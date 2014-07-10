@@ -1,0 +1,7 @@
+{
+  "name": "mbac",
+  "private": true,
+  "dependencies": {
+    "foundation": "zurb/bower-foundation"
+  }
+}
