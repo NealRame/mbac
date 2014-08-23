@@ -1,4 +1,7 @@
 *.DS_Store
 /bower_components/*
 /node_modules/*
-/public/css/style.css
+/public/css/*
+/public/fonts/*
+/public/js/*
+/.sass-cache/*
