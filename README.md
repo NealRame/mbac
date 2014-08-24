@@ -24,7 +24,7 @@ While you're working on your project, run:
 
 ```shell
 ~> npm install
-~> grunt
+~> grunt dev
 ~> npm start
 ```
 
