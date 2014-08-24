@@ -27,7 +27,8 @@ module.exports = function(grunt) {
         clean: {
             bower: ['<%= bower_dir %>'],
             fonts: ['<%= fonts_build_dir %>'],
-            js: ['<%= js_build_dir %>']
+            js: ['<%= js_build_dir %>'],
+            style: ['<%= sass_build_dir %>']
         },
 
         bower: {
@@ -43,17 +44,12 @@ module.exports = function(grunt) {
             fonts: {
                 files: [
                     {
-                        cwd: 'bower_components/foundation-icons/',
+                        cwd: '<%= bower_dir %>/font-awesome',
                         dest: '<%= fonts_build_dir %>/',
                         expand: true,
                         filter: 'isFile',
                         flatten: true,
-                        src: [
-                            'foundation_icons_accessibility/fonts/*',
-                            'foundation_icons_general/fonts/*',
-                            'foundation_icons_general_enclosed/fonts/*',
-                            'foundation_icons_social/fonts/*'
-                        ],
+                        src: ['fonts/*'],
                     }
                 ]
             }
@@ -72,36 +68,34 @@ module.exports = function(grunt) {
         },
 
         sass: {
-            icons: {
+            dev: {
                 options: {
-                    loadPath: [
-                        'bower_components/foundation-icons/foundation_icons_accessibility/sass',
-                        'bower_components/foundation-icons/foundation_icons_general_enclosed/sass',
-                        'bower_components/foundation-icons/foundation_icons_general/sass',
-                        'bower_components/foundation-icons/foundation_icons_social/sass'
+                    includePaths: [
+                        '<%= bower_dir %>/foundation/scss',
+                        '<%= bower_dir %>/font-awesome/scss'
                     ],
-                    quiet: true,
-                    style: 'compressed'
+                    outputStyle: 'nested',
+                    sourceMap: true
                 },
                 files: [{
                     expand: true,
-                    cwd: 'app/client/scss',
-                    src: ['icons/*.scss'],
+                    cwd: '<%= sass_src_dir %>',
+                    src: ['style.scss'],
                     dest: '<%= sass_build_dir %>',
                     ext: '.css'
                 }]
             },
-
-            style: {
+            dist: {
                 options: {
-                    loadPath: [
-                        'bower_components/foundation/scss'
+                    includePaths: [
+                        '<%= bower_dir %>/foundation/scss',
+                        '<%= bower_dir %>/font-awesome/scss'
                     ],
-                    style: 'nested'
+                    outputStyle: 'compressed'
                 },
                 files: [{
                     expand: true,
-                    cwd: 'app/client/scss',
+                    cwd: '<%= sass_src_dir %>',
                     src: ['style.scss'],
                     dest: '<%= sass_build_dir %>',
                     ext: '.css'
@@ -132,22 +126,35 @@ module.exports = function(grunt) {
                     flatten: true,
                     src: [
                         'backbone/backbone.js',
+                        'foundation/js/foundation.js',
+                        'foundation/js/foundation/*.js',
                         'jquery/dist/jquery.js',
+                        'modernizr/modernizr.js',
                         'react/react.js',
                         'requirejs/require.js',
                         'underscore/underscore.js'
                     ],
-                    dest: '<%= js_build_dir %>/vendors'
+                    dest: '<%= js_build_dir %>/vendors',
+                    report: 'min'
                 }]
             },
-            client: {
+            dev: {
+                options: {
+                    sourceMap: true
+                },
                 files: [{
                     expand: true,
                     cwd: '<%= js_src_dir %>',
                     src: [ '**/*.js' ],
-                    dest: '<%= js_build_dir %>',
-                    ext: '.min.js',
-                    extDot: 'first'
+                    dest: '<%= js_build_dir %>'
+                }]
+            },
+            dist: {
+                files: [{
+                    expand: true,
+                    cwd: '<%= js_src_dir %>',
+                    src: [ '**/*.js' ],
+                    dest: '<%= js_build_dir %>'
                 }]
             }
         },
@@ -159,25 +166,33 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-bower-task');
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-copy');
-    grunt.loadNpmTasks('grunt-contrib-sass');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-react');
+    grunt.loadNpmTasks('grunt-sass');
 
     ///////////////////////////////////////////////////////////////////////
     // Register macro task(s).
 
     grunt.registerTask(
-        'assets',
-        ['bower', 'sass:icons', 'copy:fonts', 'uglify:vendors']
+        'assets-dev',
+        ['bower', 'sass:dev',  'copy:fonts', 'uglify:vendors', 'uglify:dev']
+    );
+    grunt.registerTask(
+        'assets-dist',
+        ['bower', 'sass:dist', 'copy:fonts', 'uglify:vendors', 'uglify:dist']
     );
 
     grunt.registerTask(
-        'style',
-        ['bower', 'sass:style']
+        'dev',
+        ['assets-dev']
+    );
+    grunt.registerTask(
+        'dist',
+        ['assets-dist']
     );
 
     grunt.registerTask(
         'default',
-        ['assets', 'style']
+        ['dist']
     );
 }

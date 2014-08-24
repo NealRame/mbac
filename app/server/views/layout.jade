@@ -3,7 +3,6 @@ html
     head
         title= title
         link(rel='stylesheet', href='/css/style.css')
-        link(rel='stylesheet', href='/css/foundation-icons.css')
         script(src='js/vendors/modernizr.js')
 
     body
@@ -19,7 +18,7 @@ html
                 ul.right
                     li.active
                         a(href="#")
-                            i.fi-home
+                            i.fa.fa-home
                     li
                         a(href="#") mBàC
                     li
@@ -31,8 +30,8 @@ html
 
         block content
 
-        script(src='js/vendors/jquery.min.js')
-        script(src='js/vendors/foundation.min.js')
-        script(src='js/vendors/foundation/foundation.topbar.js')
+        script(src='js/vendors/jquery.js')
+        script(src='js/vendors/foundation.js')
+        script(src='js/vendors/foundation.topbar.js')
         script.
             $(document).foundation();
