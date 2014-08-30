@@ -7,3 +7,5 @@
 /public/css/*
 /public/fonts/*
 /public/js/*
+
+npm-debug.log
