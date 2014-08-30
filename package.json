@@ -15,6 +15,7 @@
     "mongoose": "^3.9.1",
     "morgan": "^1.2.3",
     "oauth2-js": "NealRame/oauth2-js#v0.2",
+    "promise": "^5.0.0",
     "serve-favicon": "^2.0.1",
     "underscore": "^1.7.0"
   },
