@@ -1,9 +1,49 @@
 #!/usr/bin/env node
-var debug = require('debug')('mbac');
-var app = require('app');
 
-app.set('port', process.env.PORT || 3000);
+var debug = require('debug')('mbac:app');
+var mongoose = require('mongoose');
 
-var server = app.listen(app.get('port'), function() {
-  debug('Express server listening on port ' + server.address().port);
-});
+var fatal = function(err) {
+    console.error(err.message);
+    console.error(err.stack ? err.stack : '');
+    process.exit(1);
+};
+
+var app, config, conn;
+
+try {
+    app = require('app');
+} catch (err) {
+    fatal(err);
+}
+
+config = app.get('config');
+conn = mongoose.connect(config.database.fullURI).connection;
+
+conn.on(
+    'connected',
+    debug.bind(null, 'Connected to db at ' + config.database.URI));
+
+conn.on(
+    'disconnected',
+    debug.bind(null, 'Disconnected'));
+
+conn.once(
+    'open',
+    function () {
+        try {
+            var server = app.listen(
+                config.server.port,
+                config.server.host,
+                function() {
+                    debug(
+                        'Express server listening on '
+                            + config.server.host + ':' + config.server.port
+                    );
+                }
+            );
+        } catch (err) {
+            fatal(err);
+        }
+    }
+);
