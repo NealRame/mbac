@@ -14,7 +14,7 @@
     "jade": "^1.5.0",
     "mongoose": "^3.9.1",
     "morgan": "^1.2.3",
-    "oauth2-js": "NealRame/oauth2-js#v0.1",
+    "oauth2-js": "NealRame/oauth2-js#v0.2",
     "serve-favicon": "^2.0.1"
   },
   "devDependencies": {
