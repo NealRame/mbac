@@ -2,12 +2,12 @@ var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 var debug = require('debug')('mbac:app');
 var express = require('express');
-var serveFavicon = require('serve-favicon');
-var serveStatic = require('serve-static');
 var logger = require('morgan');
 var mongoose = require('mongoose');
 var path = require('path');
 var Promise = require('Promise');
+var serveFavicon = require('serve-favicon');
+var serveStatic = require('serve-static');
 var session = require('express-session');
 var Store = require('mongoose-express-session-store');
 
@@ -50,7 +50,11 @@ exports.getInstance = function() {
 
         // routes setup
         app.use('/', require('routes/index'));
-        app.use('/users', require('routes/users'));
+
+
+        // plugins
+
+        require('plugins/auth').setup(app);
 
         // error handlers setup
 
