@@ -2,11 +2,14 @@ var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 var debug = require('debug')('mbac:app');
 var express = require('express');
-var favicon = require('serve-favicon');
+var serveFavicon = require('serve-favicon');
+var serveStatic = require('serve-static');
 var logger = require('morgan');
 var mongoose = require('mongoose');
 var path = require('path');
 var Promise = require('Promise');
+var session = require('express-session');
+var Store = require('mongoose-express-session-store');
 
 var app;
 
@@ -41,11 +44,11 @@ exports.getInstance = function() {
         app.use(bodyParser.json());
         app.use(bodyParser.urlencoded({extended: true}));
         app.use(cookieParser());
-        app.use(favicon(path.join(__dirname, '..', '..', 'public', 'mbac.ico')));
-        app.use(express.static(path.join(__dirname, '..', '..', 'public')));
+        app.use(session({store: new Store, secret: 'IL0veK4t', proxy: true, resave: true, saveUninitialized: true}));
+        app.use(serveFavicon(path.join(__dirname, '..', '..', 'public', 'mbac.ico')));
+        app.use(serveStatic(path.join(__dirname, '..', '..', 'public')));
 
         // routes setup
-
         app.use('/', require('routes/index'));
         app.use('/users', require('routes/users'));
 
@@ -62,6 +65,7 @@ exports.getInstance = function() {
             // development error handler
             // will print stacktrace
             app.use(function(err, req, res, next) {
+                console.error(err.stack);
                 res.status(err.status || 500);
                 res.render('error', {
                     message: err.message,
