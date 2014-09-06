@@ -1,0 +1,25 @@
+<VirtualHost *:80>
+        ServerAdmin ADMIN_MAIL_ADDRESS
+        ServerName  APPLICATION_VHOST_ADDRESS
+        ServerAlias APPLICATION_ALIAS_ADDRESS_POSSIBLY
+
+        ProxyRequests off
+
+        <Proxy *>
+                Order deny,allow
+                Allow from all
+        </Proxy>
+
+        <Location />
+                ProxyPass http://HOST:PORT/
+                ProxyPassReverse http://HOST:PORT/
+        </Location>
+
+        ErrorLog ${APACHE_LOG_DIR}/PATH_TO_ERROR_LOG
+
+        # Possible values include: debug, info, notice, warn, error, crit,
+        # alert, emerg.
+        LogLevel warn
+
+        CustomLog ${APACHE_LOG_DIR}/PATH_TO_LOG combined
+</VirtualHost>
