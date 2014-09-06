@@ -1,13 +1,20 @@
+var _ = require('underscore');
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var UserSchema = new Schema({
     _id: {type: String, unique: true},
-    _initialized: {type: Boolean, default: false},
     name: {
         first: String,
         last: String
     },
-    mail: String,
+    email: String,
     picture: String
 });
+
+UserSchema.methods.isInitialized = function() {
+    return _.has(this, 'email')
+        && _.has(this, 'name') && _.has(this, 'picture');
+};
+
+module.exports = mongoose.model('User', UserSchema);
