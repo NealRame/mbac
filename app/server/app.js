@@ -48,13 +48,11 @@ exports.getInstance = function() {
         app.use(serveFavicon(path.join(__dirname, '..', '..', 'public', 'mbac.ico')));
         app.use(serveStatic(path.join(__dirname, '..', '..', 'public')));
 
+        // plugins
+        require('plugins/auth').setup(app);
+
         // routes setup
         app.use('/', require('routes/index'));
-
-
-        // plugins
-
-        require('plugins/auth').setup(app);
 
         // error handlers setup
 
