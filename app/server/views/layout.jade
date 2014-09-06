@@ -27,6 +27,11 @@ html
                         a(href="#") Réalisations
                     li
                         a(href="#") Contact
+                    li
+                        if loggedIn
+                            a(href=logoutLink) Logout
+                        else
+                            a(href=loginLink) Login
 
         block content
 
