@@ -72,7 +72,7 @@ if (config.env === 'development') {
         ///   In _development_ environment:
         ///   - use the value of `DB_NAME` environment variable if defined,
         ///   - fallback to `products`
-        name: process.env['DB_NAME'] || 'products',
+        name: process.env['DB_NAME'] || 'test',
         /// - `products` **REQUIRED**.
         ///   In _development_ environment:
         ///   - use the value of `DB_USER` environment variable if defined,
@@ -84,6 +84,8 @@ if (config.env === 'development') {
         ///   - fallback to `test`
         password: process.env['DB_PASSWORD'] || 'test'
     });
+
+    
 
     /// ## Server settings
     /// These settings are defined in the `config/server.conf.json` file.
