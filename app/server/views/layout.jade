@@ -27,10 +27,14 @@ html
                         a(href="#") Réalisations
                     li
                         a(href="#") Contact
-                    li
-                        if loggedIn
-                            a(href=logoutLink) Logout
-                        else
+                    if loggedIn
+                        li.has-dropdown
+                            img(src=user.picture width=45 height=45)
+                            ul.dropdown
+                                li
+                                    a(href=logoutLink) Logout
+                    else
+                        li
                             a(href=loginLink) Login
 
         block content
