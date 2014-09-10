@@ -11,12 +11,11 @@ exports.setup = function(app) {
             findUser: function(id, callback) {
                 User.count({}).exec()
                     .then(function(count) {
-                        if (count === 0) {
-                            User.create({ _id: id}, callback);
-                        } else {
-                            User.findById(id, callback);
-                        }
+                        return count === 0
+                            ? User.create( {_id: id})
+                            : User.findOne({_id: id}).exec();
                     })
+                    .then(callback.bind(null, null))
                     .then(null, callback);
             },
             isInitialized: function(user, callback) {
