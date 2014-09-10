@@ -63,28 +63,20 @@ exports.getInstance = function() {
             next(err);
         });
 
-        if (app.get('env') === 'development') {
-            // development error handler
-            // will print stacktrace
-            app.use(function(err, req, res, next) {
-                console.error(err.stack);
-                res.status(err.status || 500);
-                res.render('error', {
-                    message: err.message,
-                    error: err
-                });
-            });
-        } else {
-            // production error handler
-            // no stacktraces leaked to user
-            app.use(function(err, req, res, next) {
-                res.status(err.status || 500);
-                res.render('error', {
-                    message: err.message,
-                    error: {}
-                });
-            });
-        }
+        // development env will print stacktrace
+        app.use(function(err, req, res, next) {
+            var status = err.status = err.status || 500;
+            res.status(status);
+            res.render(
+                'error',
+                {
+                    error:
+                        app.get('env') === 'development'
+                            ? err
+                            : {message: err.message, status: status}
+                }
+            );
+        });
 
         return app;
     });
