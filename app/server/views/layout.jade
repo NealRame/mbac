@@ -17,26 +17,25 @@ html
                         span
             section.top-bar-section
                 ul.right
-                    each page in pages
-                        - var slug = page.slug()
-                        - var title = page.title
-                        li(class=slug === path ? 'active':'')
-                            if title === 'home'
-                                a(href=slug): i.fa.fa-home
-                            else
-                                a(href=slug) #{title}
+                    if pages['top-bar']
+                        each page in pages['top-bar']
+                            - var slug = page.slug()
+                            - var title = page.title
+                            li(class=slug === path ? 'active':'')
+                                if title === 'home'
+                                    a(href=slug): i.fa.fa-home
+                                else
+                                    a(href=slug) #{title}
                     if loggedIn
                         li.has-dropdown
                             a
                                 img.user-picture(src=user.picture)
                                 span.user-name #{user.name.full}
                             ul.dropdown
-                                li
-                                    a(href=logoutLink)
-                                        i.fa.fa-sign-out
-                                        |  Logout
+                                li: a(href=logoutLink)
+                                    i.fa.fa-sign-out
+                                    |  Logout
                     else
-
                         li: a(href=loginLink) Login
 
         block content
@@ -44,9 +43,11 @@ html
         footer
             div.links
                 ul
-                    li: a(href="mentions-legales") Mentions légales
-                    li: a(href="sitemap") Plan du site
-                    li: a(href="partners") Partenaires
+                    if pages['footer']
+                        each page in pages['footer']
+                            - var slug = page.slug
+                            - var title = page.title
+                            li: a(href=slug) #{title}
             div.socials
                 ul
                     li: a.symbol(href="https://www.facebook.com/MonBarACouture" title="circlefacebook")
