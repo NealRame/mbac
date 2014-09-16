@@ -46,7 +46,7 @@ PageSchema.pre('save', function(next) {
 PageSchema.static('list', function(options, callback) {
     return this.find(options)
         .sort({rank: 1})
-        .select('title')
+        .select('title index')
         .exec(callback);
 });
 
