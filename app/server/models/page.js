@@ -4,9 +4,8 @@ var Schema = mongoose.Schema;
 var Promise = mongoose.Promise;
 
 var PageSchema = new Schema({
-    title: String,
     _id: {type: String, unique: true},
-    authors: [{ type: Schema.Types.ObjectID, ref: 'User' }],
+    _authors: [{ type: String, ref: 'User' }],
     dates: {
         creation: {
             type: Date,
@@ -25,7 +24,8 @@ var PageSchema = new Schema({
     rank: {
         type: Number,
         default: 0
-    }
+    },
+    title: String
 });
 
 // Updates modification date before saving the document.
@@ -45,7 +45,7 @@ PageSchema.pre('save', function(next) {
 ///   a node.js completion callback.
 PageSchema.static('list', function(options, callback) {
     return this.find(options)
-        .sort({rank: -1})
+        .sort({rank: 1})
         .select('title')
         .exec(callback);
 });
@@ -59,9 +59,9 @@ PageSchema.static('list', function(options, callback) {
 ///   a node.js completion callback.
 PageSchema.methods.authors = function(callback) {
     return Page.popuplate(
-            this,
-            {path: 'authors', select: 'name'},
-            callback
+        this,
+        {path: '_authors', select: 'name'},
+        callback
     ).then(function(page) {
         return page.authors;
     });
