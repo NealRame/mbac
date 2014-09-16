@@ -50,6 +50,14 @@ module.exports = function(grunt) {
                         filter: 'isFile',
                         flatten: true,
                         src: ['fonts/*'],
+                    },
+                    {
+                        cwd: '<%= bower_dir %>/monosocialiconsfont',
+                        dest: '<%= fonts_build_dir %>/',
+                        expand: true,
+                        filter: 'isFile',
+                        flatten: true,
+                        src: ['MonoSocialIconsFont-1.10.*'],
                     }
                 ]
             }
