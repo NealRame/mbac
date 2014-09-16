@@ -48,16 +48,7 @@ exports.getInstance = function() {
         app.use(serveFavicon(path.join(__dirname, '..', '..', 'public', 'mbac.ico')));
         app.use(serveStatic(path.join(__dirname, '..', '..', 'public')));
 
-        app.use(function(req, res, next) {
-            require('models/page')
-                .list({index: /(?:top-bar)|(?:footer)/, published: true})
-                .then(function(pages) {
-                    res.locals.path = req.path;
-                    res.locals.pages = pages;
-                    next();
-                })
-                .then(null, next);
-        });
+        app.use(require('middlewares/menu'));
 
         // plugins
         require('plugins/auth').setup(app);
