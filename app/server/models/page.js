@@ -34,54 +34,44 @@ PageSchema.pre('save', function(next) {
     next();
 });
 
-/// #### `Page.list([index],[callback])`
+/// #### `Page.list([options],[callback])`
 ///
-/// Returns a promise to be fulfilled with the pages lists.
+/// Returns a `Promise` to be fulfilled with the list of pages.
 ///
 /// _Parameters_:
-/// * `index` [optional],
-///   if specified, will only return the pages that are indexed in the given
-///   index.
-/// * `callback` [optional],
+/// * `options` _[optional]_,
+///   if specified, will be used to filtered the result lists.
+/// * `callback` _[optional]_,
 ///   a node.js completion callback.
-PageSchema.static('list', function(index, callback) {
-    if (indexed) {
-        return this.find({index: index, published: true})
-                    .sort({rank: -1})
-                    .select('title')
-    }
-    return this.find({}
+PageSchema.static('list', function(options, callback) {
+    return this.find(options)
+        .sort({rank: -1})
+        .select('title')
+        .exec(callback);
 });
+
+/// #### `Page#authors([callback])`
+///
+/// Returns a `Promise` to be fulfilled with the list of authors.
+///
+/// _Parameters_:
+/// * `callback` _[optional]_,
+///   a node.js completion callback.
+PageSchema.methods.authors = function(callback) {
+    return Page.popuplate(
+            this,
+            {path: 'authors', select: 'name'},
+            callback
+    ).then(function(page) {
+        return page.authors;
+    });
+};
 
 /// #### `Page#slug()`
 ///
 /// Returns the page slug (alias to _id).
 PageSchema.methods.slug = function() {
     return this._id;
-};
-
-/// #### `Page#authors([options])`
-///
-/// Returns the list of authors
-PageSchema.methods.authors = function(options, callback) {
-    var promise =
-        Page.popuplate(
-            this, _.extend(options, {path: 'authors'})
-        ).then(function(page) {
-            var authors = page.authors;
-            if (callback) {
-                callback(null, authors);
-            }
-            return authors;
-        }).then(null, function(err) {
-            throw err;
-        });
-
-    if (callback) {
-        promise.onResolve(callback);
-    }
-
-    return promise;
 };
 
 var Page = module.exports = mongoose.model('Page', PageSchema);
