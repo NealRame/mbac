@@ -45,7 +45,7 @@ html
                 ul
                     if pages['footer']
                         each page in pages['footer']
-                            - var slug = page.slug
+                            - var slug = page.slug()
                             - var title = page.title
                             li: a(href=slug) #{title}
             div.socials
