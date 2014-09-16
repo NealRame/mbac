@@ -17,4 +17,8 @@ UserSchema.methods.isInitialized = function() {
         && _.has(this, 'name') && _.has(this, 'picture');
 };
 
+UserSchema.virtual('name.full').get(function() {
+    return this.name.first + ' ' + this.name.last;
+});
+
 module.exports = mongoose.model('User', UserSchema);
