@@ -17,12 +17,14 @@ html
                         span
             section.top-bar-section
                 ul.right
-                    li.active
-                        a(href="#"): i.fa.fa-home
-                    li: a(href="/mbac") mBàC
-                    li: a(href="/services") Services
-                    li: a(href="/realisations") Réalisations
-
+                    each page in pages
+                        - var slug = page.slug()
+                        - var title = page.title
+                        li(class=slug === path ? 'active':'')
+                            if title === 'home'
+                                a(href=slug): i.fa.fa-home
+                            else
+                                a(href=slug) #{title}
                     if loggedIn
                         li.has-dropdown
                             a
