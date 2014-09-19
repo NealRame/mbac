@@ -30,7 +30,7 @@ var Page = require('models/page');
 /// _Parameters_:
 /// * `app` _[required]_, an express app object.
 exports.setup = function(app) {
-    app.user(function(req, res, next) {
+    app.use(function(req, res, next) {
         Page
             .list({index: /(?:top-bar)|(?:footer)/, published: true})
             .then(function(pages) {
