@@ -7,55 +7,9 @@ html
         script(src='/js/vendors/jquery.js')
 
     body
-        nav.top-bar(data-topbar)
-            ul.title-area
-                li.name
-                    h1
-                        a(href="#") mon Bar à Couture
-                li.toggle-topbar.menu-icon
-                    a(href="#")
-                        span
-            section.top-bar-section
-                ul.right
-                    if pages['top-bar']
-                        each page in pages['top-bar']
-                            - var slug = page.slug()
-                            - var title = page.title
-                            li(class=slug === path ? 'active':'')
-                                if title === 'home'
-                                    a(href=slug): i.fa.fa-home
-                                else
-                                    a(href=slug) #{title}
-                    if loggedIn
-                        li.has-dropdown
-                            a
-                                img.user-picture(src=user.picture)
-                                span.user-name #{user.name.full}
-                            ul.dropdown
-                                li: a(href=logoutLink)
-                                    i.fa.fa-sign-out
-                                    |  Logout
-                    else
-                        li: a(href=loginLink) Login
-
+        include navbar
         block content
-
-        footer
-            div.links
-                ul
-                    if pages['footer']
-                        each page in pages['footer']
-                            - var slug = page.slug()
-                            - var title = page.title
-                            li: a(href=slug) #{title}
-            div.socials
-                ul
-                    li: a.symbol(href="https://www.facebook.com/MonBarACouture" title="circlefacebook")
-                    li: a.symbol(href="http://www.pinterest.com/4size" title="circlepinterest")
-                    li: a.symbol(href="https://twitter.com/NealRame" title="circletwitter")
-            div.copyright
-                i.fa.fa-copyright
-                | Copyright 2014 mon Bar à Couture - tous droits réservés
+        include footer
 
         script(src='/js/vendors/foundation.js')
         script(src='/js/vendors/foundation.topbar.js')
