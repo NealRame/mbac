@@ -3,30 +3,9 @@ html
     head
         title= title
         link(rel='stylesheet', href='/css/style.css')
-        script(src='/js/vendors/modernizr.js')
-        script(src='/js/vendors/jquery.js')
 
     body
         include navbar
         block content
         include footer
-
-        script(src='/js/vendors/foundation.js')
-        script(src='/js/vendors/foundation.topbar.js')
-        script.
-            $(document).foundation();
-            $(window).bind('load', function() {
-                var footer = $('body > footer').first();
-                var pin_it = function(offset) {
-                    footer.css(
-                        'margin-top',
-                        Math.max(
-                            $(this).height() - footer.position().top - footer.height() + offset,
-                            0
-                        )
-                    );
-                }
-                pin_it(20);
-                // Throttled pin_it function
-                $(this).on('resize', Foundation.utils.throttle(pin_it.bind(null, 0), 300));
-            });
+        script(src='/js/vendors/require.js' data-main='/js/main')

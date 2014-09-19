@@ -115,8 +115,7 @@ module.exports = function(grunt) {
             options: {
                 compress: {
                     sequences: true,
-                    hoist_vars: true,
-                    drop_console: true
+                    hoist_vars: true
                 },
                 output: {
                     beautify: false,
@@ -128,6 +127,9 @@ module.exports = function(grunt) {
                 warnings: true
             },
             vendors: {
+                options: {
+                    drop_console: true
+                },
                 files: [{
                     expand: true,
                     cwd: '<%= bower_dir %>',
@@ -148,7 +150,8 @@ module.exports = function(grunt) {
             },
             dev: {
                 options: {
-                    sourceMap: true
+                    sourceMap: true,
+                    drop_console: true
                 },
                 files: [{
                     expand: true,
