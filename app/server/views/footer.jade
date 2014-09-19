@@ -1,0 +1,20 @@
+//- footer.jade
+//- ===========
+//- - author: Neal.Rame. <contact@nealrame.com>
+//- -   date: Thu Sep 18 13:25:12 CEST 2014
+footer
+    div.links
+        ul
+            if pages['footer']
+                each page in pages['footer']
+                    - var slug = page.slug()
+                    - var title = page.title
+                    li: a(href=slug) #{title}
+    div.socials
+        ul
+            li: a.symbol(href="https://www.facebook.com/MonBarACouture" title="circlefacebook")
+            li: a.symbol(href="http://www.pinterest.com/4size" title="circlepinterest")
+            li: a.symbol(href="https://twitter.com/NealRame" title="circletwitter")
+    div.copyright
+        i.fa.fa-copyright
+        | Copyright 2014 mon Bar à Couture - tous droits réservés
