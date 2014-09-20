@@ -1,26 +1,66 @@
 {
-  "name": "mbac",
-  "version": "0.0.1",
-  "authors": [
-    "NealRame <contact@nealrame.com>"
-  ],
-  "license": "MIT",
-  "private": true,
-  "ignore": [
-    "**/.*",
-    "node_modules",
-    "bower_components",
-    "test",
-    "tests"
-  ],
-  "dependencies": {
-    "backbone": "~1.1.2",
-    "jquery": "~2.1.1",
-    "foundation": "5.4.2",
-    "requirejs": "~2.1.14",
-    "react": "~0.11.0",
-    "modernizr": "~2.8.3",
-    "font-awesome": "~4.2.0",
-    "monosocialiconsfont": "*"
-  }
+    "name": "mbac",
+    "version": "0.0.1",
+    "authors": [
+        "NealRame <contact@nealrame.com>"
+    ],
+    "license": "MIT",
+    "private": true,
+    "ignore": [
+        "**/.*",
+        "node_modules",
+        "bower_components",
+        "test",
+        "tests"
+    ],
+    "dependencies": {
+        "backbone": "~1.1.2",
+        "jquery": "~2.1.1",
+        "foundation": "5.4.2",
+        "requirejs": "~2.1.14",
+        "react": "~0.11.0",
+        "modernizr": "~2.8.3",
+        "font-awesome": "~4.2.0",
+        "monosocialiconsfont": "*"
+    },
+    "exportsOverride": {
+        "backbone": {
+            "app/client/js/lib": "backbone.js"
+        },
+        "fastclick": {
+            "app/client/js/lib": "fastclick.js"
+        },
+        "font-awesome": {
+            "app/client/scss/lib/font-awesome": "scss/**/*.scss",
+            "public/fonts": "fonts/*"
+        },
+        "foundation": {
+            "app/client/scss/lib/foundation": "scss/**/*.scss",
+            "app/client/js/lib": "js/foundation.js"
+        },
+        "jquery": {
+            "app/client/js/lib": "dist/jquery.js"
+        },
+        "jquery-placeholder": {
+            "app/client/js/lib": "jquery.placeholder.js"
+        },
+        "jquery.cookie": {
+            "app/client/js/lib": "jquery.cookie.js"
+        },
+        "modernizr": {
+            "app/client/js/lib": "modernizr.js"
+        },
+        "monosocialiconsfont": {
+            "public/fonts": "MonoSocialIconsFont-*"
+        },
+        "react": {
+            "app/client/js/lib": "react.js"
+        },
+        "requirejs": {
+            "app/client/js/lib": "require.js"
+        },
+        "underscore": {
+            "app/client/js/lib": "underscore.js"
+        }
+    }
 }
