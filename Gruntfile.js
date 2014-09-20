@@ -10,76 +10,52 @@ module.exports = function(grunt) {
         // assets variables
         assets_dir: 'public',
 
-        // bower variables
-        bower_dir: 'bower_components',
+        // fonts variables
+        fonts_dir: '<%= assets_dir %>/fonts',
 
         // javascript variables
-        js_build_dir: 'public/js',
-        js_src_dir: 'app/client/js',
+        js_src_dir:   'app/client/js',
+        js_lib_dir:   '<%= js_src_dir %>/lib',
+        js_build_dir: '<%= assets_dir %>/js',
 
         // sass variables
-        sass_build_dir: 'public/css',
-        sass_src_dir: 'app/client/scss',
-
-        // fonts variables
-        fonts_build_dir: '<%= assets_dir %>/fonts',
-
-        clean: {
-            bower: ['<%= bower_dir %>'],
-            fonts: ['<%= fonts_build_dir %>'],
-            js: ['<%= js_build_dir %>'],
-            style: ['<%= sass_build_dir %>']
-        },
+        sass_src_dir:   'app/client/sass',
+        sass_lib_dir:   '<%= sass_src_dir %>/lib',
+        sass_build_dir: '<%= assets_dir %>/css',
 
         bower: {
             options: {
-                verbose: true,
-                copy: false
+                cleanBowerDir: true,
+                layout: function(type) {return type;},
+                targetDir: '.',
+                verbose: false,
             },
-            install: {
-            }
+            install: { }
         },
 
-        copy: {
-            fonts: {
-                files: [
-                    {
-                        cwd: '<%= bower_dir %>/font-awesome',
-                        dest: '<%= fonts_build_dir %>/',
-                        expand: true,
-                        filter: 'isFile',
-                        flatten: true,
-                        src: ['fonts/*'],
-                    },
-                    {
-                        cwd: '<%= bower_dir %>/monosocialiconsfont',
-                        dest: '<%= fonts_build_dir %>/',
-                        expand: true,
-                        filter: 'isFile',
-                        flatten: true,
-                        src: ['MonoSocialIconsFont-1.10.*'],
-                    }
-                ]
-            }
+        clean: {
+            fonts: ['<%= fonts_dir %>'],
+            js:    ['<%= js_build_dir %>'],
+            sass:  ['<%= sass_build_dir %>']
         },
 
-        react: {
-            components: {
-                files: [{
-                    expand: true,
-                    cwd: '<%= js_src_dir %>/views',
-                    src: ['**/*.jsx'],
-                    dest: '<%= js_build_dir %>/views',
-                    ext: '.js'
-                }]
-            }
-        },
+        // react: {
+        //     components: {
+        //         files: [{
+        //             expand: true,
+        //             cwd: '<%= js_src_dir %>/views',
+        //             src: ['**/*.jsx'],
+        //             dest: '<%= js_build_dir %>/views',
+        //             ext: '.js'
+        //         }]
+        //     }
+        // },
 
         sass: {
             dev: {
                 options: {
                     includePaths: [
-                        '<%= bower_dir %>/foundation/scss',
+                        '<%= sass_lib_dir %>/foundation/scss',
                         '<%= bower_dir %>/font-awesome/scss'
                     ],
                     outputStyle: 'nested',
@@ -111,64 +87,64 @@ module.exports = function(grunt) {
             },
         },
 
-        uglify: {
-            options: {
-                compress: {
-                    sequences: true,
-                    hoist_vars: true
-                },
-                output: {
-                    beautify: false,
-                    space_colon: false,
-                    bracketize: true
-                },
-                mangle: true,
-                preserveLicenseComments: true,
-                warnings: true
-            },
-            vendors: {
-                options: {
-                    drop_console: true
-                },
-                files: [{
-                    expand: true,
-                    cwd: '<%= bower_dir %>',
-                    flatten: true,
-                    src: [
-                        'backbone/backbone.js',
-                        'foundation/js/foundation.js',
-                        'foundation/js/foundation/*.js',
-                        'jquery/dist/jquery.js',
-                        'modernizr/modernizr.js',
-                        'react/react.js',
-                        'requirejs/require.js',
-                        'underscore/underscore.js'
-                    ],
-                    dest: '<%= js_build_dir %>/vendors',
-                    report: 'min'
-                }]
-            },
-            dev: {
-                options: {
-                    sourceMap: true,
-                    drop_console: true
-                },
-                files: [{
-                    expand: true,
-                    cwd: '<%= js_src_dir %>',
-                    src: [ '**/*.js' ],
-                    dest: '<%= js_build_dir %>'
-                }]
-            },
-            dist: {
-                files: [{
-                    expand: true,
-                    cwd: '<%= js_src_dir %>',
-                    src: [ '**/*.js' ],
-                    dest: '<%= js_build_dir %>'
-                }]
-            }
-        },
+        // uglify: {
+        //     options: {
+        //         compress: {
+        //             sequences: true,
+        //             hoist_vars: true
+        //         },
+        //         output: {
+        //             beautify: false,
+        //             space_colon: false,
+        //             bracketize: true
+        //         },
+        //         mangle: true,
+        //         preserveLicenseComments: true,
+        //         warnings: true
+        //     },
+        //     vendors: {
+        //         options: {
+        //             drop_console: true
+        //         },
+        //         files: [{
+        //             expand: true,
+        //             cwd: '<%= bower_dir %>',
+        //             flatten: true,
+        //             src: [
+        //                 'backbone/backbone.js',
+        //                 'foundation/js/foundation.js',
+        //                 'foundation/js/foundation/*.js',
+        //                 'jquery/dist/jquery.js',
+        //                 'modernizr/modernizr.js',
+        //                 'react/react.js',
+        //                 'requirejs/require.js',
+        //                 'underscore/underscore.js'
+        //             ],
+        //             dest: '<%= js_build_dir %>/vendors',
+        //             report: 'min'
+        //         }]
+        //     },
+        //     dev: {
+        //         options: {
+        //             sourceMap: true,
+        //             drop_console: true
+        //         },
+        //         files: [{
+        //             expand: true,
+        //             cwd: '<%= js_src_dir %>',
+        //             src: [ '**/*.js' ],
+        //             dest: '<%= js_build_dir %>'
+        //         }]
+        //     },
+        //     dist: {
+        //         files: [{
+        //             expand: true,
+        //             cwd: '<%= js_src_dir %>',
+        //             src: [ '**/*.js' ],
+        //             dest: '<%= js_build_dir %>'
+        //         }]
+        //     }
+        // },
     });
 
     ///////////////////////////////////////////////////////////////////////
@@ -176,9 +152,8 @@ module.exports = function(grunt) {
 
     grunt.loadNpmTasks('grunt-bower-task');
     grunt.loadNpmTasks('grunt-contrib-clean');
-    grunt.loadNpmTasks('grunt-contrib-copy');
-    grunt.loadNpmTasks('grunt-contrib-uglify');
-    grunt.loadNpmTasks('grunt-react');
+    // grunt.loadNpmTasks('grunt-contrib-uglify');
+    // grunt.loadNpmTasks('grunt-react');
     grunt.loadNpmTasks('grunt-sass');
 
     ///////////////////////////////////////////////////////////////////////
@@ -186,11 +161,11 @@ module.exports = function(grunt) {
 
     grunt.registerTask(
         'assets-dev',
-        ['bower', 'sass:dev',  'copy:fonts', 'uglify:vendors', 'uglify:dev']
+        ['bower', 'sass:dev', 'uglify:vendors', 'uglify:dev']
     );
     grunt.registerTask(
         'assets-dist',
-        ['bower', 'sass:dist', 'copy:fonts', 'uglify:vendors', 'uglify:dist']
+        ['bower', 'sass:dist', 'uglify:vendors', 'uglify:dist']
     );
 
     grunt.registerTask(
