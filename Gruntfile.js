@@ -4,6 +4,20 @@ module.exports = function(grunt) {
     ///////////////////////////////////////////////////////////////////////
     // Configure tasks
 
+    var isDev = function() {
+        switch (process.env['NODE_ENV']) {
+        case 'development':
+        case 'dev':
+            return true;
+        default:
+            return false;
+        }
+    };
+
+    var isProd = function() {
+        return ! isDev();
+    };
+
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
 
@@ -14,13 +28,13 @@ module.exports = function(grunt) {
         fonts_dir: '<%= assets_dir %>/fonts',
 
         // javascript variables
-        js_srcs_dir:   'app/client/js',
-        js_libs_dir:   '<%= js_srcs_dir %>/libs',
+        js_srcs_dir:  'app/client/js',
+        js_libs_dir:  '<%= js_srcs_dir %>/libs',
         js_build_dir: '<%= assets_dir %>/js',
 
         // sass variables
-        sass_srcs_dir:   'app/client/sass',
-        sass_libs_dir:   '<%= sass_srcs_dir %>/lib',
+        sass_srcs_dir:  'app/client/sass',
+        sass_libs_dir:  '<%= sass_srcs_dir %>/libs',
         sass_build_dir: '<%= assets_dir %>/css',
 
         bower: {
@@ -34,9 +48,11 @@ module.exports = function(grunt) {
         },
 
         clean: {
-            fonts: ['<%= fonts_dir %>'],
-            js:    ['<%= js_build_dir %>'],
-            sass:  ['<%= sass_build_dir %>']
+            'fonts':     ['<%= fonts_dir %>'],
+            'js':        ['<%= js_build_dir %>'],
+            'js-libs':   ['<%= js_libs_dir %>'],
+            'sass':      ['<%= sass_build_dir %>'],
+            'sass-libs': ['<%= sass_libs_dir %>']
         },
 
         // react: {
@@ -52,30 +68,11 @@ module.exports = function(grunt) {
         // },
 
         sass: {
-            dev: {
+            compile: {
                 options: {
-                    includePaths: [
-                        '<%= sass_libs_dir %>/foundation',
-                        '<%= sass_libs_dir %>/font-awesome'
-                    ],
+                    includePaths: ['<%= sass_libs_dir %>'],
                     outputStyle: 'nested',
-                    sourceMap: true
-                },
-                files: [{
-                    expand: true,
-                    cwd: '<%= sass_srcs_dir %>',
-                    src: ['style.scss'],
-                    dest: '<%= sass_build_dir %>',
-                    ext: '.css'
-                }]
-            },
-            dist: {
-                options: {
-                    includePaths: [
-                        '<%= bower_dir %>/foundation',
-                        '<%= bower_dir %>/font-awesome'
-                    ],
-                    outputStyle: 'compressed'
+                    sourceMap: isDev()
                 },
                 files: [{
                     expand: true,
@@ -86,6 +83,38 @@ module.exports = function(grunt) {
                 }]
             },
         },
+
+        requirejs: {
+        },
+
+        uglify: {
+            options: {
+                compress: {
+                    sequences: true,
+                    hoist_vars: true
+                },
+                drop_console: isProd(),
+                output: {
+                    beautify: false,
+                    space_colon: false,
+                    bracketize: true
+                },
+                mangle: true,
+                preserveLicenseComments: true,
+                warnings: true
+
+            },
+            compile: {
+                files: [{
+                    cwd: '<%= js_libs_dir %>',
+                    dest: '<%= js_build_dir %>/libs',
+                    expand: true,
+                    flatten: true,
+                    report: 'min',
+                    src: ['require.js']
+                }]
+            }
+        }
 
         // uglify: {
         //     options: {
@@ -152,34 +181,17 @@ module.exports = function(grunt) {
 
     grunt.loadNpmTasks('grunt-bower-task');
     grunt.loadNpmTasks('grunt-contrib-clean');
-    // grunt.loadNpmTasks('grunt-contrib-uglify');
-    // grunt.loadNpmTasks('grunt-contrib-requirejs');
+    grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.loadNpmTasks('grunt-contrib-requirejs');
     // grunt.loadNpmTasks('grunt-react');
     grunt.loadNpmTasks('grunt-sass');
 
     ///////////////////////////////////////////////////////////////////////
     // Register macro task(s).
 
-    grunt.registerTask(
-        'assets-dev',
-        ['bower', 'sass:dev', 'uglify:vendors', 'uglify:dev']
-    );
-    grunt.registerTask(
-        'assets-dist',
-        ['bower', 'sass:dist', 'uglify:vendors', 'uglify:dist']
-    );
-
-    grunt.registerTask(
-        'dev',
-        ['assets-dev']
-    );
-    grunt.registerTask(
-        'dist',
-        ['assets-dist']
-    );
-
-    grunt.registerTask(
-        'default',
-        ['dist']
-    );
+    grunt.registerTask('assets-dev',  ['bower', 'sass:dev']);
+    grunt.registerTask('assets-dist', ['bower', 'sass:dist']);
+    grunt.registerTask('dev',         ['assets-dev']);
+    grunt.registerTask('dist',        ['assets-dist']);
+    grunt.registerTask('default',     ['dist']);
 }
