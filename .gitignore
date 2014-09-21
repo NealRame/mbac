@@ -7,5 +7,6 @@
 /public/css/*
 /public/fonts/*
 /public/js/*
-
 npm-debug.log
+app/client/js/libs
+app/client/sass/libs
