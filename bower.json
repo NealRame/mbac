@@ -31,11 +31,11 @@
             "app/client/js/lib": "fastclick.js"
         },
         "font-awesome": {
-            "app/client/scss/lib/font-awesome": "scss/**/*.scss",
+            "app/client/sass/lib/font-awesome": "scss/**/*.scss",
             "public/fonts": "fonts/*"
         },
         "foundation": {
-            "app/client/scss/lib/foundation": "scss/**/*.scss",
+            "app/client/sass/lib/foundation": "scss/**/*.scss",
             "app/client/js/lib": "js/foundation.js"
         },
         "jquery": {
