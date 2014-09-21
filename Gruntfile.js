@@ -14,13 +14,13 @@ module.exports = function(grunt) {
         fonts_dir: '<%= assets_dir %>/fonts',
 
         // javascript variables
-        js_src_dir:   'app/client/js',
-        js_lib_dir:   '<%= js_src_dir %>/lib',
+        js_srcs_dir:   'app/client/js',
+        js_libs_dir:   '<%= js_srcs_dir %>/libs',
         js_build_dir: '<%= assets_dir %>/js',
 
         // sass variables
-        sass_src_dir:   'app/client/sass',
-        sass_lib_dir:   '<%= sass_src_dir %>/lib',
+        sass_srcs_dir:   'app/client/sass',
+        sass_libs_dir:   '<%= sass_srcs_dir %>/lib',
         sass_build_dir: '<%= assets_dir %>/css',
 
         bower: {
@@ -43,7 +43,7 @@ module.exports = function(grunt) {
         //     components: {
         //         files: [{
         //             expand: true,
-        //             cwd: '<%= js_src_dir %>/views',
+        //             cwd: '<%= js_srcs_dir %>/views',
         //             src: ['**/*.jsx'],
         //             dest: '<%= js_build_dir %>/views',
         //             ext: '.js'
@@ -55,15 +55,15 @@ module.exports = function(grunt) {
             dev: {
                 options: {
                     includePaths: [
-                        '<%= sass_lib_dir %>/foundation/scss',
-                        '<%= bower_dir %>/font-awesome/scss'
+                        '<%= sass_libs_dir %>/foundation',
+                        '<%= sass_libs_dir %>/font-awesome'
                     ],
                     outputStyle: 'nested',
                     sourceMap: true
                 },
                 files: [{
                     expand: true,
-                    cwd: '<%= sass_src_dir %>',
+                    cwd: '<%= sass_srcs_dir %>',
                     src: ['style.scss'],
                     dest: '<%= sass_build_dir %>',
                     ext: '.css'
@@ -72,14 +72,14 @@ module.exports = function(grunt) {
             dist: {
                 options: {
                     includePaths: [
-                        '<%= bower_dir %>/foundation/scss',
-                        '<%= bower_dir %>/font-awesome/scss'
+                        '<%= bower_dir %>/foundation',
+                        '<%= bower_dir %>/font-awesome'
                     ],
                     outputStyle: 'compressed'
                 },
                 files: [{
                     expand: true,
-                    cwd: '<%= sass_src_dir %>',
+                    cwd: '<%= sass_srcs_dir %>',
                     src: ['style.scss'],
                     dest: '<%= sass_build_dir %>',
                     ext: '.css'
@@ -131,7 +131,7 @@ module.exports = function(grunt) {
         //         },
         //         files: [{
         //             expand: true,
-        //             cwd: '<%= js_src_dir %>',
+        //             cwd: '<%= js_srcs_dir %>',
         //             src: [ '**/*.js' ],
         //             dest: '<%= js_build_dir %>'
         //         }]
@@ -139,7 +139,7 @@ module.exports = function(grunt) {
         //     dist: {
         //         files: [{
         //             expand: true,
-        //             cwd: '<%= js_src_dir %>',
+        //             cwd: '<%= js_srcs_dir %>',
         //             src: [ '**/*.js' ],
         //             dest: '<%= js_build_dir %>'
         //         }]

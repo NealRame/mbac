@@ -25,42 +25,42 @@
     },
     "exportsOverride": {
         "backbone": {
-            "app/client/js/lib": "backbone.js"
+            "app/client/js/libs": "backbone.js"
         },
         "fastclick": {
-            "app/client/js/lib": "fastclick.js"
+            "app/client/js/libs": "fastclick.js"
         },
         "font-awesome": {
-            "app/client/sass/lib/font-awesome": "scss/**/*.scss",
+            "app/client/sass/libs/font-awesome": "scss/**/*.scss",
             "public/fonts": "fonts/*"
         },
         "foundation": {
-            "app/client/sass/lib/foundation": "scss/**/*.scss",
-            "app/client/js/lib": "js/foundation.js"
+            "app/client/sass/libs/foundation": "scss/**/*.scss",
+            "app/client/js/libs": "js/foundation.js"
         },
         "jquery": {
-            "app/client/js/lib": "dist/jquery.js"
+            "app/client/js/libs": "dist/jquery.js"
         },
         "jquery-placeholder": {
-            "app/client/js/lib": "jquery.placeholder.js"
+            "app/client/js/libs": "jquery.placeholder.js"
         },
         "jquery.cookie": {
-            "app/client/js/lib": "jquery.cookie.js"
+            "app/client/js/libs": "jquery.cookie.js"
         },
         "modernizr": {
-            "app/client/js/lib": "modernizr.js"
+            "app/client/js/libs": "modernizr.js"
         },
         "monosocialiconsfont": {
             "public/fonts": "MonoSocialIconsFont-*"
         },
         "react": {
-            "app/client/js/lib": "react.js"
+            "app/client/js/libs": "react.js"
         },
         "requirejs": {
-            "app/client/js/lib": "require.js"
+            "app/client/js/libs": "require.js"
         },
         "underscore": {
-            "app/client/js/lib": "underscore.js"
+            "app/client/js/libs": "underscore.js"
         }
     }
 }
