@@ -27,13 +27,16 @@ module.exports = function(grunt) {
         // fonts variables
         fonts_dir: '<%= assets_dir %>/fonts',
 
+        // client app directory
+        client_app_dir: 'app/client',
+
         // javascript variables
-        js_srcs_dir:  'app/client/js',
+        js_srcs_dir:  '<%= client_app_dir %>/js',
         js_libs_dir:  '<%= js_srcs_dir %>/libs',
         js_build_dir: '<%= assets_dir %>/js',
 
         // sass variables
-        sass_srcs_dir:  'app/client/sass',
+        sass_srcs_dir:  '<%= client_app_dir %>/sass',
         sass_libs_dir:  '<%= sass_srcs_dir %>/libs',
         sass_build_dir: '<%= assets_dir %>/css',
 
@@ -71,7 +74,7 @@ module.exports = function(grunt) {
             compile: {
                 options: {
                     includePaths: ['<%= sass_libs_dir %>'],
-                    outputStyle: 'nested',
+                    outputStyle: isDev() ? 'nested' : 'compressed',
                     sourceMap: isDev()
                 },
                 files: [{
@@ -85,6 +88,27 @@ module.exports = function(grunt) {
         },
 
         requirejs: {
+            compile: {
+                options: {
+                    appDir: '<%= js_srcs_dir %>',
+                    dir: '<%= js_build_dir %>',
+                    mainConfigFile: '<%= js_srcs_dir %>/common.js',
+                    optimize: 'uglify2',
+                    generateSourceMaps: isDev(),
+                    preserveLicenseComments: isProd(),
+                    useSourceUrl: isDev(),
+                    modules: [
+                        {
+                            name: '../common',
+                            include: ['jquery', 'foundation']
+                        },
+                        {
+                            name: 'app/main',
+                            exclude: ['../common']
+                        }
+                    ]
+                }
+            }
         },
 
         uglify: {
@@ -102,7 +126,6 @@ module.exports = function(grunt) {
                 mangle: true,
                 preserveLicenseComments: true,
                 warnings: true
-
             },
             compile: {
                 files: [{
@@ -116,64 +139,6 @@ module.exports = function(grunt) {
             }
         }
 
-        // uglify: {
-        //     options: {
-        //         compress: {
-        //             sequences: true,
-        //             hoist_vars: true
-        //         },
-        //         output: {
-        //             beautify: false,
-        //             space_colon: false,
-        //             bracketize: true
-        //         },
-        //         mangle: true,
-        //         preserveLicenseComments: true,
-        //         warnings: true
-        //     },
-        //     vendors: {
-        //         options: {
-        //             drop_console: true
-        //         },
-        //         files: [{
-        //             expand: true,
-        //             cwd: '<%= bower_dir %>',
-        //             flatten: true,
-        //             src: [
-        //                 'backbone/backbone.js',
-        //                 'foundation/js/foundation.js',
-        //                 'foundation/js/foundation/*.js',
-        //                 'jquery/dist/jquery.js',
-        //                 'modernizr/modernizr.js',
-        //                 'react/react.js',
-        //                 'requirejs/require.js',
-        //                 'underscore/underscore.js'
-        //             ],
-        //             dest: '<%= js_build_dir %>/vendors',
-        //             report: 'min'
-        //         }]
-        //     },
-        //     dev: {
-        //         options: {
-        //             sourceMap: true,
-        //             drop_console: true
-        //         },
-        //         files: [{
-        //             expand: true,
-        //             cwd: '<%= js_srcs_dir %>',
-        //             src: [ '**/*.js' ],
-        //             dest: '<%= js_build_dir %>'
-        //         }]
-        //     },
-        //     dist: {
-        //         files: [{
-        //             expand: true,
-        //             cwd: '<%= js_srcs_dir %>',
-        //             src: [ '**/*.js' ],
-        //             dest: '<%= js_build_dir %>'
-        //         }]
-        //     }
-        // },
     });
 
     ///////////////////////////////////////////////////////////////////////

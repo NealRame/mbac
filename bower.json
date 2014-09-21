@@ -15,20 +15,22 @@
     ],
     "dependencies": {
         "backbone": "~1.1.2",
-        "jquery": "~2.1.1",
-        "foundation": "5.4.2",
-        "requirejs": "~2.1.14",
-        "react": "~0.11.0",
-        "modernizr": "~2.8.3",
+        "fastclick": "~1.0.3",
         "font-awesome": "~4.2.0",
-        "monosocialiconsfont": "*"
+        "foundation": "5.4.2",
+        "jquery": "~2.1.1",
+        "jquery.cookie": "~1.4.1",
+        "modernizr": "~2.8.3",
+        "monosocialiconsfont": "*",
+        "requirejs": "~2.1.14",
+        "react": "~0.11.0"
     },
     "exportsOverride": {
         "backbone": {
             "app/client/js/libs": "backbone.js"
         },
         "fastclick": {
-            "app/client/js/libs": "fastclick.js"
+            "app/client/js/libs": "lib/fastclick.js"
         },
         "font-awesome": {
             "app/client/sass/libs/font-awesome": "scss/**/*.scss",
@@ -42,9 +44,6 @@
         },
         "jquery": {
             "app/client/js/libs": "dist/jquery.js"
-        },
-        "jquery-placeholder": {
-            "app/client/js/libs": "jquery.placeholder.js"
         },
         "jquery.cookie": {
             "app/client/js/libs": "jquery.cookie.js"

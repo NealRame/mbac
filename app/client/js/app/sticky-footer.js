@@ -1,4 +1,4 @@
-define(['jquery', 'foundation.core'], function($) {
+define(['jquery'], function($) {
     var footer = $('body > footer').first();
     return function(offset) {
         footer.css(
