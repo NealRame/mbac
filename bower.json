@@ -35,7 +35,9 @@
             "public/fonts": "fonts/*"
         },
         "foundation": {
-            "app/client/sass/libs/foundation": "scss/**/*.scss",
+            "app/client/sass/libs/foundation": "scss/*.scss",
+            "app/client/sass/libs/foundation/foundation": "scss/foundation/*.scss",
+            "app/client/sass/libs/foundation/foundation/components": "scss/foundation/components/*.scss",
             "app/client/js/libs": "js/foundation.js"
         },
         "jquery": {
