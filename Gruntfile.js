@@ -153,6 +153,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-bower-task');
     grunt.loadNpmTasks('grunt-contrib-clean');
     // grunt.loadNpmTasks('grunt-contrib-uglify');
+    // grunt.loadNpmTasks('grunt-contrib-requirejs');
     // grunt.loadNpmTasks('grunt-react');
     grunt.loadNpmTasks('grunt-sass');
 
