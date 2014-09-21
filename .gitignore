@@ -1,5 +1,7 @@
 *.DS_Store
 /.sass-cache/*
+/app/client/js/libs
+/app/client/sass/libs
 /bower_components/*
 /config/*.conf
 /config/*.conf.json
@@ -7,6 +9,4 @@
 /public/css/*
 /public/fonts/*
 /public/js/*
-npm-debug.log
-app/client/js/libs
-app/client/sass/libs
+/**/npm-debug.log
