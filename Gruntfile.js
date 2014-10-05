@@ -93,7 +93,7 @@ module.exports = function(grunt) {
                     appDir: '<%= client_app_dir %>',
                     dir: '<%= assets_dir %>',
                     keepBuildDir: true,
-                    removeCombined: true,
+                    removeCombined: isProd(),
                     mainConfigFile: '<%= js_srcs_dir %>/common.js',
                     optimize: 'uglify2',
                     generateSourceMaps: isDev(),
