@@ -90,8 +90,10 @@ module.exports = function(grunt) {
         requirejs: {
             compile: {
                 options: {
-                    appDir: '<%= js_srcs_dir %>',
-                    dir: '<%= js_build_dir %>',
+                    appDir: '<%= client_app_dir %>',
+                    dir: '<%= assets_dir %>',
+                    keepBuildDir: true,
+                    removeCombined: true,
                     mainConfigFile: '<%= js_srcs_dir %>/common.js',
                     optimize: 'uglify2',
                     generateSourceMaps: isDev(),
@@ -110,35 +112,6 @@ module.exports = function(grunt) {
                 }
             }
         },
-
-        uglify: {
-            options: {
-                compress: {
-                    sequences: true,
-                    hoist_vars: true
-                },
-                drop_console: isProd(),
-                output: {
-                    beautify: false,
-                    space_colon: false,
-                    bracketize: true
-                },
-                mangle: true,
-                preserveLicenseComments: true,
-                warnings: true
-            },
-            compile: {
-                files: [{
-                    cwd: '<%= js_libs_dir %>',
-                    dest: '<%= js_build_dir %>/libs',
-                    expand: true,
-                    flatten: true,
-                    report: 'min',
-                    src: ['require.js']
-                }]
-            }
-        }
-
     });
 
     ///////////////////////////////////////////////////////////////////////
@@ -146,17 +119,12 @@ module.exports = function(grunt) {
 
     grunt.loadNpmTasks('grunt-bower-task');
     grunt.loadNpmTasks('grunt-contrib-clean');
-    grunt.loadNpmTasks('grunt-contrib-uglify');
-    grunt.loadNpmTasks('grunt-contrib-requirejs');
     // grunt.loadNpmTasks('grunt-react');
+    grunt.loadNpmTasks('grunt-contrib-requirejs');
     grunt.loadNpmTasks('grunt-sass');
 
     ///////////////////////////////////////////////////////////////////////
     // Register macro task(s).
 
-    grunt.registerTask('assets-dev',  ['bower', 'sass:dev']);
-    grunt.registerTask('assets-dist', ['bower', 'sass:dist']);
-    grunt.registerTask('dev',         ['assets-dev']);
-    grunt.registerTask('dist',        ['assets-dist']);
-    grunt.registerTask('default',     ['dist']);
+    grunt.registerTask('default', ['clean', 'bower', 'requirejs', 'sass']);
 }
