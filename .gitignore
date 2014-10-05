@@ -10,3 +10,5 @@
 /public/fonts/*
 /public/js/*
 /**/npm-debug.log
+public/build.txt
+public/sass
