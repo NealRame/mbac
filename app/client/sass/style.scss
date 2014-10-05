@@ -1,18 +1,26 @@
 @import "settings";
 @import "icons";
-
 @import "foundation/foundation";
 
-
 .top-bar {
-        img.user-picture {
-            @extend .show-for-medium-up;
-            width: $topbar-height;
-            height: $topbar-height;
-        }
-        span.user-name {
-            @extend .show-for-small;
-        }
+    img.user-picture {
+        @extend .show-for-medium-up;
+        width: $topbar-height;
+        height: $topbar-height;
+    }
+    span.user-name {
+        @extend .show-for-small;
+    }
+}
+
+body > section {
+    margin: 64px;
+    h1 {
+        margin-bottom: 32px;
+        margin-left: -32px;
+        font-family: 'Pacifico', cursive;
+        color: $page-section-title-color;
+    }
 }
 
 footer {
