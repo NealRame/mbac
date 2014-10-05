@@ -3,9 +3,13 @@ html
     head
         title= title
         link(rel='stylesheet', href='/css/style.css')
+        script(src='/js/libs/require.js')
 
     body
         include navbar
         block content
         include footer
-        script(src='/js/vendors/require.js' data-main='/js/main')
+        script.
+            require(['js/common'], function(common) {
+                require(['js/app/main'])
+            })
