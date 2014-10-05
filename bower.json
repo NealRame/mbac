@@ -48,6 +48,9 @@
         "jquery.cookie": {
             "app/client/js/libs": "jquery.cookie.js"
         },
+        "jquery-placeholder": {
+            "app/client/js/libs": "jquery.placeholder.js"
+        },
         "modernizr": {
             "app/client/js/libs": "modernizr.js"
         },
