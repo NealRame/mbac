@@ -70,23 +70,6 @@ module.exports = function(grunt) {
         //     }
         // },
 
-        sass: {
-            compile: {
-                options: {
-                    includePaths: ['<%= sass_libs_dir %>'],
-                    outputStyle: isDev() ? 'nested' : 'compressed',
-                    sourceMap: isDev()
-                },
-                files: [{
-                    expand: true,
-                    cwd: '<%= sass_srcs_dir %>',
-                    src: ['style.scss'],
-                    dest: '<%= sass_build_dir %>',
-                    ext: '.css'
-                }]
-            },
-        },
-
         requirejs: {
             compile: {
                 options: {
@@ -112,6 +95,37 @@ module.exports = function(grunt) {
                 }
             }
         },
+
+        sass: {
+            compile: {
+                options: {
+                    includePaths: ['<%= sass_libs_dir %>'],
+                    outputStyle: isDev() ? 'nested' : 'compressed',
+                    sourceMap: isDev()
+                },
+                files: [{
+                    expand: true,
+                    cwd: '<%= sass_srcs_dir %>',
+                    src: ['style.scss'],
+                    dest: '<%= sass_build_dir %>',
+                    ext: '.css'
+                }]
+            },
+        },
+
+        watch: {
+            sass: {
+                files: [
+                    '<%= sass_srcs_dir %>/**/*.scss',
+                    '<%= sass_srcs_dir %>/**/*.sass'
+                ],
+                tasks: ['sass'],
+                options: {
+                    spawn: false,
+                },
+            },
+        }
+
     });
 
     ///////////////////////////////////////////////////////////////////////
@@ -121,6 +135,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-clean');
     // grunt.loadNpmTasks('grunt-react');
     grunt.loadNpmTasks('grunt-contrib-requirejs');
+    grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-sass');
 
     ///////////////////////////////////////////////////////////////////////
