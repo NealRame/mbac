@@ -2,31 +2,32 @@
 //- ===========
 //- - author: Neal.Rame. <contact@nealrame.com>
 //- -   date: Thu Sep 18 13:25:12 CEST 2014
-nav.top-bar(data-topbar)
-    ul.title-area
-        li.name
-            h1: a(href="#") mon Bar à Couture
-        li.toggle-topbar.menu-icon
-            a(href="#"): span
-    section.top-bar-section
-        ul.right
-            if pages['top-bar']
-                each page in pages['top-bar']
-                    - var slug = page.slug()
-                    - var title = page.title
-                    li(class=slug === path ? 'active':'')
-                        if title === 'home'
-                            a(href=slug): i.fa.fa-home
-                        else
-                            a(href=slug) #{title}
-            if loggedIn
-                li.has-dropdown
-                    a
-                        img.user-picture(src=user.picture)
-                        span.user-name #{user.name.full}
-                    ul.dropdown
-                        li: a(href=logoutLink)
-                            i.fa.fa-sign-out
-                            |  Logout
-            else
-                li: a(href=loginLink) Login
+div.sticky
+    nav.top-bar(data-topbar)
+        ul.title-area
+            li.name
+                h1: a(href="#") mon Bar à Couture
+            li.toggle-topbar.menu-icon
+                a(href="#"): span
+        section.top-bar-section
+            ul.right
+                if pages['top-bar']
+                    each page in pages['top-bar']
+                        - var slug = page.slug()
+                        - var title = page.title
+                        li(class=slug === path ? 'active':'')
+                            if title === 'home'
+                                a(href=slug): i.fa.fa-home
+                            else
+                                a(href=slug) #{title}
+                if loggedIn
+                    li.has-dropdown
+                        a
+                            img.user-picture(src=user.picture)
+                            span.user-name #{user.name.full}
+                        ul.dropdown
+                            li: a(href=logoutLink)
+                                i.fa.fa-sign-out
+                                |  Logout
+                else
+                    li: a(href=loginLink) Login

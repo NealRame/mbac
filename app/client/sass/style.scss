@@ -8,19 +8,97 @@
         width: $topbar-height;
         height: $topbar-height;
     }
+
     span.user-name {
         @extend .show-for-small;
     }
 }
 
-body > section {
-    margin: 64px;
-    h1 {
-        margin-bottom: 32px;
-        margin-left: -32px;
-        font-family: 'Pacifico', cursive;
-        color: $page-section-title-color;
+body > .splash {
+    margin-top: $topbar-height;
+    position: fixed;
+    z-index: 1;
+
+    .logo {
+        margin: 0 48px;
+        font-size: 64pt;
+        font-family: 'Oswald', sans-serif;
+        font-weight: 700;
+        line-height: 100%;
+        .italic {
+            font-family: 'Georgia', serif;
+            font-style: italic;
+            font-weight: normal;
+        }
+        .small {
+            font-size: smaller;
+        }
     }
+}
+
+body > section {
+    position: relative;
+    z-index: 2;
+    background-color: inherit;
+
+    &:nth-child(3) {
+        margin-top: 300px;
+    }
+
+    &:nth-child(even) {
+        background-color: #4cb7de;
+    }
+
+    & > article {
+        margin: 32px;
+        @media #{$large-up} {
+            width: #{upper-bound($medium-range)};
+            margin: 32px auto;
+        }
+        overflow: auto;
+
+        & > header {
+            margin: 16px 0;
+            h1 {
+                color: $page-section-title-color;
+                font-family: 'Pacifico', cursive;
+            }
+        }
+
+        & > section {
+            margin: 0 32px;
+        }
+    }
+
+    table.schedule {
+        background-color: inherit;
+        border-collapse: collapse;
+        border: none;
+
+        tr {
+            background-color: inherit;
+        }
+
+        td {
+            &.center {
+                width: 33%;
+                @media #{$medium-only} {
+                    width: 66%;
+                }
+                @media #{$large-up} {
+                    width: 80%;
+                }
+
+                hr {
+                    border: 0;
+                    border-bottom: 1px dashed;
+                    margin: 0;
+                }
+            }
+        }
+    }
+
+    overflow: auto;
 }
 
 footer {

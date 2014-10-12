@@ -5,80 +5,96 @@
 extends layout
 
 block content
-    header.splash
+    div.splash
+        p.logo
+            span.italic.small mon
+            br
+            | BAR&#xA0;
+            span.italic à
+            | &#xA0;COUTURE ...
 
     section
-        h1: | Le rendez-vous du «Prêt-à-créer»
-        p
-            | mon Bar à Couture est le lieu destiné aux amateurs de loisirs
-            | creatifs. Ouvert en continu tout au long de la semaine, il vous
-            | offre un cadre privilégié pour réaliser tous vos projets de
-            | couture.
+        article
+            header
+                h1: | Le rendez-vous du «Prêt-à-créer»
+            section
+                p
+                    | mon Bar à Couture est le lieu destiné aux amateurs de
+                    | loisirs creatifs. Ouvert en continu tout au long de la
+                    | semaine, il vous offre un cadre privilégié pour réaliser
+                    | tous vos projets de couture.
 
     section
-        h1: | Horaires d'ouverture
-        table
-            tbody
-                tr
-                    td Mardi
-                    td: hr
-                    td 10H - 21H
-                tr
-                    td Mercredi
-                    td: hr
-                    td 10H - 18H
-                tr
-                    td Jeudi
-                    td: hr
-                    td 10H - 21H
-                tr
-                    td Vendredi
-                    td: hr
-                    td 10H - 21H
-                tr
-                    td Samedi
-                    td: hr
-                    td 10H - 21H
-
-    section
-        h1: | Contact
-        .row(data-equalizer)
-            .columns.large-4.medium-4(data-equalizer-watch)
+        article
+            header
+                h1: | Horaires d'ouverture
+            section
                 .row
-                    .columns.small-1.medium-12.large-12
-                        p.text-center
-                            i.fa.fa-mobile-phone.fa-4x.fa-fw
-                    .columns.small-8.medium-12.large-12
-                        p.text-center 03.20.39.72.44
-            .columns.large-4.medium-4(data-equalizer-watch)
-                .row
-                    .columns.small-1.medium-12.large-12
-                        p.text-center
-                            i.fa.fa-map-marker.fa-4x.fa-fw
-                    .columns.small-8.medium-12.large-12
-                        p.text-center
-                            | mon Bar à Couture<br>
-                            | 32, rue Mourmant<br>
-                            | 59000 Lille
-            .columns.large-4.medium-4(data-equalizer-watch)
-                .row
-                    .columns.small-1.medium-12.large-12
-                        p.text-center
-                            i.fa.fa-envelope-o.fa-4x.fa-fw
-                    .columns.small-8.medium-12.large-12
-                        p.text-center
-                            a(href='mailto:contact@monbaracouture.com')
-                                | contact@monbaracouture.com
+                    table.schedule
+                        tbody
+                            tr
+                                td.left Mardi
+                                td.center: hr
+                                td.right 10H - 21H
+                            tr
+                                td.left Mercredi
+                                td.center: hr
+                                td.right 10H - 18H
+                            tr
+                                td.left Jeudi
+                                td.center: hr
+                                td.right 10H - 21H
+                            tr
+                                td.left Vendredi
+                                td.center: hr
+                                td.right 10H - 21H
+                            tr
+                                td.left Samedi
+                                td.center: hr
+                                td.right 10H - 21H
 
     section
-        h1: | Newsletter
-        p
-            | Abonnez-vous à la newsletter et recevez toute l'actualité et les
-            | bon plans mon Bar à Couture.
-        .row
-            .small-10.medium-3.large-3.small-centered.columns
-                a(href="#", data-reveal-id="newsletter-modal").button
-                    | Je m'abonne !
+        article
+            header
+                h1: | Contact
+            section
+                .row(data-equalizer)
+                    .columns.large-4.medium-4(data-equalizer-watch)
+                        .row
+                            .columns.small-1.medium-12.large-12
+                                p.text-center
+                                    i.fa.fa-mobile-phone.fa-4x.fa-fw
+                            .columns.small-8.medium-12.large-12
+                                p.text-center 03.20.39.72.44
+                    .columns.large-4.medium-4(data-equalizer-watch)
+                        .row
+                            .columns.small-1.medium-12.large-12
+                                p.text-center
+                                    i.fa.fa-map-marker.fa-4x.fa-fw
+                            .columns.small-8.medium-12.large-12
+                                p.text-center
+                                    | mon Bar à Couture<br>
+                                    | 32, rue Mourmant<br>
+                                    | 59000 Lille
+                    .columns.large-4.medium-4(data-equalizer-watch)
+                        .row
+                            .columns.small-1.medium-12.large-12
+                                p.text-center
+                                    i.fa.fa-envelope-o.fa-4x.fa-fw
+                            .columns.small-8.medium-12.large-12
+                                p.text-center
+                                    a(href='mailto:contact@monbaracouture.com')
+                                        | contact@monbaracouture.com
+        article
+            header
+                h1: | Newsletter
+            section
+                | Abonnez-vous à la newsletter et recevez toute l'actualité et
+                | les bon plans mon Bar à Couture.
+                .row
+                    .small-10.medium-3.large-3.small-centered.columns
+                        a(href="#", data-reveal-id="newsletter-modal").button
+                            | Je m'abonne !
 
     div(class="reveal-modal", id="newsletter-modal" data-reveal)
         a.close-reveal-modal: &#215;
