@@ -74,24 +74,31 @@ module.exports = function(grunt) {
             compile: {
                 options: {
                     appDir: '<%= client_app_dir %>',
+                    mainConfigFile: '<%= js_srcs_dir %>/common.js',
+                    baseUrl: './js',
                     dir: '<%= assets_dir %>',
+
                     keepBuildDir: true,
                     removeCombined: isProd(),
-                    mainConfigFile: '<%= js_srcs_dir %>/common.js',
+
                     optimize: 'uglify2',
                     generateSourceMaps: isDev(),
                     preserveLicenseComments: isProd(),
                     useSourceUrl: isDev(),
+                    paths: {
+
+                    },
                     modules: [
                         {
-                            name: '../common',
+                            name: 'common',
                             include: ['jquery', 'foundation']
                         },
                         {
                             name: 'app/main',
-                            exclude: ['../common']
+                            exclude: ['common']
                         }
-                    ]
+                    ],
+                    logLevel: 4
                 }
             }
         },

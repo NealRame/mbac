@@ -1,7 +1,12 @@
 requirejs.config({
-    baseUrl: 'js/libs',
+    baseUrl: '/js',
     paths: {
-        'app': '../app'
+        'backbone': 'libs/backbone',
+        'fastclick': 'libs/fastclick',
+        'foundation': 'libs/foundation',
+        'jquery': 'libs/jquery',
+        'modernizr': 'libs/modernizr',
+        'underscore': 'libs/underscore'
     },
     shim: {
         'fastclick':  {exports: 'FastClick'},
