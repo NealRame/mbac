@@ -7,11 +7,15 @@ extends layout
 block content
     div.splash
         p.logo
-            span.italic.small mon
-            br
-            | BAR&#xA0;
-            span.italic à
-            | &#xA0;COUTURE ...
+            span.italic m
+            span B
+            span à
+            span C...
+            //- span.italic.small mon
+            //- br
+            //- | BAR&#xA0;
+            //- span à
+            //- | &#xA0;COUTURE ...
 
     section
         article
@@ -53,7 +57,7 @@ block content
                                 td.center: hr
                                 td.right 10H - 21H
 
-    section
+    section.filled
         article
             header
                 h1: | Contact
@@ -89,12 +93,13 @@ block content
             header
                 h1: | Newsletter
             section
-                | Abonnez-vous à la newsletter et recevez toute l'actualité et
-                | les bon plans mon Bar à Couture.
-                .row
-                    .small-10.medium-3.large-3.small-centered.columns
-                        a(href="#", data-reveal-id="newsletter-modal").button
-                            | Je m'abonne !
+                p.text-center
+                    | Abonnez-vous à la newsletter et recevez toute l'actualité
+                    | et les bon plans mon Bar à Couture.
+
+
+                a(href="#", data-reveal-id="newsletter-modal").button.text-center
+                    | Je m'abonne !
 
     div(class="reveal-modal", id="newsletter-modal" data-reveal)
         a.close-reveal-modal &#215;
@@ -106,7 +111,6 @@ block content
                 label
                     | E-mail
                     input(type="text", placeholder="Votre adresse mail")
-        .row
-            .small-10.medium-3.large-3.small-centered.columns
-                a(href="#").button
+
+                a(href="#").button.center
                     | Hop !
