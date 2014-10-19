@@ -11,11 +11,6 @@ block content
             span B
             span à
             span C...
-            //- span.italic.small mon
-            //- br
-            //- | BAR&#xA0;
-            //- span à
-            //- | &#xA0;COUTURE ...
 
     section
         article
@@ -57,7 +52,7 @@ block content
                                 td.center: hr
                                 td.right 10H - 21H
 
-    section.filled
+    section
         article
             header
                 h1: | Contact
@@ -100,6 +95,16 @@ block content
 
                 a(href="#", data-reveal-id="newsletter-modal").button.text-center
                     | Je m'abonne !
+
+    section.filled
+        article
+            header
+                h1: | Dernières réalisations
+            section
+                ul.small-block-grid-1.medium-block-grid-3
+                    li: img(src="/images/84191566b67168a139c3b17378add6c4.jpg")
+                    li: img(src="/images/9ccd6eca84a062668b0c08bbf2c6b75a.jpg")
+                    li: img(src="/images/f2a3742840b9331f254a696b7361e6da.jpg")
 
     div(class="reveal-modal", id="newsletter-modal" data-reveal)
         a.close-reveal-modal &#215;
