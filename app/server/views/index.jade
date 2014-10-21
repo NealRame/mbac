@@ -57,33 +57,44 @@ block content
             header
                 h1: | Contact
             section
-                .row(data-equalizer)
-                    .columns.large-4.medium-4(data-equalizer-watch)
-                        .row
-                            .columns.small-1.medium-12.large-12
-                                p.text-center
-                                    i.fa.fa-mobile-phone.fa-4x.fa-fw
-                            .columns.small-8.medium-12.large-12
-                                p.text-center 03.20.39.72.44
-                    .columns.large-4.medium-4(data-equalizer-watch)
-                        .row
-                            .columns.small-1.medium-12.large-12
-                                p.text-center
-                                    i.fa.fa-map-marker.fa-4x.fa-fw
-                            .columns.small-8.medium-12.large-12
-                                p.text-center
-                                    | mon Bar à Couture<br>
-                                    | 32, rue Mourmant<br>
-                                    | 59000 Lille
-                    .columns.large-4.medium-4(data-equalizer-watch)
-                        .row
-                            .columns.small-1.medium-12.large-12
-                                p.text-center
-                                    i.fa.fa-envelope-o.fa-4x.fa-fw
-                            .columns.small-8.medium-12.large-12
-                                p.text-center
-                                    a(href='mailto:contact@monbaracouture.com')
-                                        | contact@monbaracouture.com
+                ul.contact
+                    li
+                        div.contact-icon.phone
+                        | 03.20.39.72.44
+                    li
+                        div.contact-icon.address
+                        | mon Bar à Couture<br>
+                        | 32, rue Mourmant<br>
+                        | 59000 Lille
+                    li
+                        div.contact-icon.e-mail
+                        a(href='mailto:contact@monbaracouture.com')
+                            | contact@monbaracouture.com
+
+                //- .row(data-equalizer)
+                //-     .columns.large-4.medium-4(data-equalizer-watch)
+                //-         .row(data-equalizer)
+                //-             .columns.small-1.medium-12.large-12(data-equalizer-watch)
+                //-                 div.contact-icon.phone
+                //-             .columns.small-8.medium-12.large-12(data-equalizer-watch)
+                //-                 p.text-center 03.20.39.72.44
+                //-     .columns.large-4.medium-4(data-equalizer-watch)
+                //-         .row(data-equalizer)
+                //-             .columns.small-1.medium-12.large-12(data-equalizer-watch)
+                //-                 div.contact-icon.address
+                //-             .columns.small-8.medium-12.large-12(data-equalizer-watch)
+                //-                 p.text-center
+                //-                     | mon Bar à Couture<br>
+                //-                     | 32, rue Mourmant<br>
+                //-                     | 59000 Lille
+                //-     .columns.large-4.medium-4(data-equalizer-watch)
+                //-         .row(data-equalizer)
+                //-             .columns.small-1.medium-12.large-12(data-equalizer-watch)
+                //-                 div.contact-icon.e-mail
+                //-             .columns.small-8.medium-12.large-12(data-equalizer-watch)
+                //-                 p.text-center
+                //-                     a(href='mailto:contact@monbaracouture.com')
+                //-                         | contact@monbaracouture.com
         article
             header
                 h1: | Newsletter

@@ -90,29 +90,27 @@ $include-html-global-classes: $include-html-classes;
 $font-weight-normal: normal !default;
 $font-weight-bold: bold !default;
 
-// Global
-
-// We use these to define default font weights
-// $font-weight-normal: normal !default;
-// $font-weight-bold: bold !default;
-
+// Colors
 $black: #232020;
 $blue: #0095c7;
+$gray: #3d3838;
 $light-gray: #e4e5e6;
 $red: #ee222e;
 $yellow: #ffcf01;
 $white: #fff;
 
+// splash variables
+$splash-height: 384px;
 $splash-background-color: $black;
 
+//
 $page-background-color: $light-gray;
-$page-section-title-color: $red;
+$page-section-title-color: #aaa;
 
-// We use these to control various global styles
 $body-bg: $page-background-color;
-// $body-font-color: $jet;
+$body-font-color: $black;
 
-$font-weight-normal:300;
+$font-weight-normal: 300;
 $body-font-family: "Raleway", sans-serif;
 $body-font-weight: $font-weight-normal;
 // $body-font-style: normal;
@@ -1389,35 +1387,35 @@ $topbar-bg: $black;
 // $topbar-title-font-size: rem-calc(17);
 
 // Style the top bar dropdown elements
-$topbar-dropdown-bg: $light-gray;
-$topbar-dropdown-link-color: $black;
-$topbar-dropdown-link-bg: $light-gray;
+$topbar-dropdown-bg: $black;
+// $topbar-dropdown-link-color: $black;
+// $topbar-dropdown-link-bg: $light-gray;
 // $topbar-dropdown-link-weight: $font-weight-normal;
 // $topbar-dropdown-toggle-size: 5px;
-$topbar-dropdown-toggle-color: $light-gray;
+// $topbar-dropdown-toggle-color: $light-gray;
 // $topbar-dropdown-toggle-alpha: 0.4;
 
 // Set the link colors and styles for top-level nav
-$topbar-link-color: $white;
-$topbar-link-color-hover: $white;
-$topbar-link-color-active: $white;
-$topbar-link-color-active-hover: $white;
+// $topbar-link-color: $white;
+$topbar-link-color-hover: $yellow;
+$topbar-link-color-active: $yellow;
+$topbar-link-color-active-hover: $yellow;
 $topbar-link-weight: $font-weight-bold;
 // $topbar-link-font-size: rem-calc(13);
 // $topbar-link-hover-lightness: -10%; // Darken by 10%
 // $topbar-link-bg: $topbar-bg;
-$topbar-link-bg-color-hover: $black;
-$topbar-link-bg-hover: $yellow;
-$topbar-link-bg-active: $yellow;
-$topbar-link-bg-active-hover: $yellow;
+// $topbar-link-bg-color-hover: $black;
+$topbar-link-bg-hover: $black;
+$topbar-link-bg-active: $black;
+$topbar-link-bg-active-hover: $black;
 // $topbar-link-font-family: $body-font-family;
-// $topbar-link-text-transform: none;
+// $topbar-link-text-transform: uppercase;
 // $topbar-link-padding: $topbar-height / 3;
 
 // $topbar-button-font-size: 0.75rem;
-// $topbar-button-top: 7px;
+// $topbar-button-top: 12px;
 
-$topbar-dropdown-label-color: $black;
+// $topbar-dropdown-label-color: $red;
 // $topbar-dropdown-label-text-transform: uppercase;
 // $topbar-dropdown-label-font-weight: $font-weight-bold;
 // $topbar-dropdown-label-font-size: rem-calc(10);
@@ -1433,7 +1431,7 @@ $topbar-dropdown-label-color: $black;
 // $topbar-menu-icon-color-toggled: $jumbo;
 
 // Transitions and breakpoint styles
-// $topbar-transition-speed: 300ms;
+// $topbar-transition-speed: 600ms;
 // Using rem-calc for the below breakpoint causes issues with top bar
 // $topbar-breakpoint: #{lower-bound($medium-range)}; // Change to 9999px for always mobile layout
 // $topbar-media-query: $medium-up;

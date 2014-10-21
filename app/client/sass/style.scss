@@ -2,22 +2,26 @@
 @import "icons";
 @import "foundation/foundation";
 
-.top-bar {
-    h1 {
-        font-family: 'Georgia', serif;
-        font-style: italic;
-        font-weight: bold;
-        text-shadow: 1px 0px 6px white;
-    }
+.menu {
+    // border-bottom: 2px solid $light-gray;
+    .top-bar {
+        h1 {
+            font-family: 'Georgia', serif;
+            font-style: italic;
+            font-weight: bold;
+            text-shadow: 1px 0px 6px white;
+        }
 
-    img.user-picture {
-        @extend .show-for-medium-up;
-        height: $topbar-height;
-        width: $topbar-height;
-    }
+        img.user-picture {
+            @extend .show-for-medium-up;
+            height: $topbar-height - 8px;
+            width: $topbar-height - 8px;
+            margin: 4px;
+        }
 
-    span.user-name {
-        @extend .show-for-small;
+        span.user-name {
+            @extend .show-for-small;
+        }
     }
 }
 
@@ -30,10 +34,9 @@ body > .splash {
         display: block;
 
         background-color: $splash-background-color;
-        // margin-top: $topbar-height;
         position: fixed;
 
-        height: 256px;
+        height: $splash-height;
         width: 100%;
 
         z-index: 1;
@@ -41,20 +44,25 @@ body > .splash {
         .logo {
             color: white;
 
-            font-size: 100pt;
+            font-size: 112pt;
+
+            @media #{$large-up} {
+                font-size: 128pt;
+            }
+
             font-family: 'Georgia', serif;
             font-weight: bold;
-            letter-spacing: -2px;
+            letter-spacing: -8px;
 
             text-shadow: 1px 0px 6px white;
+            text-align: center;
 
-            margin: 0 128px;
-            margin-top: 48px;
+            margin-top: 96px;
 
             .italic {
                 font-style: italic;
                 font-weight: normal;
-                letter-spacing: -18px;
+                letter-spacing: -26px;
             }
 
             .small {
@@ -74,7 +82,7 @@ body > section {
 
     @media #{$medium-up} {
         &:nth-child(3) {
-            margin-top: 256px;
+            margin-top: $splash-height;
         }
     }
     & > article {
@@ -141,6 +149,75 @@ body > section {
                     border-bottom: 1px dashed;
                     margin: 0;
                 }
+            }
+        }
+    }
+
+    .contact {
+        list-style-type: none;
+        overflow: auto;
+        margin: 0 auto;
+        padding: 0;
+        text-align: center;
+
+        @media #{$medium-only} {
+            width: 510px;
+        }
+
+        @media #{$large-only} {
+            width: 768px;
+        }
+
+        li {
+            @media #{$medium-only} {
+                width: 168px;
+                font-size: 0.75em;
+            }
+
+            @media #{$large-only} {
+                width: 256px;
+            }
+
+            @media #{$medium-up} {
+                float: left;
+            }
+
+            margin: 32px auto;
+        }
+
+        .contact-icon {
+            background-color: #aaa;
+            border-radius: 90px;
+            color: $light-gray;
+
+            font-family: FontAwesome;
+            font-size: 2em;
+            line-height: 64px;
+
+            height: 64px;
+            width: 64px;
+
+            margin: 8px auto;
+            text-align: center;
+
+            @media #{$medium-up} {
+                font-size: 4em;
+                line-height: 96px;
+                height: 96px;
+                width: 96px;
+                margin: 16px auto;
+            }
+
+            &.phone:before {
+                content: "\f10b";
+            }
+
+            &.address:before {
+                content: "\f041";
+            }
+
+            &.e-mail:before {
+                content: "\f003";
             }
         }
     }
