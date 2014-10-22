@@ -1,0 +1,19 @@
+//- index.jade
+//- ==========
+//- - author: Neal.Rame. <contact@nealrame.com>
+//- -   date: Thu Jul 10 00:00:00 CEST 2014
+extends layout
+
+block content
+    if ! loggedIn
+        section
+            article
+                section
+                    p.text-center
+                        | Vous devez d'abord vous authentifier avant de pouvoir
+                        | continuer:<br>
+                        a(href="#{loginLink}").button.text-center
+                            | Login
+    else
+        section: article: section: p
+            | Pouet!

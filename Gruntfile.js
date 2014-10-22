@@ -96,6 +96,10 @@ module.exports = function(grunt) {
                         {
                             name: 'app/main',
                             exclude: ['common']
+                        },
+                        {
+                            name: 'app/admin_main',
+                            exclude: ['common']
                         }
                     ],
                     logLevel: 4

@@ -14,7 +14,9 @@ html
         include navbar
         block content
         include footer
+        - var main = script ? script : 'app/main'
+
         script.
             require(['/js/common.js'], function(common) {
-                require(['app/main'])
+                require(['#{main}'])
             })
