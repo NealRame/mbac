@@ -695,16 +695,16 @@ $font-smoothing: antialiased;
 
 // We use these to style the icon-bar and items
 // $include-html-icon-bar-classes: $include-html-classes;
-// $icon-bar-bg: $oil;
+$icon-bar-bg: $gray;
 // $icon-bar-font-color: $white;
-// $icon-bar-font-size: 1rem;
-// $icon-bar-hover-color: $primary-color;
+$icon-bar-font-size: 0.5em;
+$icon-bar-hover-color: $light-gray;
 // $icon-bar-icon-color: $white;
-// $icon-bar-icon-size: 1.875rem;
+// $icon-bar-icon-size: 1rem;
 // $icon-bar-image-width: 1.875rem;
 // $icon-bar-image-height: 1.875rem;
 // $icon-bar-active-color: $primary-color;
-// $icon-bar-item-padding: 1.25rem;
+$icon-bar-item-padding: 0.5rem;
 
 // 13. Inline Lists
 // - - - - - - - - - - - - - - - - - - - - - - - - -
