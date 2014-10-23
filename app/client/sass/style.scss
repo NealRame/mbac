@@ -69,6 +69,10 @@ body > .splash {
                 font-size: smaller;
             }
         }
+
+        & + section {
+            margin-top: $splash-height;
+        }
     }
 }
 
@@ -80,11 +84,6 @@ body > section {
 
     -webkit-transform: translate3d(0,0,0);
 
-    @media #{$medium-up} {
-        &:nth-child(3) {
-            margin-top: $splash-height;
-        }
-    }
     & > article {
         margin: 32px;
 
