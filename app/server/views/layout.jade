@@ -2,20 +2,21 @@
 //- ===========
 //- - author: Neal.Rame. <contact@nealrame.com>
 //- -   date: Thu Jul 10 00:00:00 CEST 2014
+
+- var style = css ? css : '/css/style.css'
+- var main  = app ? app : 'app/main'
+
 doctype html
 html
     head
         title= title
-        link(rel='stylesheet', href='/css/style.css')
+        link(rel='stylesheet', href='#{style}')
         link(rel='stylesheet', href='//fonts.googleapis.com/css?family=Lobster|Raleway:300,700', type='text/css')
         script(src='/js/libs/require.js')
-
     body
         include navbar
         block content
         include footer
-        - var main = script ? script : 'app/main'
-
         script.
             require(['/js/common.js'], function(common) {
                 require(['#{main}'])

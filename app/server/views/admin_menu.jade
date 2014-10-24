@@ -1,0 +1,15 @@
+//- admin_menu.jade
+//- ===============
+//- - author: Neal.Rame. <contact@nealrame.com>
+//- -   date: Thu Oct 23 22:50:10 CEST 2014
+
+div.admin-menu.three-up.label-right
+    a.item(href='/admin/blog', data-state=panel === 'blog' ? 'active':'')
+        i.fa.fa-rss
+        label: | Blog
+    a.item(href='/admin/gallery', data-state=panel === 'gallery' ? 'active':'')
+        i.fa.fa-photo
+        label: | Gallerie
+    a.item(href='/admin/pages', data-state=panel === 'pages' ? 'active':'')
+        i.fa.fa-file-code-o
+        label: | Pages
