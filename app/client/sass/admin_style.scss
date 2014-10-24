@@ -9,7 +9,7 @@
         // Set the hover background color for the icon bar.
         $bar-hover-color: $light-gray,
         // Set the padding for icon bar.
-        $padding: 0.5rem,
+        $padding: 0.25rem 0 0 0,
         // Set the font-size of the icon bar.
         $font-size: 1em,
         // Set the size of the icons within the icon bar.
@@ -17,16 +17,17 @@
     );
 
     .item {
-		&:hover {
-            label { color: $black; }
-			i { color: $black; }
+        border-bottom: 2px solid #aaa;
+		&:hover, &[data-state=active] {
+            background-color: $light-gray;
+            * { color: $black; }
         }
-    }
-
-    .item[data-state=active]  {
-        background-color: $light-gray;
-        label { color: $black; }
-        i { color: $black; }
+        &[data-state=active] {
+            border: 2px solid #aaa;
+            border-bottom: none;
+        }
+        &:first-child { border-left:  none; }
+        &:last-child  { border-right: none; }
     }
 
     &.label-right > .item {
@@ -35,7 +36,6 @@
             font-size: 1rem;
             margin: 0 0.5rem 4px 0;
         }
-
         label {
             display: inline-block;
         }
