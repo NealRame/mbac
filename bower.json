@@ -23,6 +23,7 @@
         "modernizr": "~2.8.3",
         "monosocialiconsfont": "*",
         "requirejs": "~2.1.14",
+        "requirejs-text": "~2.0.12",
         "react": "~0.11.0"
     },
     "exportsOverride": {
@@ -62,6 +63,9 @@
         },
         "requirejs": {
             "app/client/js/libs": "require.js"
+        },
+        "requirejs-text": {
+            "app/client/js/libs": "text.js"
         },
         "underscore": {
             "app/client/js/libs": "underscore.js"

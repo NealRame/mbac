@@ -6,7 +6,8 @@ requirejs.config({
         'foundation': 'libs/foundation',
         'jquery': 'libs/jquery',
         'modernizr': 'libs/modernizr',
-        'underscore': 'libs/underscore'
+        'text': 'libs/text',
+        'underscore': 'libs/underscore',
     },
     shim: {
         'fastclick':  {exports: 'FastClick'},
