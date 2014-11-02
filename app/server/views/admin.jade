@@ -2,6 +2,7 @@
 //- ==========
 //- - author: Neal.Rame. <contact@nealrame.com>
 //- -   date: Thu Jul 10 00:00:00 CEST 2014
+
 extends layout
 
 block content
@@ -15,12 +16,7 @@ block content
                         a(href="#{loginLink}").button.text-center
                             | Login
     else
-
+        
         include admin_menu
-        case panel
-            when 'blog':    include admin_panel_blog
-            when 'gallery': include admin_panel_gallery
-            when 'pages':   include admin_panel_pages
-            default
-                section: article: section: p
-                    | Dashboard
+        section: article: section: p
+            | Dashboard
