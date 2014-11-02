@@ -10,7 +10,7 @@ require('app').getInstance()
             function() {
                 debug(
                     'Express server listening on '
-                        + config.server.host + ':' + config.server.port
+                        + config.server.address + ':' + config.server.port
                 );
             }
         );
