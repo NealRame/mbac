@@ -1,7 +1,7 @@
 define(function(require) {
     var $ = require('jquery');
     var Foundation = require('foundation');
-    var stickyFooter = require('app/sticky-footer');
+    var stickyFooter = require('utils/sticky-footer');
 
     $(document).foundation();
     $(window)

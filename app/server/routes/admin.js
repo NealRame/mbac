@@ -8,7 +8,7 @@ var express = require('express');
 var router = express.Router();
 
 var locals = {
-    app:   'app/admin_main',
+    app:   'back/main',
     css:   '/css/admin_style.css',
     title: 'mon Bar à Couture - l\'arrière boutique'
 };

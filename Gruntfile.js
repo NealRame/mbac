@@ -94,11 +94,11 @@ module.exports = function(grunt) {
                             include: ['jquery', 'foundation']
                         },
                         {
-                            name: 'app/main',
+                            name: 'front/main',
                             exclude: ['common']
                         },
                         {
-                            name: 'app/admin_main',
+                            name: 'back/main',
                             exclude: ['common']
                         }
                     ],
