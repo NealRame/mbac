@@ -73,13 +73,16 @@ module.exports = function(grunt) {
                     generateSourceMaps: isDev(),
                     preserveLicenseComments: isProd(),
                     useSourceUrl: isDev(),
-                    paths: {
-
-                    },
                     modules: [
                         {
                             name: 'common',
-                            include: ['jquery', 'foundation']
+                            include: [
+                                'backbone',
+                                'foundation',
+                                'jquery',
+                                'marionette',
+                                'underscore'
+                            ]
                         },
                         {
                             name: 'front/main',

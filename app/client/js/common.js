@@ -5,6 +5,7 @@ requirejs.config({
         'fastclick': 'libs/fastclick',
         'foundation': 'libs/foundation',
         'jquery': 'libs/jquery',
+        'marionette': 'libs/backbone.marionette',
         'modernizr': 'libs/modernizr',
         'text': 'libs/text',
         'underscore': 'libs/underscore',
