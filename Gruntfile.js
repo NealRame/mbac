@@ -58,18 +58,6 @@ module.exports = function(grunt) {
             'sass-libs': ['<%= sass_libs_dir %>']
         },
 
-        // react: {
-        //     components: {
-        //         files: [{
-        //             expand: true,
-        //             cwd: '<%= js_srcs_dir %>/views',
-        //             src: ['**/*.jsx'],
-        //             dest: '<%= js_build_dir %>/views',
-        //             ext: '.js'
-        //         }]
-        //     }
-        // },
-
         requirejs: {
             compile: {
                 options: {
@@ -144,7 +132,6 @@ module.exports = function(grunt) {
 
     grunt.loadNpmTasks('grunt-bower-task');
     grunt.loadNpmTasks('grunt-contrib-clean');
-    // grunt.loadNpmTasks('grunt-react');
     grunt.loadNpmTasks('grunt-contrib-requirejs');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-sass');
