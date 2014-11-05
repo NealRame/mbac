@@ -5,5 +5,9 @@
 extends layout
 
 block content
-  h1 #{error.status}: #{error.message}
-  pre #{error.stack}
+    section.wrapper
+        article
+            header
+                h1 #{error.status}: #{error.message}
+            section
+                pre #{error.stack}
