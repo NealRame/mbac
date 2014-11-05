@@ -7,7 +7,7 @@ extends layout
 
 block content
     if ! loggedIn
-        section
+        section.wrapper
             article
                 section
                     p.text-center
@@ -16,7 +16,7 @@ block content
                         a(href="#{loginLink}").button.text-center
                             | Login
     else
-        
-        include admin_menu
-        section: article: section: p
-            | Dashboard
+        #dashboard
+            include admin_menu
+            #dashbord-panel
+                section.wrapper: article: section: p: | Dashboard
