@@ -123,9 +123,20 @@ module.exports = function(grunt) {
                 ],
                 tasks: ['sass'],
                 options: {
-                    spawn: false,
+                    spawn: true,
                 },
             },
+            requirejs: {
+                files: [
+                    '<%= js_srcs_dir %>/back/**/*.js',
+                    '<%= js_srcs_dir %>/back/**/template.html',
+                    '<%= js_srcs_dir %>/front/**/*.js'
+                ],
+                tasks: ['clean:js', 'requirejs'],
+                options: {
+                    spawn: true,
+                },
+            }
         }
 
     });
