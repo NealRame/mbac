@@ -56,6 +56,7 @@ exports.getInstance = function() {
         // routes setup
         app.use('/', require('routes/index'));
         app.use('/admin', require('routes/admin'));
+        app.use('/api', require('routes/api'));
 
         // error handlers setup
 
