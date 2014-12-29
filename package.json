@@ -30,7 +30,7 @@
     "grunt-contrib-requirejs": "^0.4.4",
     "grunt-contrib-watch": "^0.6.1",
     "grunt-notify": "^0.4.1",
-    "grunt-sass": "^0.16.1",
+    "grunt-sass": "^0.17.0",
     "uglify-js": "^2.4.15"
   }
 }
