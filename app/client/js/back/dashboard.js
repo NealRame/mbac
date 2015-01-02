@@ -12,7 +12,7 @@ define(function(require) {
         console.log('-- Dashboard started!');
     });
 
-    console.log('-- Creating application instance - done!');
+    console.log('-- Creating application instance - done');
 
     app.addInitializer(function() {
         var controller = new Controller(this);

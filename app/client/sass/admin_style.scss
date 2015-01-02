@@ -1,6 +1,8 @@
 @import "style";
 
-#dashboard-menu > .items {
+
+
+.tab-bar > .items {
     @include icon-bar(
         // Set the background color of the icon bar.
         $bar-bg: $gray,
