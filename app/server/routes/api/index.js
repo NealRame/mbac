@@ -7,6 +7,6 @@ var _ = require('underscore');
 var express = require('express');
 var router = express.Router();
 
-router.use('/products', require('routes/api/products'));
+router.use('/achievements', require('routes/api/achievements'));
 
 module.exports = router;
