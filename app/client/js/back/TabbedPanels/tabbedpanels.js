@@ -62,14 +62,15 @@ define(function(require) {
         childView: ItemView,
         tagName: 'div',
         initialize: function() {
-            this.options = {
+            this.configure({
                 labelRight: false
-            };
+            });
             this.listenTo(this.collection, 'change', this.render);
         },
-        configure: function(options) {
-            _.extend(
-                this.options, _.pick(options || {}, 'labelRight')
+        configure: function(config) {
+            this.config = _.extend(
+                this.config || {},
+                _.pick(config || {}, 'labelRight')
             );
             return this;
         },
@@ -77,7 +78,7 @@ define(function(require) {
             var classes = [ 'items' ];
 
             classes.push(menuClasses[this.collection.length]);
-            if (this.options.labelRight) {
+            if (this.config.labelRight) {
                 classes.push('label-right');
             }
             this.$el.removeClass().addClass(classes.join(' '));
@@ -106,6 +107,10 @@ define(function(require) {
                 collection: this.collection
             });
             console.log('-- TabbedPanels: initialization - done');
+        },
+        configure: function(config) {
+            this.tabBar.configure(config);
+            return this;
         },
         addPanel: function(panel) {
             this.collection.add(panel);

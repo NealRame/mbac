@@ -9,6 +9,10 @@ requirejs.config({
         'modernizr': 'libs/modernizr',
         'text': 'libs/text',
         'underscore': 'libs/underscore',
+
+        'Dashboard': 'back/dashboard',
+        'TabbedPanels': 'back/TabbedPanels/tabbedpanels',
+        'Gallery': 'back/Gallery/gallery',
     },
     shim: {
         'fastclick':  {exports: 'FastClick'},
