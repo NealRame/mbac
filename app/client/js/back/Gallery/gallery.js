@@ -6,6 +6,7 @@ define(function(require) {
     var _ = require('underscore');
     var $ = require('jquery');
     var Backbone = require('backbone');
+    var Thumbnail = require('back/Gallery/gallery.thumbnail');
 
     var galleryTemplate = require('text!back/Gallery/gallery.template.html');
 
@@ -31,9 +32,9 @@ define(function(require) {
             var list = this.get('pictures').slice(0);
             if (! _.contains(list, picture)) {
                 var index = list.length;
-                if (picture instanceof File) {
-                    picture = {file: picture};
-                }
+                // if (picture instanceof File) {
+                //     picture = {file: picture};
+                // }
                 list.push(picture);
                 this.set({pictures: list});
                 this.trigger('new-picture', picture, index);
@@ -124,221 +125,67 @@ define(function(require) {
     });
 
 
-    var Achievements = Backbone.Collection.extend({
-        model: Achievement,
-        // url: '/api/achievements'
-    });
-
-
-    var Picture = Backbone.Model.extend({
-        setPicture: function(picture) {
-            this.unset('original',  {silent: true});
-            this.unset('thumbnail', {silent: true});
-            this.unset('file',      {silent: true});
-            this.set(picture);
-        },
-        validate: function(attributes) {
-            if (! (attributes.file instanceof File)
-                    || (attributes.thumbnail instanceof String
-                        && attributes.original instanceof String)) {
-                return new Error('invalid thumbnail data');
-            }
-        }
-    });
-
-
-    var Thumbnail = Marionette.ItemView.extend({
-        className: 'thumb',
-        ui: {
-            'actions': '.action-bar > a'
-        },
+    var AchievementPictureList = Marionette.CollectionView.extend({
+        childView: Thumbnail.view,
         events: {
-            'click @ui.actions': 'onActionRequested',
-            'mouseenter': 'onMouseEnter',
-            'mouseleave': 'onMouseLeave'
+            'dragenter': 'onDragEnter',
+            'dragleave': 'onDragLeave',
+            'dragover':  'onDragOver',
+            'drop':      'onDrop'
         },
-        getOption: Marionette.proxyGetOption,
-        initialize: function(attr, options) {
-            this.configure(
-                _.extend(
-                    options || {},
-                    {
-                        removable: true,
-                        editable: true,
-                        side: 128,
-                    }
-                )
-            );
-        },
-        configure: function(options, render) {
-            this.options = _.extend(
-                this.options || {},
-                _.pick(options || {}, 'removable', 'editable', 'side')
-            );
-            if (render) {
-                this.render();
-            }
-            return this;
-        },
-        onActionRequested: function(e) {
-            e.preventDefault();
-            this.trigger($(e.currentTarget).attr('data-action'), this.model);
-            return false;
-        },
-        onMouseEnter: function(e) {
-            this.$('.action-bar').fadeIn(100);
-            return false;
-        },
-        onMouseLeave: function(e) {
-            this.$('.action-bar').fadeOut(100);
-            return false;
-        },
-        template: false,
-        onBeforeRender: function() {
-            var side = this.options.side;
-
-            var create_spinner = (function() {
-                var fontSize = side/4;
-                var shift = 3*fontSize/2;
-
-                return $(document.createElement('i'))
-                    .addClass('fa fa-circle-o-notch fa-spin')
-                    .css({
-                        position: 'absolute',
-                        fontSize: fontSize,
-                        height: fontSize,
-                        width: fontSize,
-                        left: shift,
-                        top:  shift
-                    });
-            }).bind(this);
-
-            var create_placeholder = (function() {
-                var fontSize = side - 32;
-                var shift = (side - fontSize)/2;
-
-                return $(document.createElement('i'))
-                    .addClass('fa fa-ban fa-fw')
-                    .css({
-                        color: 'lightgray',
-                        position: 'absolute',
-                        fontSize: fontSize,
-                        height: fontSize,
-                        width: fontSize,
-                        left: shift,
-                        top:  shift
-                    });
-            }).bind(this);
-
-            var create_action_bar = (function() {
-                var actions = [];
-                if (this.options.removable) {
-                    actions.push(
-                        $(document.createElement('a'))
-                            .attr('href', '#')
-                            .attr('data-action', 'remove')
-                            .append($(document.createElement('i')).addClass('fa fa-trash'))
-                    );
-                }
-                if (this.options.editable) {
-                    actions.push(
-                        $(document.createElement('a'))
-                            .attr('href', '#')
-                            .attr('data-action', 'edit')
-                            .append($(document.createElement('i')).addClass('fa fa-pencil'))
-                    );
-                }
-                return $(document.createElement('div')).addClass('action-bar').append(actions);
-            }).bind(this);
-
-            var create_thumb = (function(cb) {
-                if (! this.model) {
-                    var elt = create_placeholder();
-                    if (cb) {
-                        cb.call(this, elt);
-                    }
-                    return elt;
-                }
-
-                this.$el.append(create_spinner());
-
-                var data = this.model.toJSON();
-                var view = this;
-                var img = new Image;
-
-                img.onload = function() {
-                    var w = img.width, h = img.height, r = w/h;
-
-                    if (r > 1) {
-                        w = side*r;
-                        $(img).css({
-                            left: (side - w)/2,
-                            width: w,
-                            height: side
-                        });
-                    } else {
-                        h = side/r;
-                        $(img).css({
-                            top: (side - h)/2,
-                            width: side,
-                            height: h
-                        });
-                    }
-
-                    if (cb) {
-                        cb.call(view, $(img));
-                    }
-                };
-
-                if (data.file instanceof File) {
-                    var reader = new FileReader;
-                    reader.onload = (function(e) {
-                        img.src = e.target.result;
-                    });
-                    reader.readAsDataURL(data.file);
-                } else {
-                    // img.src = 'files/' + data.thumbnail;
-                    img.src = data.thumbnail;
-                }
-
-                return $(img);
-            }).bind(this);
-
-            this.$el.empty();
-            this.$el.css({width: side, height: side});
-
-            create_thumb(function(thumb) {
-                this.$('i').remove();
-                this.$el
-                    .append(thumb)
-                    .append(create_action_bar());
-            });
-
-            return this;
-        }
-    });
-
-
-    var AchievementView = Marionette.ItemView.extend({
-        tagName: 'li',
-        template: false,
         initialize: function() {
-            var pictures = this.model.get('pictures');
-            this.thumbnail = new Thumbnail({
-                model: pictures.length > 0 ? new Picture(pictures[0]) : null
-            });
-            this.listenTo(this.thumbnail, 'remove', function() {
-                console.log('-- AchievementView: remove');
-                this.model.destroy();
-                this.thumbnail.remove();
-            });
-            this.listenTo(this.thumbnail, 'edit', function() {
-                console.log('-- AchievementView: edit');
-            });
+            this.render();
         },
-        onRender: function() {
-            this.$el.append(this.thumbnail.render().el);
-        }
+        addChild: function(child, ChildView, index) {
+            var thumbnail = new ChildView({
+                tagName: 'li',
+                model: child
+            }, {editable: false});
+            this.$el.append(thumbnail.render().el);
+            this.listenTo(thumbnail, 'remove', function() {
+                console.log('-- AchievementPictureList: remove');
+                this.stopListening(thumbnail);
+                child.destroy();
+                thumbnail.remove();
+                this.trigger('remove-picture', index);
+            });
+            this.trigger('add-picture', child.toJSON(), index);
+        },
+        addFile: function(file) {
+            if (file instanceof File) {
+                this.collection.add({file: file});
+            }
+        },
+        addFiles: function(files) {
+            _.each(files, this.addFile, this);
+        },
+        onDragEnter: function(e) {
+            console.log('-- AchievementCreator:onDragEnter');
+            e.preventDefault();
+            e.stopPropagation();
+            this.$el.attr('data-state', 'over');
+            return false;
+        },
+        onDragLeave: function(e) {
+            console.log('-- AchievementCreator:onDragLeave');
+            e.preventDefault();
+            e.stopPropagation();
+            this.$el.removeAttr('data-state');
+            return false;
+        },
+        onDragOver: function(e) {
+            console.log('-- AchievementCreator:onDragOver');
+            e.dataTransfer.dropEffect = 'copy';
+            e.preventDefault();
+            e.stopPropagation();
+            return false;
+        },
+        onDrop: function(e) {
+            console.log('-- AchievementCreator:onDrop');
+            this.onDragLeave.call(this, e);
+            this.addFiles(e.dataTransfer.files);
+            return false;
+        },
     });
 
 
@@ -346,17 +193,21 @@ define(function(require) {
         ui: {
             nameField: '#name',
             descField: '#desc',
-            addButton: '#add-picture > input',
-            sbtButton: 'input[type=submit]'
+            addButton: '#add-pictures > input',
+            sbtButton: '#submit'
         },
         events: {
-            'blur @ui.nameField': 'onNameChanged',
-            'blur @ui.descField': 'onDescriptionChanged',
-            'change @ui.addButton': 'onAddPicture',
-            'click @ui.sbtButton': 'onOkClicked'
+            'blur   @ui.nameField': 'onNameChanged',
+            'blur   @ui.descField': 'onDescriptionChanged',
+            'click  @ui.sbtButton': 'onOkClicked',
+            'change @ui.addButton': 'onAddPictures'
         },
+        template: false,
         initialize: function() {
             this.reset();
+        },
+        reset: function() {
+            this.setModel(null);
         },
         setModel: function(model) {
             if (this.model) {
@@ -365,18 +216,33 @@ define(function(require) {
             this.model = model || new Achievement;
             this.listenTo(this.model, 'destroy', this.reset);
             this.render();
+            return this;
         },
         onNameChanged: function() {
-
+            console.log('-- AchievementCreator:onNameChanged');
+            this.model.set('name', this.ui.nameField.val().trim());
+            return false;
         },
         onDescriptionChanged: function() {
-
+            console.log('-- AchievementCreator:onDescriptionChanged');
+            this.model.set('description', this.ui.descField.val());
+            return false;
         },
-        onAddPicture: function() {
-
+        onAddPictures: function(e) {
+            console.log('-- AchievementCreator:onAddPictures');
+            e.preventDefault();
+            e.stopPropagation();
+            this.achievementPictureList.addFiles(e.target.files);
+            return false;
         },
-        onOkClicked: function() {
-
+        onOkClicked: function(e) {
+            console.log('-- AchievementCreator:onOkClicked');
+            e.preventDefault();
+            e.stopPropagation();
+            if (this.model.isNew()) {
+                this.collection.add(this.model);
+            }
+            return false;
         },
         onRender: function() {
             if (this.achievementPictureList) {
@@ -384,25 +250,71 @@ define(function(require) {
                 this.achievementPictureList.stopListening();
                 this.achievementPictureList.remove();
             }
+            this.achievementPictureList = new AchievementPictureList({
+                el: this.$('#pictures'),
+                collection: new Backbone.Collection(
+                    this.model.get('pictures'),
+                    {model: Thumbnail.model}
+                )
+            });
+            this.listenTo(this.achievementPictureList, 'add-picture', function(picture, index) {
+                this.model.addPicture(picture);
+            });
+            this.listenTo(this.achievementPictureList, 'remove-picture', function(index) {
+                this.model.removePictureAtIndex(index);
+            });
             this.ui.nameField.val(this.model.get('name'));
             this.ui.descField.val(this.model.get('description'));
-
+            return this;
         }
     });
 
 
-    var achievements = new Achievements();
+    var AchievementList = Marionette.CollectionView.extend({
+        childView: Thumbnail.view,
+        initialize: function() {
+            this.render();
+        },
+        addChild: function(child, ChildView, index) {
+            var pictures = child.get('pictures');
+            var thumbnail = new ChildView({
+                tagName: 'li',
+                model: pictures.length > 0 ? new Thumbnail.model(pictures[0]) : null
+            });
+            this.$el.append(thumbnail.render().el);
+            this.listenTo(thumbnail, 'remove', function() {
+                console.log('-- AchievementView: remove');
+                this.stopListening(thumbnail);
+                child.destroy();
+                thumbnail.remove();
+            });
+            this.listenTo(thumbnail, 'edit', function() {
+                console.log('-- AchievementView: edit');
+                this.trigger('edit', child);
+            });
+        },
+    });
 
-    achievements.add(new Achievement({
-        name: 'Kittens',
-        description: 'Some cats, that\'s all',
-        pictures: [
-            {
-                original: 'http://placekitten.com/g/800/600',
-                thumbnail: 'http://placekitten.com/g/128/128',
-            }
-        ]
-    }));
+
+    var achievements = new Backbone.Collection(
+        [
+            new Achievement({
+                name: 'Kittens',
+                description: 'Some cats, that\'s all',
+                pictures: [
+                    {
+                        original: 'http://placekitten.com/g/800/600',
+                        thumbnail: 'http://placekitten.com/g/128/128',
+                    }
+                ]
+            })
+        ],
+        {
+            model: Achievement,
+            // url: '/api/achievements'
+        }
+    );
+
 
     var Gallery = Marionette.ItemView.extend({
         template: _.template(galleryTemplate),
@@ -416,11 +328,17 @@ define(function(require) {
         onBeforeRender: function() {
         },
         onRender: function() {
-            this.achievementList = (new Marionette.CollectionView({
+            this.achievementCreator = new AchievementCreator({
+                el: this.$('#achievement-creator'),
                 collection: achievements,
-                childView: AchievementView,
-                el: this.$('#achievement-list')
-            })).render();
+            });
+            this.achievementList = new AchievementList({
+                el: this.$('#achievement-list'),
+                collection: achievements,
+            });
+            this.listenTo(this.achievementList, 'edit', function(model) {
+                this.achievementCreator.setModel(model);
+            });
         }
     });
 

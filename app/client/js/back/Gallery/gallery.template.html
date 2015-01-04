@@ -1,6 +1,21 @@
 <section class='wrapper'>
     <article>
-        <div id='achievement-creator'></div>
-        <ul id='achievement-list'></ul>
+        <div id='achievement-creator'>
+            <label for='name'>Name</label>
+            <input id='name' type='text'>
+
+            <label for='desc'>Description</label>
+            <textarea id='desc' type='text' rows='4'></textarea>
+
+            <div id='add-pictures' class='add-files-button expand'>
+                <span>Ajouter des images</span>
+                <input type='file' multiple>
+            </div>
+
+            <ul id='pictures' class='thumbnails'></ul>
+
+            <a id='submit' class='button' href='#'>Ok</a>
+        </div>
+        <ul id='achievement-list' class='thumbnails'></ul>
     </article>
 </section>

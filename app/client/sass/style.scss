@@ -92,7 +92,7 @@ section.wrapper {
             width: #{upper-bound($medium-range)};
         }
 
-        overflow: auto;
+        // overflow: auto;
 
         & > header {
             margin: 16px 0;

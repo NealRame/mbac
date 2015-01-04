@@ -1,6 +1,70 @@
 @import "style";
 
+// Gallery widget /////////////////////////////////////////////////////////////
 
+.add-files-button {
+    @extend .button;
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+    input[type=file] {
+        position: absolute;
+        bottom: 0; right: 0; top: 0; left: 0;
+        margin: 0;
+        padding: 0;
+        opacity: 0;
+        filter: alpha(opacity=0);
+        cursor: pointer;
+    }
+}
+
+#achievement-creator #pictures {
+    background-color: white;
+    min-height: 132px;
+}
+
+.thumbnails {
+    list-style-type: none;
+    margin: 0;
+    margin-bottom: 16px;
+    overflow: auto;
+    .thumb {
+        float: left;
+        margin: 2px;
+        div {
+            position: relative;
+            overflow: hidden;
+            img {
+                max-width: none;
+                max-height: none;
+                position: absolute;
+            }
+        }
+    }
+}
+
+.action-bar {
+    background-color: rgba(0, 0, 0, 0.5);
+    position: absolute;
+    display: none;
+    top: 0;
+    width: 100%;
+    overflow: auto;
+}
+
+.action-bar a {
+    color: lightgray;
+    float: right;
+    text-decoration: none;
+    margin: 2px;
+    display: block;
+}
+
+.action-bar a:hover {
+    color: red;
+}
+
+// Tabbed panels widget ///////////////////////////////////////////////////////
 
 .tab-bar > .items {
     @include icon-bar(
