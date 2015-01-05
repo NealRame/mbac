@@ -1,0 +1,11 @@
+<div class='crop' style='width: <%= width %>px; height: <%= height %>px;'>
+    <% if (actions.length > 0) { %>
+        <div class='action-bar'>
+            <% _.each(actions, function(action) { %>
+                <a href='#' data-action='<%= action.name %>'>
+                    <i class='<%= action.icon %>'></i>
+                </a>
+            <% }); %>
+        </div>
+    <% } %>
+</div>

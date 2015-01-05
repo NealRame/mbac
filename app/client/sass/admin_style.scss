@@ -30,13 +30,19 @@
     overflow: auto;
     .thumb {
         float: left;
-        margin: 2px;
-        div {
+        .crop {
             position: relative;
             overflow: hidden;
             img {
                 max-width: none;
                 max-height: none;
+                position: absolute;
+            }
+            .placeholder {
+                color: lightgray;
+                position: absolute;
+            }
+            .spinner {
                 position: absolute;
             }
         }

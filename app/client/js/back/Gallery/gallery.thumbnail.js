@@ -3,14 +3,15 @@ define(function(require) {
     var $ = require('jquery');
     var Backbone = require('backbone');
 
+    var thumbnailTemplate = require('text!back/Gallery/gallery.thumbnail.template.html');
 
     var Picture = Backbone.Model.extend({
-        setPicture: function(picture) {
-            this.unset('original',  {silent: true});
-            this.unset('thumbnail', {silent: true});
-            this.unset('file',      {silent: true});
-            this.set(picture);
-        },
+        // setPicture: function(picture) {
+        //     this.unset('original',  {silent: true});
+        //     this.unset('thumbnail', {silent: true});
+        //     this.unset('file',      {silent: true});
+        //     this.set(picture);
+        // },
         validate: function(attributes) {
             if (! (attributes.file instanceof File)
                     || (attributes.thumbnail instanceof String
@@ -24,7 +25,8 @@ define(function(require) {
     var Thumbnail = Marionette.ItemView.extend({
         className: 'thumb',
         ui: {
-            'actions': '.action-bar > a'
+            'actions': '.action-bar > a',
+            'crop': '.crop'
         },
         events: {
             'click @ui.actions': 'onActionRequested',
@@ -32,6 +34,7 @@ define(function(require) {
             'mouseleave': 'onMouseLeave'
         },
         getOption: Marionette.proxyGetOption,
+        thumbnailTemplate: _.template(thumbnailTemplate),
         template: false,
         initialize: function(attr, options) {
             this.configure(
@@ -41,6 +44,7 @@ define(function(require) {
                         removable: true,
                         editable: true,
                         side: 128,
+                        margin: 2,
                     }
                 )
             );
@@ -48,11 +52,16 @@ define(function(require) {
         configure: function(options, render) {
             this.options = _.extend(
                 this.options || {},
-                _.pick(options || {}, 'removable', 'editable', 'side')
+                _.pick(options || {}, 'removable', 'editable', 'side', 'margin')
             );
             if (render) {
                 this.render();
             }
+            return this;
+        },
+        setPicture: function(picture) {
+            this.model = picture;
+            this.render();
             return this;
         },
         onActionRequested: function(e) {
@@ -69,79 +78,57 @@ define(function(require) {
             return false;
         },
         onBeforeRender: function() {
+            console.log(data);
+            console.log(this);
+            var data = {
+                width:  this.options.side,
+                height: this.options.side,
+                actions: []
+            };
+
+            if (this.options.removable) {
+                data.actions.push({
+                    name: 'remove',
+                    icon: 'fa fa-trash'
+                });
+            }
+            if (this.options.editable) {
+                data.actions.push({
+                    name: 'edit',
+                    icon: 'fa fa-pencil'
+                });
+            }
+            this.$el.css('margin', this.options.margin).empty().html(this.thumbnailTemplate(data));
+        },
+        onRender: function() {
             var side = this.options.side;
-
-            var create_spinner = (function() {
-                var fontSize = side/4;
-                var shift = 3*fontSize/2;
-
+            var create_overlay = function(type, font_size) {
+                var classes = {
+                    spinner: 'fa fa-circle-o-notch fa-spin',
+                    placeholder: 'fa fa-ban fa-fw'
+                };
+                var shift = (side - font_size)/2;
                 return $(document.createElement('i'))
-                    .addClass('fa fa-circle-o-notch fa-spin spinner')
+                    .addClass((classes[type] || '') + ' ' + type)
                     .css({
-                        position: 'absolute',
-                        fontSize: fontSize,
-                        height: fontSize,
-                        width: fontSize,
+                        fontSize: font_size,
+                        height: font_size,
+                        width: font_size,
                         left: shift,
-                        top:  shift
+                        top: shift
                     });
-            }).bind(this);
+            };
+            var create_spinner = create_overlay.bind(this, 'spinner', side/4);
+            var create_placeholder = create_overlay.bind(this, 'placeholder', side - 32);
+            var insert =
+                (this.ui.crop.children().length > 0
+                    ? function(elt){$(elt).insertBefore(this.$('.action-bar'));}
+                    : function(elt){this.ui.crop.append(elt);}).bind(this);
 
-            var create_placeholder = (function() {
-                var fontSize = side - 32;
-                var shift = (side - fontSize)/2;
-
-                return $(document.createElement('i'))
-                    .addClass('fa fa-ban fa-fw')
-                    .css({
-                        color: 'lightgray',
-                        position: 'absolute',
-                        fontSize: fontSize,
-                        height: fontSize,
-                        width: fontSize,
-                        left: shift,
-                        top:  shift
-                    });
-            }).bind(this);
-
-            var create_action_bar = (function() {
-                var actions = [];
-                if (this.options.removable) {
-                    actions.push(
-                        $(document.createElement('a'))
-                            .attr('href', '#')
-                            .attr('data-action', 'remove')
-                            .append($(document.createElement('i')).addClass('fa fa-trash'))
-                    );
-                }
-                if (this.options.editable) {
-                    actions.push(
-                        $(document.createElement('a'))
-                            .attr('href', '#')
-                            .attr('data-action', 'edit')
-                            .append($(document.createElement('i')).addClass('fa fa-pencil'))
-                    );
-                }
-                return $(document.createElement('div')).addClass('action-bar').append(actions);
-            }).bind(this);
-
-            var create_thumb = (function(cb) {
-                if (! this.model) {
-                    var elt = create_placeholder();
-                    if (cb) {
-                        cb.call(this, elt);
-                    }
-                    return elt;
-                }
-
+            if (this.model) {
                 var data = this.model.toJSON();
                 var view = this;
                 var img = new Image;
-
-                var wrapper =
-                    $(document.createElement('div'))
-                        .css({width: side, height: side})
-                        .append([img, create_spinner(), create_action_bar()]);
 
                 img.onload = function() {
                     var w = img.width, h = img.height, r = w/h;
@@ -161,13 +148,11 @@ define(function(require) {
                             height: h
                         });
                     }
-
-                    wrapper.find('.spinner').remove();
-
-                    if (cb) {
-                        cb.call(view, wrapper);
-                    }
+                    view.ui.crop.find('.spinner').remove();
                 };
+
+                insert(create_spinner());
+                insert(img);
 
                 if (data.file instanceof File) {
                     var reader = new FileReader;
@@ -179,15 +164,9 @@ define(function(require) {
                     // img.src = 'files/' + data.thumbnail;
                     img.src = data.thumbnail;
                 }
-
-                return wrapper;
-            }).bind(this);
-
-            create_thumb(function(thumb) {
-                this.$el.empty().append(thumb);
-            });
-
-            return this;
+            } else {
+                insert(create_placeholder());
+            }
         }
     });
 
