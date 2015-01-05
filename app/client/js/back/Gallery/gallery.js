@@ -133,9 +133,6 @@ define(function(require) {
             'dragover':  'onDragOver',
             'drop':      'onDrop'
         },
-        initialize: function() {
-            this.render();
-        },
         addChild: function(child, ChildView, index) {
             var thumbnail = new ChildView({
                 tagName: 'li',
@@ -149,11 +146,13 @@ define(function(require) {
                 thumbnail.remove();
                 this.trigger('remove-picture', index);
             });
-            this.trigger('add-picture', child.toJSON(), index);
         },
         addFile: function(file) {
             if (file instanceof File) {
-                this.collection.add({file: file});
+                var picture = {file: file};
+                var index = this.collection.length;
+                this.collection.add(picture);
+                this.trigger('add-picture', picture, index);
             }
         },
         addFiles: function(files) {
@@ -186,6 +185,10 @@ define(function(require) {
             this.addFiles(e.dataTransfer.files);
             return false;
         },
+        onBeforeRender: function() {
+            console.log('-- AchievementCreator:onBeforeRender', this.collection.toJSON());
+            this.$el.empty();
+        }
     });
 
 
@@ -204,10 +207,33 @@ define(function(require) {
         },
         template: false,
         initialize: function() {
+            this.achievementPictureList = new AchievementPictureList({
+                el: this.$('#pictures'),
+                collection: new Backbone.Collection(
+                    [], {model: Thumbnail.model}
+                )
+            });
+            this.listenTo(
+                this.achievementPictureList,
+                'add-picture',
+                function(picture, index) {
+                    console.log('add-picture: ', picture, index);
+                    this.model.addPicture(picture);
+                }
+            );
+            this.listenTo(
+                this.achievementPictureList,
+                'remove-picture',
+                function(index) {
+                    console.log('remove-picture: ', index);
+                    this.model.removePictureAtIndex(index);
+                }
+            );
+            this.render();
             this.reset();
         },
-        reset: function() {
-            this.setModel(null);
+        reset: function(render) {
+            return this.setModel(null);
         },
         setModel: function(model) {
             if (this.model) {
@@ -215,7 +241,12 @@ define(function(require) {
             }
             this.model = model || new Achievement;
             this.listenTo(this.model, 'destroy', this.reset);
-            this.render();
+            this.ui.nameField.val(this.model.get('name'));
+            this.ui.descField.val(this.model.get('description'));
+            this.achievementPictureList.collection.reset(this.model.get('pictures'));
+
+            console.log(this.model.toJSON());
+
             return this;
         },
         onNameChanged: function() {
@@ -245,26 +276,9 @@ define(function(require) {
             return false;
         },
         onRender: function() {
-            if (this.achievementPictureList) {
-                this.stopListening(this.achievementPictureList);
-                this.achievementPictureList.stopListening();
-                this.achievementPictureList.remove();
-            }
-            this.achievementPictureList = new AchievementPictureList({
-                el: this.$('#pictures'),
-                collection: new Backbone.Collection(
-                    this.model.get('pictures'),
-                    {model: Thumbnail.model}
-                )
-            });
-            this.listenTo(this.achievementPictureList, 'add-picture', function(picture, index) {
-                this.model.addPicture(picture);
-            });
-            this.listenTo(this.achievementPictureList, 'remove-picture', function(index) {
-                this.model.removePictureAtIndex(index);
-            });
-            this.ui.nameField.val(this.model.get('name'));
-            this.ui.descField.val(this.model.get('description'));
+            this.achievementPictureList.render();
+            // this.ui.nameField.val(this.model.get('name'));
+            // this.ui.descField.val(this.model.get('description'));
             return this;
         }
     });
@@ -276,12 +290,21 @@ define(function(require) {
             this.render();
         },
         addChild: function(child, ChildView, index) {
-            var pictures = child.get('pictures');
+            var picture = function() {
+                var pictures = child.get('pictures');
+                return pictures.length > 0
+                        ? new Thumbnail.model(pictures[0])
+                        : null;
+            };
             var thumbnail = new ChildView({
                 tagName: 'li',
-                model: pictures.length > 0 ? new Thumbnail.model(pictures[0]) : null
+                model: picture()
             });
             this.$el.append(thumbnail.render().el);
+            this.listenTo(child, 'change', function() {
+                console.log('-- AchievementView: change');
+                thumbnail.setPicture(picture());
+            });
             this.listenTo(thumbnail, 'remove', function() {
                 console.log('-- AchievementView: remove');
                 this.stopListening(thumbnail);
