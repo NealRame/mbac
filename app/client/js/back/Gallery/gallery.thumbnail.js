@@ -78,14 +78,11 @@ define(function(require) {
             return false;
         },
         onBeforeRender: function() {
-            console.log(data);
-            console.log(this);
             var data = {
                 width:  this.options.side,
                 height: this.options.side,
                 actions: []
             };
-
             if (this.options.removable) {
                 data.actions.push({
                     name: 'remove',
