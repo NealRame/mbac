@@ -244,9 +244,6 @@ define(function(require) {
             this.ui.nameField.val(this.model.get('name'));
             this.ui.descField.val(this.model.get('description'));
             this.achievementPictureList.collection.reset(this.model.get('pictures'));
-
-            console.log(this.model.toJSON());
-
             return this;
         },
         onNameChanged: function() {
