@@ -135,6 +135,11 @@ define(function(require) {
             'dragover':  'onDragOver',
             'drop':      'onDrop'
         },
+        initialize: function() {
+            this.listenTo(this.collection, 'remove', function(model, col, opt) {
+                this.trigger('remove-picture', model.attributes, opt.index);
+            });
+        },
         addChild: function(child, ChildView, index) {
             var thumbnail = new ChildView({
                 tagName: 'li',
@@ -146,7 +151,6 @@ define(function(require) {
                 this.stopListening(thumbnail);
                 child.destroy();
                 thumbnail.remove();
-                this.trigger('remove-picture', index);
             });
         },
         addFile: function(file) {
@@ -226,8 +230,8 @@ define(function(require) {
             this.listenTo(
                 this.achievementPictureList,
                 'remove-picture',
-                function(index) {
-                    console.log('remove-picture: ', index);
+                function(picture, index) {
+                    console.log('remove-picture: ', picture, index);
                     this.model.removePictureAtIndex(index);
                 }
             );
@@ -276,8 +280,6 @@ define(function(require) {
         },
         onRender: function() {
             this.achievementPictureList.render();
-            // this.ui.nameField.val(this.model.get('name'));
-            // this.ui.descField.val(this.model.get('description'));
             return this;
         }
     });
