@@ -284,7 +284,18 @@ define(function(require) {
     var AchievementList = Marionette.CollectionView.extend({
         childView: Thumbnail.view,
         initialize: function() {
+            this.configure({
+                thumbnail: {
+                    width: 128,
+                    height: 85,
+                    margin: 2,
+                }
+            });
             this.render();
+        },
+        configure: function(config) {
+            this.options = _.extend(this.options || {}, config);
+            return this;
         },
         addChild: function(child, ChildView, index) {
             var picture = function() {
