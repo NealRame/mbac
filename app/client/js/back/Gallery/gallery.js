@@ -8,7 +8,7 @@ define(function(require) {
     var Backbone = require('backbone');
     var Thumbnail = require('back/Gallery/gallery.thumbnail');
 
-    var galleryTemplate = require('text!back/Gallery/gallery.template.html');
+    var achievementCreateTemplate = require('text!back/Gallery/gallery.achievement-create.template.html');
 
     if (_.indexOf($.event.props, 'dataTransfer') < 0) {
         $.event.props.push('dataTransfer');
@@ -337,7 +337,7 @@ define(function(require) {
 
 
     var Gallery = Marionette.ItemView.extend({
-        template: _.template(galleryTemplate),
+        template: _.template(achievementCreateTemplate),
         initialize: function() {
             this.configure({});
         },
