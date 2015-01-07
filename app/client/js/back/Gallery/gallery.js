@@ -9,6 +9,8 @@ define(function(require) {
     var Thumbnail = require('back/Gallery/gallery.thumbnail');
 
     var achievementCreateTemplate = require('text!back/Gallery/gallery.achievement-create.template.html');
+    var achievementListAddTemplate = require('text!back/Gallery/gallery.achievement-list-add.template.html');
+
 
     if (_.indexOf($.event.props, 'dataTransfer') < 0) {
         $.event.props.push('dataTransfer');
@@ -282,7 +284,14 @@ define(function(require) {
 
 
     var AchievementList = Marionette.CollectionView.extend({
+        ui: {
+            addButton: '#add-achievement'
+        },
+        events: {
+            'click @ui.addButton': 'onAddButtonClicked'
+        },
         childView: Thumbnail.view,
+        addAchievementTemplate: _.template(achievementListAddTemplate),
         initialize: function() {
             this.configure({
                 thumbnail: {
@@ -297,6 +306,37 @@ define(function(require) {
             this.options = _.extend(this.options || {}, config);
             return this;
         },
+        onAddButtonClicked: function(e) {
+            console.log('-- AchievementList:onAddButtonClicked');
+            e.preventDefault();
+            e.stopPropagation();
+        },
+        onBeforeRender: function() {
+            var w = this.options.thumbnail.width;
+            var h = this.options.thumbnail.height;
+            var font_size = Math.max(8, Math.min(w, h) - 32);
+            var left_shift = (w - font_size)/2;
+            var top_shift = (h - font_size)/2;
+
+            this.addElement = $(document.createElement('li'))
+                .addClass('thumb')
+                .attr('data-last', '')
+                .css({margin: this.options.thumbnail.margin})
+                .html(this.addAchievementTemplate({
+                    width: w,
+                    height: h,
+                }));
+            this.addElement.find('a').css({
+                left: left_shift,
+                top: top_shift
+            });
+            this.addElement.find('i').css({
+                fontSize: font_size,
+                width: font_size,
+                height: font_size,
+            });
+            this.$el.append(this.addElement);
+        },
         addChild: function(child, ChildView, index) {
             var picture = function() {
                 var pictures = child.get('pictures');
@@ -307,8 +347,8 @@ define(function(require) {
             var thumbnail = new ChildView({
                 tagName: 'li',
                 model: picture()
-            });
-            this.$el.append(thumbnail.render().el);
+            }).configure(this.options.thumbnail);
+
             this.listenTo(child, 'change', function() {
                 console.log('-- AchievementView: change');
                 thumbnail.setPicture(picture());
@@ -323,6 +363,7 @@ define(function(require) {
                 console.log('-- AchievementView: edit');
                 this.trigger('edit', child);
             });
+            thumbnail.render().$el.insertBefore(this.$("[data-last]"));
         },
     });
 

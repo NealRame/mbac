@@ -48,6 +48,15 @@
                 position: absolute;
             }
         }
+    .thumb[data-last] {
+        #add-achievement {
+            color: lightgray;
+            position: absolute;
+        }
+        #add-achievement:hover {
+            color: #aaa;
+            position: absolute;
+        }
     }
 }
 
