@@ -45,9 +45,14 @@
                 position: absolute;
             }
             .spinner {
+                color: lightgray;
                 position: absolute;
             }
         }
+        .crop[data-empty] {
+            background-color: #eee;
+        }
+    }
     .thumb[data-last] {
         #add-achievement {
             color: lightgray;

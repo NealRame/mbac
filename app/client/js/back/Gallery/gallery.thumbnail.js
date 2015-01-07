@@ -81,6 +81,7 @@ define(function(require) {
             var data = {
                 width:  this.options.side,
                 height: this.options.side,
+                hasPicture: ! (_.isNull(this.model) || _.isUndefined(this.model)),
                 actions: []
             };
             if (this.options.removable) {
