@@ -43,16 +43,17 @@ define(function(require) {
                     {
                         removable: true,
                         editable: true,
-                        side: 128,
+                        width: 128,
+                        height: 128,
                         margin: 2,
                     }
                 )
             );
         },
-        configure: function(options, render) {
+        configure: function(config, render) {
             this.options = _.extend(
                 this.options || {},
-                _.pick(options || {}, 'removable', 'editable', 'side', 'margin')
+                _.pick(config || {}, 'removable', 'editable', 'height', 'width', 'margin')
             );
             if (render) {
                 this.render();
@@ -79,8 +80,8 @@ define(function(require) {
         },
         onBeforeRender: function() {
             var data = {
-                width:  this.options.side,
-                height: this.options.side,
+                width:  this.options.width,
+                height: this.options.height,
                 hasPicture: ! (_.isNull(this.model) || _.isUndefined(this.model)),
                 actions: []
             };
@@ -99,21 +100,21 @@ define(function(require) {
             this.$el.css('margin', this.options.margin).empty().html(this.thumbnailTemplate(data));
         },
         onRender: function() {
-            var side = this.options.side;
+            var width = this.options.width, height = this.options.height;
+            var side = Math.min(width, height);
             var create_overlay = function(type, font_size) {
                 var classes = {
                     spinner: 'fa fa-circle-o-notch fa-spin',
                     placeholder: 'fa fa-ban fa-fw'
                 };
-                var shift = (side - font_size)/2;
                 return $(document.createElement('i'))
                     .addClass((classes[type] || '') + ' ' + type)
                     .css({
                         fontSize: font_size,
                         height: font_size,
                         width: font_size,
-                        left: shift,
-                        top: shift
+                        left: (width - font_size)/2,
+                        top: (height - font_size)/2
                     });
             };
             var create_spinner = create_overlay.bind(this, 'spinner', side/4);
@@ -129,20 +130,20 @@ define(function(require) {
                 var img = new Image;
 
                 img.onload = function() {
-                    var w = img.width, h = img.height, r = w/h;
+                    var r = img.width/img.height;
 
                     if (r > 1) {
-                        w = side*r;
+                        var w = Math.max(width, height*r);
                         $(img).css({
-                            left: (side - w)/2,
+                            left: (width - w)/2,
                             width: w,
-                            height: side,
+                            height: 'auto',
                         });
                     } else {
-                        h = side/r;
+                        var h = Math.max(height, width/r);
                         $(img).css({
-                            top: (side - h)/2,
-                            width: side,
+                            top: (height - h)/2,
+                            width: 'auto',
                             height: h
                         });
                     }
