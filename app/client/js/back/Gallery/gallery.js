@@ -34,9 +34,6 @@ define(function(require) {
             var list = this.get('pictures').slice(0);
             if (! _.contains(list, picture)) {
                 var index = list.length;
-                // if (picture instanceof File) {
-                //     picture = {file: picture};
-                // }
                 list.push(picture);
                 this.set({pictures: list});
                 this.trigger('new-picture', picture, index);
@@ -139,12 +136,26 @@ define(function(require) {
             this.listenTo(this.collection, 'remove', function(model, col, opt) {
                 this.trigger('remove-picture', model.attributes, opt.index);
             });
+            this.configure({
+                thumbnail: {
+                    width:  128,
+                    height: 128,
+                    margin: 2
+                }
+            });
+        },
+        configure: function(config) {
+            this.options = _.extend(
+                this.options || {},
+                _.pick(config || {}, 'thumbnail')
+            );
+            return this;
         },
         addChild: function(child, ChildView, index) {
             var thumbnail = new ChildView({
                 tagName: 'li',
                 model: child
-            }, {editable: false});
+            }).configure(_.extend(this.options.thumbnail, {editable: true}));
             this.$el.append(thumbnail.render().el);
             this.listenTo(thumbnail, 'remove', function() {
                 console.log('-- AchievementPictureList: remove');
