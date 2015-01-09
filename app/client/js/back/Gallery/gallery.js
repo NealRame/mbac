@@ -400,16 +400,86 @@ define(function(require) {
         }
     );
 
+    var Configuration = Backbone.Model.extend({
+        set: function(path, value) {
+            var super_set = Backbone.Model.prototype.set.bind(this);
+
+            if (_.isString(path)) {
+                this.set(path.split('.'), value);
+            } else if (_.isArray(path)) {
+                switch (path.length) {
+                    case 0: break;
+                    case 1:
+                        super_set(path[0], value);
+                        break;
+                    default: {
+                        super_set(path[0], (new Configuration()).set(path.slice(1), value));
+                        break;
+                    }
+                }
+            } else if (_.isObject(path)) {
+                _.each(path, function(value, key) {
+                    super_set(key, _.isObject(value) ? new Configuration(value) : value);
+                });
+            } else {
+                throw new TypeError('path must be a string or an array of strings');
+            }
+            return this;
+        },
+        get: function(path) {
+            var super_get = Backbone.Model.prototype.get.bind(this);
+
+            if (_.isString(path)) {
+                return this.get(path.split('.'));
+            } else if (_.isArray(path)) {
+                switch (path.length) {
+                    case 0: break;
+                    case 1:
+                        return super_get(path[0]);
+                    default:
+                        return super_get(path[0]).get(path.slice(1));
+                }
+            } else {
+                throw new TypeError('path must be a string or an array of strings');
+            }
+        },
+        toJSON: function() {
+            var o = Backbone.Model.prototype.toJSON.call(this);
+            _.each(o, function(value, key) {
+                if (value instanceof Configuration) {
+                    o[key] = value.toJSON();
+                }
+            });
+            return o;
+        },
+        destroy: function() {
+            _.each(this.attributes, function(value, key) {
+                if (value instanceof Configuration) {
+                    this.stopListening(value);
+                    value.destroy();
+                }
+            });
+            Backbone.Model.prototype.destroy.call(this);
+        }
+    });
+
+    // var conf = new Configuration({foo: {bar: {gee: 42}}});
+    // conf.set('foo.bar.gee', 42);
+
+    // console.log('** conf: ', conf);
+    // console.log(conf.get('foo.bar.gee'));
+    // console.log(conf.toJSON());
 
     var Gallery = Marionette.ItemView.extend({
         template: _.template(achievementCreateTemplate),
         initialize: function() {
-            this.configure({});
+            // this.configuration = { foo: {bar: 'gee'}};
+            // console.log(this.config('foo.bar'));
         },
-        configure: function(config) {
-            this.config = _.extend(this.config || {}, config);
-            return this;
-        },
+        // configure: function(config) {
+        //     this.config = _.extend(this.config || {}, config);
+        //     return this;
+        // },
         onBeforeRender: function() {
         },
         onRender: function() {
