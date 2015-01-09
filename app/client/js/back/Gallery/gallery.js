@@ -409,10 +409,21 @@ define(function(require) {
             } else if (_.isArray(path)) {
                 switch (path.length) {
                     case 0: break;
-                    case 1:
-                        super_set(path[0], value);
+                    case 1: {
+                        if (_.isObject(value)) {
+                            super_set(path[0], new Collection(value));
+                        } else {
+                            super_set(path[0], value);
+                        }
                         break;
+                    }
                     default: {
+                        var old_value = this.get(path[0]);
+
+                        if (old_value instanceof Collection) {
+                            old_value.destroy();
+                            this.stopListening(old_value);
+                        }
                         super_set(path[0], (new Configuration()).set(path.slice(1), value));
                         break;
                     }
