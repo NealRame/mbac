@@ -9,7 +9,7 @@ define(function(require) {
     var Thumbnail = require('back/Gallery/gallery.thumbnail');
 
     var galleryTemplate = require('text!back/Gallery/gallery.template.html');
-    var achievementCreateTemplate = require('text!back/Gallery/gallery.achievement-create.template.html');
+    var achievementEditorTemplate = require('text!back/Gallery/gallery.achievement-create.template.html');
     var achievementListAddTemplate = require('text!back/Gallery/gallery.achievement-list-add.template.html');
     var configuration = require('Configuration');
 
@@ -178,40 +178,39 @@ define(function(require) {
             _.each(files, this.addFile, this);
         },
         onDragEnter: function(e) {
-            console.log('-- AchievementCreator:onDragEnter');
+            console.log('-- AchievementPictureList:onDragEnter');
             e.preventDefault();
             e.stopPropagation();
             this.$el.attr('data-state', 'over');
             return false;
         },
         onDragLeave: function(e) {
-            console.log('-- AchievementCreator:onDragLeave');
+            console.log('-- AchievementPictureList:onDragLeave');
             e.preventDefault();
             e.stopPropagation();
             this.$el.removeAttr('data-state');
             return false;
         },
         onDragOver: function(e) {
-            console.log('-- AchievementCreator:onDragOver');
+            console.log('-- AchievementPictureList:onDragOver');
             e.dataTransfer.dropEffect = 'copy';
             e.preventDefault();
             e.stopPropagation();
             return false;
         },
         onDrop: function(e) {
-            console.log('-- AchievementCreator:onDrop');
+            console.log('-- AchievementPictureList:onDrop');
             this.onDragLeave.call(this, e);
             this.addFiles(e.dataTransfer.files);
             return false;
         },
         onBeforeRender: function() {
-            console.log('-- AchievementCreator:onBeforeRender', this.collection.toJSON());
             this.$el.empty();
         }
     });
 
 
-    var AchievementCreator = Marionette.ItemView.extend({
+    var AchievementEditor = Marionette.ItemView.extend({
         ui: {
             nameField: '#name',
             descField: '#desc',
@@ -226,7 +225,7 @@ define(function(require) {
             'click  @ui.cancelButton': 'onCancelClicked',
             'change @ui.addButton': 'onAddPictures'
         },
-        template: _.template(achievementCreateTemplate),
+        template: _.template(achievementEditorTemplate),
         initialize: function() {
             this.workingCopy = this.model.clone();
             this.listenTo(this.workingCopy, 'change', function() {
@@ -234,14 +233,14 @@ define(function(require) {
             });
         },
         onAddPictures: function(e) {
-            console.log('-- AchievementCreator:onAddPictures');
+            console.log('-- AchievementEditor:onAddPictures');
             e.preventDefault();
             e.stopPropagation();
             this.achievementPictureList.addFiles(e.target.files);
             return false;
         },
         onSubmitClicked: function(e) {
-            console.log('-- AchievementCreator:onSubmitClicked');
+            console.log('-- AchievementEditor:onSubmitClicked');
             e.preventDefault();
             e.stopPropagation();
             if (this.model.isNew() || this.workingCopy.hasChanged()) {
@@ -254,7 +253,7 @@ define(function(require) {
             return false;
         },
         onCancelClicked: function(e) {
-            console.log('-- AchievementCreator:onCancelClicked');
+            console.log('-- AchievementEditor:onCancelClicked');
             e.preventDefault();
             e.stopPropagation();
             if (this.model.isNew()) {
@@ -264,12 +263,12 @@ define(function(require) {
             return false;
         },
         onNameChanged: function() {
-            console.log('-- AchievementCreator:onNameChanged');
+            console.log('-- AchievementEditor:onNameChanged');
             this.workingCopy.set('name', this.ui.nameField.val().trim());
             return false;
         },
         onDescriptionChanged: function() {
-            console.log('-- AchievementCreator:onDescriptionChanged');
+            console.log('-- AchievementEditor:onDescriptionChanged');
             this.workingCopy.set('description', this.ui.descField.val());
             return false;
         },
@@ -394,7 +393,7 @@ define(function(require) {
     var Gallery = Marionette.LayoutView.extend({
         template: _.template(galleryTemplate),
         regions: {
-            achievementCreator: '#achievement-creator',
+            achievementEditor: '#achievement-editor',
             achievementList: '#achievement-list'
         },
         initialize: function() {
@@ -424,8 +423,8 @@ define(function(require) {
             this.listenTo(this.collection, 'add', this.openEditor);
         },
         openEditor: function(achievement) {
-            var region = this.getRegion('achievementCreator');
-            var creator = new AchievementCreator({model: achievement});
+            var region = this.getRegion('achievementEditor');
+            var creator = new AchievementEditor({model: achievement});
 
             region.show(creator);
             region.$el.foundation('reveal', 'open');
