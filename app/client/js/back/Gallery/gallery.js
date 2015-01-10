@@ -8,6 +8,7 @@ define(function(require) {
     var Backbone = require('backbone');
     var Thumbnail = require('back/Gallery/gallery.thumbnail');
 
+    var galleryTemplate = require('text!back/Gallery/gallery.template.html');
     var achievementCreateTemplate = require('text!back/Gallery/gallery.achievement-create.template.html');
     var achievementListAddTemplate = require('text!back/Gallery/gallery.achievement-list-add.template.html');
     var configuration = require('Configuration');
@@ -215,64 +216,22 @@ define(function(require) {
             nameField: '#name',
             descField: '#desc',
             addButton: '#add-pictures > input',
-            sbtButton: '#submit'
+            submitButton: '#submit',
+            cancelButton: '#cancel'
         },
         events: {
             'blur   @ui.nameField': 'onNameChanged',
             'blur   @ui.descField': 'onDescriptionChanged',
-            'click  @ui.sbtButton': 'onOkClicked',
+            'click  @ui.submitButton': 'onSubmitClicked',
+            'click  @ui.cancelButton': 'onCancelClicked',
             'change @ui.addButton': 'onAddPictures'
         },
-        template: false,
+        template: _.template(achievementCreateTemplate),
         initialize: function() {
-            this.achievementPictureList = new AchievementPictureList({
-                el: this.$('#pictures'),
-                collection: new Backbone.Collection(
-                    [], {model: Thumbnail.model}
-                )
+            this.workingCopy = this.model.clone();
+            this.listenTo(this.workingCopy, 'change', function() {
+                this.ui.submitButton.removeClass('disabled');
             });
-            this.listenTo(
-                this.achievementPictureList,
-                'add-picture',
-                function(picture, index) {
-                    console.log('add-picture: ', picture, index);
-                    this.model.addPicture(picture);
-                }
-            );
-            this.listenTo(
-                this.achievementPictureList,
-                'remove-picture',
-                function(picture, index) {
-                    console.log('remove-picture: ', picture, index);
-                    this.model.removePictureAtIndex(index);
-                }
-            );
-            this.render();
-            this.reset();
-        },
-        reset: function(render) {
-            return this.setModel(null);
-        },
-        setModel: function(model) {
-            if (this.model) {
-                this.stopListening(this.model);
-            }
-            this.model = model || new Achievement;
-            this.listenTo(this.model, 'destroy', this.reset);
-            this.ui.nameField.val(this.model.get('name'));
-            this.ui.descField.val(this.model.get('description'));
-            this.achievementPictureList.collection.reset(this.model.get('pictures'));
-            return this;
-        },
-        onNameChanged: function() {
-            console.log('-- AchievementCreator:onNameChanged');
-            this.model.set('name', this.ui.nameField.val().trim());
-            return false;
-        },
-        onDescriptionChanged: function() {
-            console.log('-- AchievementCreator:onDescriptionChanged');
-            this.model.set('description', this.ui.descField.val());
-            return false;
         },
         onAddPictures: function(e) {
             console.log('-- AchievementCreator:onAddPictures');
@@ -281,23 +240,73 @@ define(function(require) {
             this.achievementPictureList.addFiles(e.target.files);
             return false;
         },
-        onOkClicked: function(e) {
-            console.log('-- AchievementCreator:onOkClicked');
+        onSubmitClicked: function(e) {
+            console.log('-- AchievementCreator:onSubmitClicked');
+            e.preventDefault();
+            e.stopPropagation();
+            if (this.model.hasChanged()) {
+                this.model.set(this.workingCopy.toJSON());
+                console.log(this.model.toJSON());
+                // FIXME: connect to server
+                // this.model.save();
+            }
+            this.trigger('close');
+            return false;
+        },
+        onCancelClicked: function(e) {
+            console.log('-- AchievementCreator:onCancelClicked');
             e.preventDefault();
             e.stopPropagation();
             if (this.model.isNew()) {
-                this.collection.add(this.model);
+                this.model.destroy();
             }
+            this.trigger('close');
+            return false;
+        },
+        onNameChanged: function() {
+            console.log('-- AchievementCreator:onNameChanged');
+            this.workingCopy.set('name', this.ui.nameField.val().trim());
+            return false;
+        },
+        onDescriptionChanged: function() {
+            console.log('-- AchievementCreator:onDescriptionChanged');
+            this.workingCopy.set('description', this.ui.descField.val());
             return false;
         },
         onRender: function() {
+            this.ui.submitButton.html(this.model.isNew() ? 'Ajouter':'Modifier');
+            this.ui.nameField.val(this.workingCopy.get('name'));
+            this.ui.descField.val(this.workingCopy.get('description'));
+            this.achievementPictureList = new AchievementPictureList({
+                el: this.$('#pictures'),
+                collection: new Backbone.Collection(
+                    this.workingCopy.get('pictures'), {model: Thumbnail.model}
+                )
+            });
+            this.listenTo(
+                this.achievementPictureList,
+                'add-picture',
+                function(picture, index) {
+                    console.log('add-picture: ', picture, index);
+                    this.workingCopy.addPicture(picture);
+                }
+            );
+            this.listenTo(
+                this.achievementPictureList,
+                'remove-picture',
+                function(picture, index) {
+                    console.log('remove-picture: ', picture, index);
+                    this.workingCopy.removePictureAtIndex(index);
+                }
+            );
             this.achievementPictureList.render();
-            return this;
         }
     });
 
 
     var AchievementList = Marionette.CollectionView.extend({
+        tagName: 'ul',
+        className: 'thumbnails',
         ui: {
             addButton: '#add-achievement'
         },
@@ -308,8 +317,6 @@ define(function(require) {
         addAchievementTemplate: _.template(achievementListAddTemplate),
         initialize: function() {
             this.configuration = configuration.get('gallery');
-            console.log(this.configuration.toJSON());
-            this.render();
         },
         configure: function(config) {
             this.options = _.extend(this.options || {}, config);
@@ -317,6 +324,7 @@ define(function(require) {
         },
         onAddButtonClicked: function(e) {
             console.log('-- AchievementList:onAddButtonClicked');
+            this.collection.add(new Achievement);
             e.preventDefault();
             e.stopPropagation();
         },
@@ -363,6 +371,11 @@ define(function(require) {
                 console.log('-- AchievementView: change');
                 thumbnail.setPicture(picture());
             });
+            this.listenTo(child, 'destroy', function() {
+                console.log('-- AchievementView: remove');
+                this.stopListening(thumbnail);
+                thumbnail.remove();
+            });
             this.listenTo(thumbnail, 'remove', function() {
                 console.log('-- AchievementView: remove');
                 this.stopListening(thumbnail);
@@ -378,43 +391,54 @@ define(function(require) {
     });
 
 
-    var achievements = new Backbone.Collection(
-        [
-            new Achievement({
-                name: 'Kittens',
-                description: 'Some cats, that\'s all',
-                pictures: [
-                    {
-                        original: 'http://placekitten.com/g/800/600',
-                        thumbnail: 'http://placekitten.com/g/128/128',
-                    }
-                ]
-            })
-        ],
-        {
-            model: Achievement,
-            // url: '/api/achievements'
-        }
-    );
-
-    var Gallery = Marionette.ItemView.extend({
-        template: _.template(achievementCreateTemplate),
-        initialize: function() {
+    var Gallery = Marionette.LayoutView.extend({
+        template: _.template(galleryTemplate),
+        regions: {
+            achievementCreator: '#achievement-creator',
+            achievementList: '#achievement-list'
         },
-        onBeforeRender: function() {
+        initialize: function() {
+            this.collection = new Backbone.Collection(
+                [
+                    new Achievement({
+                        name: 'Kittens',
+                        description: 'Some cats, that\'s all',
+                        pictures: [
+                            {
+                                original: 'http://placekitten.com/g/800/600',
+                                thumbnail: 'http://placekitten.com/g/128/128',
+                            }
+                        ]
+                    })
+                ],
+                {
+                    model: Achievement,
+                    // url: '/api/achievements'
+                }
+            );
+            this.achievementList = new AchievementList({
+                collection: this.collection
+            });
+
+            this.listenTo(this.achievementList, 'edit', this.openEditor);
+            this.listenTo(this.collection, 'add', this.openEditor);
+        },
+        openEditor: function(achievement) {
+            var region = this.getRegion('achievementCreator');
+            var creator = new AchievementCreator({model: achievement});
+
+            region.show(creator);
+            region.$el.foundation('reveal', 'open');
+
+            this.listenTo(creator, 'close', function() {
+                region.$el.foundation('reveal', 'close');
+                creator.$el.fadeOut('slow', function() {
+                    creator.remove();
+                });
+            });
         },
         onRender: function() {
-            this.achievementCreator = new AchievementCreator({
-                el: this.$('#achievement-creator'),
-                collection: achievements,
-            });
-            this.achievementList = new AchievementList({
-                el: this.$('#achievement-list'),
-                collection: achievements,
-            });
-            this.listenTo(this.achievementList, 'edit', function(model) {
-                this.achievementCreator.setModel(model);
-            });
+            this.getRegion('achievementList').show(this.achievementList);
         }
     });
 
