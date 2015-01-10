@@ -10,6 +10,7 @@ define(function(require) {
 
     var achievementCreateTemplate = require('text!back/Gallery/gallery.achievement-create.template.html');
     var achievementListAddTemplate = require('text!back/Gallery/gallery.achievement-list-add.template.html');
+    var configuration = require('Configuration');
 
 
     if (_.indexOf($.event.props, 'dataTransfer') < 0) {
@@ -306,13 +307,8 @@ define(function(require) {
         childView: Thumbnail.view,
         addAchievementTemplate: _.template(achievementListAddTemplate),
         initialize: function() {
-            this.configure({
-                thumbnail: {
-                    width: 128,
-                    height: 85,
-                    margin: 2,
-                }
-            });
+            this.configuration = configuration.get('gallery');
+            console.log(this.configuration.toJSON());
             this.render();
         },
         configure: function(config) {
@@ -325,8 +321,9 @@ define(function(require) {
             e.stopPropagation();
         },
         onBeforeRender: function() {
-            var w = this.options.thumbnail.width;
-            var h = this.options.thumbnail.height;
+            var thumb_config = this.configuration.get('thumbnail').toJSON();
+            var w = thumb_config.width;
+            var h = thumb_config.height;
             var font_size = Math.max(8, Math.min(w, h) - 32);
             var left_shift = (w - font_size)/2;
             var top_shift = (h - font_size)/2;
@@ -334,7 +331,7 @@ define(function(require) {
             this.addElement = $(document.createElement('li'))
                 .addClass('thumb')
                 .attr('data-last', '')
-                .css({margin: this.options.thumbnail.margin})
+                .css({margin: thumb_config.margin})
                 .html(this.addAchievementTemplate({
                     width: w,
                     height: h,
@@ -360,7 +357,7 @@ define(function(require) {
             var thumbnail = new ChildView({
                 tagName: 'li',
                 model: picture()
-            }).configure(this.options.thumbnail);
+            }).configure(this.configuration.get('thumbnail').toJSON());
 
             this.listenTo(child, 'change', function() {
                 console.log('-- AchievementView: change');
@@ -400,97 +397,10 @@ define(function(require) {
         }
     );
 
-    var Configuration = Backbone.Model.extend({
-        set: function(path, value) {
-            var super_set = Backbone.Model.prototype.set.bind(this);
-
-            if (_.isString(path)) {
-                this.set(path.split('.'), value);
-            } else if (_.isArray(path)) {
-                switch (path.length) {
-                    case 0: break;
-                    case 1: {
-                        if (_.isObject(value)) {
-                            super_set(path[0], new Collection(value));
-                        } else {
-                            super_set(path[0], value);
-                        }
-                        break;
-                    }
-                    default: {
-                        var old_value = this.get(path[0]);
-
-                        if (old_value instanceof Collection) {
-                            old_value.destroy();
-                            this.stopListening(old_value);
-                        }
-                        super_set(path[0], (new Configuration()).set(path.slice(1), value));
-                        break;
-                    }
-                }
-            } else if (_.isObject(path)) {
-                _.each(path, function(value, key) {
-                    super_set(key, _.isObject(value) ? new Configuration(value) : value);
-                });
-            } else {
-                throw new TypeError('path must be a string or an array of strings');
-            }
-            return this;
-        },
-        get: function(path) {
-            var super_get = Backbone.Model.prototype.get.bind(this);
-
-            if (_.isString(path)) {
-                return this.get(path.split('.'));
-            } else if (_.isArray(path)) {
-                switch (path.length) {
-                    case 0: break;
-                    case 1:
-                        return super_get(path[0]);
-                    default:
-                        return super_get(path[0]).get(path.slice(1));
-                }
-            } else {
-                throw new TypeError('path must be a string or an array of strings');
-            }
-        },
-        toJSON: function() {
-            var o = Backbone.Model.prototype.toJSON.call(this);
-            _.each(o, function(value, key) {
-                if (value instanceof Configuration) {
-                    o[key] = value.toJSON();
-                }
-            });
-            return o;
-        },
-        destroy: function() {
-            _.each(this.attributes, function(value, key) {
-                if (value instanceof Configuration) {
-                    this.stopListening(value);
-                    value.destroy();
-                }
-            });
-            Backbone.Model.prototype.destroy.call(this);
-        }
-    });
-
-    // var conf = new Configuration({foo: {bar: {gee: 42}}});
-    // conf.set('foo.bar.gee', 42);
-
-    // console.log('** conf: ', conf);
-    // console.log(conf.get('foo.bar.gee'));
-    // console.log(conf.toJSON());
-
     var Gallery = Marionette.ItemView.extend({
         template: _.template(achievementCreateTemplate),
         initialize: function() {
-            // this.configuration = { foo: {bar: 'gee'}};
-            // console.log(this.config('foo.bar'));
         },
-        // configure: function(config) {
-        //     this.config = _.extend(this.config || {}, config);
-        //     return this;
-        // },
         onBeforeRender: function() {
         },
         onRender: function() {
