@@ -244,7 +244,7 @@ define(function(require) {
             console.log('-- AchievementCreator:onSubmitClicked');
             e.preventDefault();
             e.stopPropagation();
-            if (this.model.hasChanged()) {
+            if (this.model.isNew() || this.workingCopy.hasChanged()) {
                 this.model.set(this.workingCopy.toJSON());
                 console.log(this.model.toJSON());
                 // FIXME: connect to server
