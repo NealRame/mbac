@@ -10,6 +10,7 @@ requirejs.config({
         'text': 'libs/text',
         'underscore': 'libs/underscore',
 
+        'Configuration': 'back/Configuration/configuration',
         'Dashboard': 'back/dashboard',
         'TabbedPanels': 'back/TabbedPanels/tabbedpanels',
         'Gallery': 'back/Gallery/gallery',
