@@ -1,21 +1,17 @@
-<section class='wrapper'>
-    <article>
-        <div id='achievement-creator'>
-            <label for='name'>Name</label>
-            <input id='name' type='text'>
+<label for='name'>Name</label>
+<input id='name' type='text'>
 
-            <label for='desc'>Description</label>
-            <textarea id='desc' type='text' rows='4'></textarea>
+<label for='desc'>Description</label>
+<textarea id='desc' type='text' rows='4'></textarea>
 
-            <div id='add-pictures' class='add-files-button expand'>
-                <span>Ajouter des images</span>
-                <input type='file' multiple>
-            </div>
+<div id='add-pictures' class='add-files-button expand'>
+    <span>Ajouter des images</span>
+    <input type='file' multiple>
+</div>
 
-            <ul id='pictures' class='thumbnails'></ul>
+<ul id='pictures' class='thumbnails'></ul>
 
-            <a id='submit' class='button' href='#'>Ok</a>
-        </div>
-        <ul id='achievement-list' class='thumbnails'></ul>
-    </article>
-</section>
+<ul class="button-group even-2">
+    <li><a id='submit' class='button disabled' href='#'></a></li>
+    <li><a id='cancel' class='button secondary' href='#'>Annuler</a></li>
+</ul>
