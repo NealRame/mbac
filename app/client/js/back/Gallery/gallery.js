@@ -427,14 +427,15 @@ define(function(require) {
             var creator = new AchievementEditor({model: achievement});
 
             region.show(creator);
-            region.$el.foundation('reveal', 'open');
-
-            this.listenTo(creator, 'close', function() {
+            region.$el.foundation('reveal', 'open', {
+                close_on_background_click: false,
+                close_on_esc: false,
+            });
+            region.$el.on('closed', function() {
+                creator.remove();
+            });
             this.listenTo(creator, 'closed', function() {
                 region.$el.foundation('reveal', 'close');
-                creator.$el.fadeOut('slow', function() {
-                    creator.remove();
-                });
             });
         },
         onRender: function() {
