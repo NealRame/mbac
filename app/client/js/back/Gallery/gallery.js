@@ -249,7 +249,7 @@ define(function(require) {
                 // FIXME: connect to server
                 // this.model.save();
             }
-            this.trigger('close');
+            this.trigger('closed');
             return false;
         },
         onCancelClicked: function(e) {
@@ -259,7 +259,7 @@ define(function(require) {
             if (this.model.isNew()) {
                 this.model.destroy();
             }
-            this.trigger('close');
+            this.trigger('closed');
             return false;
         },
         onNameChanged: function() {
@@ -430,6 +430,7 @@ define(function(require) {
             region.$el.foundation('reveal', 'open');
 
             this.listenTo(creator, 'close', function() {
+            this.listenTo(creator, 'closed', function() {
                 region.$el.foundation('reveal', 'close');
                 creator.$el.fadeOut('slow', function() {
                     creator.remove();
