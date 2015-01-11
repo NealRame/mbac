@@ -398,18 +398,7 @@ define(function(require) {
         },
         initialize: function() {
             this.collection = new Backbone.Collection(
-                [
-                    new Achievement({
-                        name: 'Kittens',
-                        description: 'Some cats, that\'s all',
-                        pictures: [
-                            {
-                                original: 'http://placekitten.com/g/800/600',
-                                thumbnail: 'http://placekitten.com/g/128/128',
-                            }
-                        ]
-                    })
-                ],
+                [],
                 {
                     model: Achievement,
                     // url: '/api/achievements'
