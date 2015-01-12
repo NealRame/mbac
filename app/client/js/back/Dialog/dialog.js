@@ -29,19 +29,13 @@ defined(function(require) {
             });
         },
         open: function() {
-            var modal = this.modal;
-
-            modal.foundation('reveal', 'open', {
+            this.modal.foundation('reveal', 'open', {
                 close_on_background_click: false,
                 close_on_esc: false,
             });
-            modal.on('closed', function() {
-                modal.off();
-                this.remove();
-            });
         },
         close: function() {
-            this.$(this.modal).foundation('reveal', 'close');
+            this.modal.foundation('reveal', 'close');
         },
         onAccept: function(e) {
             console.log('-- Dialog:onAccept');
@@ -62,7 +56,6 @@ defined(function(require) {
         onRender: function() {
             var container = this.getRegion('container');
             var content = Marionette.getOption(this, 'content') || '';
-            var id = Marionette.getOption(this, 'id') || 'dialog';
 
             if (_.isString(content)) {
                 container.$el.html(content);
@@ -70,7 +63,10 @@ defined(function(require) {
                 container.show(content);
             }
 
-            this.modal = this.$('#' + id);
+            this.modal = this.$('#' + (Marionette.getOption(this, 'id') || 'dialog'));
+            this.modal.one('closed', (function() {
+                this.remove();
+            }).bind(this));
         }
     });
 
