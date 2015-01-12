@@ -12,8 +12,9 @@ requirejs.config({
 
         'Configuration': 'back/Configuration/configuration',
         'Dashboard': 'back/dashboard',
-        'TabbedPanels': 'back/TabbedPanels/tabbedpanels',
+        'Dialog': 'back/Dialog/dialog',
         'Gallery': 'back/Gallery/gallery',
+        'TabbedPanels': 'back/TabbedPanels/tabbedpanels',
     },
     shim: {
         'fastclick':  {exports: 'FastClick'},
