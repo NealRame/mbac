@@ -29,7 +29,7 @@ defined(function(require) {
             });
         },
         exec: function() {
-            var modal = this.$(this.modal);
+            var modal = this.modal;
 
             modal.foundation('reveal', 'open', {
                 close_on_background_click: false,
