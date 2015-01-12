@@ -28,7 +28,7 @@ defined(function(require) {
                 refuse: Marionette.getOption(this, 'refuse') || 'Non',
             });
         },
-        exec: function() {
+        open: function() {
             var modal = this.modal;
 
             modal.foundation('reveal', 'open', {
@@ -40,7 +40,7 @@ defined(function(require) {
                 this.remove();
             });
         },
-        quit: function() {
+        close: function() {
             this.$(this.modal).foundation('reveal', 'close');
         },
         onAccept: function(e) {
