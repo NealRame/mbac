@@ -18,15 +18,21 @@ defined(function(require) {
             'click @ui.acceptButton': 'onAccept',
             'click @ui.refuseButton': 'onRefuse',
         },
-        template: function() {
-            if (! _.isFunction(dialogTemplate)) {
-                dialogTemplate = _.template(dialogTemplate);
-            }
-            return dialogTemplate({
-                id:     Marionette.getOption(this, 'id')     || 'dialog'
-                accept: Marionette.getOption(this, 'accept') || 'Oui',
-                refuse: Marionette.getOption(this, 'refuse') || 'Non',
-            });
+        initialize: function() {
+            this.template = (function() {
+                if (! _.isFunction(dialogTemplate)) {
+                    dialogTemplate = _.template(dialogTemplate);
+                }
+
+                var compiled = dialogTemplate({
+                    id:     Marionette.getOption(this, 'id')     || 'dialog',
+                    accept: Marionette.getOption(this, 'accept') || 'Oui',
+                    refuse: Marionette.getOption(this, 'refuse') || 'Non',
+                });
+
+                return compiled;
+            }).bind(this);
+            this.render();
         },
         open: function() {
             this.modal.foundation('reveal', 'open', {
