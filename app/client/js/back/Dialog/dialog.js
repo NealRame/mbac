@@ -8,76 +8,112 @@ define(function(require) {
 
     var Dialog = Marionette.LayoutView.extend({
         ui: {
-            acceptButton: '#accept',
-            refuseButton: '#refuse',
-        },
-        events: {
-            'click @ui.acceptButton': 'onAccept',
-            'click @ui.refuseButton': 'onRefuse',
+            accept: '#accept',
+            refuse: '#refuse',
         },
         initialize: function() {
+            this.options = _.defaults(
+                _.pick(this.options, 'accept', 'refuse'), {accept: 'Ok'}
+            );
             this.template = (function() {
                 if (! _.isFunction(dialogTemplate)) {
                     dialogTemplate = _.template(dialogTemplate);
                 }
-
-                var compiled = dialogTemplate({
-                    id:     Marionette.getOption(this, 'id')     || 'dialog',
-                    accept: Marionette.getOption(this, 'accept') || 'Oui',
-                    refuse: Marionette.getOption(this, 'refuse') || 'Non',
-                });
-
-                return compiled;
+                return dialogTemplate(this.options);
             }).bind(this);
-            this.render();
         },
         open: function() {
-            this.modal.foundation('reveal', 'open', {
+            this.$el.foundation('reveal', 'open', {
                 close_on_background_click: false,
                 close_on_esc: false,
             });
         },
         close: function() {
-            this.modal.foundation('reveal', 'close');
+            console.log('-- Dialog:close');
+            $().add(this.ui.accept).add(this.ui.refuse).off('click');
+            this.$el.one('closed', (function() {
+                console.log('-- Dialog:closed');
+                this.remove();
+            }).bind(this));
+            this.$el.foundation('reveal', 'close');
         },
-        onAccept: function(e) {
-            console.log('-- Dialog:onAccept');
-            e.preventDefault();
-            e.stopPropagation();
-            this.trigger('accept');
-            this.close();
-            return false;
+        accept: function() {
         },
-        onRefuse: function(e) {
-            console.log('-- Dialog:onRefuse');
-            e.preventDefault();
-            e.stopPropagation();
-            this.trigger('refuse');
-            this.close();
-            return false;
+        refuse: function() {
+        },
+        setContent: function() {
         },
         onRender: function() {
             // debugger;
             console.log('-- Dialog:onRender');
 
-            this.addRegion('contentWrapper', '#dialog-content-wrapper');
+            var dialog = this;
 
-            var container = this.getRegion('contentWrapper');
-            var content = Marionette.getOption(this, 'content') || '';
+            this.addRegions({
+                'contentWrapper': {
+                    regionClass: Marionette.Region.extend({
+                        el: this.$('#dialog-content-wrapper')
+                    })
+                }
+            });
+            this.$el.addClass('reveal-modal').attr('data-reveal', '');
 
-            if (_.isString(content)) {
-                container.$el.html(content);
-            } else {
-                container.show(content);
-            }
+            $().add(this.ui.accept).add(this.ui.refuse)
+                .off('click').on('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
 
-            this.modal = this.$('#' + (Marionette.getOption(this, 'id') || 'dialog'));
-            this.modal.one('closed', (function() {
-                this.remove();
-            }).bind(this));
+                    switch($(this).attr('id')) {
+                    case 'accept':
+                        console.log('-- Dialog:onAccept');
+                        (dialog.accept || dialog.close).call(dialog);
+                        break;
+                    case 'refuse':
+                        console.log('-- Dialog:onRefuse');
+                        (dialog.refuse || dialog.close).call(dialog);
+                        break;
+                    }
+
+                    return false;
+                });
+
+            this.setContent(this.getRegion('contentWrapper'));
         }
     });
 
+    Dialog.createMessageBox = function(message, options) {
+        var settings = {};
+
+        if (options.el) {
+            settings.el = options.el;
+        }
+
+        if (options.acceptLabel) {
+            settings.accept = options.acceptLabel;
+        }
+
+        if (options.refuseLabel) {
+            settings.refuse = options.refuseLabel;
+        }
+
+        return (new (Dialog.extend({
+            accept: function() {
+                if (options.accept) {
+                    options.accept();
+                }
+                this.close();
+            },
+            refuse: function() {
+                if (options.refuse) {
+                    options.refuse();
+                }
+                this.close();
+            },
+            setContent: function(region) {
+                region.$el.append($(document.createElement('p')).html(message));
+            }
+        }))(settings)).render();
+    };
 
     return Dialog;
 });

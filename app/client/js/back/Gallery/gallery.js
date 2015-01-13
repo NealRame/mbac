@@ -6,6 +6,7 @@ define(function(require) {
     var _ = require('underscore');
     var $ = require('jquery');
     var Backbone = require('backbone');
+    var Dialog = require('Dialog');
     var Thumbnail = require('back/Gallery/gallery.thumbnail');
 
     var galleryTemplate = require('text!back/Gallery/gallery.template.html');
@@ -209,26 +210,20 @@ define(function(require) {
         }
     });
 
-
     var AchievementEditor = Marionette.ItemView.extend({
         ui: {
             nameField: '#name',
             descField: '#desc',
             addButton: '#add-pictures > input',
-            submitButton: '#submit',
-            cancelButton: '#cancel'
         },
         events: {
             'blur   @ui.nameField': 'onNameChanged',
             'blur   @ui.descField': 'onDescriptionChanged',
-            'click  @ui.submitButton': 'onSubmitClicked',
-            'click  @ui.cancelButton': 'onCancelClicked',
             'change @ui.addButton': 'onAddPictures'
         },
         template: _.template(achievementEditorTemplate),
         initialize: function() {
-            this.workingCopy = this.model.clone();
-            this.listenTo(this.workingCopy, 'change', function() {
+            this.listenTo(this.model, 'change', function() {
                 this.ui.submitButton.removeClass('disabled');
             });
         },
@@ -239,47 +234,23 @@ define(function(require) {
             this.achievementPictureList.addFiles(e.target.files);
             return false;
         },
-        onSubmitClicked: function(e) {
-            console.log('-- AchievementEditor:onSubmitClicked');
-            e.preventDefault();
-            e.stopPropagation();
-            if (this.model.isNew() || this.workingCopy.hasChanged()) {
-                this.model.set(this.workingCopy.toJSON());
-                console.log(this.model.toJSON());
-                // FIXME: connect to server
-                // this.model.save();
-            }
-            this.trigger('closed');
-            return false;
-        },
-        onCancelClicked: function(e) {
-            console.log('-- AchievementEditor:onCancelClicked');
-            e.preventDefault();
-            e.stopPropagation();
-            if (this.model.isNew()) {
-                this.model.destroy();
-            }
-            this.trigger('closed');
-            return false;
-        },
         onNameChanged: function() {
             console.log('-- AchievementEditor:onNameChanged');
-            this.workingCopy.set('name', this.ui.nameField.val().trim());
+            this.model.set('name', this.ui.nameField.val().trim());
             return false;
         },
         onDescriptionChanged: function() {
             console.log('-- AchievementEditor:onDescriptionChanged');
-            this.workingCopy.set('description', this.ui.descField.val());
+            this.model.set('description', this.ui.descField.val());
             return false;
         },
         onRender: function() {
-            this.ui.submitButton.html(this.model.isNew() ? 'Ajouter':'Modifier');
-            this.ui.nameField.val(this.workingCopy.get('name'));
-            this.ui.descField.val(this.workingCopy.get('description'));
+            this.ui.nameField.val(this.model.get('name'));
+            this.ui.descField.val(this.model.get('description'));
             this.achievementPictureList = new AchievementPictureList({
                 el: this.$('#pictures'),
                 collection: new Backbone.Collection(
-                    this.workingCopy.get('pictures'), {model: Thumbnail.model}
+                    this.model.get('pictures'), {model: Thumbnail.model}
                 )
             });
             this.listenTo(
@@ -287,7 +258,7 @@ define(function(require) {
                 'add-picture',
                 function(picture, index) {
                     console.log('add-picture: ', picture, index);
-                    this.workingCopy.addPicture(picture);
+                    this.model.addPicture(picture);
                 }
             );
             this.listenTo(
@@ -295,13 +266,56 @@ define(function(require) {
                 'remove-picture',
                 function(picture, index) {
                     console.log('remove-picture: ', picture, index);
-                    this.workingCopy.removePictureAtIndex(index);
+                    this.model.removePictureAtIndex(index);
                 }
             );
             this.achievementPictureList.render();
         }
     });
 
+
+    var AchievementEditorDialog = Dialog.extend({
+        initialize: function() {
+            this.options.accept = 'Ajouter';
+            this.options.refuse = 'Annuler';
+            Dialog.prototype.initialize.call(this);
+        },
+        accept: function() {
+
+        },
+        refuse: function() {
+            console.log('-- AchievementEditorDialog:onCancelClicked');
+
+
+            var editor = this;
+            var dialog = Dialog.createMessageBox(
+                'Les modifications apportées seront perdues! Êtes vous sure de vouloir continuer ?',
+                {
+                    acceptLabel: 'Oui',
+                    refuseLabel: 'Non',
+                    accept: function() {
+                        console.log('accepted');
+                        editor.close();
+                    },
+                    refuse: function() {
+                        console.log('refused');
+                        editor.$el.removeAttr('style');
+                        editor.delegateEvents();
+                        editor.open();
+                    }
+                }
+            );
+            this.$el.append(dialog.el);
+            dialog.open();
+
+            return false;
+        },
+        setContent: function(region) {
+            region.show(new AchievementEditor({
+                model: this.model.clone()
+            }));
+        }
+    });
 
     var AchievementList = Marionette.CollectionView.extend({
         tagName: 'ul',
@@ -413,19 +427,10 @@ define(function(require) {
         },
         openEditor: function(achievement) {
             var region = this.getRegion('achievementEditor');
-            var creator = new AchievementEditor({model: achievement});
+            var editor = new AchievementEditorDialog({model: achievement});
 
-            region.show(creator);
-            region.$el.foundation('reveal', 'open', {
-                close_on_background_click: false,
-                close_on_esc: false,
-            });
-            region.$el.on('closed', function() {
-                creator.remove();
-            });
-            this.listenTo(creator, 'closed', function() {
-                region.$el.foundation('reveal', 'close');
-            });
+            region.show(editor);
+            editor.open();
         },
         onRender: function() {
             this.getRegion('achievementList').show(this.achievementList);
