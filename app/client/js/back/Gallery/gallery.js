@@ -210,6 +210,7 @@ define(function(require) {
         }
     });
 
+
     var AchievementEditor = Marionette.ItemView.extend({
         ui: {
             nameField: '#name',
@@ -316,6 +317,7 @@ define(function(require) {
             }));
         }
     });
+
 
     var AchievementList = Marionette.CollectionView.extend({
         tagName: 'ul',
