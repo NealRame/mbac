@@ -1,3 +1,7 @@
+// Dialog/dialog.js
+// ----------------
+// - author: Neal.Rame. <contact@nealrame.com>
+// -   date: Sun Jan 12
 define(function(require) {
     var _ = require('underscore');
     var $ = require('jquery');
@@ -44,7 +48,6 @@ define(function(require) {
         setContent: function() {
         },
         onRender: function() {
-            // debugger;
             console.log('-- Dialog:onRender');
 
             var dialog = this;
