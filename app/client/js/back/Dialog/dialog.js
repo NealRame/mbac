@@ -7,9 +7,6 @@ define(function(require) {
     var dialogTemplate = require('text!back/Dialog/dialog.template.html');
 
     var Dialog = Marionette.LayoutView.extend({
-        regions: {
-            container: '#dialog-content-wrapper'
-        },
         ui: {
             acceptButton: '#accept',
             refuseButton: '#refuse',
@@ -60,7 +57,12 @@ define(function(require) {
             return false;
         },
         onRender: function() {
-            var container = this.getRegion('container');
+            // debugger;
+            console.log('-- Dialog:onRender');
+
+            this.addRegion('contentWrapper', '#dialog-content-wrapper');
+
+            var container = this.getRegion('contentWrapper');
             var content = Marionette.getOption(this, 'content') || '';
 
             if (_.isString(content)) {
