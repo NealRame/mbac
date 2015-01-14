@@ -8,6 +8,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var Picture = new mongoose.Schema({
+    prefix: String,
     original: Schema.Types.ObjectId,
     thumbnail: Schema.Types.ObjectId
 }, {_id: false});
