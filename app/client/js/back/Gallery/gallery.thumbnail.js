@@ -160,8 +160,8 @@ define(function(require) {
                     });
                     reader.readAsDataURL(data.file);
                 } else {
-                    // img.src = 'files/' + data.thumbnail;
-                    img.src = data.thumbnail;
+                    img.src = 'files/' + data.thumbnail;
+                    // img.src = data.thumbnail;
                 }
             } else {
                 insert(create_placeholder());
