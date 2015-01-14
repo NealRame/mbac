@@ -429,19 +429,19 @@ define(function(require) {
             achievementList: '#achievement-list'
         },
         initialize: function() {
-            this.collection = new Backbone.Collection(
-                [],
-                {
-                    model: Achievement,
-                    // url: '/api/achievements'
-                }
-            );
+            console.log('-- Gallery:initialize');
+            this.collection = new (Backbone.Collection.extend({
+                model: Achievement,
+                url: '/api/achievements'
+            }));
             this.achievementList = new AchievementList({
                 collection: this.collection
             });
 
             this.listenTo(this.achievementList, 'edit', this.openEditor);
             this.listenTo(this.collection, 'add', this.openEditor);
+
+            this.collection.fetch({reset: true});
         },
         openEditor: function(achievement) {
             var region = this.getRegion('achievementEditor');
