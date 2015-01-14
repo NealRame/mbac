@@ -280,12 +280,9 @@ define(function(require) {
             console.log('-- AchievementEditorDialog:onAcceptClicked');
 
             var commit = (function() {
-                var changed_attributes = this.getContent().currentView.model.changedAttributes();
-                if (changed_attributes) {
-                    this.model.set(changed_attributes);
-                    // this.model.save();
-                    this.close();
-                }
+                this.model.set(this.getContent().currentView.model.toJSON());
+                this.model.save();
+                this.close();
             }).bind(this);
 
             if (! this.model.isNew()) {
