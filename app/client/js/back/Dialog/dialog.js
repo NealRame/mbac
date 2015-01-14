@@ -48,6 +48,9 @@ define(function(require) {
         },
         setContent: function() {
         },
+        getContent: function() {
+            return this.getRegion('contentWrapper');
+        },
         onRender: function() {
             console.log('-- Dialog:onRender');
 
