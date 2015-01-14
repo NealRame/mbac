@@ -48,6 +48,7 @@ exports.getInstance = function() {
         app.use(serveFavicon(path.join(__dirname, '..', '..', 'public', 'mbac.ico')));
         app.use(serveStatic(path.join(__dirname, '..', '..', 'public')));
 
+        require('middlewares/db').setup(app);
         require('middlewares/menu').setup(app);
 
         // plugins
