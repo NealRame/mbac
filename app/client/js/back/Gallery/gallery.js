@@ -456,6 +456,7 @@ define(function(require) {
             editor.open();
         },
         onRender: function() {
+            console.log('-- Gallery:onRender');
             this.getRegion('achievementList').show(this.achievementList);
         }
     });
