@@ -360,31 +360,36 @@ define(function(require) {
             e.stopPropagation();
         },
         onBeforeRender: function() {
-            var thumb_config = this.configuration.get('thumbnail').toJSON();
-            var w = thumb_config.width;
-            var h = thumb_config.height;
-            var font_size = Math.max(8, Math.min(w, h) - 32);
-            var left_shift = (w - font_size)/2;
-            var top_shift = (h - font_size)/2;
+            if (! this.addElement) {
+                var thumb_config = this.configuration.get('thumbnail').toJSON();
+                var w = thumb_config.width;
+                var h = thumb_config.height;
+                var font_size = Math.max(8, Math.min(w, h) - 32);
+                var left_shift = (w - font_size)/2;
+                var top_shift = (h - font_size)/2;
 
-            this.addElement = $(document.createElement('li'))
-                .addClass('thumb')
-                .attr('data-last', '')
-                .css({margin: thumb_config.margin})
-                .html(this.addAchievementTemplate({
-                    width: w,
-                    height: h,
-                }));
-            this.addElement.find('a').css({
-                left: left_shift,
-                top: top_shift
-            });
-            this.addElement.find('i').css({
-                fontSize: font_size,
-                width: font_size,
-                height: font_size,
-            });
-            this.$el.append(this.addElement);
+                console.log('pouet');
+
+                this.addElement =
+                    $(document.createElement('li'))
+                        .addClass('thumb')
+                        .attr('data-last', '')
+                        .css({margin: thumb_config.margin})
+                        .html(this.addAchievementTemplate({
+                            width: w,
+                            height: h,
+                        }));
+                this.addElement.find('a').css({
+                    left: left_shift,
+                    top: top_shift
+                });
+                this.addElement.find('i').css({
+                    fontSize: font_size,
+                    width: font_size,
+                    height: font_size,
+                });
+                this.$el.append(this.addElement);
+            }
         },
         addChild: function(child, ChildView, index) {
             var picture = function() {
