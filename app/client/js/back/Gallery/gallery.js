@@ -223,11 +223,6 @@ define(function(require) {
             'change @ui.addButton': 'onAddPictures'
         },
         template: _.template(achievementEditorTemplate),
-        initialize: function() {
-            this.listenTo(this.model, 'change', function() {
-                this.ui.submitButton.removeClass('disabled');
-            });
-        },
         onAddPictures: function(e) {
             console.log('-- AchievementEditor:onAddPictures');
             e.preventDefault();
@@ -282,32 +277,56 @@ define(function(require) {
             Dialog.prototype.initialize.call(this);
         },
         accept: function() {
+            console.log('-- AchievementEditorDialog:onAcceptClicked');
 
+            var commit = (function() {
+                var changed_attributes = this.getContent().currentView.model.changedAttributes();
+                if (changed_attributes) {
+                    this.model.set(changed_attributes);
+                    // this.model.save();
+                    this.close();
+                }
+            }).bind(this);
+
+            if (! this.model.isNew()) {
+                var editor_dialog  = this;
+                var confirm_dialog = Dialog.createMessageBox(
+                    'Êtes vous sûr de vouloir continuer ?',
+                    {
+                        accept: commit,
+                        acceptLabel: 'Continuer',
+                        refuse: editor_dialog.open.bind(editor_dialog),
+                        refuseLabel: 'Annuler',
+                    }
+                );
+                this.$el.append(confirm_dialog.el);
+                confirm_dialog.open();
+            } else commit();
         },
         refuse: function() {
             console.log('-- AchievementEditorDialog:onCancelClicked');
 
-
-            var editor = this;
-            var dialog = Dialog.createMessageBox(
-                'Les modifications apportées seront perdues! Êtes vous sure de vouloir continuer ?',
-                {
-                    acceptLabel: 'Oui',
-                    refuseLabel: 'Non',
-                    accept: function() {
-                        console.log('accepted');
-                        editor.close();
-                    },
-                    refuse: function() {
-                        console.log('refused');
-                        editor.$el.removeAttr('style');
-                        editor.delegateEvents();
-                        editor.open();
-                    }
+            var commit = (function() {
+                if (this.model.isNew()) {
+                    this.model.destroy();
                 }
-            );
-            this.$el.append(dialog.el);
-            dialog.open();
+                this.close();
+            }).bind(this);
+
+            if (this.getContent().currentView.model.hasChanged()) {
+                var editor_dialog  = this;
+                var confirm_dialog = Dialog.createMessageBox(
+                    'Les modifications apportées seront perdues! Êtes vous sûr de vouloir continuer ?',
+                    {
+                        accept: commit,
+                        acceptLabel: 'Oui',
+                        refuse: editor_dialog.open.bind(editor_dialog),
+                        refuseLabel: 'Non'
+                    }
+                );
+                this.$el.append(confirm_dialog.el);
+                confirm_dialog.open();
+            } else commit();
 
             return false;
         },
