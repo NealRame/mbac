@@ -272,7 +272,7 @@ define(function(require) {
 
     var AchievementEditorDialog = Dialog.extend({
         initialize: function() {
-            this.options.accept = 'Ajouter';
+            this.options.accept = this.model.isNew() ? 'Ajouter':'Modifier';
             this.options.refuse = 'Annuler';
             Dialog.prototype.initialize.call(this);
         },
