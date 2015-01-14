@@ -27,6 +27,7 @@ define(function(require) {
             }).bind(this);
         },
         open: function() {
+            this.$el.removeAttr('style');
             this.$el.foundation('reveal', 'open', {
                 close_on_background_click: false,
                 close_on_esc: false,
