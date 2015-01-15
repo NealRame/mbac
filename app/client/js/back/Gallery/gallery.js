@@ -335,15 +335,46 @@ define(function(require) {
     });
 
 
-    var AchievementList = Marionette.CollectionView.extend({
-        tagName: 'ul',
-        className: 'thumbnails',
+    var AchievementAddButton = Marionette.ItemView.extend({
+        tagName: 'li',
+        className: 'thumb',
+        attributes: {
+            'class': 'thumb',
+            'data-last': ''
+        },
         ui: {
             addButton: '#add-achievement'
         },
-        events: {
-            'click @ui.addButton': 'onAddButtonClicked'
+        triggers: {
+            'click @ui.addButton': 'click'
         },
+        initialize: function() {
+            this.model = configuration.get('gallery.thumbnail');
+            this.template = function(data) {
+                if (_.isString(achievementListAddTemplate)) {
+                    achievementListAddTemplate =
+                        _.template(achievementListAddTemplate);
+                }
+
+                var w = data.width, h = data.height;
+                var font_size = Math.max(8, Math.min(w, h) - 32);
+
+                return achievementListAddTemplate({
+                    width: w,
+                    height: h,
+                    margin: data.margin,
+                    fontSize: font_size,
+                    left: (w - font_size)/2,
+                    top: (h - font_size)/2
+                });
+            }
+        },
+    });
+
+
+    var AchievementList = Marionette.CollectionView.extend({
+        tagName: 'ul',
+        className: 'thumbnails',
         childView: Thumbnail.view,
         addAchievementTemplate: _.template(achievementListAddTemplate),
         initialize: function() {
@@ -356,32 +387,12 @@ define(function(require) {
         onAddButtonClicked: function(e) {
             console.log('-- AchievementList:onAddButtonClicked');
             this.collection.add(new Achievement);
-            e.preventDefault();
-            e.stopPropagation();
         },
         onBeforeRender: function() {
-            if (! this.addElement) {
-                var thumb_config = this.configuration.get('thumbnail').toJSON();
-                var w = thumb_config.width;
-                var h = thumb_config.height;
-                var font_size = Math.max(8, Math.min(w, h) - 32);
-                var left_shift = (w - font_size)/2;
-                var top_shift = (h - font_size)/2;
-
-                this.addElement =
-                    $(document.createElement('li'))
-                        .addClass('thumb')
-                        .attr('data-last', '')
-                        .css({margin: thumb_config.margin})
-                        .html(this.addAchievementTemplate({
-                            width: w,
-                            height: h,
-                            margin: thumb_config.margin,
-                            fontSize: font_size,
-                            left: left_shift,
-                            top: top_shift
-                        }));
-                this.$el.append(this.addElement);
+            if (! this.addAchievementButton) {
+                this.addAchievementButton = new AchievementAddButton;
+                this.$el.append(this.addAchievementButton.render().el);
+                this.listenTo(this.addAchievementButton, 'click', this.onAddButtonClicked);
             }
         },
         addChild: function(child, ChildView, index) {
