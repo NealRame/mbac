@@ -162,7 +162,7 @@ define(function(require) {
             }
         },
     });
-    
+
 
     var AchievementPictureList = Marionette.CollectionView.extend({
         childView: Thumbnail.view,
@@ -173,29 +173,22 @@ define(function(require) {
             'drop':      'onDrop'
         },
         initialize: function() {
+            this.configuration = configuration.get('gallery.thumbnail');
             this.listenTo(this.collection, 'remove', function(model, col, opt) {
                 this.trigger('remove-picture', model.attributes, opt.index);
             });
-            this.configure({
-                thumbnail: {
-                    width:  128,
-                    height: 128,
-                    margin: 2
-                }
+            this.filesInput = $(document.createElement('input')).attr({
+                type: 'file', multiple: ''
             });
-        },
-        configure: function(config) {
-            this.options = _.extend(
-                this.options || {},
-                _.pick(config || {}, 'thumbnail')
-            );
-            return this;
+            this.filesInput.on('change', (function(e) {
+                this.addFiles(e.target.files);
+            }).bind(this));
         },
         addChild: function(child, ChildView, index) {
             var thumbnail = new ChildView({
                 tagName: 'li',
                 model: child
-            }).configure(_.extend(this.options.thumbnail, {editable: true}));
+            }).configure(_.extend(this.configuration.toJSON(), {editable: true}));
             this.$el.append(thumbnail.render().el);
             this.listenTo(thumbnail, 'remove', function() {
                 console.log('-- AchievementPictureList: remove');
@@ -243,7 +236,14 @@ define(function(require) {
             return false;
         },
         onBeforeRender: function() {
-            this.$el.empty();
+            if (! this.addPictureButton) {
+                this.addPictureButton = new AddItemButton;
+                this.$el.append(this.addPictureButton.render().el);
+                this.listenTo(this.addPictureButton, 'click', function() {
+                    console.log('pouet');
+                    this.filesInput.click();
+                });
+            }
         }
     });
 
@@ -252,21 +252,12 @@ define(function(require) {
         ui: {
             nameField: '#name',
             descField: '#desc',
-            addButton: '#add-pictures > input',
         },
         events: {
             'blur   @ui.nameField': 'onNameChanged',
             'blur   @ui.descField': 'onDescriptionChanged',
-            'change @ui.addButton': 'onAddPictures'
         },
         template: _.template(achievementEditorTemplate),
-        onAddPictures: function(e) {
-            console.log('-- AchievementEditor:onAddPictures');
-            e.preventDefault();
-            e.stopPropagation();
-            this.achievementPictureList.addFiles(e.target.files);
-            return false;
-        },
         onNameChanged: function() {
             console.log('-- AchievementEditor:onNameChanged');
             this.model.set('name', this.ui.nameField.val().trim());
@@ -379,10 +370,6 @@ define(function(require) {
         addAchievementTemplate: _.template(achievementListAddTemplate),
         initialize: function() {
             this.configuration = configuration.get('gallery');
-        },
-        configure: function(config) {
-            this.options = _.extend(this.options || {}, config);
-            return this;
         },
         onAddButtonClicked: function(e) {
             console.log('-- AchievementList:onAddButtonClicked');
