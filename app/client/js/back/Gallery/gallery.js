@@ -249,6 +249,7 @@ define(function(require) {
 
 
     var AchievementEditor = Marionette.ItemView.extend({
+        className: 'achievement-editor',
         ui: {
             nameField: '#name',
             descField: '#desc',

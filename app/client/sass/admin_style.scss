@@ -65,6 +65,28 @@
     color: red;
 }
 
+.achievement-editor {
+    border-bottom: solid 1px lightgray;
+    margin-bottom: 8px;
+    .unpublish-button {
+        @extend .button;
+        @extend .alert;
+        &:after {
+            content: 'Ne plus publier la réalisation';
+        }
+    }
+    .publish-button {
+        @extend .button;
+        @extend .success;
+        &:after {
+            content: 'Publier la réalisation';
+        }
+    }
+    .unpublish-button, .publish-button {
+        @extend .expand;
+    }
+}
+
 // Tabbed panels widget ///////////////////////////////////////////////////////
 
 .tab-bar > .items {
