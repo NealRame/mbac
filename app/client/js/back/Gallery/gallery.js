@@ -6,13 +6,13 @@ define(function(require) {
     var _ = require('underscore');
     var $ = require('jquery');
     var Backbone = require('backbone');
-    var Dialog = require('Dialog');
-    var Thumbnail = require('back/Gallery/gallery.thumbnail');
-
-    var galleryTemplate = require('text!back/Gallery/gallery.template.html');
-    var achievementEditorTemplate = require('text!back/Gallery/gallery.achievement-create.template.html');
-    var achievementListAddTemplate = require('text!back/Gallery/gallery.achievement-list-add.template.html');
     var configuration = require('Configuration');
+    var Dialog = require('Dialog');
+    var Thumbnail = require('back/Gallery/thumbnail');
+
+    var achievementEditorTemplate = require('text!back/Gallery/editor.template.html');
+    var galleryTemplate = require('text!back/Gallery/gallery.template.html');
+    var listAddTemplate = require('text!back/Gallery/list-add.template.html');
 
 
     if (_.indexOf($.event.props, 'dataTransfer') < 0) {
@@ -143,15 +143,15 @@ define(function(require) {
         initialize: function() {
             this.model = configuration.get('gallery.thumbnail');
             this.template = function(data) {
-                if (_.isString(achievementListAddTemplate)) {
-                    achievementListAddTemplate =
-                    _.template(achievementListAddTemplate);
+                if (_.isString(listAddTemplate)) {
+                    listAddTemplate =
+                    _.template(listAddTemplate);
                 }
 
                 var w = data.width, h = data.height;
                 var font_size = Math.max(8, Math.min(w, h) - 32);
 
-                return achievementListAddTemplate({
+                return listAddTemplate({
                     width: w,
                     height: h,
                     margin: data.margin,
@@ -367,7 +367,6 @@ define(function(require) {
         tagName: 'ul',
         className: 'thumbnails',
         childView: Thumbnail.view,
-        addAchievementTemplate: _.template(achievementListAddTemplate),
         initialize: function() {
             this.configuration = configuration.get('gallery');
         },

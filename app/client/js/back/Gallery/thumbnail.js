@@ -3,7 +3,7 @@ define(function(require) {
     var $ = require('jquery');
     var Backbone = require('backbone');
 
-    var thumbnailTemplate = require('text!back/Gallery/gallery.thumbnail.template.html');
+    var thumbnailTemplate = require('text!back/Gallery/thumbnail.template.html');
 
     var Picture = Backbone.Model.extend({
         // setPicture: function(picture) {
