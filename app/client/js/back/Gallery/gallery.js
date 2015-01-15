@@ -376,16 +376,11 @@ define(function(require) {
                         .html(this.addAchievementTemplate({
                             width: w,
                             height: h,
+                            margin: thumb_config.margin,
+                            fontSize: font_size,
+                            left: left_shift,
+                            top: top_shift
                         }));
-                this.addElement.find('a').css({
-                    left: left_shift,
-                    top: top_shift
-                });
-                this.addElement.find('i').css({
-                    fontSize: font_size,
-                    width: font_size,
-                    height: font_size,
-                });
                 this.$el.append(this.addElement);
             }
         },
