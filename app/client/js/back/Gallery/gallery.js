@@ -10,7 +10,7 @@ define(function(require) {
     var Dialog = require('Dialog');
     var Thumbnail = require('back/Gallery/thumbnail');
 
-    var achievementEditorTemplate = require('text!back/Gallery/editor.template.html');
+    var editorTemplate  = require('text!back/Gallery/editor.template.html');
     var galleryTemplate = require('text!back/Gallery/gallery.template.html');
     var listAddTemplate = require('text!back/Gallery/list-add.template.html');
 
@@ -257,7 +257,7 @@ define(function(require) {
             'blur   @ui.nameField': 'onNameChanged',
             'blur   @ui.descField': 'onDescriptionChanged',
         },
-        template: _.template(achievementEditorTemplate),
+        template: _.template(editorTemplate),
         onNameChanged: function() {
             console.log('-- AchievementEditor:onNameChanged');
             this.model.set('name', this.ui.nameField.val().trim());
