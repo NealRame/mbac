@@ -368,8 +368,6 @@ define(function(require) {
                 var left_shift = (w - font_size)/2;
                 var top_shift = (h - font_size)/2;
 
-                console.log('pouet');
-
                 this.addElement =
                     $(document.createElement('li'))
                         .addClass('thumb')
