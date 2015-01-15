@@ -27,11 +27,17 @@ define(function(require) {
             pictures: [],
             tags: [],
         },
+        published: function() {
+            return this.get('published');
+        },
         publish: function() {
-            this.save({published: true});
+            return this.set({published: true});
         },
         unpublish: function() {
-            this.save({published: false});
+            return this.set({published: false});
+        },
+        togglePublish: function() {
+            return this.set({published: ! this.published()});
         },
         addPicture: function(picture) {
             var list = this.get('pictures').slice(0);
@@ -253,10 +259,12 @@ define(function(require) {
         ui: {
             nameField: '#name',
             descField: '#desc',
+            publish:   '#publish'
         },
         events: {
             'blur   @ui.nameField': 'onNameChanged',
             'blur   @ui.descField': 'onDescriptionChanged',
+            'click  @ui.publish': 'onPublishClick'
         },
         template: _.template(editorTemplate),
         onNameChanged: function() {
@@ -269,9 +277,28 @@ define(function(require) {
             this.model.set('description', this.ui.descField.val());
             return false;
         },
+        onPublishClick: function(e) {
+            console.log('-- AchievementEditor:onPublishClick');
+
+            e.preventDefault();
+            e.stopPropagation();
+
+            this.ui.publish.removeClass();
+
+            if (this.model.togglePublish().published()) {
+                this.ui.publish.addClass('unpublish-button');
+            } else {
+                this.ui.publish.addClass('publish-button');
+            }
+
+            return false;
+        },
         onRender: function() {
             this.ui.nameField.val(this.model.get('name'));
             this.ui.descField.val(this.model.get('description'));
+            this.ui.publish.addClass(
+                this.model.published() ? 'unpublish-button':'publish-button'
+            );
             this.achievementPictureList = new AchievementPictureList({
                 el: this.$('#pictures'),
                 collection: new Backbone.Collection(
