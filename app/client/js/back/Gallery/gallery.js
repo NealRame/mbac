@@ -127,6 +127,43 @@ define(function(require) {
     });
 
 
+    var AddItemButton = Marionette.ItemView.extend({
+        tagName: 'li',
+        className: 'thumb',
+        attributes: {
+            'class': 'thumb',
+            'data-last': ''
+        },
+        ui: {
+            addButton: '#add-achievement'
+        },
+        triggers: {
+            'click @ui.addButton': 'click'
+        },
+        initialize: function() {
+            this.model = configuration.get('gallery.thumbnail');
+            this.template = function(data) {
+                if (_.isString(achievementListAddTemplate)) {
+                    achievementListAddTemplate =
+                    _.template(achievementListAddTemplate);
+                }
+
+                var w = data.width, h = data.height;
+                var font_size = Math.max(8, Math.min(w, h) - 32);
+
+                return achievementListAddTemplate({
+                    width: w,
+                    height: h,
+                    margin: data.margin,
+                    fontSize: font_size,
+                    left: (w - font_size)/2,
+                    top: (h - font_size)/2
+                });
+            }
+        },
+    });
+    
+
     var AchievementPictureList = Marionette.CollectionView.extend({
         childView: Thumbnail.view,
         events: {
@@ -335,43 +372,6 @@ define(function(require) {
     });
 
 
-    var AchievementAddButton = Marionette.ItemView.extend({
-        tagName: 'li',
-        className: 'thumb',
-        attributes: {
-            'class': 'thumb',
-            'data-last': ''
-        },
-        ui: {
-            addButton: '#add-achievement'
-        },
-        triggers: {
-            'click @ui.addButton': 'click'
-        },
-        initialize: function() {
-            this.model = configuration.get('gallery.thumbnail');
-            this.template = function(data) {
-                if (_.isString(achievementListAddTemplate)) {
-                    achievementListAddTemplate =
-                        _.template(achievementListAddTemplate);
-                }
-
-                var w = data.width, h = data.height;
-                var font_size = Math.max(8, Math.min(w, h) - 32);
-
-                return achievementListAddTemplate({
-                    width: w,
-                    height: h,
-                    margin: data.margin,
-                    fontSize: font_size,
-                    left: (w - font_size)/2,
-                    top: (h - font_size)/2
-                });
-            }
-        },
-    });
-
-
     var AchievementList = Marionette.CollectionView.extend({
         tagName: 'ul',
         className: 'thumbnails',
@@ -390,7 +390,7 @@ define(function(require) {
         },
         onBeforeRender: function() {
             if (! this.addAchievementButton) {
-                this.addAchievementButton = new AchievementAddButton;
+                this.addAchievementButton = new AddItemButton;
                 this.$el.append(this.addAchievementButton.render().el);
                 this.listenTo(this.addAchievementButton, 'click', this.onAddButtonClicked);
             }
