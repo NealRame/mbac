@@ -184,22 +184,32 @@ function parse_product_data(req) {
 };
 
 router
-    .route('/')
-    .get(function(req, res) {
+    .get('/', function(req, res) {
         Achievement.find().exec()
             .then(res.send.bind(res))
             .then(null, error.bind(null, res));
     })
-    .post(function(req, res) {
-        parse_product_data(req)
-            .then(function(data) {
-                return Achievement.create(data);
+    .get('/:id', function(req, res) {
+        Achievement
+            .findById(req.params.id)
+            .exec()
+            .then(function(achievement) {
+                if (achievement) {
+                    res.send(achievement);
+                } else {
+                    res.sendStatus(404);
+                }
             })
-            .then(res.send.bind(res))
-            .then(null, error.bind(null, res));
     });
 
 router
+    .use('/', function(req, res, next) {
+        if (res.locals.loggedIn) {
+            next();
+        } else {
+            res.sendStatus(401);
+        }
+    })
     .param('id', function(req, res, next, id) {
         Achievement
             .findById(id)
@@ -217,8 +227,15 @@ router
                 res.status(err.status || 500).send(err);
             });
     })
+    .post('/', function(req, res) {
+        parse_product_data(req)
+        .then(function(data) {
+            return Achievement.create(data);
+        })
+        .then(res.send.bind(res))
+        .then(null, error.bind(null, res));
+    })
     .route('/:id')
-        .get(function(req, res) {res.send(req.product);})
         .put(function(req, res) {
             parse_product_data(req)
             .then(function(data) {
