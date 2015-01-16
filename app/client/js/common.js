@@ -10,6 +10,7 @@ requirejs.config({
         'text': 'libs/text',
         'underscore': 'libs/underscore',
 
+        'Achievement': 'common/Achievement/achievement',
         'Dialog': 'common/Dialog/dialog',
 
         'Configuration': 'back/Configuration/configuration',
