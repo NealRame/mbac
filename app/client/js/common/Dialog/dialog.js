@@ -8,7 +8,7 @@ define(function(require) {
     var Backbone = require('backbone');
     var Marionette = require('marionette');
 
-    var dialogTemplate = require('text!back/Dialog/dialog.template.html');
+    var dialogTemplate = require('text!common/Dialog/dialog.template.html');
 
     var Dialog = Marionette.LayoutView.extend({
         ui: {
