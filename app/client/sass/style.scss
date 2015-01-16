@@ -76,6 +76,30 @@ body > .splash {
     }
 }
 
+.achievements {
+    list-style-type: none;
+    overflow: auto;
+    margin: 0;
+    .achievement {
+        float: left;
+        padding: 4px;
+        figure {
+            margin: 0;
+            padding: 0;
+            .th {display: none;}
+            .th:first-child {
+                @include thumb(
+                    $border-width: 2px,
+                    $box-shadow: none, $box-shadow-hover: none
+                );
+                margin: 0;
+                padding: 0;
+            }
+            figcaption {display: none;}
+        }
+    }
+}
+
 section.wrapper {
     background-color: inherit;
 

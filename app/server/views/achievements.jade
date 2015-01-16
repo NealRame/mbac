@@ -8,17 +8,20 @@ block content
     section.wrapper
         article
             header
-                h1: | Réalisation des clients de mon Bar à Couture
+                h1: | Réalisations des clients de mon Bar à Couture
             section
                 | Blah blah sur les réalisations
         
     section.wrapper
-        each achievement in achievements
-            if achievement.published && (achievement.pictures.length > 0)
-                ul.clearing-thumbs.clearing-feature(data-clearing)                            
-                    each picture, index in achievement.pictures
-                        - var thmb = picture.thumbnail
-                        - var orig = picture.original
-                        li(class=index === 0 ? 'clearing-featured-img':'')
-                            a.th(href='/files/#{orig}'): img(src='/files/#{thmb}')
-                                
+        article
+            ul.achievements
+                each achievement in achievements
+                    if achievement.published && (achievement.pictures.length > 0)
+                        li.achievement
+                            figure(title='#{achievement.name}')
+                                each picture, index in achievement.pictures
+                                    - var thmb = picture.thumbnail
+                                    - var orig = picture.original
+                                    a.th(href='/files/#{orig}')
+                                        img(src='/files/#{thmb}')
+                                figcaption: | #{achievement.description}
