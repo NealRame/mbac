@@ -146,6 +146,31 @@ body > .splash {
     }
 }
 
+.achievement-lightbox {
+    background-color: rgba(64, 64, 64, 0.7);
+    color: #fff;
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    z-index: 100;
+    .thumbnails {
+        border: none;
+        position: absolute;
+        bottom: 32px;
+    }
+    .action {
+        &:hover {
+            color: red;
+        }
+    }
+    #picture {
+        position: absolute;
+    }
+}
+
 section.wrapper {
     background-color: inherit;
 
