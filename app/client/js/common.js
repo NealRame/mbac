@@ -11,6 +11,7 @@ requirejs.config({
         'underscore': 'libs/underscore',
 
         'Achievement': 'common/Achievement/achievement',
+        'AchievementLightBox': 'common/AchievementLightBox/achievement-lightbox',
         'Dialog': 'common/Dialog/dialog',
 
         'Configuration': 'back/Configuration/configuration',

@@ -1,0 +1,10 @@
+<div id='picture'></div>
+<ul class='thumbnails'>
+    <% _.each(pictures, function(picture){ %>
+        <li>
+            <a href='/files/<%= picture.original %>'>
+                <img src='/files/<%= picture.thumbnail %>'>
+            </a>
+        </li>
+    <% }); %>
+</ul>
