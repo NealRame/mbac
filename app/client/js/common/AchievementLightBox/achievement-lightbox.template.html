@@ -1,8 +1,8 @@
 <div id='picture'></div>
 <ul class='thumbnails'>
-    <% _.each(pictures, function(picture){ %>
-        <li>
-            <a href='/files/<%= picture.original %>'>
+    <% _.each(pictures, function(picture, index){ %>
+        <li class='thumb'>
+            <a href='/files/<%= picture.original %>' data-index='<%= index %>'>
                 <img src='/files/<%= picture.thumbnail %>'>
             </a>
         </li>
