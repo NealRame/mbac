@@ -34,7 +34,7 @@ define(function(require) {
                             model: this
                         });
                         $('body').append(lightbox.render().el);
-
+                        lightbox.open();
                     })
                     .fetch();
 
