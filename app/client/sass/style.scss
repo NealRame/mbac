@@ -76,6 +76,52 @@ body > .splash {
     }
 }
 
+.thumbnails {
+    border: 1px solid lightgray;
+    list-style-type: none;
+    margin: 0;
+    margin-bottom: 16px;
+    padding: 2px;
+    overflow: auto;
+    .thumb {
+        border: 2px solid white;
+        float: left;
+        margin: 4px;
+        position: relative;
+        .crop {
+            display: block;
+            position: relative;
+            overflow: hidden;
+            img {
+                max-width: none;
+                max-height: none;
+                position: absolute;
+            }
+            .placeholder {
+                color: lightgray;
+                position: absolute;
+            }
+            .spinner {
+                color: lightgray;
+                position: absolute;
+            }
+        }
+        .crop[data-empty] {
+            background-color: #eee;
+        }
+    }
+    .thumb[data-last] {
+        #add-achievement {
+            color: lightgray;
+            position: absolute;
+        }
+        #add-achievement:hover {
+            color: #aaa;
+            position: absolute;
+        }
+    }
+}
+
 .achievements {
     list-style-type: none;
     overflow: auto;

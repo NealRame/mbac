@@ -2,48 +2,6 @@
 
 // Gallery widget /////////////////////////////////////////////////////////////
 
-.thumbnails {
-    list-style-type: none;
-    margin: 0;
-    margin-bottom: 16px;
-    padding: 2px;
-    border: 1px solid lightgray;
-    overflow: auto;
-    .thumb {
-        float: left;
-        .crop {
-            position: relative;
-            overflow: hidden;
-            img {
-                max-width: none;
-                max-height: none;
-                position: absolute;
-            }
-            .placeholder {
-                color: lightgray;
-                position: absolute;
-            }
-            .spinner {
-                color: lightgray;
-                position: absolute;
-            }
-        }
-        .crop[data-empty] {
-            background-color: #eee;
-        }
-    }
-    .thumb[data-last] {
-        #add-achievement {
-            color: lightgray;
-            position: absolute;
-        }
-        #add-achievement:hover {
-            color: #aaa;
-            position: absolute;
-        }
-    }
-}
-
 .action-bar {
     background-color: rgba(0, 0, 0, 0.5);
     position: absolute;
