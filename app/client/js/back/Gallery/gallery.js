@@ -26,7 +26,6 @@ define(function(require) {
         tagName: 'li',
         className: 'thumb',
         attributes: {
-            'class': 'thumb',
             'data-last': ''
         },
         ui: {
