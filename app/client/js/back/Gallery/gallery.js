@@ -49,13 +49,15 @@ define(function(require) {
                 return listAddTemplate({
                     width: w,
                     height: h,
-                    margin: data.margin,
                     fontSize: font_size,
                     left: (w - font_size)/2,
                     top: (h - font_size)/2
                 });
             }
         },
+        onRender: function() {
+            this.$el.css({margin: this.model.get('margin')});
+        }
     });
 
 
