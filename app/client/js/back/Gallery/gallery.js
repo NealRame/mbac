@@ -295,17 +295,6 @@ define(function(require) {
         initialize: function() {
             this.configuration = configuration.get('gallery');
         },
-        onAddButtonClicked: function(e) {
-            console.log('-- AchievementList:onAddButtonClicked');
-            this.collection.add(new Achievement);
-        },
-        onBeforeRender: function() {
-            if (! this.addAchievementButton) {
-                this.addAchievementButton = new AddItemButton({title: 'Ajouter une réalisation'});
-                this.$el.append(this.addAchievementButton.render().el);
-                this.listenTo(this.addAchievementButton, 'click', this.onAddButtonClicked);
-            }
-        },
         filter: function(requested_tags) {
             this.children.each(function(child) {
                 var provided_tags = child.$el.data('tags');
@@ -320,7 +309,7 @@ define(function(require) {
                 }
             });
         },
-        addChild: function(child, ChildView, index) {
+        addChild: function(child, ChildView) {
             var picture = function() {
                 var pictures = child.get('pictures');
                 return pictures.length > 0
@@ -356,7 +345,14 @@ define(function(require) {
                 console.log('-- AchievementView: edit');
                 this.trigger('edit', child);
             });
-            thumbnail.render().$el.insertBefore(this.$("[data-last]"));
+
+            var $child = thumbnail.render().$el;
+
+            if (this.$el.children().length > 0) {
+                $child.insertBefore(this.$el.children().first());
+            } else {
+                this.$el.append($child);
+            }
         },
     });
 
