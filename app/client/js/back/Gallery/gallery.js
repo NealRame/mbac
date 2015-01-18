@@ -306,6 +306,16 @@ define(function(require) {
                 this.listenTo(this.addAchievementButton, 'click', this.onAddButtonClicked);
             }
         },
+        filter: function(tags) {
+            this.children.each(function(child) {
+                if (tags.length === 0
+                        || _.intersection(tags, child.$el.data('tags').split(',')).length > 0) {
+                    child.$el.fadeIn('fast');
+                } else {
+                    child.$el.fadeOut('fast');
+                }
+            });
+        },
         addChild: function(child, ChildView, index) {
             var picture = function() {
                 var pictures = child.get('pictures');
@@ -315,12 +325,17 @@ define(function(require) {
             };
             var thumbnail = new ChildView({
                 tagName: 'li',
-                model: picture()
+                model: picture(),
+                attributes: {
+                    'data-tags': child.tags()
+                }
             }).configure(this.configuration.get('thumbnail').toJSON());
 
+            this.children.add(thumbnail);
             this.listenTo(child, 'change', function() {
                 console.log('-- AchievementView: change');
                 thumbnail.setPicture(picture());
+                thumbnail.$el.attr('data-tags', child.tags());
             });
             this.listenTo(child, 'destroy', function() {
                 console.log('-- AchievementView: remove');
@@ -409,11 +424,22 @@ define(function(require) {
                 this.ui.filterButton.attr('data-state', 'enabled');
                 this.ui.filters.show();
             }
+            this.updateFilter();
             return false;
         },
         onFiltersChanged: function(e) {
             console.log('-- Gallery:onFiltersChanged');
+            this.updateFilter();
             return false;
+        },
+        updateFilter: function() {
+            var tags = [];
+            if (this.ui.filterButton.attr('data-state') === 'enabled') {
+                tags = this.ui.filters.find('input:checked').map(
+                    function(){return this.id;}
+                ).get();
+            }
+            this.achievementList.filter(tags);
         },
         openEditor: function(achievement) {
             console.log('-- Gallery:openEditor');
