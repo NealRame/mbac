@@ -243,18 +243,16 @@ define(function(require) {
             }).bind(this);
 
             if (! this.model.isNew()) {
-                var editor_dialog  = this;
-                var confirm_dialog = Dialog.createMessageBox(
+                var editor = this;
+                Dialog.createMessageBox(
                     'Êtes vous sûr de vouloir continuer ?',
                     {
                         accept: commit,
                         acceptLabel: 'Continuer',
-                        refuse: editor_dialog.open.bind(editor_dialog),
+                        refuse: editor.open.bind(editor),
                         refuseLabel: 'Annuler',
                     }
-                );
-                this.$el.append(confirm_dialog.el);
-                confirm_dialog.open();
+                ).run();
             } else commit();
         },
         refuse: function() {
@@ -268,18 +266,16 @@ define(function(require) {
             }).bind(this);
 
             if (this.getContent().currentView.model.hasChanged()) {
-                var editor_dialog  = this;
-                var confirm_dialog = Dialog.createMessageBox(
+                var editor = this;
+                Dialog.createMessageBox(
                     'Les modifications apportées seront perdues! Êtes vous sûr de vouloir continuer ?',
                     {
                         accept: commit,
                         acceptLabel: 'Oui',
-                        refuse: editor_dialog.open.bind(editor_dialog),
+                        refuse: editor.open.bind(editor),
                         refuseLabel: 'Non'
                     }
-                );
-                this.$el.append(confirm_dialog.el);
-                confirm_dialog.open();
+                ).run();
             } else commit();
 
             return false;
@@ -349,7 +345,6 @@ define(function(require) {
     var Gallery = Marionette.LayoutView.extend({
         template: _.template(galleryTemplate),
         regions: {
-            achievementEditor: '#achievement-editor',
             achievementList: '#achievement-list'
         },
         initialize: function() {
@@ -368,11 +363,8 @@ define(function(require) {
             this.collection.fetch({reset: true});
         },
         openEditor: function(achievement) {
-            var region = this.getRegion('achievementEditor');
-            var editor = new AchievementEditorDialog({model: achievement});
-
-            region.show(editor);
-            editor.open();
+            console.log('-- Gallery:openEditor');
+            (new AchievementEditorDialog({model: achievement})).run();
         },
         onRender: function() {
             console.log('-- Gallery:onRender');

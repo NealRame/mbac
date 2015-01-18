@@ -11,6 +11,10 @@ define(function(require) {
     var dialogTemplate = require('text!common/Dialog/dialog.template.html');
 
     var Dialog = Marionette.LayoutView.extend({
+        className: 'reveal-modal',
+        attributes: {
+            'data-reveal': ''
+        },
         ui: {
             accept: '#accept',
             refuse: '#refuse',
@@ -26,6 +30,10 @@ define(function(require) {
                 return dialogTemplate(this.options);
             }).bind(this);
         },
+        run: function() {
+            $('body').append(this.render().el);
+            this.open();
+        },
         open: function() {
             this.$el.removeAttr('style');
             this.$el.foundation('reveal', 'open', {
@@ -36,11 +44,15 @@ define(function(require) {
         close: function() {
             console.log('-- Dialog:close');
             $().add(this.ui.accept).add(this.ui.refuse).off('click');
-            this.$el.one('closed', (function() {
-                console.log('-- Dialog:closed');
+            if (this.$el.hasClass('open')) {
+                this.$el.one('closed', (function() {
+                    console.log('-- Dialog:closed');
+                    this.remove();
+                }).bind(this));
+                this.$el.foundation('reveal', 'close');
+            } else {
                 this.remove();
-            }).bind(this));
-            this.$el.foundation('reveal', 'close');
+            }
         },
         accept: function() {
         },
@@ -103,7 +115,7 @@ define(function(require) {
             settings.refuse = options.refuseLabel;
         }
 
-        return (new (Dialog.extend({
+        return new (Dialog.extend({
             accept: function() {
                 if (options.accept) {
                     options.accept();
@@ -119,7 +131,7 @@ define(function(require) {
             setContent: function(region) {
                 region.$el.append($(document.createElement('p')).html(message));
             }
-        }))(settings)).render();
+        }))(settings);
     };
 
     return Dialog;
