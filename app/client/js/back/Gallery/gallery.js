@@ -306,10 +306,14 @@ define(function(require) {
                 this.listenTo(this.addAchievementButton, 'click', this.onAddButtonClicked);
             }
         },
-        filter: function(tags) {
+        filter: function(requested_tags) {
             this.children.each(function(child) {
-                if (tags.length === 0
-                        || _.intersection(tags, child.$el.data('tags').split(',')).length > 0) {
+                var provided_tags = child.$el.data('tags');
+                if (_.isString(provided_tags)) {
+                    provided_tags = provided_tags.split(',');
+                }
+                if (requested_tags.length === 0
+                        || _.intersection(requested_tags, provided_tags).length > 0) {
                     child.$el.fadeIn('fast');
                 } else {
                     child.$el.fadeOut('fast');
@@ -335,7 +339,7 @@ define(function(require) {
             this.listenTo(child, 'change', function() {
                 console.log('-- AchievementView: change');
                 thumbnail.setPicture(picture());
-                thumbnail.$el.attr('data-tags', child.tags());
+                thumbnail.$el.data('tags', child.tags());
             });
             this.listenTo(child, 'destroy', function() {
                 console.log('-- AchievementView: remove');
@@ -405,6 +409,7 @@ define(function(require) {
                             .html(this.filterTemplate({tag: tag}))
                     );
                 }, this);
+            this.updateFilter();
         },
         onAddButtonClicked: function(e) {
             console.log('-- Gallery:onAddButtonClicked');
