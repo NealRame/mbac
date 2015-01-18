@@ -34,9 +34,10 @@ define(function(require) {
         triggers: {
             'click @ui.addButton': 'click'
         },
+        title: '',
         initialize: function() {
             this.model = configuration.get('gallery.thumbnail');
-            this.template = function(data) {
+            this.template = (function(data) {
                 if (_.isString(listAddTemplate)) {
                     listAddTemplate =
                     _.template(listAddTemplate);
@@ -50,9 +51,10 @@ define(function(require) {
                     height: h,
                     fontSize: font_size,
                     left: (w - font_size)/2,
-                    top: (h - font_size)/2
+                    top: (h - font_size)/2,
+                    title: Marionette.getOption(this, 'title')
                 });
-            }
+            }).bind(this);
         },
         onRender: function() {
             this.$el.css({margin: this.model.get('margin')});
@@ -133,7 +135,7 @@ define(function(require) {
         },
         onBeforeRender: function() {
             if (! this.addPictureButton) {
-                this.addPictureButton = new AddItemButton;
+                this.addPictureButton = new AddItemButton({title: 'Ajouter une image'});
                 this.$el.append(this.addPictureButton.render().el);
                 this.listenTo(this.addPictureButton, 'click', function() {
                     this.filesInput.click();
@@ -303,7 +305,7 @@ define(function(require) {
         },
         onBeforeRender: function() {
             if (! this.addAchievementButton) {
-                this.addAchievementButton = new AddItemButton;
+                this.addAchievementButton = new AddItemButton({title: 'Ajouter une réalisation'});
                 this.$el.append(this.addAchievementButton.render().el);
                 this.listenTo(this.addAchievementButton, 'click', this.onAddButtonClicked);
             }
