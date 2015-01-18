@@ -9,6 +9,10 @@ define(function(require) {
 
     var template = require('text!common/AchievementLightbox/achievement-lightbox.template.html');
 
+    var ESC_KEY = 27;
+    var PREV_KEY = 37;
+    var NEXT_KEY = 39;
+
     return Marionette.ItemView.extend({
         className: 'achievement-lightbox',
         template: _.template(template),
@@ -25,15 +29,34 @@ define(function(require) {
         },
         initialize: function() {
             var resize_cb = this.onWindowResized.bind(this);
+            var keyup_cb = this.onKeypress.bind(this);
             this.once('opened', $(window).on.bind($(window),  'resize', resize_cb));
             this.once('closed', $(window).off.bind($(window), 'resize', resize_cb));
+            this.once('opened', $(window).on.bind($(window),  'keyup', keyup_cb));
+            this.once('closed', $(window).off.bind($(window), 'keyup', keyup_cb));
             this.count = this.model.get('pictures').length;
             this.current = 0;
+        },
+        onKeypress: function(e) {
+            // console.log(e.which);
+            e.preventDefault();
+            e.stopPropagation();
+            switch (e.which) {
+            case ESC_KEY:
+                this.close();
+                break;
+            case NEXT_KEY:
+                this.showNextPicture();
+                break;
+            case PREV_KEY:
+                this.showPreviousPicture();
+                break;
+            }
+            return false;
         },
         onActionRequest: function(e) {
             e.preventDefault();
             e.stopPropagation();
-
             switch ($(e.currentTarget).attr('data-action')) {
             case 'next':
                 this.showNextPicture();
@@ -44,7 +67,6 @@ define(function(require) {
             default:
                 break;
             }
-
             return false;
         },
         onThumbnailClick: function(e) {
