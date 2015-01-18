@@ -150,7 +150,7 @@ function delete_pictures(gfs, pictures) {
 
 function parse_product_data(req) {
     var promise = new mongoose.Promise;
-    var data = {tags:[]};
+    var data = {tags: []};
     var files = [];
     var form = formidableGrid(req.db, mongo, {
         accept: ['image/.*']
@@ -163,10 +163,16 @@ function parse_product_data(req) {
         }
     })
     .on('field', function(name, value) {
-        if (name === 'pictures') {
+        switch (name) {
+        case 'pictures':
             files.push(JSON.parse(unescape(value)));
-        } else {
+            break;
+        case 'tags':
+            data.tags.push(value);
+            break;
+        default:
             _.extend(data, querystring.parse(name+'='+value));
+            break;
         }
     })
     .once('error', promise.error.bind(promise))

@@ -45,6 +45,23 @@ define(function(require) {
             }
             return false;
         },
+        tags: function() {
+            return this.get('tags');
+        },
+        addTag: function(tag) {
+            var tags = this.get('tags').slice(0);
+            tags.push(tag);
+            return this.setTags(tags);
+        },
+        setTags: function(tags) {
+            var tags =
+                _.chain(tags || [])
+                    .compact()
+                    .map(function(tag) {return tag.trim().toLowerCase();})
+                    .uniq()
+                    .value();
+            return this.set('tags', tags);
+        },
         validate: function(attributes, options) {
             var isValidPicture = function(picture) {
                 return picture.file instanceof File
@@ -78,13 +95,11 @@ define(function(require) {
                     _.chain(data)
                         .pick('name', 'description', 'published')
                         .each(function(value, attr) {
-                            form_data.append(
-                                attr,
-                                attr === 'tags'
-                                    ? escape(JSON.stringify(value))
-                                    : value
-                            )
+                            form_data.append(attr, value);
                         });
+                    _.each(data.tags, function(tag) {
+                        form_data.append('tags', tag);
+                    });
                     _.each(data.pictures, function(picture) {
                         form_data.append(
                             'pictures',
