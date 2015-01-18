@@ -10,7 +10,7 @@ router.get('/:id', function(req, res, next) {
 
     gfs.collection('fs')
         .findOne(
-            {_id: new mongo.ObjectID(req.param('id'))},
+            {_id: new mongo.ObjectID(req.params.id)},
             function(err, item) {
                 if (err) {
                     return next(err);
@@ -24,7 +24,7 @@ router.get('/:id', function(req, res, next) {
                     );
                 }
 
-                gfs.createReadStream({_id: req.param('id')})
+                gfs.createReadStream({_id: req.params.id})
                     .pipe(res.type('image/jpeg'));
             }
         );
