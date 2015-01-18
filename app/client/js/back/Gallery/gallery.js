@@ -136,7 +136,6 @@ define(function(require) {
                 this.addPictureButton = new AddItemButton;
                 this.$el.append(this.addPictureButton.render().el);
                 this.listenTo(this.addPictureButton, 'click', function() {
-                    console.log('pouet');
                     this.filesInput.click();
                 });
             }
