@@ -191,7 +191,7 @@ function parse_product_data(req) {
 
 router
     .get('/', function(req, res) {
-        Achievement.find().exec()
+        Achievement.find().sort('-date').exec()
             .then(res.send.bind(res))
             .then(null, error.bind(null, res));
     })
