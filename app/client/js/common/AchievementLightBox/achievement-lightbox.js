@@ -21,9 +21,12 @@ define(function(require) {
             'click': 'close',
             'click .thumbnails > li > a': 'onThumbnailClick',
             'click @ui.picture > img': 'onPictureClick',
-            'click @ui.actions': 'onActionRequest',
+            'click @ui.actions': 'onActionRequest'
         },
         initialize: function() {
+            var resize_cb = this.onWindowResized.bind(this);
+            this.once('opened', $(window).on.bind($(window),  'resize', resize_cb));
+            this.once('closed', $(window).off.bind($(window), 'resize', resize_cb));
             this.count = this.model.get('pictures').length;
             this.current = 0;
         },
@@ -56,40 +59,36 @@ define(function(require) {
             this.showNextPicture();
             return false;
         },
-        showNextPicture: function() {
-            this.showPicture((this.current + 1) % this.count);
+        onWindowResized: function(e) {
+            console.log('window being resized');
+            this.setGeometry();
         },
-        showPreviousPicture: function() {
-            this.showPicture((this.current - 1 + this.count) % this.count);
-        },
-        showPicture: function(index) {
-            console.log('showing:', index);
-            console.log(this.ui.picture.find());
-
-            this.current = index;
-
+        setGeometry: function() {
             var viewport = {
                 width: $(window).width(),
                 height: this.ui.thumbnails.offset().top
             };
 
-            var spinner =
-                $(document.createElement('i'))
-                    .addClass('fa fa-spin fa-5x fa-circle-o-notch');
+            this.ui.picture.css(viewport);
 
-            this.ui.picture.empty().css(viewport).append(
+            var spinner = this.ui.picture.find('i');
+            var spinner_elt = spinner.get(0);
+            if (spinner_elt) {
                 spinner.css({
                     position: 'absolute',
                     left: (viewport.width - spinner.width())/2,
                     top: (viewport.height - spinner.height())/2
-                }));
+                })
+            }
 
-            var img = document.createElement('img');
-
-            img.onload = (function() {
+            var img = this.ui.picture.find('img');
+            var img_elt = img.get(0);
+            if (img_elt) {
                 var max_w = viewport.width  - 32;
                 var max_h = viewport.height - 32;
-                var w = img.width, h = img.height, r = w/h;
+                var w = img_elt.naturalWidth;
+                var h = img_elt.naturalHeight;
+                var r = w/h;
 
                 if (r > 1) {
                     w = Math.min(max_w, w);
@@ -107,25 +106,56 @@ define(function(require) {
                     }
                 }
 
-                $(img).css({
-                    border: '4px solid white',
-                    position: 'absolute',
+                img.css({
                     left: (viewport.width - w)/2,
                     top: (viewport.height - h)/2,
                     width: w,
                     height: h,
                 });
+            }
 
-                this.ui.picture.empty().append(img);
+            this.ui.thumbnails.css({
+                left: (viewport.width - this.ui.thumbnails.width())/2
+            });
+        },
+        showNextPicture: function() {
+            this.showPicture((this.current + 1) % this.count);
+        },
+        showPreviousPicture: function() {
+            this.showPicture((this.current - 1 + this.count) % this.count);
+        },
+        showPicture: function(index) {
+            console.log('showing:', index);
+
+            this.current = index;
+            this.ui.picture.empty().append(
+                $(document.createElement('i'))
+                    .addClass('fa fa-spin fa-5x fa-circle-o-notch')
+            );
+            this.setGeometry();
+
+            var img = document.createElement('img');
+
+            img.onload = (function() {
+                this.ui.picture.empty().append($(img).css({
+                    border: '4px solid white',
+                    position: 'absolute',
+                }));
+                this.setGeometry();
             }).bind(this);
-
             img.src = '/files/' + this.model.get('pictures')[index].original;
         },
         open: function() {
-            this.$el.fadeIn(this.showPicture.bind(this, 0));
+            this.$el.fadeIn((function() {
+                this.trigger('opened');
+                this.showPicture(0);
+            }).bind(this));
         },
         close: function() {
-            this.$el.fadeOut(this.remove.bind(this));
+            this.$el.fadeOut((function() {
+                this.remove();
+                this.trigger('closed');
+            }).bind(this));
         },
     });
 });
