@@ -147,24 +147,33 @@ define(function(require) {
     var AchievementEditor = Marionette.ItemView.extend({
         className: 'achievement-editor',
         ui: {
-            nameField: '#name',
             descField: '#desc',
+            nameField: '#name',
+            tagsField: '#tags',
             publish:   '#publish'
         },
         events: {
-            'blur   @ui.nameField': 'onNameChanged',
             'blur   @ui.descField': 'onDescriptionChanged',
+            'blur   @ui.nameField': 'onNameChanged',
+            'blur   @ui.tagsField': 'onTagsChanged',
             'click  @ui.publish': 'onPublishClick'
         },
         template: _.template(editorTemplate),
+
+        onDescriptionChanged: function() {
+            console.log('-- AchievementEditor:onDescriptionChanged');
+            this.model.set('description', this.ui.descField.val());
+            return false;
+        },
         onNameChanged: function() {
             console.log('-- AchievementEditor:onNameChanged');
             this.model.set('name', this.ui.nameField.val().trim());
             return false;
         },
-        onDescriptionChanged: function() {
-            console.log('-- AchievementEditor:onDescriptionChanged');
-            this.model.set('description', this.ui.descField.val());
+        onTagsChanged: function() {
+            console.log('-- AchievementEditor:onTagsChanged');
+            this.model.setTags(this.ui.tagsField.val().split(','));
+            this.ui.tagsField.val(this.model.tags().join(', '));
             return false;
         },
         onPublishClick: function(e) {
@@ -186,6 +195,7 @@ define(function(require) {
         onRender: function() {
             this.ui.nameField.val(this.model.get('name'));
             this.ui.descField.val(this.model.get('description'));
+            this.ui.tagsField.val(this.model.tags().join(', '));
             this.ui.publish.addClass(
                 this.model.published() ? 'unpublish-button':'publish-button'
             );
