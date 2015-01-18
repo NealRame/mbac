@@ -23,6 +23,22 @@
     color: red;
 }
 
+#achievement-toolbox {
+    border: solid 1px lightgray;
+    padding: 6px;
+    margin-right: 16px;
+    float: left;
+    li {
+        float: left;
+        clear: both;
+        width: 100%;
+    }
+    #filters {
+        list-style-type: none;
+        display: none;
+    }
+}
+
 .achievement-editor {
     border-bottom: solid 1px lightgray;
     margin-bottom: 8px;
