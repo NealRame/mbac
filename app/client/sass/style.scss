@@ -2,6 +2,13 @@
 @import "icons";
 @import "foundation/foundation";
 
+.toggle-button {
+    @extend .button;
+    &[data-state='disabled'] {
+        @extend .secondary;
+    }
+}
+
 .menu {
     // border-bottom: 2px solid $light-gray;
     .top-bar {
