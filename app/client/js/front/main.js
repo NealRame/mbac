@@ -30,11 +30,7 @@ define(function(require) {
 
                 achievement
                     .once('change', function() {
-                        var lightbox = new AchievementLightBox({
-                            model: this
-                        });
-                        $('body').append(lightbox.render().el);
-                        lightbox.open();
+                        (new AchievementLightBox({model: this})).run();
                     })
                     .fetch();
 

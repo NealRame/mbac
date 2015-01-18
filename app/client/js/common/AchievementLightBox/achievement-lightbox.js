@@ -164,6 +164,10 @@ define(function(require) {
             }).bind(this);
             img.src = '/files/' + this.model.get('pictures')[index].original;
         },
+        run: function() {
+            $('body').append(this.render().el);
+            this.open();
+        },
         open: function() {
             this.$el.fadeIn((function() {
                 this.trigger('opened');
