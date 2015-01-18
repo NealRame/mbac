@@ -60,7 +60,6 @@ define(function(require) {
             return false;
         },
         onWindowResized: function(e) {
-            console.log('window being resized');
             this.setGeometry();
         },
         setGeometry: function() {
@@ -125,8 +124,6 @@ define(function(require) {
             this.showPicture((this.current - 1 + this.count) % this.count);
         },
         showPicture: function(index) {
-            console.log('showing:', index);
-
             this.current = index;
             this.ui.picture.empty().append(
                 $(document.createElement('i'))
