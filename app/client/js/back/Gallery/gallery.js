@@ -219,7 +219,7 @@ define(function(require) {
                 'remove-picture',
                 function(picture, index) {
                     console.log('remove-picture: ', picture, index);
-                    this.model.removePictureAtIndex(index);
+                    this.model.removePicture(index);
                 }
             );
             this.achievementPictureList.render();
@@ -295,14 +295,9 @@ define(function(require) {
         initialize: function() {
             this.configuration = configuration.get('gallery');
         },
-        filter: function(requested_tags) {
+        filter: function(tags) {
             this.children.each(function(child) {
-                var provided_tags = child.$el.data('tags');
-                if (_.isString(provided_tags)) {
-                    provided_tags = provided_tags.split(',');
-                }
-                if (requested_tags.length === 0
-                        || _.intersection(requested_tags, provided_tags).length > 0) {
+                if (tags.length === 0 || child.model.hasTags(tags)) {
                     child.$el.fadeIn('fast');
                 } else {
                     child.$el.fadeOut('fast');
@@ -310,26 +305,13 @@ define(function(require) {
             });
         },
         addChild: function(child, ChildView) {
-            var picture = function() {
-                var pictures = child.get('pictures');
-                return pictures.length > 0
-                        ? new Thumbnail.model(pictures[0])
-                        : null;
-            };
             var thumbnail = new ChildView({
                 tagName: 'li',
-                model: picture(),
-                attributes: {
-                    'data-tags': child.tags()
-                }
+                model: child
             }).configure(this.configuration.get('thumbnail').toJSON());
 
             this.children.add(thumbnail);
-            this.listenTo(child, 'change', function() {
-                console.log('-- AchievementView: change');
-                thumbnail.setPicture(picture());
-                thumbnail.$el.data('tags', child.tags());
-            });
+
             this.listenTo(child, 'destroy', function() {
                 console.log('-- AchievementView: remove');
                 this.stopListening(thumbnail);
@@ -337,9 +319,7 @@ define(function(require) {
             });
             this.listenTo(thumbnail, 'remove', function() {
                 console.log('-- AchievementView: remove');
-                this.stopListening(thumbnail);
                 child.destroy();
-                thumbnail.remove();
             });
             this.listenTo(thumbnail, 'edit', function() {
                 console.log('-- AchievementView: edit');

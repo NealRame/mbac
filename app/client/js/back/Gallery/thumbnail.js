@@ -49,6 +49,9 @@ define(function(require) {
                     }
                 )
             );
+            if (this.model) {
+                this.listenTo(this.model, 'change', this.render);
+            }
         },
         configure: function(config, render) {
             this.options = _.extend(
@@ -60,10 +63,11 @@ define(function(require) {
             }
             return this;
         },
-        setPicture: function(picture) {
-            this.model = picture;
-            this.render();
-            return this;
+        picture: function() {
+            if (this.model) {
+                return this.model instanceof Picture
+                    ? this.model.toJSON() : this.model.picture();
+            }
         },
         onActionRequested: function(e) {
             e.preventDefault();
@@ -124,8 +128,9 @@ define(function(require) {
                     ? function(elt){$(elt).insertBefore(this.$('.action-bar'));}
                     : function(elt){this.ui.crop.append(elt);}).bind(this);
 
-            if (this.model) {
-                var data = this.model.toJSON();
+            var data = this.picture();
+
+            if (data) {
                 var view = this;
                 var img = new Image;
 

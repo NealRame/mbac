@@ -26,6 +26,12 @@ define(function(require) {
         togglePublish: function() {
             return this.set({published: ! this.published()});
         },
+        picture: function(index) {
+            return this.get('pictures')[index || 0];
+        },
+        pictures: function() {
+            return this.get('pictures');
+        },
         addPicture: function(picture) {
             var list = this.get('pictures').slice(0);
             if (! _.contains(list, picture)) {
@@ -36,7 +42,7 @@ define(function(require) {
                 return list[index];
             }
         },
-        removePictureAtIndex: function(index) {
+        removePicture: function(index) {
             var list = this.get('pictures').slice(0);
             if (index < list.length) {
                 var picture = (list.splice(index, 1))[0];
@@ -47,6 +53,17 @@ define(function(require) {
         },
         tags: function() {
             return this.get('tags');
+        },
+        hasTags: function(tags) {
+            if (_.isString(tags)) {
+                return this.hasTags(
+                    tags.split(',')
+                        .map(function(tag){return tag.trim().toLowerCase();})
+                );
+            } else if (_.isArray(tags)) {
+                return _.intersection(tags, this.tags()).length > 0;
+            }
+            throw new TypeError('Required a String or an array of Strings');
         },
         addTag: function(tag) {
             var tags = this.get('tags').slice(0);
