@@ -50,7 +50,7 @@ var PictureSchema = new Schema({
 
 //// #### ratio
 //// _Virtual_. Ratio of width to height.
-PictureSchema.virtual('ratio').get(function () {
+PictureSchema.virtual('ratio').get(function() {
     return this.width/this.height;
 });
 
