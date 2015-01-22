@@ -4,8 +4,14 @@
 // -   date: Mon Jan 19 22:25:36 CET 2015
 
 var _ = require('underscore');
+var GridFs = require('gridfs-stream');
+var gm = require('gm');
+var inspect = require('util').inspect;
 var mongoose = require('mongoose');
+var path = require('path');
+
 var Schema = mongoose.Schema;
+var mongo = mongoose.mongo;
 
 /// ### Fields
 var PictureSchema = new Schema({
