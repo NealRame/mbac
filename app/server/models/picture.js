@@ -1,5 +1,5 @@
-// models/picture.js
-// -----------------
+// models/Picture
+// --------------
 // - author: Neal.Rame. <contact@nealrame.com>
 // -   date: Mon Jan 19 22:25:36 CET 2015
 
