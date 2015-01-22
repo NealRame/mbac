@@ -26,8 +26,11 @@ var AchievementSchema = new Schema({
     // A list of picture of this product
     pictures: [Picture],
     // Tag list for this product
-    tags: [String],
-    // Published flag
+    tags: [{
+        type: String,
+        lowercase: true,
+        trim: true
+    }],
     published: {
         type: Boolean,
         default: false
