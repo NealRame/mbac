@@ -68,4 +68,52 @@ PictureSchema.methods.thumbnailPath = function() {
     return path.join('/', this.prefix, this.thumbnail);
 }
 
+
+/// #### `Picture.create(original, [cb])`
+/// Create a picture instance with the given image.
+///
+/// __Parameters:__
+/// - `original`, the original image.
+/// - `cb`, a node.js style callback.
+///
+/// __Returns:__
+/// - If callback is not provided, it returns a `mongoose.Promise`.
+PictureSchema.static('create', function(original, cb) {
+    var Model = this;
+    var promise = new mongoose.Promise(cb);
+    var gfs = GridFs(mongoose.connection.db, mongo);
+    var data = {
+        original: original.id
+    };
+
+    gm(gfs.createReadStream({_id: original.id}))
+        .size({bufferStream: true}, function(err, size) {
+            if (err) {
+                return promise.error(err);
+            }
+
+            var thumbnail_id = new mongo.ObjectID;
+            var ostream = gfs.createWriteStream({
+                _id: thumbnail_id,
+                content_type: original.mime,
+                metadata: {original: original.id},
+                mode: 'w',
+            });
+
+            _.bindAll(promise, 'resolve', 'error');
+            _.extend(data, {thumbnail: thumbnail_id}, size);
+            ostream
+                .once('error', function(err) {
+                    gfs.remove({_id: id.toString()}, promise.error);
+                })
+                .once('close', function() {
+                    (new Model(data)).save(promise.resolve);
+                });
+
+            this.resize(256).stream().pipe(ostream);
+        });
+
+    if (! cb) return promise;
+});
+
 module.exports = mongoose.model('Picture', PictureSchema);
