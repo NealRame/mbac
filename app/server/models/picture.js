@@ -67,3 +67,5 @@ PictureSchema.methods.originalPath = function() {
 PictureSchema.methods.thumbnailPath = function() {
     return path.join('/', this.prefix, this.thumbnail);
 }
+
+module.exports = mongoose.model('Picture', PictureSchema);
