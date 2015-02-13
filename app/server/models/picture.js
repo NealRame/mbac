@@ -115,20 +115,19 @@ PictureSchema.methods.destroy = function(cb) {
 /// Create a picture instance with the given image.
 ///
 /// __Parameters:__
-/// - `original`, the original image.
+/// - `data`, the data to create the picture from. It should at least contains
+///    the `original` attribute which is the original file for creating the
+///    picture.
 /// - `cb`, a node.js style callback.
 ///
 /// __Returns:__
-/// - If callback is not provided, it returns a `mongoose.Promise`.
-PictureSchema.static('create', function(original, cb) {
+/// - `Promise`.
+PictureSchema.static('create', function(data, cb) {
     var Model = this;
-    var promise = new mongoose.Promise(cb);
+    var promise = new Promise(cb);
     var gfs = GridFs(mongoose.connection.db, mongo);
-    var data = {
-        original: original.id
-    };
 
-    gm(gfs.createReadStream({_id: original.id}))
+    gm(gfs.createReadStream({_id: data.original}))
         .size({bufferStream: true}, function(err, size) {
             if (err) {
                 return promise.error(err);
@@ -137,8 +136,8 @@ PictureSchema.static('create', function(original, cb) {
             var thumbnail_id = new mongo.ObjectID;
             var ostream = gfs.createWriteStream({
                 _id: thumbnail_id,
-                content_type: original.mime,
-                metadata: {original: original.id},
+                content_type: 'image/png',
+                metadata: {original: data.original},
                 mode: 'w',
             });
 
@@ -146,7 +145,8 @@ PictureSchema.static('create', function(original, cb) {
             _.extend(data, {thumbnail: thumbnail_id}, size);
             ostream
                 .once('error', function(err) {
-                    gfs.remove({_id: id.toString()}, promise.error);
+                    gfs.remove({_id: thumbnail_id.toString()});
+                    promise.error(err);
                 })
                 .once('close', function() {
                     (new Model(data)).save(promise.resolve);
@@ -155,7 +155,9 @@ PictureSchema.static('create', function(original, cb) {
             this.resize(256).stream().pipe(ostream);
         });
 
-    if (! cb) return promise;
+    return promise;
 });
+
+
 
 module.exports = mongoose.model('Picture', PictureSchema);
