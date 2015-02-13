@@ -1,3 +1,4 @@
+var _ = require('underscore');
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 var debug = require('debug')('mbac:app');
@@ -71,17 +72,25 @@ exports.getInstance = function() {
 
         // development env will print stacktrace
         app.use(function(err, req, res, next) {
-            var status = err.status = err.status || 500;
-            res.status(status);
-            res.render(
-                'error',
+            var error = _.defaults(
+                _.pick(err, 'message', 'status'),
                 {
-                    error:
-                        app.get('env') === 'development'
-                            ? err
-                            : {message: err.message, status: status}
+                    message: 'Internal server error',
+                    status: 500
                 }
             );
+
+            if (app.get('env') === 'development' && err.stack) {
+                error.stack = err.stack;
+            }
+
+            res.status(error.status);
+
+            if (req.api) {
+                res.send(error);
+            } else {
+                res.render('error', {error: error});
+            }
         });
 
         return app;
