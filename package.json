@@ -19,6 +19,7 @@
     "mongoose": "^3.8.17",
     "mongoose-express-session-store": "NealRame/mongoose-express-session-store#v0.2",
     "morgan": "^1.5.1",
+    "mpromise": "^0.5.5",
     "oauth2-js": "NealRame/oauth2-js#v0.3.2",
     "promise": "^5.0.0",
     "serve-favicon": "^2.1.5",
