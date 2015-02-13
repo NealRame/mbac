@@ -8,25 +8,20 @@ var express = require('express');
 var formidableGrid = require('formidable-grid');
 var GridFs = require('gridfs-stream');
 var inspect = require('util').inspect;
-var Picture = require('models/picture');
-var Promise = require('mongoose').Promise;
-var mongo = require('mongodb');
+var mongoose = require('mongoose');
+var mongo = mongoose.mongo;
 var path = require('path');
+var Picture = require('models/picture');
+var Promise = mongoose.Promise;
 
 var router = express.Router();
 
-function error(res, err) {
-    var err = err || new Error('Internal server error');
-    var status = err.status || 500;
-
-    res.status(status).send({
-        status: status,
-        message: err.message
-    });
+function _404() {
+    throw _.extend(new Error('Not found'), {status: 404});
 };
 
 function parse_picture_data(req) {
-    var promise = new mongoose.Promise;
+    var promise = new Promise;
     var files = [];
     var form = formidableGrid(req.db, mongo, {
         accept: ['image/.*']
@@ -36,7 +31,7 @@ function parse_picture_data(req) {
     form.maxFields = 1;
     form
         .on('file', function(name, file) {
-            files.push(file);
+            files.push({original: file.id});
         })
         .once('error', promise.error.bind(promise))
         .once('end', function() {
@@ -49,19 +44,20 @@ function parse_picture_data(req) {
 
 router
     .route('/')
-        .get(function(req, res) {
+        .get(function(req, res, next) {
             Picture.find().exec()
                 .then(res.send.bind(res))
-                .then(null, error.bind(null, res));
+                .then(null, next);
         })
-        .post(function(req, res) {
+        .post(function(req, res, next) {
             parse_picture_data(req)
                 .then(function(data) {
                     return Picture.create(data);
                 })
                 .then(res.send.bind(res))
-                .then(null, error.bind(null, res));
-        });
+                .then(null, next);
+        })
+        .all(_404);
 
 router
     .param('id', function(req, res, next, id) {
@@ -73,25 +69,22 @@ router
                     req.picture = picture;
                     next();
                 } else {
-                    throw _.extend(new Error('Not found'), {status: 404});
+                    _404();
                 }
             })
-            .then(null, function(err) {
-                res.status(err.status || 500).send(err);
-            });
+            .then(null, next);
     })
     .route('/:id')
         .get(function(req, res) {
             res.send(req.picture);
         })
-        .delete(function(req, res) {
-            req.picture.destroy(function(err) {
-                if (err) {
-                    error(res, err);
-                } else {
+        .delete(function(req, res, next) {
+            req.picture.destroy()
+                .then(function() {
                     res.sendStatus(200);
-                }
-            });
-        });
+                })
+                .then(null, next);
+        })
+        .all(_404);
 
 module.exports = router;
