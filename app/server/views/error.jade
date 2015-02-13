@@ -9,5 +9,6 @@ block content
         article
             header
                 h1 #{error.status}: #{error.message}
-            section
-                pre #{error.stack}
+            if error.stack
+                section
+                    pre #{error.stack}
