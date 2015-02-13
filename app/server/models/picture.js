@@ -4,14 +4,16 @@
 // -   date: Mon Jan 19 22:25:36 CET 2015
 
 var _ = require('underscore');
+var async = require('async');
+var debug = require('debug')('mbac:models.Picture');
 var GridFs = require('gridfs-stream');
 var gm = require('gm');
 var inspect = require('util').inspect;
 var mongoose = require('mongoose');
-var path = require('path');
-
-var Schema = mongoose.Schema;
 var mongo = mongoose.mongo;
+var path = require('path');
+var Promise = mongoose.Promise;
+var Schema = mongoose.Schema;
 
 /// ### Fields
 var PictureSchema = new Schema({
@@ -54,6 +56,25 @@ var PictureSchema = new Schema({
     },
 });
 
+PictureSchema.pre('remove', function(next) {
+    var gfs = GridFs(mongoose.connection.db, mongo);
+
+    debug('removing', this._id);
+    async.each(
+        _.chain(this).pick('original', 'thumbnail').values().value(),
+        function(id, next) {
+            debug('removing file', id);
+            gfs.remove({_id: id.toString()}, function(err) {
+                if (err) {
+                    debug(err);
+                }
+                next();
+            });
+        },
+        next
+    );
+});
+
 //// #### ratio
 //// _Virtual_. Ratio of width to height.
 PictureSchema.virtual('ratio').get(function() {
@@ -81,26 +102,13 @@ PictureSchema.methods.thumbnailPath = function() {
 /// - `cb`, a node.js style callback.
 ///
 /// __Returns:__
-/// - If callback is not provided, it returns a `mongoose.Promise`.
+/// - `Promise`.
 PictureSchema.methods.destroy = function(cb) {
-    var picture = this;
-    var promise = new mongoose.Promise(cb);
-    var gfs = GridFs(mongoose.connection.db, mongo);
-
-    _.bindAll(promise, 'resolve');
-    _.chain(picture).pick('original', 'thumbnail').values().each(
-        function(id) {
-            gfs.remove({ _id: id.toString()}, function(err) {
-                if (err) {
-                    console.error(err); // FIXME: report the error
-                }
-            });
-        }
-    );
-
-    picture.remove(promise.resolve);
-
-    if (! cb) return promise;
+    // original and thumbnail files are destroyed by pre-middleware on
+    // 'remove'.
+    var promise = new Promise(cb);
+    this.remove(promise.resolve.bind(promise));
+    return promise;
 }
 
 /// #### `Picture.create(original, [cb])`
