@@ -58,8 +58,6 @@ var PictureSchema = new Schema({
 
 PictureSchema.pre('remove', function(next) {
     var gfs = GridFs(mongoose.connection.db, mongo);
-
-    debug('removing', this._id);
     async.each(
         _.chain(this).pick('original', 'thumbnail').values().value(),
         function(id, next) {
@@ -106,6 +104,7 @@ PictureSchema.methods.thumbnailPath = function() {
 PictureSchema.methods.destroy = function(cb) {
     // original and thumbnail files are destroyed by pre-middleware on
     // 'remove'.
+    debug('removing', this._id);
     var promise = new Promise(cb);
     this.remove(promise.resolve.bind(promise));
     return promise;
