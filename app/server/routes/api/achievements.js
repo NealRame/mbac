@@ -13,7 +13,8 @@ var helpers = require('routes/api/_helpers');
 var gm = require('gm');
 var GridFs = require('gridfs-stream');
 var mongoose = require('mongoose');
-var ObjectId = mongoose.Schema.Types.ObjectId;
+var ObjectId = mongoose.Types.ObjectId;
+var Promise = mongoose.Promise;
 var path = require('path');
 var querystring = require('querystring');
 var inspect = require('util').inspect;
@@ -50,15 +51,32 @@ function parse_data(req) {
         }
     })
     .once('error', promise.error)
-    .once('end', promise.fulfill)
+    .once('end', function() {
+        promise.fulfill(data);
+    })
     .parse(req);
 
+    return promise;
+};
+
+var populate = function(doc, next) {
+    var promise = new Promise(next);
+    _.bindAll(promise, 'fulfill', 'error');
+    Achievement.populate(doc, {path: 'pictures'})
+        .then(promise.fulfill)
+        .then(null, promise.error);
     return promise;
 };
 
 router
     .get('/', function(req, res, next) {
         Achievement.find().sort('-date').exec()
+            .then(function(collection) {
+                var promise = new Promise;
+                _.bindAll(promise, 'resolve');
+                async.map(collection, populate, promise.resolve);
+                return promise;
+            })
             .then(res.send.bind(res))
             .then(null, next);
     })
@@ -82,7 +100,6 @@ router
             .exec()
             .then(helpers.checkIfDefined)
             .then(function(achievement) {
-                _.bindAll(achievement, 'path', 'destroy');
                 req.achievement = achievement;
                 next();
             })
@@ -96,22 +113,26 @@ router
             .then(function(data) {
                 return Achievement.create(data);
             })
+            .then(populate)
             .then(res.send.bind(res))
             .then(null, next);
-    });
+    })
+    .all(helpers.forbidden());
 
 router
     .route('/:id')
     .put(function(req, res, next) {
         parse_data(req)
-            .then(req.achievement.patch)
+            .then(req.achievement.patch.bind(req.achievement))
+            .then(populate)
             .then(res.send.bind(res))
             .then(null, next);
     })
-    .delete(function(req, res) {
+    .delete(function(req, res, next) {
         req.achievement.destroy()
             .then(res.sendStatus.bind(res, 200))
             .then(null, next);
-    });
+    })
+    .all(helpers.forbidden());
 
 module.exports = router;
