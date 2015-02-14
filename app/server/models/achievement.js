@@ -117,7 +117,6 @@ AchievementSchema.static('create', function(data, cb) {
     var promise = new Promise(cb);
 
     debug('creating Achievement', data);
-
     _.bindAll(promise, 'resolve', 'error');
     create_pictures(data.files)
         .then(function(pictures) {
@@ -141,34 +140,44 @@ AchievementSchema.methods.patch = function(data, cb) {
     var promise = new Promise(cb);
 
     debug('patching', this._id);
-
     async.compose(
         // Patch model task
         function(pictures, next) {
             this.set(
-                _.pick(
-                    data, 'date', 'name', 'description', 'tags', 'published'
-                )
+                _.chain(data)
+                    .pick('date', 'name', 'description', 'tags', 'published')
+                    .extend({pictures: pictures})
+                    .value()
             ).save(next);
         },
         // Create pictures task
         function(pictures, next) {
             create_pictures(data.files)
-                .then(function(new_pictures) {
-                    next(null, pictures.concat(new_pictures));
-                })
+                .then(Array.prototype.concat.bind(pictures))
+                .then(next.bind(null, null))
                 .then(null, next);
         },
-        // Delete pictures task
-        function(next) {
-            _.chain(this.pictures).each(function(picture) {
-                var id = picture instanceof ObjectId ? picture : picture._id;
+        // Delete pictures which are not both referenced in pictures and in
+        // `data.pictures`, immediately pass back original file list to create
+        // new pictures to the create task.
+        function(pictures, next) {
+            _.chain(pictures).pluck('_id').each(function(id) {
                 if (! _.any(data.pictures, id.equals.bind(id))) {
-                    Picture.findByIdAndRemove(id).exec();
+                    Picture.findById(id).exec()
+                        .then(function(doc) {
+                            if (doc) {
+                                doc.destroy()
+                            }
+                        })
+                        .then(null, function(err) {
+                            console.log(err);
+                        })
                 }
-                next(null, data.pictures);
             });
-        }
+            next(null, data.pictures);
+        },
+        // Populate pictures and pass it back to delete task
+        populate_and_get_pictures
     ).call(this, promise.resolve.bind(promise));
 
     return promise;
