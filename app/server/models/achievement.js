@@ -52,27 +52,13 @@ var AchievementSchema = new Schema({
     }
 });
 
-AchievementSchema.pre('remove', function(next) {
-    debug('removing', this._id);
-    async.each(
-        this.pictures,
-        function(picture, next) {
-            (picture instanceof ObjectId
-                ? Picture.findByIdAndRemove(picture).exec()
-                : picture.destroy()
-            ).addBack(next);
-        },
-        next
-    );
-});
-
 // Returns a promise of an array of pictures'ids created from the given files
-function create_pictures(files) {
-    var promise = new Promise;
+function create_pictures(files, next) {
+    var promise = new Promise(next);
     async.map(
         files,
         function(file, next) {
-            Picture.create({original: file})
+            Picture.create(file)
                 .then(function(picture) {
                     next(null, picture._id);
                 })
@@ -82,6 +68,39 @@ function create_pictures(files) {
     );
     return promise;
 };
+
+// Returns binded doc pictures list, call populate if the model has not been
+// populated yet.
+function populate_and_get_pictures(next) {
+    var promise = new Promise(next);
+    if (this.populated('picture')) {
+        promise.fulfill(this.pictures);
+    } else {
+        this.populate('pictures', function(err, doc) {
+            if (err) {
+                promise.error(err);
+            } else {
+                promise.fulfill(doc.pictures);
+            }
+        });
+    }
+    return promise;
+};
+
+AchievementSchema.pre('remove', function(next) {
+    debug('removing', this._id);
+    populate_and_get_pictures.call(this)
+        .then(function(pictures) {
+            async.each(
+                pictures,
+                function(picture, next) {
+                    picture.destroy().addBack(next)
+                },
+                next
+            );
+        })
+        .then(null, next);
+});
 
 /// #### `Achievement.create(data, [cb])`
 /// Create an `Achievement` instance with the given data.
