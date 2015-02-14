@@ -9,6 +9,7 @@ var async = require('async');
 var debug = require('debug')('mbac:routes.achievements');
 var express = require('express');
 var formidableGrid = require('formidable-grid');
+var helpers = require('routes/api/_helpers');
 var gm = require('gm');
 var GridFs = require('gridfs-stream');
 var mongoose = require('mongoose');
@@ -19,16 +20,6 @@ var inspect = require('util').inspect;
 
 var mongo = mongoose.mongo;
 var router = express.Router();
-
-function error(res, err) {
-    var err = err || new Error('Internal server error');
-    var status = err.status || 500;
-
-    res.status(status).send({
-        status: status,
-        message: err.message
-    });
-};
 
 function parse_data(req) {
     var promise = new mongoose.Promise;
@@ -66,77 +57,61 @@ function parse_data(req) {
 };
 
 router
-    .get('/', function(req, res) {
+    .get('/', function(req, res, next) {
         Achievement.find().sort('-date').exec()
             .then(res.send.bind(res))
-            .then(null, error.bind(null, res));
+            .then(null, next);
     })
-    .get('/:id', function(req, res) {
+    .get('/:id', function(req, res, next) {
         Achievement
             .findById(req.params.id)
             .populate('pictures')
             .exec()
+            .then(helpers.checkIfDefined)
             .then(function(achievement) {
-                if (achievement) {
-                    res.send(achievement);
-                } else {
-                    res.sendStatus(404);
-                }
+                res.send(achievement);
             })
-            .then(null, function(err) {
-                res.status(500).send(err);
-            });
+            .then(null, next);
     });
 
 router
-    .use('/', function(req, res, next) {
-        if (res.locals.loggedIn) {
-            next();
-        } else {
-            res.sendStatus(401);
-        }
-    })
+    .use('/', helpers.authorized())
     .param('id', function(req, res, next, id) {
         Achievement
             .findById(id)
             .exec()
+            .then(helpers.checkIfDefined)
             .then(function(achievement) {
-                if (achievement) {
-                    _.bindAll(achievement, 'path', 'destroy');
-                    req.achievement = achievement;
-                    next();
-                } else {
-                    throw _.extend(new Error('Not found'), {status: 404});
-                }
+                _.bindAll(achievement, 'path', 'destroy');
+                req.achievement = achievement;
+                next();
             })
-            .then(null, function(err) {
-                res.status(err.status || 500).send(err);
-            });
+            .then(null, next);
     });
 
 router
     .route('/')
-    .post(function(req, res) {
+    .post(function(req, res, next) {
         parse_data(req)
             .then(function(data) {
                 return Achievement.create(data);
             })
             .then(res.send.bind(res))
-            .then(null, error.bind(null, res));
+            .then(null, next);
     });
 
 router
     .route('/:id')
-    .put(function(req, res) {
+    .put(function(req, res, next) {
         parse_data(req)
             .then(req.achievement.patch)
             .then(res.send.bind(res))
-            .then(null, error.bind(null, res));
+            .then(null, next);
     })
     .delete(function(req, res) {
         req.achievement.destroy()
             .then(res.sendStatus.bind(res, 200))
-            .then(null, error.bind(null, res));
+            .then(null, next);
     });
 
 module.exports = router;
