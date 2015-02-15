@@ -52,44 +52,9 @@ var AchievementSchema = new Schema({
     }
 });
 
-// Returns a promise of an array of pictures'ids created from the given files
-function create_pictures(files, next) {
-    var promise = new Promise(next);
-    async.map(
-        files,
-        function(file, next) {
-            Picture.create(file)
-                .then(function(picture) {
-                    next(null, picture._id);
-                })
-                .then(null, next);
-        },
-        promise.resolve.bind(promise)
-    );
-    return promise;
-};
-
-// Returns binded doc pictures list, call populate if the model has not been
-// populated yet.
-function populate_and_get_pictures(next) {
-    var promise = new Promise(next);
-    if (this.populated('picture')) {
-        promise.fulfill(this.pictures);
-    } else {
-        this.populate('pictures', function(err, doc) {
-            if (err) {
-                promise.error(err);
-            } else {
-                promise.fulfill(doc.pictures);
-            }
-        });
-    }
-    return promise;
-};
-
 AchievementSchema.pre('remove', function(next) {
     debug('removing', this._id);
-    populate_and_get_pictures.call(this)
+    this.getPictures()
         .then(function(pictures) {
             async.each(
                 pictures,
@@ -118,7 +83,7 @@ AchievementSchema.static('create', function(data, cb) {
 
     debug('creating Achievement', data);
     _.bindAll(promise, 'resolve', 'error');
-    create_pictures(data.files)
+    Picture.create(data.files)
         .then(function(pictures) {
             achievement.set('pictures', pictures).save(promise.resolve);
         })
@@ -182,6 +147,7 @@ AchievementSchema.methods.patch = function(data, cb) {
     async.compose(
         // Patch model task
         function(pictures, next) {
+            debug('patching task');
             this.set(
                 _.chain(data)
                     .pick('date', 'name', 'description', 'tags', 'published')
@@ -191,6 +157,7 @@ AchievementSchema.methods.patch = function(data, cb) {
         },
         // Create pictures task
         function(pictures, next) {
+            debug('create task');
             create_pictures(data.files)
                 .then(Array.prototype.concat.bind(pictures))
                 .then(next.bind(null, null))
@@ -200,6 +167,7 @@ AchievementSchema.methods.patch = function(data, cb) {
         // `data.pictures`, immediately pass back original file list to create
         // new pictures to the create task.
         function(pictures, next) {
+            debug('delete task');
             _.chain(pictures).pluck('_id').each(function(id) {
                 if (! _.any(data.pictures, id.equals.bind(id))) {
                     Picture.findById(id).exec()
@@ -216,7 +184,7 @@ AchievementSchema.methods.patch = function(data, cb) {
             next(null, data.pictures);
         },
         // Populate pictures and pass it back to delete task
-        populate_and_get_pictures
+        this.getPictures
     ).call(this, promise.resolve.bind(promise));
 
     return promise;
@@ -237,4 +205,4 @@ AchievementSchema.methods.destroy = function(cb) {
     return promise;
 };
 
-module.exports = mongoose.model('Achievement', AchievementSchema);
+var Achievement = module.exports = mongoose.model('Achievement', AchievementSchema);
