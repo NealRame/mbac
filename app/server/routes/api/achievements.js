@@ -84,7 +84,7 @@ var read = function(id, cb) {
     var promise = new Promise(cb);
     _.bindAll(promise, 'fulfill', 'error');
     Achievement.findById(id).exec()
-        .then(helpers.checkIfDefined)
+        .then(helpers.assertIsDefined)
         .then(function(doc) {
             return populate(doc);
         })

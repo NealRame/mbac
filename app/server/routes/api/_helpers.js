@@ -20,7 +20,7 @@ function error_500(err) {
 module.exports = {
     throw404: function(message) { throw error_401(message); },
     throw500: function(err) { throw error_500(err); },
-    checkIfDefined: function(value) {
+    assertIsDefined: function(value) {
         return value || Promise.rejected(error_404());
     },
     authorized: function(message) {

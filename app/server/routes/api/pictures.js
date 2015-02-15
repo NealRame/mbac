@@ -61,7 +61,7 @@ router
         Picture
             .findById(id)
             .exec()
-            .then(helpers.checkIfDefined)
+            .then(helpers.assertIsDefined)
             .then(function(picture) {
                 req.picture = picture;
                 next();
