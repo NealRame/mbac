@@ -14,7 +14,7 @@ router
     })
     .get('/pages/realisations', function(req, res, next) {
 
-        Achievement.find().exec()
+        Achievement.readAll()
             .then(function(achievements) {
                 res.locals.achievements = achievements;
                 res.render('achievements', {title: 'Réalisations'});
