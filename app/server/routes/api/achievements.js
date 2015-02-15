@@ -57,46 +57,73 @@ function parse_data(req) {
     return promise;
 };
 
-var populate = function(doc, next) {
-    var promise = new Promise(next);
+var populate = function(doc, cb) {
+    var promise = new Promise(cb);
+    _.bindAll(promise, 'resolve');
+    if (_.isArray(doc)) {
+        var docs = doc;
+        async.map(docs, populate, promise.resolve);
+    } else {
+        doc.populate(promise.resolve);
+    }
+    return promise;
+};
+
+var create = function(req, cb) {
+    var promise = new Promise(cb);
     _.bindAll(promise, 'fulfill', 'error');
-    Achievement.populate(doc, {path: 'pictures'})
+    parse_data(req)
+        .then(Achievement.create.bind(Achievement))
+        .then(populate)
         .then(promise.fulfill)
-        .then(null, promise.error);
+        .then(promise.error);
+    return promise;
+}
+
+var read = function(id, cb) {
+    var promise = new Promise(cb);
+    _.bindAll(promise, 'fulfill', 'error');
+    Achievement.findById(id).exec()
+        .then(helpers.checkIfDefined)
+        .then(function(doc) {
+            return populate(doc);
+        })
+        .then(function(doc) {
+            promise.fulfill(doc);
+        })
+        .then(promise.error);
+    return promise;
+}
+
+var update = function(req, cb) {
+    var promise = new Promise(cb);
+    var achievement = req.achievement;
+    _.bindAll(promise, 'fulfill', 'error');
+    parse_data(req)
+        .then(achievement.patch.bind(achievement))
+        .then(populate)
+        .then(promise.fulfill)
+        .then(promise.error);
     return promise;
 };
 
 router
     .get('/', function(req, res, next) {
         Achievement.find().sort('-date').exec()
-            .then(function(collection) {
-                var promise = new Promise;
-                _.bindAll(promise, 'resolve');
-                async.map(collection, populate, promise.resolve);
-                return promise;
-            })
+            .then(populate)
             .then(res.send.bind(res))
             .then(null, next);
     })
     .get('/:id', function(req, res, next) {
-        Achievement
-            .findById(req.params.id)
-            .populate('pictures')
-            .exec()
-            .then(helpers.checkIfDefined)
-            .then(function(achievement) {
-                res.send(achievement);
-            })
+        read(req.params.id)
+            .then(res.send.bind(res))
             .then(null, next);
     });
 
 router
-    .use('/', helpers.authorized())
+    // .use('/', helpers.authorized())
     .param('id', function(req, res, next, id) {
-        Achievement
-            .findById(id)
-            .exec()
-            .then(helpers.checkIfDefined)
+        read(id)
             .then(function(achievement) {
                 req.achievement = achievement;
                 next();
@@ -107,11 +134,7 @@ router
 router
     .route('/')
     .post(function(req, res, next) {
-        parse_data(req)
-            .then(function(data) {
-                return Achievement.create(data);
-            })
-            .then(populate)
+        create(req)
             .then(res.send.bind(res))
             .then(null, next);
     })
@@ -120,9 +143,7 @@ router
 router
     .route('/:id')
     .put(function(req, res, next) {
-        parse_data(req)
-            .then(req.achievement.patch.bind(req.achievement))
-            .then(populate)
+        update(req)
             .then(res.send.bind(res))
             .then(null, next);
     })
