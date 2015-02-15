@@ -57,73 +57,10 @@ function parse_data(req) {
     return promise;
 };
 
-function populate(doc, cb) {
-    var promise = new Promise(cb);
-    _.bindAll(promise, 'resolve');
-    if (_.isArray(doc)) {
-        var docs = doc;
-        async.map(docs, populate, promise.resolve);
-    } else {
-        doc.populate(promise.resolve);
-    }
-    return promise;
-};
-
-function create(req, cb) {
-    var promise = new Promise(cb);
-    _.bindAll(promise, 'fulfill', 'error');
-    parse_data(req)
-        .then(Achievement.create)
-        .then(populate)
-        .then(promise.fulfill)
-        .then(promise.error);
-    return promise;
-}
-
-function read(id, cb) {
-    var promise = new Promise(cb);
-    _.bindAll(promise, 'fulfill', 'error');
-    Achievement.findById(id).exec()
-        .then(helpers.assertIsDefined)
-        .then(function(doc) {
-            return populate(doc);
-        })
-        .then(function(doc) {
-            promise.fulfill(doc);
-        })
-        .then(promise.error);
-    return promise;
-}
-
-function update(req, cb) {
-    var promise = new Promise(cb);
-    var achievement = req.achievement;
-    _.bindAll(promise, 'fulfill', 'error');
-    parse_data(req)
-        .then(achievement.patch.bind(achievement))
-        .then(populate)
-        .then(promise.fulfill)
-        .then(promise.error);
-    return promise;
-};
-
 router
-    .get('/', function(req, res, next) {
-        Achievement.find().sort('-date').exec()
-            .then(populate)
-            .then(res.send.bind(res))
-            .then(null, next);
-    })
-    .get('/:id', function(req, res, next) {
-        read(req.params.id)
-            .then(res.send.bind(res))
-            .then(null, next);
-    });
-
-router
-    // .use('/', helpers.authorized())
     .param('id', function(req, res, next, id) {
-        read(id)
+        Achievement.read(id)
+            .then(helpers.assertIsDefined)
             .then(function(achievement) {
                 req.achievement = achievement;
                 next();
@@ -132,9 +69,26 @@ router
     });
 
 router
+    .get('/', function(req, res, next) {
+        Achievement.readAll()
+            .then(res.send.bind(res))
+            .then(null, next);
+    })
+    .get('/:id', function(req, res, next) {
+        Achievement.read(req.params.id)
+            .then(helpers.assertIsDefined)
+            .then(res.send.bind(res))
+            .then(null, next);
+    });
+
+router
+// .use('/', helpers.authorized())
+
+router
     .route('/')
     .post(function(req, res, next) {
-        create(req)
+        parse_data(req)
+            .then(Achievement.create)
             .then(res.send.bind(res))
             .then(null, next);
     })
@@ -143,12 +97,13 @@ router
 router
     .route('/:id')
     .put(function(req, res, next) {
-        update(req)
+        parse_data(req)
+            .then(Achievement.patch.bind(null, req.achievement))
             .then(res.send.bind(res))
             .then(null, next);
     })
     .delete(function(req, res, next) {
-        req.achievement.destroy()
+        Achievement.delete(req.achievement)
             .then(res.sendStatus.bind(res, 200))
             .then(null, next);
     })
