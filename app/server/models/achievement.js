@@ -144,6 +144,28 @@ AchievementSchema.methods.populate = function(cb) {
         .then(null, promise.error);
     return promise;
 };
+
+/// #### `Achievement#getPictures([cb])`
+/// Return an array of pictures document.
+///
+/// __Parameters:__
+/// - `cb`, a node.js style callback.
+///
+/// __Returns:__
+/// - `Promise`.
+AchievementSchema.methods.getPictures = function(cb) {
+    debug('getPictures');
+    var promise = new Promise(cb);
+    _.bindAll(promise, 'fulfill', 'error');
+    this.populate()
+        .then(function(doc) {
+            return doc.pictures;
+        })
+        .then(promise.fulfill)
+        .then(null, promise.error)
+    return promise;
+}
+
 /// #### `Achievement#patch(data, [cb])`
 /// Patch this achievement with the given data.
 ///
