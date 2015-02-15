@@ -77,9 +77,8 @@ AchievementSchema.pre('remove', function(next) {
 /// __Returns:__
 /// - `Promise`.
 AchievementSchema.static('create', function(data, cb) {
-    var Model = this;
-    var achievement = new Model(_.pick(data, 'date', 'name', 'description', 'tags', 'published'));
     var promise = new Promise(cb);
+    var achievement = new Achievement(_.pick(data, 'date', 'name', 'description', 'tags', 'published'));
 
     debug('creating Achievement', data);
     _.bindAll(promise, 'resolve', 'error');
