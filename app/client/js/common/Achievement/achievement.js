@@ -121,8 +121,7 @@ define(function(require) {
                         form_data.append(
                             'pictures',
                             picture.file instanceof File
-                                ? picture.file
-                                : JSON.stringify(picture)
+                                ? picture.file : picture._id
                         );
                     });
 
@@ -131,7 +130,7 @@ define(function(require) {
                             data: form_data,
                             contentType: false,
                             processData: false,
-                            type: method === 'create' ? 'POST':'PUT',
+                            type: method === 'create' ? 'POST' : 'PUT',
                             url: options.url || model.url(),
                         },
                         options
