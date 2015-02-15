@@ -57,7 +57,7 @@ function parse_data(req) {
     return promise;
 };
 
-var populate = function(doc, cb) {
+function populate(doc, cb) {
     var promise = new Promise(cb);
     _.bindAll(promise, 'resolve');
     if (_.isArray(doc)) {
@@ -69,7 +69,7 @@ var populate = function(doc, cb) {
     return promise;
 };
 
-var create = function(req, cb) {
+function create(req, cb) {
     var promise = new Promise(cb);
     _.bindAll(promise, 'fulfill', 'error');
     parse_data(req)
@@ -80,7 +80,7 @@ var create = function(req, cb) {
     return promise;
 }
 
-var read = function(id, cb) {
+function read(id, cb) {
     var promise = new Promise(cb);
     _.bindAll(promise, 'fulfill', 'error');
     Achievement.findById(id).exec()
@@ -95,7 +95,7 @@ var read = function(id, cb) {
     return promise;
 }
 
-var update = function(req, cb) {
+function update(req, cb) {
     var promise = new Promise(cb);
     var achievement = req.achievement;
     _.bindAll(promise, 'fulfill', 'error');
