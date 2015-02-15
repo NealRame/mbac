@@ -142,7 +142,7 @@ AchievementSchema.methods.getPictures = function(cb) {
 AchievementSchema.methods.patch = function(data, cb) {
     var promise = new Promise(cb);
 
-    debug('patching', this._id);
+    debug('patching', this._id, 'with', data);
     async.compose(
         // Patch model task
         function(pictures, next) {
@@ -156,8 +156,8 @@ AchievementSchema.methods.patch = function(data, cb) {
         },
         // Create pictures task
         function(pictures, next) {
-            debug('create task');
-            create_pictures(data.files)
+            debug('create task', data.files);
+            Picture.create(data.files)
                 .then(Array.prototype.concat.bind(pictures))
                 .then(next.bind(null, null))
                 .then(null, next);
