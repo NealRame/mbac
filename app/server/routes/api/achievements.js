@@ -73,7 +73,7 @@ function create(req, cb) {
     var promise = new Promise(cb);
     _.bindAll(promise, 'fulfill', 'error');
     parse_data(req)
-        .then(Achievement.create.bind(Achievement))
+        .then(Achievement.create)
         .then(populate)
         .then(promise.fulfill)
         .then(promise.error);
