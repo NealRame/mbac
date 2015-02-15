@@ -127,6 +127,23 @@ AchievementSchema.static('create', function(data, cb) {
     return promise;
 });
 
+/// #### `Achievement#populate([cb])`
+/// Populate this achievement..
+///
+/// __Parameters:__
+/// - `cb`, a node.js style callback.
+///
+/// __Returns:__
+/// - `Promise`.
+AchievementSchema.methods.populate = function(cb) {
+    debug('populate');
+    var promise = new Promise(cb);
+    _.bindAll(promise, 'fulfill', 'error');
+    Achievement.populate(this, {path: 'pictures'})
+        .then(promise.fulfill)
+        .then(null, promise.error);
+    return promise;
+};
 /// #### `Achievement#patch(data, [cb])`
 /// Patch this achievement with the given data.
 ///
