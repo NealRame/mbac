@@ -110,6 +110,17 @@ PictureSchema.methods.destroy = function(cb) {
     return promise;
 }
 
+// Returns a promise of an array of pictures'ids created from the given files
+function create_pictures(datas, cb) {
+    var promise = new Promise(cb);
+    async.map(
+        datas,
+        Picture.create.bind(Picture),
+        promise.resolve.bind(promise)
+    );
+    return promise;
+};
+
 /// #### `Picture.create(original, [cb])`
 /// Create a picture instance with the given image.
 ///
@@ -122,6 +133,10 @@ PictureSchema.methods.destroy = function(cb) {
 /// __Returns:__
 /// - `Promise`.
 PictureSchema.static('create', function(data, cb) {
+    if (_.isArray(data)) {
+        return create_pictures(data, cb);
+    }
+
     var Model = this;
     var promise = new Promise(cb);
     var gfs = GridFs(mongoose.connection.db, mongo);
@@ -159,4 +174,4 @@ PictureSchema.static('create', function(data, cb) {
 
 
 
-module.exports = mongoose.model('Picture', PictureSchema);
+var Picture = module.exports = mongoose.model('Picture', PictureSchema);
