@@ -137,7 +137,6 @@ PictureSchema.static('create', function(data, cb) {
         return create_pictures(data, cb);
     }
 
-    var Model = this;
     var promise = new Promise(cb);
     var gfs = GridFs(mongoose.connection.db, mongo);
 
@@ -163,7 +162,7 @@ PictureSchema.static('create', function(data, cb) {
                     promise.error(err);
                 })
                 .once('close', function() {
-                    (new Model(data)).save(promise.resolve);
+                    (new Picture(data)).save(promise.resolve);
                 });
 
             this.resize(256).stream().pipe(ostream);
