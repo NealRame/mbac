@@ -10,12 +10,10 @@ var debug = require('debug')('mbac:routes.achievements');
 var express = require('express');
 var formidableGrid = require('formidable-grid');
 var helpers = require('routes/api/_helpers');
-var gm = require('gm');
 var GridFs = require('gridfs-stream');
 var mongoose = require('mongoose');
 var ObjectId = mongoose.Types.ObjectId;
 var Promise = mongoose.Promise;
-var path = require('path');
 var querystring = require('querystring');
 var inspect = require('util').inspect;
 
