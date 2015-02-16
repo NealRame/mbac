@@ -75,10 +75,7 @@ router
             .then(null, next);
     })
     .get('/:id', function(req, res, next) {
-        Achievement.read(req.params.id)
-            .then(helpers.assertIsDefined)
-            .then(res.send.bind(res))
-            .then(null, next);
+        res.send(req.achievement);
     });
 
 router
