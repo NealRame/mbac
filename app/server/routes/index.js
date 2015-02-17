@@ -13,15 +13,12 @@ router
         res.render('index', {title: 'mon Bar à Couture'});
     })
     .get('/pages/realisations', function(req, res, next) {
-
-        Achievement.readAll()
+        Achievement.published()
             .then(function(achievements) {
                 res.locals.achievements = achievements;
                 res.render('achievements', {title: 'Réalisations'});
             })
             .then(null, next);
-
-
     });
 
 module.exports = router;
