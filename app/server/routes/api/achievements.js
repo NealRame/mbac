@@ -57,10 +57,53 @@ function parse_data(req) {
     return promise;
 };
 
+function read(req, res) {
+    var promise = new Promise;
+    var query = {};
+
+    if (! helpers.isAuthorized(res)) {
+        // Unauthorized client only get published and non-empty achievements
+        // items.
+        _.chain(query)
+            .extend({published: true})
+            .extend({pictures: {$not: {$size: 0}}});
+    }
+
+    _.bindAll(promise, 'fulfill', 'error');
+    Achievement.find(query).exec()
+        .then(function(collection) {
+            return Achievement.populate(collection, {path: 'pictures'});
+        })
+        .then(promise.fulfill)
+        .then(null, promise.error);
+
+    return promise;
+};
+
+function readOne(req, res, id) {
+    var promise = new Promise;
+
+    _.bindAll(promise, 'fulfill', 'error');
+    Achievement.findById(id).exec()
+        .then(helpers.assertIsDefined)
+        .then(function(achievement) {
+            if (! (achievement.published || helpers.isAuthorized(res))) {
+                helpers.throw404(); // 401 or 404 ?
+            }
+            return Achievement.populate(achievement, {path: 'pictures'});
+        })
+        .then(promise.fulfill)
+        .then(null, promise.error);
+
+    return promise;
+};
+
+function create(req, res) {
+};
+
 router
     .param('id', function(req, res, next, id) {
-        Achievement.read(id)
-            .then(helpers.assertIsDefined)
+        readOne(req, res, id)
             .then(function(achievement) {
                 req.achievement = achievement;
                 next();
@@ -70,7 +113,7 @@ router
 
 router
     .get('/', function(req, res, next) {
-        Achievement.readAll()
+        read(req, res)
             .then(res.send.bind(res))
             .then(null, next);
     })
