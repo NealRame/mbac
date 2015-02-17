@@ -17,15 +17,22 @@ function error_500(err) {
     return _.extend(err || new Error('Internal server error'), {status: 500});
 };
 
+function is_authorized(res) {
+    return res.locals.loggedIn;
+};
+
 module.exports = {
-    throw404: function(message) { throw error_401(message); },
+    throw401: function(message) { throw error_401(message); },
+    throw403: function(message) { throw error_403(message); },
+    throw404: function(message) { throw error_404(message); },
     throw500: function(err) { throw error_500(err); },
     assertIsDefined: function(value) {
         return value || Promise.rejected(error_404());
     },
+    isAuthorized: is_authorized,
     authorized: function(message) {
         return function(req, res, next) {
-            next(res.locals.loggedIn ? null : error_401(message));
+            next(is_authorized(res) ? null : error_401(message));
         };
     },
     forbidden: function(message) {
