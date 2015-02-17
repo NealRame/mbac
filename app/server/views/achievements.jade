@@ -16,12 +16,11 @@ block content
         article
             ul.achievements
                 each achievement in achievements
-                    if achievement.published && (achievement.pictures.length > 0)
-                        li.achievement(data-id='#{achievement.id}')
-                            figure(title='#{achievement.name}')
-                                each picture, index in achievement.pictures
-                                    - var thmb = picture.thumbnail
-                                    - var orig = picture.original
-                                    a.th(href='/files/#{orig}')
-                                        img(src='/files/#{thmb}')
-                                figcaption: | #{achievement.description}
+                    li.achievement(data-id='#{achievement.id}')
+                        figure(title='#{achievement.name}')
+                            each picture, index in achievement.pictures
+                                - var thmb = picture.thumbnail
+                                - var orig = picture.original
+                                a.th(href='/files/#{orig}')
+                                    img(src='/files/#{thmb}')
+                            figcaption: | #{achievement.description}
