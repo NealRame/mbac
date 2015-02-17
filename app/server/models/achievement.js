@@ -192,6 +192,26 @@ AchievementSchema.static('delete', function(achievement, cb) {
     return achievement.destroy(cb);
 });
 
+/// #### `Achievement.published([cb])`
+/// Returns a collection of all published `Achievement` instances. Documents
+/// are populated.
+///
+/// __Parameters:__
+/// - `cb`, a node.js style callback.
+///
+/// __Returns:__
+/// - `Promise`.
+AchievementSchema.static('published', function(cb) {
+    var promise = new Promise(cb);
+    _.bindAll(promise, 'fulfill', 'error');
+    Achievement.find({published: true, 'pictures': {$not: {$size: 0}}}).exec()
+        .then(function(collection) {
+            return Achievement.populate(collection, {path: 'pictures'});
+        })
+        .then(promise.fulfill)
+        .then(null, promise.error);
+    return promise;
+});
 
 /// #### `Achievement#populate([cb])`
 /// Populate this achievement..
