@@ -129,10 +129,11 @@ module.exports = function(grunt) {
             requirejs: {
                 files: [
                     '<%= js_srcs_dir %>/common/**/*.js',
-                    '<%= js_srcs_dir %>/common/**/*.template.html',
+                    '<%= js_srcs_dir %>/common/**/*.html',
                     '<%= js_srcs_dir %>/back/**/*.js',
-                    '<%= js_srcs_dir %>/back/**/*.template.html',
-                    '<%= js_srcs_dir %>/front/**/*.js'
+                    '<%= js_srcs_dir %>/back/**/*.html',
+                    '<%= js_srcs_dir %>/front/**/*.js',
+                    '<%= js_srcs_dir %>/front/**/*.html'
                 ],
                 tasks: ['clean:js', 'requirejs'],
                 options: {
