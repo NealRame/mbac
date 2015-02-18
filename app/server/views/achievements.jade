@@ -4,6 +4,16 @@
 //- -   date: Thu Jan 15 21:43:37 CET 2015
 extends layout
 
+mixin achievement-item(achievement)
+    li.achievement(data-id='#{achievement.id}')
+        figure(title='#{achievement.name}')
+            each picture, index in achievement.pictures
+                - var thmb = picture.thumbnail
+                - var orig = picture.original
+                a.th(href='/files/#{orig}')
+                    img(src='/files/#{thmb}')
+            figcaption: | #{achievement.description}
+
 block content
     section.wrapper
         article
@@ -11,16 +21,9 @@ block content
                 h1: | Réalisations des clients de mon Bar à Couture
             section
                 | Blah blah sur les réalisations
-        
+    
     section.wrapper
         article
             ul.achievements
                 each achievement in achievements
-                    li.achievement(data-id='#{achievement.id}')
-                        figure(title='#{achievement.name}')
-                            each picture, index in achievement.pictures
-                                - var thmb = picture.thumbnail
-                                - var orig = picture.original
-                                a.th(href='/files/#{orig}')
-                                    img(src='/files/#{thmb}')
-                            figcaption: | #{achievement.description}
+                    +achievement-item(achievement)
