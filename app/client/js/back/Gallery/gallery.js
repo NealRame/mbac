@@ -12,7 +12,7 @@ define(function(require) {
     var Dialog = require('Dialog');
     var Thumbnail = require('back/Gallery/thumbnail');
 
-    var editorTemplate  = require('text!back/Gallery/editor.template.html');
+    var editorTemplate  = require('text!back/Gallery/editor.html');
     var galleryTemplate = require('text!back/Gallery/gallery.template.html');
     var listAddTemplate = require('text!back/Gallery/list-add.template.html');
 
@@ -20,7 +20,6 @@ define(function(require) {
     if (_.indexOf($.event.props, 'dataTransfer') < 0) {
         $.event.props.push('dataTransfer');
     }
-
 
     var AddItemButton = Marionette.ItemView.extend({
         tagName: 'li',
