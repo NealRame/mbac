@@ -13,7 +13,7 @@ define(function(require) {
     var Thumbnail = require('back/Gallery/thumbnail');
 
     var editorTemplate  = require('text!back/Gallery/editor.html');
-    var galleryTemplate = require('text!back/Gallery/gallery.template.html');
+    var galleryTemplate = require('text!back/Gallery/gallery.html');
     var listAddTemplate = require('text!back/Gallery/list-add.template.html');
 
 
