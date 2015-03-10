@@ -13,11 +13,14 @@ requirejs.config({
         'Achievement': 'common/Achievement/achievement',
         'AchievementLightBox': 'common/AchievementLightBox/achievement-lightbox',
         'Dialog': 'common/Dialog/dialog',
+        'Thumbnail': 'common/Thumbnail/thumbnail',
 
         'Configuration': 'back/Configuration/configuration',
         'Dashboard': 'back/dashboard',
         'Gallery': 'back/Gallery/gallery',
         'TabbedPanels': 'back/TabbedPanels/tabbedpanels',
+
+        'Test': 'back/Test/test',
     },
     shim: {
         'fastclick':  {exports: 'FastClick'},

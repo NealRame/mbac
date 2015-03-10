@@ -7,6 +7,7 @@ define(function(require) {
     var Controller = require('back/dashboard.controller');
     var TabbedPanels = require('TabbedPanels');
     var Gallery = require('Gallery');
+    var Test = require('Test');
     var stickyFooter = require('utils/sticky-footer');
 
     var Dashboard = Marionette.Application.extend({
@@ -34,6 +35,13 @@ define(function(require) {
                     id: 'pages',
                     label: 'Pages',
                     icon: 'fa fa-file-o'
+                }, {
+                    id: 'test',
+                    label: 'Test',
+                    icon: 'fa fa-flask',
+                    view: function() {
+                        return new Test;
+                    }
                 }
             ]);
             var channel = Backbone.Wreqr.radio.channel('global');
