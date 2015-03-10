@@ -8,23 +8,22 @@ define(function(require) {
     var Marionette = Backbone.Marionette;
 
     var ThumbnailView =  require('common/Thumbnail/base-thumbnail');
-    var pictureThumbnailTemplate = require('text!common/Thumbnail/picture-thumbnail.html');
 
     return ThumbnailView.extend({
-        template: _.template(pictureThumbnailTemplate),
         initialize: function() {
             ThumbnailView.prototype.initialize.apply(this);
             this.ui.thumbImage = 'img';
         },
         onRender: function() {
             var geometry = _.bind(this.geometry, this);
-            var thumb_img = this.ui.thumbImage;
+            var image = new Image;
             var uris = this.pictureURIs();
 
-            thumb_img
-                .load(function() {
-                    thumb_img.css(geometry(thumb_img.get(0)));
-                })
+            $(image)
+                .load((function() {
+                    $(image).css(geometry(image));
+                    this.ui.thumbLink.empty().append(image);
+                }).bind(this))
                 .attr('src', uris.thumbnail);
             this.ui.thumbLink.attr('href', uris.original);
         },

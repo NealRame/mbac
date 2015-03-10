@@ -8,11 +8,13 @@ define(function(require) {
     var Backbone = require('backbone');
     var Marionette = Backbone.Marionette;
 
+    var thumbnailTemplate = require('text!common/Thumbnail/thumbnail.html');
+
     return Marionette.ItemView.extend({
         className: 'thumb',
         ui: {
+            crop: '.crop',
             thumbLink: '.thumb-link',
-            thumbImage: 'img'
         },
         events: {
             'click @ui.thumbLink': 'onThumbLinkClicked'
@@ -20,6 +22,7 @@ define(function(require) {
         serializedData: function() {
             return {};
         },
+        template: _.template(thumbnailTemplate),
         templateHelpers: function() {
             return {
                 width: this.options.width,
@@ -40,19 +43,26 @@ define(function(require) {
             }
         },
         geometry: function(image) {
-            var r = image.width/image.height
-            var crop_height = this.options.height, height;
-            var crop_width = this.options.width, width;
+            var height, crop_height = this.options.height;
+            var width, crop_width = this.options.width;
 
-            if (r > 1) {
-                // image.width < image.height
-                width = Math.max(crop_height*r, crop_width);
-                height = width/r;
+            if (image && _.has(image, 'width') && _.has(image, 'height')) {
+                var r = image.width/image.height;
+
+                if (r > 1) {
+                    // image.width < image.height
+                    width = Math.max(crop_height*r, crop_width);
+                    height = width/r;
+                } else {
+                    //image.width >= image.height
+                    height = Math.max(crop_width/r, crop_height);
+                    width = height*r;
+                }
             } else {
-                //image.width >= image.height
-                height = Math.max(crop_width/r, crop_height);
-                width = height*r;
+                height = crop_height;
+                width = crop_width;
             }
+
             return {
                 width: width, height: height,
                 left: (crop_width - width)/2, top: (crop_height - height)/2
