@@ -360,7 +360,7 @@ define(function(require) {
             this.collection = new (Backbone.Collection.extend({
                 model: Achievement,
                 url: '/api/achievements'
-            }));
+            }))();
             this.achievementList = new AchievementList({
                 collection: this.collection
             });
@@ -390,7 +390,7 @@ define(function(require) {
             console.log('-- Gallery:onAddButtonClicked');
             e.preventDefault();
             e.stopPropagation();
-            this.collection.add(new Achievement);
+            this.collection.add(new Achievement());
             return false;
         },
         onFilterButtonClicked: function(e) {
