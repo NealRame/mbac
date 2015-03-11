@@ -32,7 +32,7 @@ define(function(require) {
                     if (path.length > 1) {
                         // is old value an instance of a Configuration ?
                         if (! (val instanceof Configuration)) {
-                            val = new Configuration;
+                            val = new Configuration();
                             this.listenTo(val, 'config', config_ev_cb.bind(this, key));
                         }
                         val.set(path.slice(1), value);
@@ -42,7 +42,7 @@ define(function(require) {
                             val.destroy();
                             this.stopListening(val);
                         }
-                        val = new Configuration;
+                        val = new Configuration();
                         this.listenTo(val, 'config', config_ev_cb.bind(this, key));
                         val.set(value);
                     } else {
@@ -62,7 +62,7 @@ define(function(require) {
                     }
 
                     if (_.isObject(value)) {
-                        val = new Configuration;
+                        val = new Configuration();
                         this.listenTo(val, 'config', config_ev_cb.bind(this, key));
                         val.set(value);
                     } else {
@@ -113,5 +113,5 @@ define(function(require) {
         }
     });
 
-    return new Configuration;
+    return new Configuration();
 });
