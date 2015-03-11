@@ -13,8 +13,7 @@ var UserSchema = new Schema({
 });
 
 UserSchema.methods.isInitialized = function() {
-    return _.has(this, 'email')
-        && _.has(this, 'name') && _.has(this, 'picture');
+    return _.has(this, 'email') && _.has(this, 'name') && _.has(this, 'picture');
 };
 
 UserSchema.virtual('name.full').get(function() {
