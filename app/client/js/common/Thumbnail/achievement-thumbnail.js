@@ -18,7 +18,7 @@ define(function(require) {
             this.ui.thumbLink.attr('href', this.model.pageURL());
             if (picture) {
                 var geometry = _.bind(this.geometry, this);
-                var image = new Image;
+                var image = new Image();
                 this.ui.thumbLink.empty().append(
                     $(image)
                         .load((function() {
