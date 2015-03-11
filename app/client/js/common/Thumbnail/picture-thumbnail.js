@@ -14,25 +14,14 @@ define(function(require) {
         onRender: function() {
             var geometry = _.bind(this.geometry, this);
             var image = new Image;
-            var uris = this.pictureURIs();
 
             $(image)
                 .load((function() {
                     $(image).css(geometry(image));
                     this.ui.thumbLink.empty().append(image);
                 }).bind(this))
-                .attr('src', uris.thumbnail);
-            this.ui.thumbLink.attr('href', uris.original);
-        },
-        pictureURIs: function() {
-            var prefix = this.model.get('prefix');
-            return _.chain(this.model.toJSON())
-                .pick('original', 'thumbnail')
-                .map(function(value, key) {
-                    return [key, prefix + '/' + value];
-                })
-                .object()
-                .value();
+                .attr('src', this.model.thumbnailURL());
+            this.ui.thumbLink.attr('href', this.model.originalURL());
         }
     });
 });

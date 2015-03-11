@@ -8,14 +8,15 @@ define(function(require) {
     var Backbone = require('backbone');
     var Marionette = Backbone.Marionette;
 
-    var ThumbnailView =  require('common/Thumbnail/base-thumbnail');
+    var Picture = require('Picture');
+    var ThumbnailView = require('common/Thumbnail/base-thumbnail');
 
     return ThumbnailView.extend({
         onRender: function() {
-            var uris = this.pictureURIs();
+            var picture = this.picture();
 
-            this.ui.thumbLink.attr('href', uris.original);
-            if (uris.thumbnail) {
+            this.ui.thumbLink.attr('href', this.model.pageURL());
+            if (picture) {
                 var geometry = _.bind(this.geometry, this);
                 var image = new Image;
                 this.ui.thumbLink.empty().append(
@@ -24,21 +25,15 @@ define(function(require) {
                             $(image).css(geometry(image));
                             this.ui.thumbLink.empty().append(image);
                         }).bind(this))
-                        .attr('src', uris.thumbnail)
+                        .attr('src', picture.thumbnailURL())
                 );
             } else {
                 this.ui.thumbLink.empty().append(this.placeholder());
             }
         },
-        pictureURIs: function() {
-            var uris = {
-                original: this.model.pageURL(),
-            };
+        picture: function() {
             var picture = this.model.picture();
-            if (picture) {
-                uris.thumbnail = picture.prefix + '/' + picture.thumbnail;
-            }
-            return uris;
+            return picture ? new Picture(picture) : undefined;
         },
         placeholder: function() {
             var width = this.options.width;

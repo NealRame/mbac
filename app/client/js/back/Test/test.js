@@ -5,17 +5,19 @@ define(function(require) {
     var Marionette = Backbone.Marionette;
 
     var Achievement = require('Achievement');
+    var Picture = require('Picture');
     var ThumbnailView = require('Thumbnail');
     var testTemplate = require('text!back/Test/test.html');
 
     var collection = new Backbone.Collection([]);
 
     var remote_pictures = new (Backbone.Collection.extend({
-        url: '/api/pictures'
+        url: '/api/pictures',
+        model: Picture,
     }));
     remote_pictures.fetch({reset: true});
     remote_pictures.on('reset', function() {
-        collection.add(remote_pictures.toJSON());
+        collection.add(remote_pictures.models);
     });
 
     var achievements = new (Backbone.Collection.extend({
