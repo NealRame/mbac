@@ -21,7 +21,7 @@ var mongo = mongoose.mongo;
 var router = express.Router();
 
 function parse_data(req) {
-    var promise = new mongoose.Promise;
+    var promise = new mongoose.Promise();
     var data = {files: [], pictures: [], tags: []};
     var form = formidableGrid(req.db, mongo, {
         accept: ['image/.*']
@@ -55,10 +55,10 @@ function parse_data(req) {
     .parse(req);
 
     return promise;
-};
+}
 
 function read(req, res) {
-    var promise = new Promise;
+    var promise = new Promise();
     var query = {};
 
     if (! helpers.isAuthorized(res)) {
@@ -78,10 +78,10 @@ function read(req, res) {
         .then(null, promise.error);
 
     return promise;
-};
+}
 
 function readOne(req, res, id) {
-    var promise = new Promise;
+    var promise = new Promise();
 
     _.bindAll(promise, 'fulfill', 'error');
     Achievement.findById(id).exec()
@@ -96,10 +96,10 @@ function readOne(req, res, id) {
         .then(null, promise.error);
 
     return promise;
-};
+}
 
 function create(req, res) {
-};
+}
 
 router
     .param('id', function(req, res, next, id) {
@@ -121,7 +121,7 @@ router
         res.send(req.achievement);
     });
 
-router
+// router
 // .use('/', helpers.authorized())
 
 router
