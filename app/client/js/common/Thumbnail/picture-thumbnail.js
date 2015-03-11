@@ -13,7 +13,7 @@ define(function(require) {
     return ThumbnailView.extend({
         onRender: function() {
             var geometry = _.bind(this.geometry, this);
-            var image = new Image;
+            var image = new Image();
 
             $(image)
                 .load((function() {
