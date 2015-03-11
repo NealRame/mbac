@@ -5,7 +5,7 @@
 define(function(require) {
     var _ = require('underscore');
     var Backbone = require('backbone');
-
+    
     return Backbone.Model.extend({
         idAttribute: '_id',
         defaults: {
