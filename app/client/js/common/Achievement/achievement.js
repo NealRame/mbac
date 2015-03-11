@@ -26,6 +26,9 @@ define(function(require) {
         togglePublish: function() {
             return this.set({published: ! this.published()});
         },
+        pageURL: function() {
+            return '/pages/achievements/' + this.attributes._id;
+        },
         picture: function(index) {
             return this.get('pictures')[index || 0];
         },
