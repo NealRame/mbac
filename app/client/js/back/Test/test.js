@@ -11,20 +11,24 @@ define(function(require) {
 
     var collection = new Backbone.Collection([]);
 
-    var remote_pictures = new (Backbone.Collection.extend({
+    var remote_pictures = new(Backbone.Collection.extend({
         url: '/api/pictures',
         model: Picture,
-    }));
-    remote_pictures.fetch({reset: true});
+    }))();
+    remote_pictures.fetch({
+        reset: true
+    });
     remote_pictures.on('reset', function() {
         collection.add(remote_pictures.models);
     });
 
-    var achievements = new (Backbone.Collection.extend({
+    var achievements = new(Backbone.Collection.extend({
         url: '/api/achievements',
         model: Achievement,
-    }));
-    achievements.fetch({reset: true});
+    }))();
+    achievements.fetch({
+        reset: true
+    });
     achievements.on('reset', function() {
         collection.add(achievements.models);
     });
@@ -61,7 +65,9 @@ define(function(require) {
         },
         addFile: function(file) {
             if (file instanceof File && file.type.match(/^image\/.+$/)) {
-                collection.add({file: file});
+                collection.add({
+                    file: file
+                });
             }
         },
         addFiles: function(files) {
@@ -76,7 +82,7 @@ define(function(require) {
             return false;
         },
         onShow: function() {
-            if (! this.regions.content) {
+            if (!this.regions.content) {
                 this.addRegion('content', '#test-content');
             }
             this.getRegion('content').show(new PicturesCollection({
