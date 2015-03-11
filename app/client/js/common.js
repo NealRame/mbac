@@ -13,6 +13,7 @@ requirejs.config({
         'Achievement': 'common/Achievement/achievement',
         'AchievementLightBox': 'common/AchievementLightBox/achievement-lightbox',
         'Dialog': 'common/Dialog/dialog',
+        'Picture': 'common/Picture/picture',
         'Thumbnail': 'common/Thumbnail/thumbnail',
 
         'Configuration': 'back/Configuration/configuration',
