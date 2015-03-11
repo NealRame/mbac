@@ -29,7 +29,7 @@ define(function(require) {
                     label: 'Gallerie',
                     icon: 'fa fa-camera-retro',
                     view: function() {
-                        return new Gallery;
+                        return new Gallery();
                     }
                 }, {
                     id: 'pages',
@@ -40,7 +40,7 @@ define(function(require) {
                     label: 'Test',
                     icon: 'fa fa-flask',
                     view: function() {
-                        return new Test;
+                        return new Test();
                     }
                 }
             ]);
@@ -65,5 +65,5 @@ define(function(require) {
         }
     });
 
-    return new Dashboard;
+    return new Dashboard();
 });
