@@ -45,7 +45,7 @@ exports.getInstance = function() {
         app.use(bodyParser.json());
         app.use(bodyParser.urlencoded({extended: true}));
         app.use(cookieParser());
-        app.use(session({store: new Store, secret: 'IL0veK4t', proxy: true, resave: true, saveUninitialized: true}));
+        app.use(session({store: new Store(), secret: 'IL0veK4t', proxy: true, resave: true, saveUninitialized: true}));
         app.use(serveFavicon(path.join(__dirname, '..', '..', 'public', 'mbac.ico')));
         app.use(serveStatic(path.join(__dirname, '..', '..', 'public')));
 
