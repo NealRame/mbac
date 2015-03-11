@@ -10,10 +10,6 @@ define(function(require) {
     var ThumbnailView =  require('common/Thumbnail/base-thumbnail');
 
     return ThumbnailView.extend({
-        initialize: function() {
-            ThumbnailView.prototype.initialize.apply(this);
-            this.ui.thumbImage = 'img';
-        },
         onRender: function() {
             var geometry = _.bind(this.geometry, this);
             var image = new Image;
