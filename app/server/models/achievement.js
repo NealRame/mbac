@@ -6,7 +6,7 @@
 var _ = require('underscore');
 var async = require('async');
 var debug = require('debug')('mbac:models.Achievement');
-var mongoose = require('mongoose')
+var mongoose = require('mongoose');
 var ObjectId = mongoose.Schema.Types.ObjectId;
 var Picture = require('models/picture');
 var Promise = mongoose.Promise;
@@ -59,7 +59,7 @@ AchievementSchema.pre('remove', function(next) {
             async.each(
                 pictures,
                 function(picture, next) {
-                    picture.destroy().addBack(next)
+                    picture.destroy().addBack(next);
                 },
                 next
             );
@@ -79,13 +79,13 @@ AchievementSchema.pre('remove', function(next) {
 AchievementSchema.static('create', function(data, cb) {
     debug('creating Achievement', data);
 
-    var data = data || {};
     var promise = new Promise(cb);
 
+    data = data || {};
     _.bindAll(promise, 'resolve', 'error');
     Picture.create(data.files || [])
         .then(function(pictures) {
-            var p = new Promise;
+            var p = new Promise();
             var achievement = new Achievement(
                 _.extend(
                     _.pick(data, 'date', 'name', 'description', 'tags', 'published'),
@@ -121,9 +121,7 @@ AchievementSchema.static('read', function(id, cb) {
     _.bindAll(promise, 'fulfill', 'error');
     Achievement.findById(id).exec()
         .then(function(achievement) {
-            return achievement
-                ? achievement.populate()
-                : null;
+            return achievement ? achievement.populate() : null;
         })
         .then(promise.fulfill)
         .then(null, promise.error);
@@ -248,9 +246,9 @@ AchievementSchema.methods.getPictures = function(cb) {
             return doc.pictures;
         })
         .then(promise.fulfill)
-        .then(null, promise.error)
+        .then(null, promise.error);
     return promise;
-}
+};
 
 /// #### `Achievement#patch(data, [cb])`
 /// Patch this achievement with the given data.
@@ -294,12 +292,12 @@ AchievementSchema.methods.patch = function(data, cb) {
                     Picture.findById(id).exec()
                         .then(function(doc) {
                             if (doc) {
-                                doc.destroy()
+                                doc.destroy();
                             }
                         })
                         .then(null, function(err) {
                             console.log(err);
-                        })
+                        });
                 }
             });
             next(null, data.pictures);
