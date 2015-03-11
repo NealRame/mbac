@@ -12,8 +12,8 @@ define(function(require) {
 
     return ThumbnailView.extend({
         onRender: function() {
-            var image = new Image;
-            var reader = new FileReader;
+            var image = new Image();
+            var reader = new FileReader();
 
             image.onload = (function() {
                 var canvas = document.createElement('canvas');
