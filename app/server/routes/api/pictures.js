@@ -18,7 +18,7 @@ var Promise = mongoose.Promise;
 var router = express.Router();
 
 function parse_picture_data(req) {
-    var promise = new Promise;
+    var promise = new Promise();
     var files = [];
     var form = formidableGrid(req.db, mongo, {
         accept: ['image/.*']
@@ -37,7 +37,7 @@ function parse_picture_data(req) {
         .parse(req);
 
     return promise;
-};
+}
 
 router
     .route('/')
