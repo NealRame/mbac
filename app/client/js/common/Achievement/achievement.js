@@ -5,7 +5,7 @@
 define(function(require) {
     var _ = require('underscore');
     var Backbone = require('backbone');
-    
+
     return Backbone.Model.extend({
         idAttribute: '_id',
         defaults: {
@@ -73,7 +73,7 @@ define(function(require) {
             return this.setTags(tags);
         },
         setTags: function(tags) {
-            var tags =
+            tags =
                 _.chain(tags || [])
                     .compact()
                     .map(function(tag) {return tag.trim().toLowerCase();})
@@ -83,8 +83,7 @@ define(function(require) {
         },
         validate: function(attributes, options) {
             var isValidPicture = function(picture) {
-                return picture.file instanceof File
-                        || (picture.original && picture.thumbnail);
+                return picture.file instanceof File || (picture.original && picture.thumbnail);
             };
 
             if (! attributes.name instanceof String) {
@@ -94,11 +93,11 @@ define(function(require) {
                 return new Error('description mus be a String');
             }
             if (! (attributes.pictures instanceof Array
-                        && _.every(attributes.pictures, isValidPicture))) {
+                    && _.every(attributes.pictures, isValidPicture))) {
                 return new Error('pictures must be a non empty Array of valid pictures');
             }
             if (! (attributes.tags instanceof Array
-                        && _.every(attributes.tags, _.isString))) {
+                    && _.every(attributes.tags, _.isString))) {
                 return new Error('tags must be an Array of String');
             }
         },
@@ -109,7 +108,7 @@ define(function(require) {
             case 'patch':
                 return (function() {
                     var data = model.attributes;
-                    var form_data = new FormData;
+                    var form_data = new FormData();
 
                     _.chain(data)
                         .pick('name', 'description', 'published')
@@ -122,8 +121,7 @@ define(function(require) {
                     _.each(data.pictures, function(picture) {
                         form_data.append(
                             'pictures',
-                            picture.file instanceof File
-                                ? picture.file : picture._id
+                            picture.file instanceof File ? picture.file : picture._id
                         );
                     });
 
@@ -144,7 +142,6 @@ define(function(require) {
 
                     return xhr;
                 })();
-                break;
 
             default:
                 return Backbone.sync.call(this, method, model, options);
