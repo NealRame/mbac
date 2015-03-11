@@ -16,11 +16,11 @@ define(function(require) {
             return head.concat.apply(head, _.rest(arguments));
         }
         return [];
-    };
+    }
 
     function construct(head, tail) {
         return cat([head], _.toArray(tail));
-    };
+    }
 
     function dispatch() {
         var funs = _.toArray(arguments);
@@ -37,15 +37,15 @@ define(function(require) {
                     return ret;
                 }
             }
-        }
-    };
+        };
+    }
 
     function hasKeys(model) {
         var keys = _.rest(arguments);
         return _.every(keys, function(key) {
             return _.has(model.attributes, key);
         });
-    };
+    }
 
     function isa(view) {
         var keys = _.rest(arguments);
@@ -54,7 +54,7 @@ define(function(require) {
                 return view;
             }
         };
-    };
+    }
 
     return {
         Achievement: AchievementThumbnailView,
