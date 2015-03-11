@@ -99,17 +99,20 @@ body > .splash {
             display: block;
             position: relative;
             overflow: hidden;
-            * {
+            canvas {
                 position: absolute;
             }
             img {
+                position: absolute;
                 max-width: none;
                 max-height: none;
             }
             .placeholder {
+                position: absolute;
                 color: lightgray;
             }
             .spinner {
+                position: absolute;
                 color: lightgray;
             }
         }
