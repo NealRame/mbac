@@ -4,6 +4,7 @@ define(function(require) {
     var Backbone = require('backbone');
     var Marionette = Backbone.Marionette;
 
+    var Achievement = require('Achievement');
     var ThumbnailView = require('Thumbnail');
     var testTemplate = require('text!back/Test/test.html');
 
@@ -18,11 +19,12 @@ define(function(require) {
     });
 
     var achievements = new (Backbone.Collection.extend({
-        url: '/api/achievements'
+        url: '/api/achievements',
+        model: Achievement,
     }));
     achievements.fetch({reset: true});
     achievements.on('reset', function() {
-        collection.add(achievements.toJSON());
+        collection.add(achievements.models);
     });
 
 

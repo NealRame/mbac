@@ -31,12 +31,11 @@ define(function(require) {
             }
         },
         pictureURIs: function() {
-            var achievement = this.model.toJSON();
             var uris = {
-                original: '/pages/realisations/' + achievement._id,
+                original: this.model.pageURL(),
             };
-            if (achievement.pictures.length > 0) {
-                var picture = achievement.pictures[0];
+            var picture = this.model.picture();
+            if (picture) {
                 uris.thumbnail = picture.prefix + '/' + picture.thumbnail;
             }
             return uris;
