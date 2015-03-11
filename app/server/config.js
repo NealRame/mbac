@@ -22,7 +22,7 @@ var path = require('path');
 
 var config_dir = path.join(__dirname, '..', '..', 'config');
 var config = {
-    env: process.env['NODE_ENV'] || 'development'
+    env: process.env.NODE_ENV || 'development'
 };
 
 /// Each `config/{MODULE}.conf.json` is a module configuration. A module must
@@ -62,30 +62,30 @@ if (config.env === 'development') {
         ///   In _development_ environment:
         ///   - use the value of `DB_HOST` environment variable if defined,
         ///   - fallback to `'127.0.0.1'`
-        host: process.env['DB_HOST'] || 'localhost',
+        host: process.env.DB_HOST || 'localhost',
         /// - `port` **REQUIRED**.
         ///   In _development_ environment:
         ///   - use the value of `DB_PORT` environment variable if defined,
         ///   - fallback to `27017`
-        port: process.env['DB_PORT'] || 27017,
+        port: process.env.DB_PORT || 27017,
         /// - `name` **REQUIRED**.
         ///   In _development_ environment:
         ///   - use the value of `DB_NAME` environment variable if defined,
         ///   - fallback to `products`
-        name: process.env['DB_NAME'] || 'test',
+        name: process.env.DB_NAME || 'test',
         /// - `products` **REQUIRED**.
         ///   In _development_ environment:
         ///   - use the value of `DB_USER` environment variable if defined,
         ///   - fallback to `test`
-        user: process.env['DB_USER'] || 'test',
+        user: process.env.DB_USER || 'test',
         /// - `password` **REQUIRED**.
         ///   In _development_ environment:
         ///   - use the value of `DB_PASSWORD` environment variable if defined,
         ///   - fallback to `test`
-        password: process.env['DB_PASSWORD'] || 'test'
+        password: process.env.DB_PASSWORD || 'test'
     });
 
-    
+
 
     /// ## Server settings
     /// These settings are defined in the `config/server.conf.json` file.
@@ -96,12 +96,12 @@ if (config.env === 'development') {
         ///    In _development_ environment:
         ///    - use the value of `APP_ADDRESS` environment variable if defined,
         ///    - fallback to `'127.0.0.1'`
-        address: process.env['APP_ADDRESS'] || '127.0.0.1',
+        address: process.env.APP_ADDRESS || '127.0.0.1',
         /// - `port` **REQUIRED**.
         ///    In _development_ environment:
         ///    - use the value of `APP_PORT` environment variable if defined,
         ///    - fallback to `3000`
-        port: process.env['APP_PORT'] || 3000
+        port: process.env.APP_PORT || 3000
     });
 }
 
