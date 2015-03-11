@@ -6,6 +6,7 @@ define(function(require) {
     var _ = require('underscore');
     var $ = require('jquery');
 
+    var AchievementThumbnailView = require('common/Thumbnail/achievement-thumbnail');
     var FileThumbnailView = require('common/Thumbnail/file-thumbnail');
     var PictureThumbnailView = require('common/Thumbnail/picture-thumbnail');
 
@@ -56,9 +57,11 @@ define(function(require) {
     };
 
     return {
+        Achievement: AchievementThumbnailView,
         File: FileThumbnailView,
         Picture: PictureThumbnailView,
         create: dispatch(
+            isa(AchievementThumbnailView, 'pictures'),
             isa(FileThumbnailView, 'file'),
             isa(PictureThumbnailView, 'original', 'thumbnail')
         ),
