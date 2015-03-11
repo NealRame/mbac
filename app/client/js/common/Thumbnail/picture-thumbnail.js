@@ -4,6 +4,7 @@
 // -   date: Tue Mar 10 21:57:55 2015
 define(function(require) {
     var _ = require('underscore');
+    var $ = require('jquery');
     var Backbone = require('backbone');
     var Marionette = Backbone.Marionette;
 
