@@ -7,14 +7,24 @@ define(function(require) {
     var ThumbnailView = require('Thumbnail');
     var testTemplate = require('text!back/Test/test.html');
 
-    var pictures = new Backbone.Collection([]);
+    var collection = new Backbone.Collection([]);
+
     var remote_pictures = new (Backbone.Collection.extend({
         url: '/api/pictures'
     }));
     remote_pictures.fetch({reset: true});
     remote_pictures.on('reset', function() {
-        pictures.add(remote_pictures.toJSON());
+        collection.add(remote_pictures.toJSON());
     });
+
+    var achievements = new (Backbone.Collection.extend({
+        url: '/api/achievements'
+    }));
+    achievements.fetch({reset: true});
+    achievements.on('reset', function() {
+        collection.add(achievements.toJSON());
+    });
+
 
     var PicturesCollection = Marionette.CollectionView.extend({
         className: 'thumbnails',
@@ -47,7 +57,7 @@ define(function(require) {
         },
         addFile: function(file) {
             if (file instanceof File && file.type.match(/^image\/.+$/)) {
-                pictures.add({file: file});
+                collection.add({file: file});
             }
         },
         addFiles: function(files) {
@@ -66,7 +76,7 @@ define(function(require) {
                 this.addRegion('content', '#test-content');
             }
             this.getRegion('content').show(new PicturesCollection({
-                collection: pictures
+                collection: collection
             }));
         }
     });
