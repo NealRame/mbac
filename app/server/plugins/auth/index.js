@@ -11,9 +11,7 @@ exports.setup = function(app) {
             findUser: function(id, callback) {
                 User.count({}).exec()
                     .then(function(count) {
-                        return count === 0
-                            ? User.create( {_id: id})
-                            : User.findOne({_id: id}).exec();
+                        return count === 0 ? User.create( {_id: id}) : User.findOne({_id: id}).exec();
                     })
                     .then(callback.bind(null, null))
                     .then(null, callback);
