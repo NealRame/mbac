@@ -85,13 +85,13 @@ PictureSchema.virtual('ratio').get(function() {
 /// Returns the path of the original picture files.
 PictureSchema.methods.originalPath = function() {
     return path.join('/', this.prefix, this.original);
-}
+};
 
 /// #### `Picture#thumbnailPath()`
 /// Returns the path of the thumbnail picture files.
 PictureSchema.methods.thumbnailPath = function() {
     return path.join('/', this.prefix, this.thumbnail);
-}
+};
 
 /// #### `Picture#destroy([cb])`
 /// Destroy this pictures and all its associated files
@@ -108,7 +108,7 @@ PictureSchema.methods.destroy = function(cb) {
     var promise = new Promise(cb);
     this.remove(promise.resolve.bind(promise));
     return promise;
-}
+};
 
 // Returns a promise of an array of pictures'ids created from the given files
 function create_pictures(datas, cb) {
@@ -119,7 +119,7 @@ function create_pictures(datas, cb) {
         promise.resolve.bind(promise)
     );
     return promise;
-};
+}
 
 /// #### `Picture.create(original, [cb])`
 /// Create a picture instance with the given image.
@@ -146,7 +146,7 @@ PictureSchema.static('create', function(data, cb) {
                 return promise.error(err);
             }
 
-            var thumbnail_id = new mongo.ObjectID;
+            var thumbnail_id = new mongo.ObjectID();
             var ostream = gfs.createWriteStream({
                 _id: thumbnail_id,
                 content_type: 'image/png',
