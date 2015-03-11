@@ -99,7 +99,7 @@ define(function(require) {
                     position: 'absolute',
                     left: (viewport.width - spinner.width())/2,
                     top: (viewport.height - spinner.height())/2
-                })
+                });
             }
 
             var img = this.ui.picture.find('img');
