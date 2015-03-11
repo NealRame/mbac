@@ -27,7 +27,7 @@ define(function(require) {
             return {
                 width: this.options.width,
                 height: this.options.height,
-            }
+            };
         },
         initialize: function() {
             this.options.width = this.options.width || 128;
