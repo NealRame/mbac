@@ -9,6 +9,7 @@ define(function(require) {
     var functional = require('utils/functional');
     var AchievementThumbnailView = require('common/Thumbnail/achievement-thumbnail');
     var FileThumbnailView = require('common/Thumbnail/file-thumbnail');
+    var GenericThumbnailView = require('common/Thumbnail/base-thumbnail');
     var PictureThumbnailView = require('common/Thumbnail/picture-thumbnail');
 
     function hasKeys(model) {
@@ -34,7 +35,8 @@ define(function(require) {
         create: functional.dispatch(
             isa(AchievementThumbnailView, 'pictures'),
             isa(FileThumbnailView, 'file'),
-            isa(PictureThumbnailView, 'original', 'thumbnail')
+            isa(PictureThumbnailView, 'original', 'thumbnail'),
+            _.identity.bind(null, GenericThumbnailView) // fallback
         ),
     };
 
