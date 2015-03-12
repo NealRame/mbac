@@ -25,7 +25,6 @@
     "monosocialiconsfont": "*",
     "requirejs": "~2.1.14",
     "requirejs-text": "~2.0.12",
-    "q": "~2.0.2"
   },
   "exportsOverride": {
     "backbone": {
@@ -67,9 +66,6 @@
     },
     "monosocialiconsfont": {
       "public/fonts": "MonoSocialIconsFont-*"
-    },
-    "q": {
-        "app/client/js/libs": "q.js"
     },
     "requirejs": {
       "app/client/js/libs": "require.js"
