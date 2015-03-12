@@ -14,29 +14,49 @@ define(function(require) {
     return Marionette.ItemView.extend({
         className: 'thumb',
         ui: {
+            actions: '.action-bar > a',
             crop: '.crop',
             thumbLink: '.thumb-link',
         },
         events: {
-            'click @ui.thumbLink': 'onThumbLinkClicked'
+            'click @ui.actions': 'onActionRequested',
+            'click @ui.thumbLink': 'onThumbLinkClicked',
+            'mouseenter': 'onMouseEnter',
+            'mouseleave': 'onMouseLeave',
         },
         serializedData: function() {
             return {};
         },
+        editable: false,
+        removable: false,
+        height: 128,
+        width: 128,
+        margin: 2,
         template: _.template(thumbnailTemplate),
         templateHelpers: function() {
-            return {
-                width: this.options.width,
-                height: this.options.height,
+            var data = {
+                height: Marionette.getOption(this, 'height'),
+                width:  Marionette.getOption(this, 'width'),
+                actions: []
             };
-        },
-        initialize: function() {
-            this.options.width = this.options.width || 128;
-            this.options.height = this.options.height || 128;
+
+            if (Marionette.getOption(this, 'removable')) {
+                data.actions.push({
+                    name: 'remove',
+                    icon: 'fa fa-trash'
+                });
+            }
+            if (Marionette.getOption(this, 'editable')) {
+                data.actions.push({
+                    name: 'edit',
+                    icon: 'fa fa-pencil'
+                });
+            }
+            return data;
         },
         geometry: function(image) {
-            var height, crop_height = this.options.height;
-            var width, crop_width = this.options.width;
+            var height, crop_height = Marionette.getOption(this, 'height');
+            var width, crop_width =  Marionette.getOption(this, 'width');
 
             if (image) {
                 var r = image.width/image.height;
@@ -68,8 +88,8 @@ define(function(require) {
                 empty: 'fa fa-ban fa-fw',
                 error: 'fa fa-exclamation-circle fa-fw'
             };
-            var width = this.options.width;
-            var height = this.options.height;
+            var height = Marionette.getOption(this, 'height');
+            var width = Marionette.getOption(this, 'width');
             var font_size = (Math.min(width, height) - 32)*ratio;
 
             return $(document.createElement('i'))
@@ -95,6 +115,20 @@ define(function(require) {
                 .catch(function() {
                     this.ui.thumbLink.empty().append(this.placeholder('error'));
                 });
+        },
+        onActionRequested: function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            this.trigger($(e.currentTarget).attr('data-action'), this.model);
+            return false;
+        },
+        onMouseEnter: function(e) {
+            this.$('.action-bar').fadeIn(100);
+            return false;
+        },
+        onMouseLeave: function(e) {
+            this.$('.action-bar').fadeOut(100);
+            return false;
         },
         onThumbLinkClicked: function(e) {
             console.log('thumbnail clicked!');
