@@ -5,6 +5,7 @@ define(function(require) {
     var Marionette = Backbone.Marionette;
 
     var Achievement = require('Achievement');
+    var AchievementEditor = require('AchievementEditor');
     var Picture = require('Picture');
     var ThumbnailView = require('Thumbnail');
     var testTemplate = require('text!back/Test/test.html');
@@ -47,10 +48,12 @@ define(function(require) {
     var Test = Marionette.LayoutView.extend({
         template: _.template(testTemplate),
         ui: {
-            addButton: '#add-picture'
+            addAchievementButton: '#add-achievement',
+            addPictureButton: '#add-picture'
         },
         events: {
-            'click @ui.addButton': 'onAddButtonClicked'
+            'click @ui.addAchievementButton': 'onAddAchievementButtonClicked',
+            'click @ui.addPictureButton': 'onAddPictureButtonClicked'
         },
         initialize: function() {
             this.filesInput = $(document.createElement('input')).attr({
@@ -72,7 +75,15 @@ define(function(require) {
         addFiles: function(files) {
             _.each(files, this.addFile, this);
         },
-        onAddButtonClicked: function(e) {
+        onAddAchievementButtonClicked: function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            (new AchievementEditor({model: new Achievement()})).run();
+
+            return false;
+        },
+        onAddPictureButtonClicked: function(e) {
             e.preventDefault();
             e.stopPropagation();
 
