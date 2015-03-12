@@ -7,6 +7,7 @@ define(function(require) {
     var $ = require('jquery');
     var Backbone = require('backbone');
     var Marionette = Backbone.Marionette;
+    var Promise = require('promise');
 
     var thumbnailTemplate = require('text!common/Thumbnail/thumbnail.html');
 
@@ -103,6 +104,12 @@ define(function(require) {
                 e.stopPropagation();
                 return false;
             }
+        },
+        renderThumbnail: function() {
+            return Promise.resolve({
+                el: null,
+                target: '#'
+            });
         }
     });
 });
