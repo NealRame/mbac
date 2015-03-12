@@ -15,6 +15,10 @@ define(function(require) {
     var editorTemplate = require('text!back/AchievementEditorDialog/editor.html');
     var listAddTemplate = require('text!back/AchievementEditorDialog/list-add.html');
 
+    if (_.indexOf($.event.props, 'dataTransfer') < 0) {
+        $.event.props.push('dataTransfer');
+    }
+
     var AddItemButton = Marionette.ItemView.extend({
         tagName: 'li',
         className: 'thumb',
