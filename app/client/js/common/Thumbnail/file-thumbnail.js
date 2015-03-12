@@ -9,9 +9,9 @@ define(function(require) {
     var Marionette = Backbone.Marionette;
 
     var async = require('utils/async');
-    var ThumbnailView =  require('common/Thumbnail/base-thumbnail');
+    var GenericThumbnailView =  require('common/Thumbnail/generic-thumbnail');
 
-    return ThumbnailView.extend({
+    return GenericThumbnailView.extend({
         renderThumbnail: function() {
             var file = this.model.get('file');
             return async.loadDataURL(file)

@@ -11,9 +11,9 @@ define(function(require) {
 
     var async = require('utils/async');
     var Picture = require('Picture');
-    var ThumbnailView = require('common/Thumbnail/base-thumbnail');
+    var GenericThumbnailView = require('common/Thumbnail/generic-thumbnail');
 
-    return ThumbnailView.extend({
+    return GenericThumbnailView.extend({
         renderThumbnail: function() {
             var picture = this.picture();
             if (!_.isUndefined(picture)) {

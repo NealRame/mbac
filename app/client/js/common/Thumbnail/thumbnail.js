@@ -9,7 +9,7 @@ define(function(require) {
     var functional = require('utils/functional');
     var AchievementThumbnailView = require('common/Thumbnail/achievement-thumbnail');
     var FileThumbnailView = require('common/Thumbnail/file-thumbnail');
-    var GenericThumbnailView = require('common/Thumbnail/base-thumbnail');
+    var GenericThumbnailView = require('common/Thumbnail/generic-thumbnail');
     var PictureThumbnailView = require('common/Thumbnail/picture-thumbnail');
 
     function hasKeys(model) {
