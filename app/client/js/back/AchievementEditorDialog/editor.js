@@ -275,7 +275,7 @@ define(function(require) {
         }
     });
 
-    AchievementEditorDialog.exec = function(achievement) {
+    AchievementEditorDialog.open = function(achievement) {
         (new AchievementEditorDialog({model: achievement})).run();
     };
 

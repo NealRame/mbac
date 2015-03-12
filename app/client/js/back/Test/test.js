@@ -78,7 +78,7 @@ define(function(require) {
         onAddAchievementButtonClicked: function(e) {
             e.preventDefault();
             e.stopPropagation();
-            AchievementEditorDialog.exec(new Achievement());
+            AchievementEditorDialog.open(new Achievement());
             return false;
         },
         onAddPictureButtonClicked: function(e) {
