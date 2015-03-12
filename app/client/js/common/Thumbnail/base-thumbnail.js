@@ -33,15 +33,6 @@ define(function(require) {
             this.options.width = this.options.width || 128;
             this.options.height = this.options.height || 128;
         },
-        onThumbLinkClicked: function(e) {
-            console.log('thumbnail clicked!');
-            if (this.options.onClick) {
-                this.options.onClick(this.image);
-                e.preventDefault();
-                e.stopPropagation();
-                return false;
-            }
-        },
         geometry: function(image) {
             var height, crop_height = this.options.height;
             var width, crop_width = this.options.width;
@@ -67,6 +58,51 @@ define(function(require) {
                 width: width, height: height,
                 left: (crop_width - width)/2, top: (crop_height - height)/2
             };
+        },
+        placeholder: function(type, ratio) {
+            ratio = ratio || 1;
+
+            var classes = {
+                spinner: 'fa fa-circle-o-notch fa-spin',
+                empty: 'fa fa-ban fa-fw',
+                error: 'fa fa-exclamation-circle fa-fw'
+            };
+            var width = this.options.width;
+            var height = this.options.height;
+            var font_size = (Math.min(width, height) - 32)*ratio;
+
+            return $(document.createElement('i'))
+                .addClass([classes[type] || 'fa fa-question-circle', type].join(' '))
+                .css({
+                    fontSize: font_size,
+                    height: font_size,
+                    left: (width - font_size)/2,
+                    top: (height - font_size)/2,
+                    width: font_size,
+                });
+        },
+        onRender: function() {
+            this.ui.thumbLink.empty().append(this.placeholder('spinner'));
+            this.renderThumbnail()
+                .bind(this)
+                .then(function(thumbnail) {
+                    this.ui.thumbLink
+                        .empty()
+                        .append(thumbnail.el || this.placeholder('empty'))
+                        .attr('href', thumbnail.target);
+                })
+                .catch(function() {
+                    this.ui.thumbLink.empty().append(this.placeholder('error'));
+                });
+        },
+        onThumbLinkClicked: function(e) {
+            console.log('thumbnail clicked!');
+            if (this.options.onClick) {
+                this.options.onClick(this.image);
+                e.preventDefault();
+                e.stopPropagation();
+                return false;
+            }
         }
     });
 });
