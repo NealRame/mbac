@@ -96,38 +96,24 @@ body > .splash {
         margin: 4px;
         position: relative;
         .crop {
+            color: #ccc;
             display: block;
-            position: relative;
             overflow: hidden;
-            canvas {
+            position: relative;
+            * {
+                color: inherit;
                 position: absolute;
             }
             img {
-                position: absolute;
                 max-width: none;
                 max-height: none;
             }
-            .empty {
-                position: absolute;
-                color: lightgray;
-            }
-            .spinner {
-                position: absolute;
-                color: lightgray;
+            #add-achievement:hover {
+                color: #aaa;
             }
         }
         .crop[data-empty] {
             background-color: #eee;
-        }
-    }
-    .thumb[data-last] {
-        #add-achievement {
-            color: lightgray;
-            position: absolute;
-        }
-        #add-achievement:hover {
-            color: #aaa;
-            position: absolute;
         }
     }
 }
