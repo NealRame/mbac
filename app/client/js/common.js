@@ -7,6 +7,7 @@ requirejs.config({
         'jquery': 'libs/jquery',
         'marionette': 'libs/backbone.marionette',
         'modernizr': 'libs/modernizr',
+        'promise': 'libs/bluebird',
         'text': 'libs/text',
         'underscore': 'libs/underscore',
 

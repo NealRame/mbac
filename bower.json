@@ -25,6 +25,7 @@
     "monosocialiconsfont": "*",
     "requirejs": "~2.1.14",
     "requirejs-text": "~2.0.12",
+    "bluebird": "~2.9.13"
   },
   "exportsOverride": {
     "backbone": {
@@ -35,6 +36,9 @@
     },
     "backbone.wreqr": {
       "app/client/js/libs": "lib/backbone.wreqr.js"
+    },
+    "bluebird": {
+        "app/client/js/libs": "js/browser/bluebird.js"
     },
     "fastclick": {
       "app/client/js/libs": "lib/fastclick.js"
