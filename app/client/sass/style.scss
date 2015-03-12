@@ -100,16 +100,23 @@ body > .splash {
             display: block;
             overflow: hidden;
             position: relative;
-            * {
+            .thumb-link {
+                color: inherit;
+                * {
+                    color: inherit;
+                    position: absolute;
+                }
+                img {
+                    max-width: none;
+                    max-height: none;
+                }
+            }
+            .add-thumb {
                 color: inherit;
                 position: absolute;
-            }
-            img {
-                max-width: none;
-                max-height: none;
-            }
-            #add-achievement:hover {
-                color: #aaa;
+                &:hover {
+                    color: #aaa;
+                }
             }
         }
         .crop[data-empty] {

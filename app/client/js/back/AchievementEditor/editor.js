@@ -19,14 +19,13 @@ define(function(require) {
         tagName: 'li',
         className: 'thumb',
         ui: {
-            addButton: '#add-achievement'
+            addButton: '.add-thumb'
         },
         triggers: {
             'click @ui.addButton': 'click'
         },
         title: '',
         serializeData: function() {
-            debugger;
             var height = this.options.height;
             var width = this.options.width;
             var font_size = Math.max(8, Math.min(width, height) - 32);
@@ -45,12 +44,18 @@ define(function(require) {
     var AchievementPictureList = Marionette.CollectionView.extend({
         className: 'thumbnails',
         tagName: 'ul',
+        thumbnailHeight: 131,
+        thumbnailWidth: 196,
         childViewOptions: function() {
             return {
                 tagName: 'li',
-                width: 196,
-                height: 131,
+                width: Marionette.getOption(this, 'thumbnailWidth'),
+                height: Marionette.getOption(this, 'thumbnailHeight'),
+                removable: true,
             };
+        },
+        childEvents: {
+            'remove': 'onPictureRemoved'
         },
         getChildView: Thumbnail.create,
         events: {
@@ -68,6 +73,9 @@ define(function(require) {
             this.filesInput.on('change', (function(e) {
                 this.addFiles(e.target.files);
             }).bind(this));
+            this.listenTo(this.collection, 'remove', function(model, col, opt) {
+                this.trigger('remove-picture', model.attributes, opt.index);
+            });
         },
         addFile: function(file) {
             if (file instanceof File) {
@@ -79,6 +87,20 @@ define(function(require) {
         },
         addFiles: function(files) {
             _.each(files, this.addFile, this);
+        },
+        onBeforeRender: function() {
+            if (! this.addPictureButton) {
+                this.addPictureButton = new AddItemButton(
+                    _.extend(
+                        {title: 'Ajouter une image'},
+                        this.childViewOptions()
+                    )
+                );
+                this.$el.append(this.addPictureButton.render().el);
+                this.listenTo(this.addPictureButton, 'click', function() {
+                    this.filesInput.click();
+                });
+            }
         },
         onDragEnter: function(e) {
             console.log('-- AchievementPictureList:onDragEnter');
@@ -107,20 +129,9 @@ define(function(require) {
             this.addFiles(e.dataTransfer.files);
             return false;
         },
-        onBeforeRender: function() {
-            debugger;
-            if (! this.addPictureButton) {
-                this.addPictureButton = new AddItemButton(
-                    _.extend(
-                        {title: 'Ajouter une image'},
-                        this.childViewOptions()
-                    )
-                );
-                this.$el.append(this.addPictureButton.render().el);
-                this.listenTo(this.addPictureButton, 'click', function() {
-                    this.filesInput.click();
-                });
-            }
+        onPictureRemoved: function(view, model) {
+            view.remove();
+            model.destroy();
         }
     });
 
