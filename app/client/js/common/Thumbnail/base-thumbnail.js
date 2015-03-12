@@ -46,7 +46,7 @@ define(function(require) {
             var height, crop_height = this.options.height;
             var width, crop_width = this.options.width;
 
-            if (image && _.has(image, 'width') && _.has(image, 'height')) {
+            if (image) {
                 var r = image.width/image.height;
 
                 if (r > 1) {
