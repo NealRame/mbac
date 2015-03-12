@@ -12,8 +12,8 @@ define(function(require) {
     var Dialog = require('Dialog');
     var Thumbnail = require('Thumbnail');
 
-    var editorTemplate = require('text!back/AchievementEditor/editor.html');
-    var listAddTemplate = require('text!back/AchievementEditor/list-add.html');
+    var editorTemplate = require('text!back/AchievementEditorDialog/editor.html');
+    var listAddTemplate = require('text!back/AchievementEditorDialog/list-add.html');
 
     var AddItemButton = Marionette.ItemView.extend({
         tagName: 'li',
@@ -274,6 +274,10 @@ define(function(require) {
             }));
         }
     });
+
+    AchievementEditorDialog.exec = function(achievement) {
+        (new AchievementEditorDialog({model: achievement})).run();
+    };
 
     return AchievementEditorDialog;
 });

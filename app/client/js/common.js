@@ -17,7 +17,7 @@ requirejs.config({
         'Picture': 'common/Picture/picture',
         'Thumbnail': 'common/Thumbnail/thumbnail',
 
-        'AchievementEditor': 'back/AchievementEditor/editor',
+        'AchievementEditorDialog': 'back/AchievementEditorDialog/editor',
         'Configuration': 'back/Configuration/configuration',
         'Dashboard': 'back/dashboard',
         'Gallery': 'back/Gallery/gallery',

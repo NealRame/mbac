@@ -5,7 +5,7 @@ define(function(require) {
     var Marionette = Backbone.Marionette;
 
     var Achievement = require('Achievement');
-    var AchievementEditor = require('AchievementEditor');
+    var AchievementEditorDialog = require('AchievementEditorDialog');
     var Picture = require('Picture');
     var ThumbnailView = require('Thumbnail');
     var testTemplate = require('text!back/Test/test.html');
@@ -78,9 +78,7 @@ define(function(require) {
         onAddAchievementButtonClicked: function(e) {
             e.preventDefault();
             e.stopPropagation();
-
-            (new AchievementEditor({model: new Achievement()})).run();
-
+            AchievementEditorDialog.exec(new Achievement());
             return false;
         },
         onAddPictureButtonClicked: function(e) {
