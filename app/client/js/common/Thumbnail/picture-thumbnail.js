@@ -3,25 +3,28 @@
 // - author: Neal.Rame. <contact@nealrame.com>
 // -   date: Tue Mar 10 21:57:55 2015
 define(function(require) {
-    var _ = require('underscore');
-    var $ = require('jquery');
-    var Backbone = require('backbone');
-    var Marionette = Backbone.Marionette;
+	var _ = require('underscore');
+	var $ = require('jquery');
+	var Backbone = require('backbone');
+	var Marionette = Backbone.Marionette;
 
-    var ThumbnailView =  require('common/Thumbnail/base-thumbnail');
+    var async = require('utils/async');
+	var ThumbnailView = require('common/Thumbnail/base-thumbnail');
 
-    return ThumbnailView.extend({
-        onRender: function() {
-            var geometry = _.bind(this.geometry, this);
-            var image = new Image();
-
-            $(image)
-                .load((function() {
-                    $(image).css(geometry(image));
-                    this.ui.thumbLink.empty().append(image);
-                }).bind(this))
-                .attr('src', this.model.thumbnailURL());
-            this.ui.thumbLink.attr('href', this.model.originalURL());
-        }
-    });
+	return ThumbnailView.extend({
+		renderThumbnail: function() {
+			return async.loadImage(this.model.thumbnailURL())
+				.bind(this)
+				.then(function(image) {
+					$(image).css(this.geometry(image));
+					return {
+						el: image,
+						target: this.model.originalURL()
+					};
+				})
+				.catch(function() {
+					throw new Error('Failed to load image: ' + source);
+				});
+		}
+	});
 });

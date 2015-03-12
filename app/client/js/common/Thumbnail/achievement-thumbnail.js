@@ -7,47 +7,38 @@ define(function(require) {
     var $ = require('jquery');
     var Backbone = require('backbone');
     var Marionette = Backbone.Marionette;
+    var Promise = require('promise');
 
+    var async = require('utils/async');
     var Picture = require('Picture');
     var ThumbnailView = require('common/Thumbnail/base-thumbnail');
 
     return ThumbnailView.extend({
-        onRender: function() {
+        renderThumbnail: function() {
             var picture = this.picture();
-
-            this.ui.thumbLink.attr('href', this.model.pageURL());
-            if (picture) {
-                var geometry = _.bind(this.geometry, this);
-                var image = new Image();
-                this.ui.thumbLink.empty().append(
-                    $(image)
-                        .load((function() {
-                            $(image).css(geometry(image));
-                            this.ui.thumbLink.empty().append(image);
-                        }).bind(this))
-                        .attr('src', picture.thumbnailURL())
-                );
+            if (!_.isUndefined(picture)) {
+                return async.loadImage(picture.thumbnailURL())
+                    .bind(this)
+                    .then(function(image) {
+                        $(image).css(this.geometry(image));
+                        return {
+                            el: image,
+                            target: this.model.pageURL()
+                        };
+                    })
+                    .catch(function() {
+                        throw new Error('Failed to load image: ' + source);
+                    });
             } else {
-                this.ui.thumbLink.empty().append(this.placeholder());
+                return Promise.resolve({
+                    el: null,
+                    target: this.model.pageURL()
+                });
             }
         },
         picture: function() {
             var picture = this.model.picture();
             return picture ? new Picture(picture) : undefined;
         },
-        placeholder: function() {
-            var width = this.options.width;
-            var height = this.options.height;
-            var font_size = Math.min(width, height) - 32;
-            return $(document.createElement('i'))
-                .addClass(['fa', 'fa-ban', 'fa-fw', 'placeholder'].join(' '))
-                .css({
-                    fontSize: font_size,
-                    height: font_size,
-                    left: (width - font_size)/2,
-                    top: (height - font_size)/2,
-                    width: font_size,
-                });
-        }
     });
 });

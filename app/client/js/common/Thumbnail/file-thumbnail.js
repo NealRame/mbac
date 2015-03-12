@@ -8,31 +8,34 @@ define(function(require) {
     var Backbone = require('backbone');
     var Marionette = Backbone.Marionette;
 
+    var async = require('utils/async');
     var ThumbnailView =  require('common/Thumbnail/base-thumbnail');
 
     return ThumbnailView.extend({
-        onRender: function() {
-            var image = new Image();
-            var reader = new FileReader();
+        renderThumbnail: function() {
+            var file = this.model.get('file');
+            return async.loadDataURL(file)
+                .then(async.loadImage)
+                .bind(this)
+                .then(function(image) {
+                    var canvas = document.createElement('canvas');
+                    var contex = canvas.getContext('2d');
+                    var geo = this.geometry(image);
 
-            image.onload = (function() {
-                var canvas = document.createElement('canvas');
-                var contex = canvas.getContext('2d');
-                var geo = this.geometry(image);
+                    $(canvas)
+                        .attr(_.pick(geo, 'width', 'height'))
+                        .css(_.pick(geo, 'left', 'top'));
+                    contex.drawImage(image, 0, 0, geo.width, geo.height);
 
-                $(canvas)
-                    .attr(_.pick(geo, 'width', 'height'))
-                    .css(_.pick(geo, 'left', 'top'));
-                contex.drawImage(image, 0, 0, geo.width, geo.height);
+                    return {
+                        el: canvas,
+                        target: image.src
+                    };
+                })
+                .catch(function(err) {
+                    throw new Error('Error while load file: ' + file.name);
+                });
+        }
 
-                this.ui.thumbLink.empty().append(canvas);
-            }).bind(this);
-
-            // Read the file data as DataURL and set image source
-            reader.onload = (function(e) {
-                this.ui.thumbLink.attr('href', image.src = e.target.result);
-            }).bind(this);
-            reader.readAsDataURL(this.model.get('file'));
-        },
     });
 });
