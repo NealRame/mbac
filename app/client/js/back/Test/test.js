@@ -9,7 +9,7 @@ define(function(require) {
     var ThumbnailView = require('Thumbnail');
     var testTemplate = require('text!back/Test/test.html');
 
-    var collection = new Backbone.Collection([]);
+    var collection = new Backbone.Collection([{foo: 'foo'}]);
 
     var remote_pictures = new(Backbone.Collection.extend({
         url: '/api/pictures',
@@ -32,7 +32,6 @@ define(function(require) {
     achievements.on('reset', function() {
         collection.add(achievements.models);
     });
-
 
     var PicturesCollection = Marionette.CollectionView.extend({
         className: 'thumbnails',
