@@ -23,7 +23,7 @@ define(function(require) {
         editable: false,
         thumbnailHeight: 131,
         thumbnailWidth: 196,
-        childView: Thumbnail.Achievement,
+        childView: Thumbnail,
         childViewOptions: function() {
             return {
                 tagName: 'li',
