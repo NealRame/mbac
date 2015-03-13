@@ -58,7 +58,7 @@ define(function(require) {
 	///
 	/// __Parameters:__
 	/// - `model`, a backbone model.
-	/// - `keys`, strings.
+	/// - `attributes`, strings.
 	///
 	/// __Returns:__
 	/// - `Boolean`.
