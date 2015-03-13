@@ -10,61 +10,9 @@ define(function(require) {
 
     var Achievement = require('Achievement');
     var AchievementEditorDialog = require('AchievementEditorDialog');
-    var Dialog = require('Dialog');
-    var Thumbnail = require('Thumbnail');
+    var AchievementList = require('AchievementList');
 
-    var editorTemplate  = require('text!back/Gallery/editor.html');
     var galleryTemplate = require('text!back/Gallery/gallery.html');
-    var listAddTemplate = require('text!back/Gallery/list-add.template.html');
-
-    var AchievementList = Marionette.CollectionView.extend({
-        className: 'thumbnails',
-        tagName: 'ul',
-        editable: false,
-        thumbnailHeight: 131,
-        thumbnailWidth: 196,
-        childView: Thumbnail,
-        childEvents: {
-            edit: 'onChildEdit',
-            remove: 'onChildRemove'
-        },
-        childViewOptions: function() {
-            return {
-                tagName: 'li',
-                width: Marionette.getOption(this, 'thumbnailWidth'),
-                height: Marionette.getOption(this, 'thumbnailHeight'),
-                removable: Marionette.getOption(this, 'editable'),
-                editable: Marionette.getOption(this, 'editable'),
-            };
-        },
-        filter: function(tags) {
-            this.children.each(function(child) {
-                if (tags.length === 0 || child.model.hasTags(tags)) {
-                    child.$el.fadeIn('fast');
-                } else {
-                    child.$el.fadeOut('fast');
-                }
-            });
-        },
-        onChildEdit: function(view, model) {
-            console.log('-- AchievementList: edit request');
-            AchievementEditorDialog.open(model);
-        },
-        onChildRemove: function(view, model) {
-            console.log('-- AchievementList: remove request');
-            Dialog.prompt(
-                'Êtes vous sûr de supprimer cette réalisation ?',
-                {
-                    accept: function() {
-                        model.destroy();
-                    },
-                    acceptLabel: 'Oui',
-                    refuseLabel: 'Non'
-                }
-            );
-        }
-    });
-
 
     var Gallery = Marionette.LayoutView.extend({
         template: _.template(galleryTemplate),
