@@ -23,7 +23,7 @@ define(function(require) {
         function() {
             return Promise.resolve({
                 el: this.placeholder('unknown'),
-                target: '#'
+                target: ''
             });
         }
     );
@@ -37,9 +37,11 @@ define(function(require) {
         },
         events: {
             'click @ui.actions': 'onActionRequested',
-            'click @ui.thumbLink': 'onThumbLinkClicked',
             'mouseenter': 'onMouseEnter',
             'mouseleave': 'onMouseLeave',
+        },
+        triggers: {
+            'click @ui.thumbLink': 'click',
         },
         editable: false,
         removable: false,
@@ -120,19 +122,8 @@ define(function(require) {
                     width: font_size,
                 });
         },
-        onRender: function() {
-            this.ui.thumbLink.empty().append(this.placeholder('spinner'));
-            thumb_render.call(this, this.model)
-                .bind(this)
-                .then(function(thumbnail) {
-                    this.ui.thumbLink
-                        .empty()
-                        .append(thumbnail.el || this.placeholder('empty'))
-                        .attr('href', thumbnail.target);
-                })
-                .catch(function() {
-                    this.ui.thumbLink.empty().append(this.placeholder('error'));
-                });
+        target: function() {
+            return this.ui.thumbLink.attr('href');
         },
         onActionRequested: function(e) {
             e.preventDefault();
@@ -148,14 +139,19 @@ define(function(require) {
             this.$('.action-bar').fadeOut(100);
             return false;
         },
-        onThumbLinkClicked: function(e) {
-            console.log('thumbnail clicked!');
-            if (this.options.onClick) {
-                this.options.onClick(this.image);
-                e.preventDefault();
-                e.stopPropagation();
-                return false;
-            }
-        }
+        onRender: function() {
+            this.ui.thumbLink.empty().append(this.placeholder('spinner'));
+            thumb_render.call(this, this.model)
+                .bind(this)
+                .then(function(thumbnail) {
+                    this.ui.thumbLink
+                        .empty()
+                        .append(thumbnail.el || this.placeholder('empty'))
+                        .attr('href', thumbnail.target);
+                })
+                .catch(function() {
+                    this.ui.thumbLink.empty().append(this.placeholder('error'));
+                });
+        },
     });
 });
