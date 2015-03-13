@@ -3,8 +3,8 @@ define(function(require) {
     var Backbone = require('backbone');
     var Marionette = Backbone.Marionette;
 
-    var tabbedPanelsTemplate = require('text!back/TabbedPanels/tabbedpanels.template.html');
-    var tabbarItemTemplate = require('text!back/TabbedPanels/tabbedpanels.tabbar.item.template.html');
+    var tabbedPanelsTemplate = require('text!back/TabbedPanels/tabbedpanels.html');
+    var tabbarItemTemplate = require('text!back/TabbedPanels/tabbar-item.html');
     var menuClasses = {
         1: 'one-up',  2: 'two-up',  3: 'three-up',
         4: 'four-up', 5: 'five-up', 6: 'six-up',
