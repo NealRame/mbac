@@ -19,16 +19,12 @@ define(function(require) {
             accept: '#accept',
             refuse: '#refuse',
         },
-        initialize: function() {
-            this.options = _.defaults(
-                _.pick(this.options, 'accept', 'refuse'), {accept: 'Ok'}
-            );
-            this.template = (function() {
-                if (! _.isFunction(dialogTemplate)) {
-                    dialogTemplate = _.template(dialogTemplate);
-                }
-                return dialogTemplate(this.options);
-            }).bind(this);
+        template: _.template(dialogTemplate),
+        templateHelpers: function() {
+            return {
+                accept: Marionette.getOption(this, 'accept') || 'Ok',
+                refuse: Marionette.getOption(this, 'refuse') || false
+            };
         },
         run: function() {
             $('body').append(this.render().el);
@@ -100,22 +96,13 @@ define(function(require) {
         }
     });
 
-    Dialog.createMessageBox = function(message, options) {
-        var settings = {};
-
-        if (options.el) {
-            settings.el = options.el;
-        }
-
-        if (options.acceptLabel) {
-            settings.accept = options.acceptLabel;
-        }
-
-        if (options.refuseLabel) {
-            settings.refuse = options.refuseLabel;
-        }
-
-        return new (Dialog.extend({
+    Dialog.prompt = function(message, options) {
+        var settings = {
+            el: options.el,
+            accept: options.acceptLabel || 'Yes',
+            refuse: options.refuseLabel || 'No',
+        };
+        (new (Dialog.extend({
             accept: function() {
                 if (options.accept) {
                     options.accept();
@@ -131,7 +118,7 @@ define(function(require) {
             setContent: function(region) {
                 region.$el.append($(document.createElement('p')).html(message));
             }
-        }))(settings);
+        }))(settings)).run();
     };
 
     return Dialog;
