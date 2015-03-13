@@ -16,13 +16,13 @@ requirejs.config({
         'AchievementList': 'common/AchievementList/achievement-list',
         'Dialog': 'common/Dialog/dialog',
         'Picture': 'common/Picture/picture',
+        'TabbedPanels': 'common/TabbedPanels/tabbedpanels',
         'Thumbnail': 'common/Thumbnail/thumbnail',
 
         'AchievementEditorDialog': 'back/AchievementEditorDialog/editor',
         'Configuration': 'back/Configuration/configuration',
         'Dashboard': 'back/dashboard',
         'Gallery': 'back/Gallery/gallery',
-        'TabbedPanels': 'back/TabbedPanels/tabbedpanels',
 
         'Test': 'back/Test/test',
     },
