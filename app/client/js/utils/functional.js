@@ -63,10 +63,7 @@ define(function(require) {
 	/// __Returns:__
 	/// - `Boolean`.
 	function hasAllOfAttributes(model) {
-        var keys = _.rest(arguments);
-        return _.every(keys, function(key) {
-            return _.has(model.attributes, key);
-        });
+		return hasAllOfKeys(model.attributes, _.resst(arguments));
     }
 
 	/// #### functional.dispatch(*functions)
