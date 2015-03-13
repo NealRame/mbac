@@ -24,6 +24,10 @@ define(function(require) {
         thumbnailHeight: 131,
         thumbnailWidth: 196,
         childView: Thumbnail,
+        childEvents: {
+            edit: 'onChildEdit',
+            remove: 'onChildRemove'
+        },
         childViewOptions: function() {
             return {
                 tagName: 'li',
@@ -44,14 +48,20 @@ define(function(require) {
         },
         onChildEdit: function(view, model) {
             console.log('-- AchievementList: edit request');
-            console.log(view);
-            console.log(model);
-
+            AchievementEditorDialog.open(model);
         },
         onChildRemove: function(view, model) {
             console.log('-- AchievementList: remove request');
-            console.log(view);
-            console.log(model);
+            Dialog.prompt(
+                'Êtes vous sûr de supprimer cette réalisation ?',
+                {
+                    accept: function() {
+                        model.destroy();
+                    },
+                    acceptLabel: 'Oui',
+                    refuseLabel: 'Non'
+                }
+            );
         }
     });
 
@@ -86,12 +96,12 @@ define(function(require) {
                 editable: true
             });
 
-            this.listenTo(this.achievementList, 'childview:edit', function(view, achievement) {
-                this.openEditor(achievement);
-            });
-            this.listenTo(this.achievementList, 'childview:remove', function(view, achievement) {
-                this.achievement.destroy();
-            });
+            // this.listenTo(this.achievementList, 'childview:edit', function(view, achievement) {
+            //     this.openEditor(achievement);
+            // });
+            // this.listenTo(this.achievementList, 'childview:remove', function(view, achievement) {
+            //     this.achievement.destroy();
+            // });
 
             this.listenTo(this.collection, 'add', this.openEditor);
             this.listenTo(this.collection, 'change remove reset', function() {
