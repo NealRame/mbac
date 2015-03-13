@@ -234,7 +234,7 @@ define(function(require) {
 
             if (! this.model.isNew()) {
                 var editor = this;
-                Dialog.createMessageBox(
+                Dialog.prompt(
                     'Êtes vous sûr de vouloir continuer ?',
                     {
                         accept: commit,
@@ -242,7 +242,7 @@ define(function(require) {
                         refuse: editor.open.bind(editor),
                         refuseLabel: 'Annuler',
                     }
-                ).run();
+                );
             } else commit();
         },
         refuse: function() {
@@ -257,7 +257,7 @@ define(function(require) {
 
             if (this.getContent().currentView.model.hasChanged()) {
                 var editor = this;
-                Dialog.createMessageBox(
+                Dialog.prompt(
                     'Les modifications apportées seront perdues! Êtes vous sûr de vouloir continuer ?',
                     {
                         accept: commit,
@@ -265,7 +265,7 @@ define(function(require) {
                         refuse: editor.open.bind(editor),
                         refuseLabel: 'Non'
                     }
-                ).run();
+                );
             } else commit();
 
             return false;
