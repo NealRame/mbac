@@ -34,15 +34,15 @@ define(function(require) {
         collection.add(achievements.models);
     });
 
-    var PicturesCollection = Marionette.CollectionView.extend({
+    var PictureList = Marionette.CollectionView.extend({
         className: 'thumbnails',
         tagName: 'ul',
+        childView: ThumbnailView,
         childViewOptions: {
             tagName: 'li',
             width: 196,
             height: 131,
         },
-        getChildView: ThumbnailView.create,
     });
 
     var Test = Marionette.LayoutView.extend({
@@ -93,9 +93,11 @@ define(function(require) {
             if (!this.regions.content) {
                 this.addRegion('content', '#test-content');
             }
-            this.getRegion('content').show(new PicturesCollection({
+            this.picturesList = new PictureList({
                 collection: collection
-            }));
+            });
+            this.listenTo(this.picturesList, 'all', console.log.bind(console));
+            this.getRegion('content').show(this.picturesList);
         }
     });
 
