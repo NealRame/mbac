@@ -6,6 +6,28 @@ define(function(require) {
     var _ = require('underscore');
     var Backbone = require('backbone');
 
+    var functional = require('utils/functional');
+    var Picture = require('Picture');
+
+    function isa(Model) {
+        var keys = _.rest(arguments);
+        return function(data) {
+            if (!_.isUndefined(data)
+                    && functional.hasAllOfKeys.apply(null, functional.construct(data, keys))) {
+                return new Model(data);
+            }
+        };
+    }
+
+    var create_model = functional.dispatch(
+        isa(Picture, 'original', 'thumbnail'),
+        function(data) {
+            if (!_.isUndefined(data)) {
+                return new Backbone.Model(data);
+            }
+        }
+    );
+
     return Backbone.Model.extend({
         idAttribute: '_id',
         defaults: {
@@ -29,10 +51,14 @@ define(function(require) {
             return '/pages/achievements/' + this.attributes._id;
         },
         picture: function(index) {
-            return this.get('pictures')[index || 0];
+            return create_model(this.get('pictures')[index || 0]);
         },
         pictures: function() {
-            return this.get('pictures');
+            return new Backbone.Collection(
+                _.map(this.get('pictures'), function(data) {
+                    return create_model(data);
+                })
+            );
         },
         addPicture: function(picture) {
             var list = this.get('pictures').slice(0);
