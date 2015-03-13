@@ -141,6 +141,9 @@ define(function(require) {
         },
         onRender: function() {
             this.ui.thumbLink.empty().append(this.placeholder('spinner'));
+            this.$el.css({
+                margin: Marionette.getOption(this, 'margin')
+            });
             thumb_render.call(this, this.model)
                 .bind(this)
                 .then(function(thumbnail) {
