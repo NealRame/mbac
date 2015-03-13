@@ -1,3 +1,7 @@
+/// TabbedPanels/tabbedpanels.js
+/// ----------------------------
+/// - author: Neal.Rame. <contact@nealrame.com>
+/// -   date: Mon Jan  5 00:59:15 2015
 define(function(require) {
     var _ = require('underscore');
     var Backbone = require('backbone');
