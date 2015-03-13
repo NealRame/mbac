@@ -195,9 +195,7 @@ define(function(require) {
             );
             this.achievementPictureList = new AchievementPictureList({
                 el: this.$('#pictures'),
-                collection: new Backbone.Collection(
-                    this.model.get('pictures'), {model: Thumbnail.model}
-                )
+                collection: this.model.pictures()
             });
             this.listenTo(
                 this.achievementPictureList,
