@@ -133,7 +133,8 @@ module.exports = function(grunt) {
                     '<%= js_srcs_dir %>/back/**/*.js',
                     '<%= js_srcs_dir %>/back/**/*.html',
                     '<%= js_srcs_dir %>/front/**/*.js',
-                    '<%= js_srcs_dir %>/front/**/*.html'
+                    '<%= js_srcs_dir %>/front/**/*.html',
+                    '<%= js_srcs_dir %>/utils/**/*.js',
                 ],
                 tasks: ['clean:js', 'requirejs'],
                 options: {
