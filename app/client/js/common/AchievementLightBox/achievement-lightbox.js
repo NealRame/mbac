@@ -7,7 +7,7 @@ define(function(require) {
     var Backbone = require('backbone');
     var Marionette = require('marionette');
 
-    var template = require('text!common/AchievementLightbox/achievement-lightbox.template.html');
+    var template = require('text!common/AchievementLightbox/achievement-lightbox.html');
 
     var ESC_KEY = 27;
     var PREV_KEY = 37;
