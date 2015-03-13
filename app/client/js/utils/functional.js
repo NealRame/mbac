@@ -45,7 +45,7 @@ define(function(require) {
 	///
 	/// __Returns:__
 	/// - `Boolean`.
-	function hasAllOfKeys(object) {
+	function has_all_of_keys(object) {
 		var keys = _.rest(arguments);
 		return _.every(keys, function(key) {
 			return _.has(object, key);
@@ -62,8 +62,8 @@ define(function(require) {
 	///
 	/// __Returns:__
 	/// - `Boolean`.
-	function hasAllOfAttributes(model) {
-		return hasAllOfKeys(model.attributes, _.resst(arguments));
+	function has_all_of_attributes(model) {
+		return has_all_of_keys(model.attributes, _.resst(arguments));
     }
 
 	/// #### functional.dispatch(*functions)
@@ -96,6 +96,8 @@ define(function(require) {
     return {
         cat: cat,
         construct: construct,
-        dispatch: dispatch
+        dispatch: dispatch,
+		hasAllOfKeys: has_all_of_keys,
+		hasAllOfAttributes: has_all_of_attributes
     };
 });
