@@ -95,14 +95,6 @@ define(function(require) {
                 collection: this.collection,
                 editable: true
             });
-
-            // this.listenTo(this.achievementList, 'childview:edit', function(view, achievement) {
-            //     this.openEditor(achievement);
-            // });
-            // this.listenTo(this.achievementList, 'childview:remove', function(view, achievement) {
-            //     this.achievement.destroy();
-            // });
-
             this.listenTo(this.collection, 'add', this.openEditor);
             this.listenTo(this.collection, 'change remove reset', function() {
                 this.populateFilters();
@@ -115,7 +107,9 @@ define(function(require) {
             this.collection.chain()
                 .reduce(function(memo, model) {
                     return memo.concat(model.tags());
-                }, []).uniq().each(function(tag) {
+                }, [])
+                .uniq()
+                .each(function(tag) {
                     filters.append(
                         $(document.createElement('li'))
                             .html(this.filterTemplate({tag: tag}))
