@@ -17,6 +17,23 @@ define(function(require) {
 		return cat([head], _.toArray(tail));
 	}
 
+	/// #### functional.hasAllOfAttributes(model, *keys)
+	/// Returns true if and only if the given model has all the given
+	/// attributes.
+	///
+	/// __Parameters:__
+	/// - `model`, a backbone model.
+	/// - `keys`, strings.
+	///
+	/// __Returns:__
+	/// - `Boolean`.
+	function hasAllOfAttributes(model) {
+        var keys = _.rest(arguments);
+        return _.every(keys, function(key) {
+            return _.has(model.attributes, key);
+        });
+    }
+
 	function dispatch() {
 		var funs = _.toArray(arguments);
 		var size = funs.length;
