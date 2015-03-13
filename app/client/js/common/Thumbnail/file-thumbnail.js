@@ -9,11 +9,11 @@ define(function(require) {
     var Marionette = Backbone.Marionette;
 
     var async = require('utils/async');
-    var GenericThumbnailView =  require('common/Thumbnail/generic-thumbnail');
+    var functional = require('utils/functional');
 
-    return GenericThumbnailView.extend({
-        renderThumbnail: function() {
-            var file = this.model.get('file');
+    return function(model) {
+        if (functional.hasAllOfAttributes(model, 'file')) {
+            var file = model.get('file');
             return async.loadDataURL(file)
                 .then(async.loadImage)
                 .bind(this)
@@ -36,6 +36,5 @@ define(function(require) {
                     throw new Error('Error while load file: ' + file.name);
                 });
         }
-
-    });
+    };
 });

@@ -5,6 +5,39 @@
 define(function(require) {
 	var _ = require('underscore');
 
+	/// ### applyIf(pred, fun)
+	/// Returns a function that takes an argument and apply the given function
+	/// to this argument if and only if the predicate returns true for this
+	/// argument. If the predicate returns false, then the returned function
+	/// will return undefined.
+	///
+	/// __Parameters:__
+	/// - `pred`, a predicat function.
+	/// - `fun`, the function to be applied.
+	///
+	/// __Returns:__
+	/// - `Function`
+	function apply_if(pred, fun) {
+        return function(target) {
+            if (pred(target)) {
+                return fun(target);
+            }
+        };
+    }
+
+	/// ### existy(value)
+	/// Returns true if and only if the given value is neither null nor
+	/// undefined.
+	///
+	/// __Parameters:__
+	/// - `value`, whatever you want
+	///
+	/// __Returns:__
+	/// - `Boolean`
+	function existy(value) {
+		return value != null;
+	}
+
 	/// ### functional.cat(*arrays)
 	/// Returns an array made of the concatenation of all the given array. If
 	/// zero arguments are provided, it returns an empty array.
@@ -47,7 +80,7 @@ define(function(require) {
 	/// - `Boolean`.
 	function has_all_of_keys(object) {
 		var keys = _.rest(arguments);
-		return _.every(keys, function(key) {
+		return _.isObject(object) && _.every(keys, function(key) {
 			return _.has(object, key);
 		});
 	}
@@ -63,7 +96,7 @@ define(function(require) {
 	/// __Returns:__
 	/// - `Boolean`.
 	function has_all_of_attributes(model) {
-		return has_all_of_keys(model.attributes, _.resst(arguments));
+		return _.isObject(model) && has_all_of_keys.apply(null, construct(model.attributes, _.rest(arguments)));
     }
 
 	/// #### functional.dispatch(*functions)
@@ -84,7 +117,7 @@ define(function(require) {
 
 			for (var index = 0; index < size; index++) {
 				var fun = funs[index];
-				var ret = fun.apply(fun, construct(target, args));
+				var ret = fun.apply(this, construct(target, args));
 
 				if (!_.isUndefined(ret)) {
 					return ret;
@@ -94,9 +127,11 @@ define(function(require) {
 	}
 
     return {
+		applyIf: apply_if,
         cat: cat,
         construct: construct,
         dispatch: dispatch,
+		existy: existy,
 		hasAllOfKeys: has_all_of_keys,
 		hasAllOfAttributes: has_all_of_attributes
     };

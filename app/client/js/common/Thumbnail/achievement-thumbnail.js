@@ -10,31 +10,27 @@ define(function(require) {
     var Promise = require('promise');
 
     var async = require('utils/async');
-    var Picture = require('Picture');
-    var GenericThumbnailView = require('common/Thumbnail/generic-thumbnail');
+    var functional = require('utils/functional');
+    var render_file = require('common/Thumbnail/file-thumbnail');
+    var render_picture = require('common/Thumbnail/picture-thumbnail');
 
-    return GenericThumbnailView.extend({
-        renderThumbnail: function() {
-            var picture = this.model.picture();
-            if (!_.isUndefined(picture)) {
-                return async.loadImage(picture.thumbnailURL())
-                    .bind(this)
-                    .then(function(image) {
-                        $(image).css(this.geometry(image));
-                        return {
-                            el: image,
-                            target: this.model.pageURL()
-                        };
-                    })
-                    .catch(function() {
-                        throw new Error('Failed to load image: ' + source);
-                    });
-            } else {
-                return Promise.resolve({
-                    el: null,
-                    target: this.model.pageURL()
-                });
-            }
+    var render = functional.dispatch(
+        render_file,
+        render_picture,
+        function() {
+            return Promise.resolve({
+                el: null
+            });
         }
-    });
+    );
+
+    return function(model) {
+        if (functional.hasAllOfAttributes(model, 'pictures')) {
+            return render.call(this, model.picture())
+                .then(function(thumb) {
+                    thumb.target = model.pageURL();
+                    return thumb;
+                });
+        }
+    };
 });

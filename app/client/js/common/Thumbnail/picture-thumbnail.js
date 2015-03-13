@@ -9,22 +9,21 @@ define(function(require) {
 	var Marionette = Backbone.Marionette;
 
     var async = require('utils/async');
-	var GenericThumbnailView = require('common/Thumbnail/generic-thumbnail');
+	var functional = require('utils/functional');
 
-	return GenericThumbnailView.extend({
-		renderThumbnail: function() {
-			return async.loadImage(this.model.thumbnailURL())
-				.bind(this)
-				.then(function(image) {
-					$(image).css(this.geometry(image));
-					return {
-						el: image,
-						target: this.model.originalURL()
-					};
-				})
-				.catch(function() {
-					throw new Error('Failed to load image: ' + source);
-				});
-		}
-	});
+	return function(model) {
+		if (functional.hasAllOfAttributes(model, 'original', 'thumbnail'))
+		return async.loadImage(model.thumbnailURL())
+			.bind(this)
+			.then(function(image) {
+				$(image).css(this.geometry(image));
+				return {
+					el: image,
+					target: model.originalURL()
+				};
+			})
+			.catch(function() {
+				throw new Error('Failed to load image: ' + source);
+			});
+	};
 });

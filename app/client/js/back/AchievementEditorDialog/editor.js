@@ -61,7 +61,7 @@ define(function(require) {
         childEvents: {
             'remove': 'onPictureRemoved'
         },
-        getChildView: Thumbnail.create,
+        childView: Thumbnail,
         events: {
             'dragenter': 'onDragEnter',
             'dragleave': 'onDragLeave',
