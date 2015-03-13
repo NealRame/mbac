@@ -1,7 +1,7 @@
-// utils/functional.js
-// -------------------
-// - author: Neal.Rame. <contact@nealrame.com>
-// -   date: Wed Mar 12 03:49:48 2015
+/// utils/functional.js
+/// -------------------
+/// - author: Neal.Rame. <contact@nealrame.com>
+/// -   date: Wed Mar 12 03:49:48 2015
 define(function(require) {
 	var _ = require('underscore');
 
