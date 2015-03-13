@@ -5,7 +5,7 @@ module.exports = function(grunt) {
     // Configure tasks
 
     var isDev = function() {
-        switch (process.env['NODE_ENV']) {
+        switch (process.env.NODE_ENV) {
         case 'development':
         case 'dev':
             return true;
@@ -159,4 +159,4 @@ module.exports = function(grunt) {
     // Register macro task(s).
 
     grunt.registerTask('default', ['clean', 'bower', 'requirejs', 'sass']);
-}
+};
