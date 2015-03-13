@@ -5,6 +5,15 @@
 define(function(require) {
 	var _ = require('underscore');
 
+	/// ### functional.cat(*arrays)
+	/// Returns an array made of the concatenation of all the given array. If
+	/// zero arguments are provided, it returns an empty array.
+	///
+	/// __Parameters:__
+	/// - `arrays`, arrays
+	///
+	/// __Returns:__
+	/// - `Array`
 	function cat() {
 		var head = _.first(arguments);
 		if (!_.isUndefined(head)) {
@@ -13,6 +22,16 @@ define(function(require) {
 		return [];
 	}
 
+	/// #### functional.construct(head, tail)
+	/// Returns an array made of the given head element prepened to the given
+	/// tail array.
+	///
+	/// __Parameters:__
+	/// - `head`, whatever you want
+	/// - `tail`, an array
+	///
+	/// __Returns:__
+	/// - `Array`
 	function construct(head, tail) {
 		return cat([head], _.toArray(tail));
 	}
@@ -34,6 +53,15 @@ define(function(require) {
         });
     }
 
+	/// #### functional.dispatch(*functions)
+	/// Returns a function taking one argument that will successively invokes
+	/// the given functions on the given argument until one returns a value.
+	///
+	/// __Parameters:__
+	/// - `functions`, functions.
+	///
+	/// __Returns:__
+	/// - `Function`.
 	function dispatch() {
 		var funs = _.toArray(arguments);
 		var size = funs.length;
