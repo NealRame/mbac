@@ -15,7 +15,7 @@ define(function(require) {
 
     return GenericThumbnailView.extend({
         renderThumbnail: function() {
-            var picture = this.picture();
+            var picture = this.model.picture();
             if (!_.isUndefined(picture)) {
                 return async.loadImage(picture.thumbnailURL())
                     .bind(this)
@@ -35,10 +35,6 @@ define(function(require) {
                     target: this.model.pageURL()
                 });
             }
-        },
-        picture: function() {
-            var picture = this.model.picture();
-            return picture ? new Picture(picture) : undefined;
-        },
+        }
     });
 });
