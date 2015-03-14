@@ -14,7 +14,7 @@ requirejs.config({
         'Achievement': 'common/Achievement/achievement',
         'AchievementList': 'common/AchievementList/achievement-list',
         'Dialog': 'common/Dialog/dialog',
-        'LightBox': 'common/AchievementLightBox/lightbox',
+        'LightBox': 'common/LightBox/lightbox',
         'Picture': 'common/Picture/picture',
         'TabbedPanels': 'common/TabbedPanels/tabbedpanels',
         'Thumbnail': 'common/Thumbnail/thumbnail',
