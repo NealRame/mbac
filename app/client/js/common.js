@@ -12,9 +12,9 @@ requirejs.config({
         'underscore': 'libs/underscore',
 
         'Achievement': 'common/Achievement/achievement',
-        'AchievementLightBox': 'common/AchievementLightBox/achievement-lightbox',
         'AchievementList': 'common/AchievementList/achievement-list',
         'Dialog': 'common/Dialog/dialog',
+        'LightBox': 'common/AchievementLightBox/lightbox',
         'Picture': 'common/Picture/picture',
         'TabbedPanels': 'common/TabbedPanels/tabbedpanels',
         'Thumbnail': 'common/Thumbnail/thumbnail',

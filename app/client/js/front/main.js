@@ -7,14 +7,13 @@ define(function(require) {
     var stickyFooter = require('utils/sticky-footer');
 
     var Achievement = require('Achievement');
-    var AchievementLightBox = require('AchievementLightBox');
+    var LightBox = require('LightBox');
 
     $(document).foundation();
     $(window)
         .bind('load', stickyFooter.bind(null, 0))
         .bind('resize', Foundation.utils.throttle(stickyFooter.bind(null, 0), 150));
     stickyFooter(0);
-
 
     $('.achievement')
         .each(function(index, item) {
@@ -30,7 +29,7 @@ define(function(require) {
 
                 achievement
                     .once('change', function() {
-                        (new AchievementLightBox({model: this})).run();
+                        (new LightBox({model: this})).run();
                     })
                     .fetch();
 

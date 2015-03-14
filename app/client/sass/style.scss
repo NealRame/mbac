@@ -147,7 +147,7 @@ body > .splash {
     }
 }
 
-.achievement-lightbox {
+.lightbox {
     background-color: rgba(64, 64, 64, 0.9);
     color: #fff;
     display: none;
@@ -157,10 +157,19 @@ body > .splash {
     bottom: 0;
     right: 0;
     z-index: 100;
-    .thumbnails {
+    #navigator {
         border: none;
         position: absolute;
-        bottom: 32px;
+        right: 16px;
+        bottom: 16px;
+        left: 16px;
+        #thumbnails-wrapper {
+            overflow: scroll;
+            .thumbnails {
+                border: none;
+                margin: 0;
+            }
+        }
     }
     .action {
         &:hover {

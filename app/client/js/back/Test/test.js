@@ -4,8 +4,11 @@ define(function(require) {
     var Backbone = require('backbone');
     var Marionette = Backbone.Marionette;
 
+    var functional = require('utils/functional');
+
     var Achievement = require('Achievement');
     var AchievementEditorDialog = require('AchievementEditorDialog');
+    var LightBox = require('LightBox');
     var Picture = require('Picture');
     var ThumbnailView = require('Thumbnail');
     var testTemplate = require('text!back/Test/test.html');
@@ -96,7 +99,13 @@ define(function(require) {
             this.picturesList = new PictureList({
                 collection: collection
             });
-            this.listenTo(this.picturesList, 'all', console.log.bind(console));
+            this.listenTo(this.picturesList, 'childview:click', function(view) {
+                var model = view.model;
+                if (functional.hasAllOfAttributes(model, 'pictures')) {
+                    console.log('pouet');
+                    LightBox.open(model.pictures());
+                }
+            });
             this.getRegion('content').show(this.picturesList);
         }
     });
