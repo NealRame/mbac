@@ -5,7 +5,7 @@
 define(function(require) {
 	var _ = require('underscore');
 
-	/// ### applyIf(pred, fun)
+	/// #### applyIf(pred, fun)
 	/// Returns a function that takes an argument and apply the given function
 	/// to this argument if and only if the predicate returns true for this
 	/// argument. If the predicate returns false, then the returned function
@@ -25,7 +25,7 @@ define(function(require) {
         };
     }
 
-	/// ### existy(value)
+	/// #### existy(value)
 	/// Returns true if and only if the given value is neither null nor
 	/// undefined.
 	///
@@ -38,7 +38,7 @@ define(function(require) {
 		return value != null;
 	}
 
-	/// ### functional.cat(*arrays)
+	/// #### functional.cat(*arrays)
 	/// Returns an array made of the concatenation of all the given array. If
 	/// zero arguments are provided, it returns an empty array.
 	///
