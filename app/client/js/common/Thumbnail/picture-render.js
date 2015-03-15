@@ -18,7 +18,7 @@ define(function(require) {
 			.bind(this)
 			.then(function(image) {
 				var rect = this.thumbnailRect();
-				$(image).css(ui.center(ui.cropFit(ui.imageSize(image), rect), rect));
+				$(image).css(ui.center(ui.cropFit(ui.naturalRect(image), rect), rect));
 				return {
 					el: image,
 					target: model.originalURL()

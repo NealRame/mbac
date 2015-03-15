@@ -15,14 +15,13 @@ define(function(require) {
     return function(model) {
         if (functional.hasAllOfAttributes(model, 'file')) {
             var file = model.get('file');
-            return async.loadDataURL(file)
-                .then(async.loadImage)
+            return async.loadImage(file)
                 .bind(this)
                 .then(function(image) {
                     var canvas = document.createElement('canvas');
                     var contex = canvas.getContext('2d');
                     var rect = this.thumbnailRect();
-                    var geo = ui.center(ui.cropFit(ui.imageSize(image), rect), rect);
+                    var geo = ui.center(ui.cropFit(ui.naturalRect(image), rect), rect);
 
                     $(canvas)
                         .attr(_.pick(geo, 'width', 'height'))
