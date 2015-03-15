@@ -136,6 +136,7 @@ define(function(require) {
                         .empty()
                         .append(thumbnail.el || this.placeholder('empty'))
                         .attr('href', thumbnail.target);
+                    this.trigger('ready');
                 })
                 .catch(function() {
                     this.ui.thumbLink.empty().append(this.placeholder('error'));
