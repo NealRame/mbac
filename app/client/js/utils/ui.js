@@ -20,8 +20,8 @@ define(function(require) {
     /// Center the source rectangle around or into the target rectangle.
     ///
     /// __Parameters:__
-    ///   - `source`, the source rectangle,
-    ///   - `target`, the target rectangle.
+    /// - `source`, the source rectangle,
+    /// - `target`, the target rectangle.
     /// Both `source` and `target` are objects with `width` and `height`
     /// attributes.
     ///
@@ -47,8 +47,8 @@ define(function(require) {
     /// corresponding side.
     ///
     /// __Parameters:__
-    ///   - `source`, the source rectangle,
-    ///   - `target`, the target rectangle.
+    /// - `source`, the source rectangle,
+    /// - `target`, the target rectangle.
     /// Both `source` and `target` are objects with `width` and `height`
     /// attributes.
     ///
@@ -78,8 +78,8 @@ define(function(require) {
     /// the resulted width and height is constant.
     ///
     /// __Parameters:__
-    ///   - `source`, the source rectangle,
-    ///   - `target`, the target rectangle.
+    /// - `source`, the source rectangle,
+    /// - `target`, the target rectangle.
     /// Both `source` and `target` are objects with `width` and `height`
     /// attributes.
     ///
@@ -103,21 +103,66 @@ define(function(require) {
         }
     }
 
-    /// #### ui.imageRect(image)
-    /// Return the size of the given image.
+    /// #### ui.scale(source, ratio)
+    /// Scale the given rectangle by the given ratio.
     ///
     /// __Parameters:__
-    ///   - `image`, a dom or jquery object corresponding to an image.
+    /// - `source`, an object with `width` and `height` attributes,
+    /// - `ratio`, the ratio use to scale the given rectangle.
     ///
     /// __Returns:__
     /// - An object with `width` and `height` attributes.
-    function image_size(image) {
+    function scale(source, ratio) {
         try {
-            var img = $(image).get(0);
             return {
-                height: img ? img.naturalHeight : 0,
-                width:  img ? img.naturalWidth  : 0,
+                height: source.height*ratio,
+                width: source.width*ratio,
             };
+        } catch (err) {
+            throw new TypeError('Wrong types of parameters supplied');
+        }
+    }
+
+    /// #### ui.rect(element)
+    /// Return the client rectangle of the given element.
+    ///
+    /// __Parameters:__
+    /// - `element`, a dom or jquery object.
+    ///
+    /// __Returns:__
+    /// - An object with `width` and `height` attributes.
+    function rect(element) {
+        try {
+            var dom_elt = $(element).get(0);
+            return (dom_elt && dom_elt.getBoundingClientRect
+                ? _.pick(dom_elt.getBoundingClientRect(), 'height', 'width')
+                : {
+                    height: dom_elt ? dom_elt.innerHeight : 0,
+                    width:  dom_elt ? dom_elt.innerWidth  : 0
+                });
+        } catch (err) {
+            throw new TypeError('Wrong types of parameters supplied');
+        }
+    }
+
+    /// #### ui.naturalRect(element)
+    /// Return the natural rectangle of the given element. If the given element
+    /// is an image then it will return the rectangle of the un-resized image.
+    ///
+    /// __Parameters:__
+    /// - `element`, a dom or jquery object.
+    ///
+    /// __Returns:__
+    /// - An object with `width` and `height` attributes.
+    function natural_rect(element) {
+        try {
+            var dom_elt = $(element).get(0);
+            return (dom_elt && dom_elt.naturalWidth
+                ? {
+                    height: dom_elt.naturalHeight,
+                    width:  dom_elt.naturalWidth
+                }
+                : rect(element));
         } catch (err) {
             throw new TypeError('Wrong types of parameters supplied');
         }
@@ -127,7 +172,9 @@ define(function(require) {
         center: center,
         cropFit: crop_fit,
         fit: fit,
-        imageSize: image_size,
+        naturalRect: natural_rect,
+        rect: rect,
+        scale: scale,
         stickyFooter: sticky_footer,
     };
 });
