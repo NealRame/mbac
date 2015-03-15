@@ -48,6 +48,11 @@ define(function(require) {
         height: 128,
         width: 128,
         margin: 2,
+        initialize: function() {
+            if (!_.isUndefined(this.model)) {
+                this.listenTo(this.model, 'change', this.render);
+            }
+        },
         serializedData: function() {
             return {};
         },
