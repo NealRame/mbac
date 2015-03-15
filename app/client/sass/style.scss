@@ -157,20 +157,6 @@ body > .splash {
     bottom: 0;
     right: 0;
     z-index: 100;
-    #navigator {
-        border: none;
-        position: absolute;
-        right: 16px;
-        bottom: 16px;
-        left: 16px;
-        #thumbnails-wrapper {
-            overflow: scroll;
-            .thumbnails {
-                border: none;
-                margin: 0;
-            }
-        }
-    }
     .action {
         &:hover {
             color: red;
@@ -178,6 +164,16 @@ body > .splash {
     }
     #picture {
         position: absolute;
+        * {
+            position: absolute;
+        }
+        img {
+            border: 4px solid white;
+        }
+        .error {
+            margin: 0;
+            font-size: larger;
+        }
     }
 }
 
