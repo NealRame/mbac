@@ -10,6 +10,7 @@ define(function(require) {
 
     var async = require('utils/async');
     var functional = require('utils/functional');
+    var ui = require('utils/ui');
 
     return function(model) {
         if (functional.hasAllOfAttributes(model, 'file')) {
@@ -20,7 +21,8 @@ define(function(require) {
                 .then(function(image) {
                     var canvas = document.createElement('canvas');
                     var contex = canvas.getContext('2d');
-                    var geo = this.geometry(image);
+                    var rect = this.thumbnailRect();
+                    var geo = ui.center(ui.cropFit(ui.imageSize(image), rect), rect);
 
                     $(canvas)
                         .attr(_.pick(geo, 'width', 'height'))

@@ -10,13 +10,15 @@ define(function(require) {
 
     var async = require('utils/async');
 	var functional = require('utils/functional');
+	var ui = require('utils/ui');
 
 	return function(model) {
 		if (functional.hasAllOfAttributes(model, 'original', 'thumbnail'))
 		return async.loadImage(model.thumbnailURL())
 			.bind(this)
 			.then(function(image) {
-				$(image).css(this.geometry(image));
+				var rect = this.thumbnailRect();
+				$(image).css(ui.center(ui.cropFit(ui.imageSize(image), rect), rect));
 				return {
 					el: image,
 					target: model.originalURL()

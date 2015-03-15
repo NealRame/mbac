@@ -7,6 +7,7 @@ define(function(require) {
     var Backbone = require('backbone');
     var Marionette = require('marionette');
 
+    var ui = require('utils/ui');
     var Thumbnail = require('Thumbnail');
     var template = require('text!common/Lightbox/lightbox.html');
 
@@ -92,50 +93,21 @@ define(function(require) {
             this.ui.picture.css(viewport);
 
             var spinner = this.ui.picture.find('i');
-            var spinner_elt = spinner.get(0);
-            if (spinner_elt) {
-                spinner.css({
-                    position: 'absolute',
-                    left: (viewport.width - spinner.width())/2,
-                    top: (viewport.height - spinner.height())/2
-                });
-            }
+            spinner.css({
+                position: 'absolute',
+                left: (viewport.width  - spinner.width())/2,
+                top:  (viewport.height - spinner.height())/2
+            });
 
             var img = this.ui.picture.find('img');
-            var img_elt = img.get(0);
-            if (img_elt) {
-                var max_w = viewport.width  - 32;
-                var max_h = viewport.height - 32;
-                var w = img_elt.naturalWidth;
-                var h = img_elt.naturalHeight;
-                var r = w/h;
-
-                if (r > 1) {
-                    w = Math.min(max_w, w);
-                    h = w/r;
-                    if (h > max_h) {
-                        h = max_h;
-                        w = h*r;
-                    }
-                } else {
-                    h = Math.min(max_h, h);
-                    w = r*h;
-                    if (w > max_w) {
-                        w = max_w;
-                        h = w/r;
-                    }
-                }
-
-                img.css({
-                    left: (viewport.width - w)/2,
-                    top: (viewport.height - h)/2,
-                    width: w,
-                    height: h,
-                });
-            }
+            var target_rect = {
+                height: viewport.height - 32,
+                width:  viewport.width  - 32
+            };
+            img.css(ui.center(ui.fit(ui.imageSize(img), target_rect), viewport));
 
             this.ui.thumbnailsWrapper.css({
-                width: (196 + 8)*3 + 2,
+                width: (196 + 8 + 4)*Math.min(3, this.count) + 2, // FIXME no magic value please !
                 margin: '0 auto'
             });
         },

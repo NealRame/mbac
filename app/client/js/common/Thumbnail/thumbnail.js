@@ -73,30 +73,10 @@ define(function(require) {
             }
             return data;
         },
-        geometry: function(image) {
-            var height, crop_height = Marionette.getOption(this, 'height');
-            var width, crop_width =  Marionette.getOption(this, 'width');
-
-            if (image) {
-                var r = image.width/image.height;
-
-                if (r > 1) {
-                    // image.width < image.height
-                    width = Math.max(crop_height*r, crop_width);
-                    height = width/r;
-                } else {
-                    //image.width >= image.height
-                    height = Math.max(crop_width/r, crop_height);
-                    width = height*r;
-                }
-            } else {
-                height = crop_height;
-                width = crop_width;
-            }
-
+        thumbnailRect: function() {
             return {
-                width: width, height: height,
-                left: (crop_width - width)/2, top: (crop_height - height)/2
+                height: Marionette.getOption(this, 'height'),
+                width:  Marionette.getOption(this, 'width')
             };
         },
         placeholder: function(type, ratio) {
