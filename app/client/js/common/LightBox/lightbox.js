@@ -6,7 +6,10 @@ define(function(require) {
     var _ = require('underscore');
     var Backbone = require('backbone');
     var Marionette = require('marionette');
+    var Promise = require('promise');
 
+    var async = require('utils/async');
+    var functional = require('utils/functional');
     var ui = require('utils/ui');
     var Thumbnail = require('Thumbnail');
     var template = require('text!common/Lightbox/lightbox.html');
@@ -22,6 +25,12 @@ define(function(require) {
         thumbnailWidth: 196,
         thumbnailMargin: 4,
         childView: Thumbnail,
+        childEvents: {
+            'ready': 'onChildReady'
+        },
+        initialize: function() {
+            this._ready = 0;
+        },
         childViewOptions: function() {
             return {
                 tagName: 'li',
@@ -39,9 +48,14 @@ define(function(require) {
 
             this.$el.width(width);
         },
+        onChildReady: function() {
+            if (++this._ready >= this.collection.length) {
+                this.trigger('ready');
+            }
+        },
         onShow: function() {
 
-        }
+        },
     });
 
     var Lightbox = Marionette.LayoutView.extend({
@@ -49,20 +63,13 @@ define(function(require) {
         thumbnailHeight: 131,
         thumbnailWidth: 196,
         thumbnailMargin: 4,
-        regions: {
-            thumbnailsWrapper: '#thumbnails-wrapper'
-        },
         ui: {
-            thumbnailsWrapper: '#thumbnails-wrapper',
-            thumbnails: '.thumbnails',
             picture: '#picture',
-            actions: '.action'
         },
         events: {
             'click': 'close',
-            'click .thumbnails > li > a': 'onThumbnailClick',
             'click @ui.picture > img': 'onPictureClick',
-            'click @ui.actions': 'onActionRequest'
+            'click @ui.picture > .error': 'onPictureClick',
         },
         template: _.template(template),
         initialize: function() {
@@ -72,44 +79,46 @@ define(function(require) {
             this.once('closed', $(window).off.bind($(window), 'resize', resize_cb));
             this.once('opened', $(window).on.bind($(window),  'keyup', keyup_cb));
             this.once('closed', $(window).off.bind($(window), 'keyup', keyup_cb));
-            this.thumbnailList = new ThumbnailList({
-                collection: this.collection,
-                thumbnailHeight: Marionette.getOption(this, 'thumbnailHeight'),
-                thumbnailWidth:  Marionette.getOption(this, 'thumbnailWidth'),
-                thumbnailMargin: Marionette.getOption(this, 'thumbnailMargin'),
-            });
-            this.listenTo(this.thumbnailList, 'childview:click', function(view) {
-                this.showPicture(view._index);
-            });
             this.count = this.collection.length;
             this.current = 0;
         },
+        image: function() {
+            try {
+                if (Math.random() > 0.5) {
+                    throw new Error();
+                }
+                var picture = this.collection.at(this.current);
+                if (functional.hasAllOfAttributes(picture, 'file')) {
+                    return async.loadImage(picture.attributes.file);
+                } else {
+                    return async.loadImage(picture.originalURL());
+                }
+            } catch (err) {
+                return Promise.reject(err);
+            }
+        },
+        error: function() {
+            return $(document.createElement('p'))
+                .addClass('error')
+                .html('Une erreur est survenue lors du chargement de l\'image!');
+        },
+        spinner: function() {
+            return $(document.createElement('i'))
+                .addClass('fa fa-spin fa-5x fa-circle-o-notch spinner');
+        },
         setGeometry: function() {
-            var viewport = {
-                width: $(window).width(),
-                height: this.$('#navigator').offset().top
-            };
+            var viewport = ui.rect(window);
 
             this.ui.picture.css(viewport);
 
             var spinner = this.ui.picture.find('i');
-            spinner.css({
-                position: 'absolute',
-                left: (viewport.width  - spinner.width())/2,
-                top:  (viewport.height - spinner.height())/2
-            });
+            spinner.css(ui.center(ui.rect(spinner), viewport));
 
             var img = this.ui.picture.find('img');
-            var target_rect = {
-                height: viewport.height - 32,
-                width:  viewport.width  - 32
-            };
-            img.css(ui.center(ui.fit(ui.imageSize(img), target_rect), viewport));
+            img.css(ui.center(ui.fit(ui.naturalRect(img), ui.scale(viewport, 0.96)), viewport));
 
-            this.ui.thumbnailsWrapper.css({
-                width: (196 + 8 + 4)*Math.min(3, this.count) + 2, // FIXME no magic value please !
-                margin: '0 auto'
-            });
+            var error = this.ui.picture.find('.error');
+            error.css(ui.center(ui.rect(error), viewport));
         },
         showNextPicture: function() {
             this.showPicture((this.current + 1) % this.count);
@@ -119,23 +128,19 @@ define(function(require) {
         },
         showPicture: function(index) {
             this.current = index;
-            this.ui.picture.empty().append(
-                $(document.createElement('i'))
-                    .addClass('fa fa-spin fa-5x fa-circle-o-notch')
-            );
+            this.ui.picture.empty().append(this.spinner());
             this.setGeometry();
-
-            var img = document.createElement('img');
-
-            img.onload = (function() {
-                this.ui.picture.empty().append($(img).css({
-                    border: '4px solid white',
-                    position: 'absolute',
-                }));
-                this.setGeometry();
-            }).bind(this);
-
-            img.src = this.collection.at(index).originalURL();
+            this.image()
+                .bind(this)
+                .then(function(image) {
+                    this.ui.picture.empty().append(image);
+                })
+                .catch(function(err) {
+                    this.ui.picture.empty().append(this.error());
+                })
+                .finally(function() {
+                    this.setGeometry();
+                });
         },
         run: function() {
             $('body').append(this.render().el);
@@ -169,12 +174,6 @@ define(function(require) {
             }
             return false;
         },
-        onThumbnailClick: function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            this.showPicture($(e.currentTarget).attr('data-index'));
-            return false;
-        },
         onPictureClick: function(e) {
             e.preventDefault();
             e.stopPropagation();
@@ -184,9 +183,6 @@ define(function(require) {
         onWindowResized: function(e) {
             this.setGeometry();
         },
-        onRender: function() {
-            this.getRegion('thumbnailsWrapper').show(this.thumbnailList);
-        }
     });
 
     Lightbox.open = function(collection) {
