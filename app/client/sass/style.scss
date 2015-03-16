@@ -157,10 +157,13 @@ body > .splash {
     bottom: 0;
     right: 0;
     z-index: 100;
-    .action {
-        &:hover {
-            color: red;
-        }
+    #rewind, #forward {
+        color: white;
+        display: none;
+        font-size: 24px;
+        position: absolute;
+        text-align: center;
+        text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
     }
     #picture {
         position: absolute;

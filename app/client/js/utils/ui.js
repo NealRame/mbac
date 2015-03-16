@@ -16,6 +16,56 @@ define(function(require) {
         );
     }
 
+    /// #### ui.hCenter(source, target)
+    /// Horizontally center the source rectangle around or into the target
+    /// rectangle.
+    ///
+    /// __Parameters:__
+    /// - `source`, the source rectangle,
+    /// - `target`, the target rectangle.
+    /// Both `source` and `target` are objects with `width` and `height`
+    /// attributes.
+    ///
+    /// __Returns:__
+    /// - An object with `left` attribute.
+    function h_center(source, target) {
+        try {
+            return _.extend(
+                source,
+                {
+                    left: (target.width  - source.width)/2,
+                }
+            );
+        } catch (err) {
+            throw new TypeError('Wrong types of parameters supplied');
+        }
+    }
+
+    /// #### ui.vCenter(source, target)
+    /// Verticaly center the source rectangle around or into the target
+    /// rectangle.
+    ///
+    /// __Parameters:__
+    /// - `source`, the source rectangle,
+    /// - `target`, the target rectangle.
+    /// Both `source` and `target` are objects with `width` and `height`
+    /// attributes.
+    ///
+    /// __Returns:__
+    /// - An object with `top` attribute.
+    function v_center(source, target) {
+        try {
+            return _.extend(
+                source,
+                {
+                    top: (target.height - source.height)/2,
+                }
+            );
+        } catch (err) {
+            throw new TypeError('Wrong types of parameters supplied');
+        }
+    }
+
     /// #### ui.center(source, target)
     /// Center the source rectangle around or into the target rectangle.
     ///
@@ -26,19 +76,9 @@ define(function(require) {
     /// attributes.
     ///
     /// __Returns:__
-    /// - An object with `width` and `height` attributes.
+    /// - An object with `left` and `top` attributes.
     function center(source, target) {
-        try {
-            return _.extend(
-                source,
-                {
-                    left: (target.width  - source.width)/2,
-                    top:  (target.height - source.height)/2,
-                }
-            );
-        } catch (err) {
-            throw new TypeError('Wrong types of parameters supplied');
-        }
+        return _.extend(h_center(source, target), v_center(source, target));
     }
 
     /// #### ui.cropFit(source, target)
@@ -169,6 +209,8 @@ define(function(require) {
     }
 
     return {
+        hCenter: h_center,
+        vCenter: v_center,
         center: center,
         cropFit: crop_fit,
         fit: fit,
