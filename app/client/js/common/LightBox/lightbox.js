@@ -73,16 +73,24 @@ define(function(require) {
             'click': 'close',
             'click @ui.picture > img': 'onPictureClick',
             'click @ui.picture > .error': 'onPictureClick',
-            'mousemove': 'onMouseMove'
+            'click @ui.arrows': 'onArrowClick'
         },
         template: _.template(template),
         initialize: function() {
             var resize_cb = this.onWindowResized.bind(this);
             var keyup_cb = this.onKeypress.bind(this);
-            this.once('opened', $(window).on.bind($(window),  'resize', resize_cb));
-            this.once('closed', $(window).off.bind($(window), 'resize', resize_cb));
-            this.once('opened', $(window).on.bind($(window),  'keyup', keyup_cb));
-            this.once('closed', $(window).off.bind($(window), 'keyup', keyup_cb));
+            var show_arrow_cb = _.debounce(this.scheduleShowNavigationArrows.bind(this), 300, true);
+
+            this.listenToOnce(this, 'opened', function() {
+                this.$el.on('mousemove', show_arrow_cb);
+                $(window).on('keyup', keyup_cb);
+                $(window).on('resize', resize_cb);
+            });
+            this.listenToOnce(this, 'closed', function() {
+                this.$el.off('mousemove', show_arrow_cb);
+                $(window).off('keyup', keyup_cb);
+                $(window).off('resize', resize_cb);
+            });
             this.count = this.collection.length;
             this.current = 0;
         },
@@ -187,40 +195,38 @@ define(function(require) {
         onWindowResized: function(e) {
             this.setGeometry();
         },
-        onMouseMove: function(e) {
-            this.scheduleShowNavigationArrows();
-        },
         scheduleHideNavigationArrows: function() {
             var fwd = this.ui.forward;
             var rwd = this.ui.rewind;
             var lightbox = this.$el;
             var timeout_id = lightbox.data('arrow-timeout-id');
+            var state = lightbox.data('arrow-state');
 
             if (timeout_id) {
                 clearTimeout(timeout_id);
             }
 
-            timeout_id = setTimeout(function() {
-                lightbox.data('arrow-state', 'pending');
-                    Promise.join(
-                        rwd.animate({
-                            left: -rwd.width(),
-                            opacity: 0,
-                        }, 250).promise(),
-                        fwd.animate({
-                            right: 0,
-                            opacity: 0,
-                        }, 250).promise()
-                    )
-                    .then(function() {
-                        lightbox
-                            .data('arrow-state', 'hidden')
-                            .removeData('arrow-timeout-id');
-                    });
-            }, 5000);
-            lightbox
-                .data('arrow-state', 'visible')
-                .data('arrow-timeout-id', timeout_id);
+            if (state === 'visible') {
+                timeout_id = setTimeout(function() {
+                    lightbox.data('arrow-state', 'pending');
+                        Promise.join(
+                            rwd.animate({
+                                left: 0,
+                                opacity: 0,
+                            }, 250).promise(),
+                            fwd.animate({
+                                right: -fwd.width(),
+                                opacity: 0,
+                            }, 250).promise()
+                        )
+                        .then(function() {
+                            lightbox
+                                .data('arrow-state', 'hidden')
+                                .removeData('arrow-timeout-id');
+                        });
+                }, 5000);
+                lightbox.data('arrow-timeout-id', timeout_id);
+            }
         },
         scheduleShowNavigationArrows: function() {
             var lightbox = this.$el;
@@ -230,11 +236,12 @@ define(function(require) {
                 var fwd = this.ui.forward;
                 var rwd = this.ui.rewind;
                 var viewport = ui.rect(lightbox);
-                var rwd_rect = ui.rect(rwd);
-                var fwd_rect = ui.rect(fwd);
 
                 lightbox.data('arrow-state', 'pending');
                 this.ui.arrows.css('display', 'block');
+
+                var rwd_rect = ui.rect(rwd);
+                var fwd_rect = ui.rect(fwd);
 
                 rwd.css(_.extend(
                     ui.vCenter(rwd_rect, viewport), {
@@ -259,7 +266,10 @@ define(function(require) {
                     }, 250).promise()
                 )
                 .bind(this)
-                .then(this.scheduleHideNavigationArrows);
+                .then(function() {
+                    lightbox.data('arrow-state', 'visible');
+                    this.scheduleHideNavigationArrows();
+                });
             } else if (state === 'visible') {
                 this.scheduleHideNavigationArrows();
             }
