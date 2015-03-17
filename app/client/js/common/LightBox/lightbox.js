@@ -170,6 +170,16 @@ define(function(require) {
                 this.trigger('closed');
             }).bind(this));
         },
+        onArrowClick: function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            if ($(e.target).attr('id') === 'forward') {
+                this.showNextPicture();
+            } else {
+                this.showPreviousPicture();
+            }
+            return false;
+        },
         onKeypress: function(e) {
             e.preventDefault();
             e.stopPropagation();
