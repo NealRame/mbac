@@ -119,7 +119,7 @@ define(function(require) {
                 .addClass('fa fa-spin fa-5x fa-circle-o-notch spinner');
         },
         setGeometry: function() {
-            var viewport = ui.rect(window);
+            var viewport = ui.rect(this.el);
 
             this.ui.picture.css(viewport);
 
@@ -131,6 +131,14 @@ define(function(require) {
 
             var error = this.ui.picture.find('.error');
             error.css(ui.center(ui.rect(error), viewport));
+
+            if (this.$el.data('arrow-state') === 'visible') {
+                var fwd = this.ui.forward;
+                var rwd = this.ui.rewind;
+
+                rwd.css(ui.vCenter(ui.rect(rwd), viewport));
+                fwd.css(ui.vCenter(ui.rect(fwd), viewport));
+            }
         },
         showNextPicture: function() {
             this.showPicture((this.current + 1) % this.count);
