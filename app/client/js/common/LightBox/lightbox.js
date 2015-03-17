@@ -96,9 +96,6 @@ define(function(require) {
         },
         image: function() {
             try {
-                if (Math.random() > 0.5) {
-                    throw new Error();
-                }
                 var picture = this.collection.at(this.current);
                 if (functional.hasAllOfAttributes(picture, 'file')) {
                     return async.loadImage(picture.attributes.file);
