@@ -64,9 +64,10 @@ define(function(require) {
         thumbnailWidth: 196,
         thumbnailMargin: 4,
         ui: {
-            picture: '#picture',
+            arrows: '#rewind,#forward',
             rewind: '#rewind',
             forward: '#forward',
+            picture: '#picture',
         },
         events: {
             'click': 'close',
@@ -122,12 +123,6 @@ define(function(require) {
 
             var error = this.ui.picture.find('.error');
             error.css(ui.center(ui.rect(error), viewport));
-
-            // var rewind = this.ui.rewind;
-            // rewind.css(_.extend(ui.vCenter(ui.rect(rewind), viewport), {left: 16}));
-            //
-            // var forward = this.ui.forward;
-            // forward.css(_.extend(ui.vCenter(ui.rect(forward), viewport), {right: 16}));
         },
         showNextPicture: function() {
             this.showPicture((this.current + 1) % this.count);
@@ -197,7 +192,7 @@ define(function(require) {
             var fwd = this.ui.forward;
             var viewport = ui.rect(this.$el);
 
-            var state = rwd.data('state') || 'hidden';
+            var state = this.$el.data('arrow-state') || 'hidden';
 
             if (state === 'hidden') {
                 $(rwd).add(fwd).css('display', 'block').data('state', 'pending');
@@ -205,37 +200,51 @@ define(function(require) {
                 var rwd_rect = ui.rect(rwd);
                 var fwd_rect = ui.rect(fwd);
 
-                rwd.css(_.extend(ui.vCenter(rwd_rect, viewport), {left: -rwd_rect.width}));
-                fwd.css(_.extend(ui.vCenter(fwd_rect, viewport), {right: -fwd_rect.width}));
+                rwd.css(_.extend(ui.vCenter(rwd_rect, viewport), {left: -rwd_rect.width, opacity: 0}));
+                fwd.css(_.extend(ui.vCenter(fwd_rect, viewport), {right: -fwd_rect.width, opacity: 0}));
 
                 Promise.join(
                     rwd.animate({
                         left: 64,
                         opacity: 1,
-                    }, 150).promise(),
+                    }, 250).promise(),
                     fwd.animate({
                         right: 64,
                         opacity: 1,
-                    }, 150).promise()
+                    }, 250).promise()
                 )
-                .then(function() {
-                    console.log('wait for 5 seconds');
-                    $(rwd).add(fwd).data('state', 'visible').delay(5000).fadeOut(function() {
-                        console.log('1. pouet pouet');
-                        $(rwd).add(fwd).data('state', 'hidden');
-                    });
-                });
+                .bind(this)
+                .then(this.scheduleHideNavigateArrows);
             } else if (state === 'visible') {
-                console.log('5 seconds more!');
-
-                $(rwd).add(fwd).clearQueue('fx').show().delay(5000).fadeOut(function() {
-                    console.log('2. pouet pouet');
-                    $(rwd).add(fwd).data('state', 'hidden');
-                });
+                this.scheduleHideNavigateArrows();
             }
 
             console.log(state);
-        }
+        },
+        scheduleHideNavigateArrows: function() {
+            var arrows = this.ui.arrows;
+            var lightbox = this.$el;
+            var timeout_id = lightbox.data('timeout-id');
+
+            if (timeout_id) {
+                clearTimeout(timeout_id);
+            }
+
+            timeout_id = setTimeout(function() {
+                arrows
+                    .data('arrow-state', 'pending')
+                    .fadeOut(function() {
+                        lightbox
+                            .data('arrow-state', 'hidden')
+                            .removeData('timeout-id');
+                    });
+            }, 5000);
+
+            lightbox
+                .data('arrow-state', 'visible')
+                .data('timeout-id', timeout_id);
+        },
+
     });
 
     Lightbox.open = function(collection) {
