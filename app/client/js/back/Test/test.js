@@ -102,7 +102,6 @@ define(function(require) {
             this.listenTo(this.picturesList, 'childview:click', function(view) {
                 var model = view.model;
                 if (functional.hasAllOfAttributes(model, 'pictures')) {
-                    console.log('pouet');
                     LightBox.open(model.pictures());
                 }
             });
