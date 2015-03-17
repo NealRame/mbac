@@ -181,6 +181,7 @@ define(function(require) {
         onArrowClick: function(e) {
             e.preventDefault();
             e.stopPropagation();
+            this.scheduleHideNavigationArrows();
             if ($(e.target).attr('id') === 'forward') {
                 this.showNextPicture();
             } else {
