@@ -77,8 +77,8 @@ define(function(require) {
         },
         template: _.template(template),
         initialize: function() {
-            var resize_cb = this.onWindowResized.bind(this);
             var keyup_cb = this.onKeypress.bind(this);
+            var resize_cb = _.debounce(this.onWindowResized.bind(this), 100);
             var show_arrow_cb = _.debounce(this.scheduleShowNavigationArrows.bind(this), 300, true);
 
             this.listenToOnce(this, 'opened', function() {
