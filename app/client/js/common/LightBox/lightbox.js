@@ -188,21 +188,66 @@ define(function(require) {
             this.setGeometry();
         },
         onMouseMove: function(e) {
-            var rwd = this.ui.rewind;
+            this.scheduleShowNavigationArrows();
+        },
+        scheduleHideNavigationArrows: function() {
             var fwd = this.ui.forward;
-            var viewport = ui.rect(this.$el);
+            var rwd = this.ui.rewind;
+            var lightbox = this.$el;
+            var timeout_id = lightbox.data('arrow-timeout-id');
 
-            var state = this.$el.data('arrow-state') || 'hidden';
+            if (timeout_id) {
+                clearTimeout(timeout_id);
+            }
+
+            timeout_id = setTimeout(function() {
+                lightbox.data('arrow-state', 'pending');
+                    Promise.join(
+                        rwd.animate({
+                            left: -rwd.width(),
+                            opacity: 0,
+                        }, 250).promise(),
+                        fwd.animate({
+                            right: 0,
+                            opacity: 0,
+                        }, 250).promise()
+                    )
+                    .then(function() {
+                        lightbox
+                            .data('arrow-state', 'hidden')
+                            .removeData('arrow-timeout-id');
+                    });
+            }, 5000);
+            lightbox
+                .data('arrow-state', 'visible')
+                .data('arrow-timeout-id', timeout_id);
+        },
+        scheduleShowNavigationArrows: function() {
+            var lightbox = this.$el;
+            var state = lightbox.data('arrow-state') || 'hidden';
 
             if (state === 'hidden') {
-                $(rwd).add(fwd).css('display', 'block').data('state', 'pending');
-
+                var fwd = this.ui.forward;
+                var rwd = this.ui.rewind;
+                var viewport = ui.rect(lightbox);
                 var rwd_rect = ui.rect(rwd);
                 var fwd_rect = ui.rect(fwd);
 
-                rwd.css(_.extend(ui.vCenter(rwd_rect, viewport), {left: -rwd_rect.width, opacity: 0}));
-                fwd.css(_.extend(ui.vCenter(fwd_rect, viewport), {right: -fwd_rect.width, opacity: 0}));
+                lightbox.data('arrow-state', 'pending');
+                this.ui.arrows.css('display', 'block');
 
+                rwd.css(_.extend(
+                    ui.vCenter(rwd_rect, viewport), {
+                        left: -rwd_rect.width,
+                        opacity: 0
+                    })
+                );
+                fwd.css(_.extend(
+                    ui.vCenter(fwd_rect, viewport), {
+                        right: -fwd_rect.width,
+                        opacity: 0
+                    })
+                );
                 Promise.join(
                     rwd.animate({
                         left: 64,
@@ -214,37 +259,11 @@ define(function(require) {
                     }, 250).promise()
                 )
                 .bind(this)
-                .then(this.scheduleHideNavigateArrows);
+                .then(this.scheduleHideNavigationArrows);
             } else if (state === 'visible') {
-                this.scheduleHideNavigateArrows();
+                this.scheduleHideNavigationArrows();
             }
-
-            console.log(state);
-        },
-        scheduleHideNavigateArrows: function() {
-            var arrows = this.ui.arrows;
-            var lightbox = this.$el;
-            var timeout_id = lightbox.data('timeout-id');
-
-            if (timeout_id) {
-                clearTimeout(timeout_id);
-            }
-
-            timeout_id = setTimeout(function() {
-                arrows
-                    .data('arrow-state', 'pending')
-                    .fadeOut(function() {
-                        lightbox
-                            .data('arrow-state', 'hidden')
-                            .removeData('timeout-id');
-                    });
-            }, 5000);
-
-            lightbox
-                .data('arrow-state', 'visible')
-                .data('timeout-id', timeout_id);
-        },
-
+        }
     });
 
     Lightbox.open = function(collection) {
