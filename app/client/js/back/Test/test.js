@@ -103,6 +103,8 @@ define(function(require) {
                 var model = view.model;
                 if (functional.hasAllOfAttributes(model, 'pictures')) {
                     LightBox.open(model.pictures());
+                } else {
+                    LightBox.open(model);
                 }
             });
             this.getRegion('content').show(this.picturesList);
