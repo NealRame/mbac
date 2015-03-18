@@ -77,9 +77,18 @@ define(function(require) {
         },
         template: _.template(template),
         initialize: function() {
+            this.count = this.collection.length;
+            this.current = 0;
+
             var keyup_cb = this.onKeypress.bind(this);
             var resize_cb = _.debounce(this.onWindowResized.bind(this), 100);
-            var show_arrow_cb = _.debounce(this.scheduleShowNavigationArrows.bind(this), 300, true);
+            var show_arrow_cb = _.debounce(
+                this.count > 1
+                    ? this.scheduleShowNavigationArrows.bind(this)
+                    : _.noop,
+                300,
+                true
+            );
 
             this.listenToOnce(this, 'opened', function() {
                 this.$el.on('mousemove', show_arrow_cb);
@@ -91,8 +100,6 @@ define(function(require) {
                 $(window).off('keyup', keyup_cb);
                 $(window).off('resize', resize_cb);
             });
-            this.count = this.collection.length;
-            this.current = 0;
         },
         image: function() {
             try {
