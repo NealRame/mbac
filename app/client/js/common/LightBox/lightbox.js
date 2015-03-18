@@ -60,9 +60,6 @@ define(function(require) {
 
     var Lightbox = Marionette.LayoutView.extend({
         className: 'lightbox',
-        thumbnailHeight: 131,
-        thumbnailWidth: 196,
-        thumbnailMargin: 4,
         ui: {
             arrows: '#rewind,#forward',
             rewind: '#rewind',
