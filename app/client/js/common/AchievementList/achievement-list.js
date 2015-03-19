@@ -18,7 +18,8 @@ define(function(require) {
         childView: Thumbnail,
         childEvents: {
             edit: 'onChildEdit',
-            remove: 'onChildRemove'
+            ready: 'onChildReady',
+            remove: 'onChildRemove',
         },
         childViewOptions: function() {
             return {
@@ -36,9 +37,17 @@ define(function(require) {
                 }
             });
         },
+        initialize: function() {
+            this.ready_ = 0;
+        },
         onChildEdit: function(view, model) {
             console.log('-- AchievementList: edit request');
             AchievementEditorDialog.open(model);
+        },
+        onChildReady: function() {
+            if (++this.ready_ >= this.collection.length) {
+                this.trigger('ready');
+            }
         },
         onChildRemove: function(view, model) {
             console.log('-- AchievementList: remove request');
