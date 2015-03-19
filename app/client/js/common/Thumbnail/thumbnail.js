@@ -10,6 +10,7 @@ define(function(require) {
     var Promise = require('promise');
 
     var functional = require('utils/functional');
+    var ui = require('utils/ui');
     var thumbnailTemplate = require('text!common/Thumbnail/thumbnail.html');
 
     var achievement_render = require('common/Thumbnail/achievement-render');
@@ -45,9 +46,6 @@ define(function(require) {
         },
         editable: false,
         removable: false,
-        height: 128,
-        width: 128,
-        margin: 2,
         initialize: function() {
             if (!_.isUndefined(this.model)) {
                 this.listenTo(this.model, 'change', this.render);
@@ -78,11 +76,11 @@ define(function(require) {
             }
             return data;
         },
-        thumbnailRect: function() {
-            return {
-                height: Marionette.getOption(this, 'height'),
-                width:  Marionette.getOption(this, 'width')
-            };
+        thumbnailInnerRect: function() {
+            return ui.rect(this.ui.crop);
+        },
+        thumbnailOuterRect: function() {
+            return ui.outerRect(this.el);
         },
         placeholder: function(type, ratio) {
             ratio = ratio || 1;
@@ -93,17 +91,16 @@ define(function(require) {
                 error: 'fa fa-exclamation-circle fa-fw',
                 unknown: 'fa fa-question-circle'
             };
-            var height = Marionette.getOption(this, 'height');
-            var width = Marionette.getOption(this, 'width');
-            var font_size = (Math.min(width, height) - 32)*ratio;
+            var rect = this.thumbnailInnerRect();
+            var font_size = (Math.min(rect.width, rect.height) - 32)*ratio;
 
             return $(document.createElement('i'))
                 .addClass([classes[type] || 'fa fa-question-circle', type].join(' '))
                 .css({
                     fontSize: font_size,
                     height: font_size,
-                    left: (width - font_size)/2,
-                    top: (height - font_size)/2,
+                    left: (rect.width - font_size)/2,
+                    top: (rect.height - font_size)/2,
                     width: font_size,
                 });
         },
@@ -124,11 +121,8 @@ define(function(require) {
             this.$('.action-bar').fadeOut(100);
             return false;
         },
-        onRender: function() {
+        onShow: function() {
             this.ui.thumbLink.empty().append(this.placeholder('spinner'));
-            this.$el.css({
-                margin: Marionette.getOption(this, 'margin')
-            });
             thumb_render.call(this, this.model)
                 .bind(this)
                 .then(function(thumbnail) {
@@ -141,6 +135,6 @@ define(function(require) {
                 .catch(function() {
                     this.ui.thumbLink.empty().append(this.placeholder('error'));
                 });
-        },
+        }
     });
 });

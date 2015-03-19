@@ -17,7 +17,8 @@ define(function(require) {
 		return async.loadImage(model.thumbnailURL())
 			.bind(this)
 			.then(function(image) {
-				var rect = this.thumbnailRect();
+				var rect = this.thumbnailInnerRect();
+				console.log(rect);
 				$(image).css(ui.center(ui.cropFit(ui.naturalRect(image), rect), rect));
 				return {
 					el: image,

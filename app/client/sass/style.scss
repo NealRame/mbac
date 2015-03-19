@@ -90,12 +90,15 @@ body > .splash {
     margin-bottom: 16px;
     overflow: auto;
     .thumb {
-        border: 2px solid white;
+        border: 4px solid white;
         float: left;
+        margin: 4px;
         position: relative;
         .crop {
             color: #ccc;
             display: block;
+            height: 128px;
+            width: 192px;
             overflow: hidden;
             position: relative;
             .thumb-link {
@@ -123,6 +126,7 @@ body > .splash {
     }
 }
 
+// Deprecated
 .achievements {
     list-style-type: none;
     overflow: auto;
