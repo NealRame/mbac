@@ -7,9 +7,16 @@ define(function(require) {
     var $ = require('jquery');
     var Backbone = require('backbone');
 
+    var functional = require('utils/functional');
+    var ui = require('utils/ui');
+
     var AchievementEditorDialog = require('AchievementEditorDialog');
     var Dialog = require('Dialog');
     var Thumbnail = require('Thumbnail');
+
+    function is_model_filterable(model) {
+        return true;
+    }
 
     return Marionette.CollectionView.extend({
         className: 'thumbnails',
@@ -39,6 +46,17 @@ define(function(require) {
         },
         initialize: function() {
             this.ready_ = 0;
+            var resize_cb = _.debounce(this.center_.bind(this), 50);
+            this.listenTo(this, 'show', function() {
+                $(window).on('resize', resize_cb);
+            });
+            this.listenTo(this, 'destroy', function() {
+                $(window).off('resize', resize_cb);
+            });
+            this.listenToOnce(this, 'childview:show', function() {
+                console.log('show a child');
+                this.center_();
+            });
         },
         onChildEdit: function(view, model) {
             console.log('-- AchievementList: edit request');
@@ -61,6 +79,24 @@ define(function(require) {
                     refuseLabel: 'Non'
                 }
             );
-        }
+        },
+        center_: function() {
+            var child = this.children.first();
+            if (child) {
+                var thumb_width = child.outerRect().width;
+                var container_width = ui.rect(this.el).width - 2;
+
+                // how many thumb can we have per row ?
+                var count = Math.floor(container_width/thumb_width);
+
+                // deduce padding to center thumb in the container view
+                var padding = (container_width - count*thumb_width)/2;
+
+                this.$el.css({
+                    'padding-left': padding,
+                    'padding-right': padding
+                });
+            }
+        },
     });
 });
