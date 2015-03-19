@@ -15,8 +15,6 @@ define(function(require) {
         className: 'thumbnails',
         tagName: 'ul',
         editable: false,
-        thumbnailHeight: 131,
-        thumbnailWidth: 196,
         childView: Thumbnail,
         childEvents: {
             edit: 'onChildEdit',
@@ -25,8 +23,6 @@ define(function(require) {
         childViewOptions: function() {
             return {
                 tagName: 'li',
-                width: Marionette.getOption(this, 'thumbnailWidth'),
-                height: Marionette.getOption(this, 'thumbnailHeight'),
                 removable: Marionette.getOption(this, 'editable'),
                 editable: Marionette.getOption(this, 'editable'),
             };
