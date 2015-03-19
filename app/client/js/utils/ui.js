@@ -185,6 +185,25 @@ define(function(require) {
         }
     }
 
+    /// #### ui.outerRect(element)
+    /// Return the outer rect of the given element.
+    /// __Parameters:__
+    /// - `element`, a dom or jquery object.
+    ///
+    /// __Returns:__
+    /// - An object with `width` and `height` attributes.
+    function outer_rect(element) {
+        try {
+            var dom_elt = $(element).get(0);
+            return {
+                height: dom_elt ? $(dom_elt).outerHeight(true) : 0,
+                width:  dom_elt ? $(dom_elt).outerWidth(true) : 0
+            };
+        } catch (err) {
+            throw new TypeError('Wrong types of parameters supplied');
+        }
+    }
+
     /// #### ui.naturalRect(element)
     /// Return the natural rectangle of the given element. If the given element
     /// is an image then it will return the rectangle of the un-resized image.
@@ -215,6 +234,7 @@ define(function(require) {
         cropFit: crop_fit,
         fit: fit,
         naturalRect: natural_rect,
+        outerRect: outer_rect,
         rect: rect,
         scale: scale,
         stickyFooter: sticky_footer,
