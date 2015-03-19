@@ -76,10 +76,10 @@ define(function(require) {
             }
             return data;
         },
-        thumbnailInnerRect: function() {
+        innerRect: function() {
             return ui.rect(this.ui.crop);
         },
-        thumbnailOuterRect: function() {
+        outerRect: function() {
             return ui.outerRect(this.el);
         },
         placeholder: function(type, ratio) {
@@ -91,7 +91,7 @@ define(function(require) {
                 error: 'fa fa-exclamation-circle fa-fw',
                 unknown: 'fa fa-question-circle'
             };
-            var rect = this.thumbnailInnerRect();
+            var rect = this.innerRect();
             var font_size = (Math.min(rect.width, rect.height) - 32)*ratio;
 
             return $(document.createElement('i'))

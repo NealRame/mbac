@@ -20,7 +20,7 @@ define(function(require) {
                 .then(function(image) {
                     var canvas = document.createElement('canvas');
                     var contex = canvas.getContext('2d');
-                    var rect = this.thumbnailInnerRect();
+                    var rect = this.innerRect();
                     var geo = ui.center(ui.cropFit(ui.naturalRect(image), rect), rect);
 
                     $(canvas)
