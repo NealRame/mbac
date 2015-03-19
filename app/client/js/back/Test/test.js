@@ -8,6 +8,7 @@ define(function(require) {
 
     var Achievement = require('Achievement');
     var AchievementEditorDialog = require('AchievementEditorDialog');
+    var AchievementList = require('AchievementList');
     var LightBox = require('LightBox');
     var Picture = require('Picture');
     var ThumbnailView = require('Thumbnail');
@@ -37,26 +38,16 @@ define(function(require) {
         collection.add(achievements.models);
     });
 
-    var PictureList = Marionette.CollectionView.extend({
-        className: 'thumbnails',
-        tagName: 'ul',
-        childView: ThumbnailView,
-        childViewOptions: {
-            tagName: 'li',
-            width: 196,
-            height: 131,
-        },
-    });
-
     var Test = Marionette.LayoutView.extend({
         template: _.template(testTemplate),
         ui: {
             addAchievementButton: '#add-achievement',
-            addPictureButton: '#add-picture'
+            addPictureButton: '#add-picture',
         },
         events: {
             'click @ui.addAchievementButton': 'onAddAchievementButtonClicked',
-            'click @ui.addPictureButton': 'onAddPictureButtonClicked'
+            'click @ui.addPictureButton': 'onAddPictureButtonClicked',
+            'click @ui.removeAllButton': 'onRemoveAllButtonClicked'
         },
         initialize: function() {
             this.filesInput = $(document.createElement('input')).attr({
@@ -87,16 +78,14 @@ define(function(require) {
         onAddPictureButtonClicked: function(e) {
             e.preventDefault();
             e.stopPropagation();
-
             this.filesInput.click();
-
             return false;
         },
         onShow: function() {
             if (!this.regions.content) {
                 this.addRegion('content', '#test-content');
             }
-            this.picturesList = new PictureList({
+            this.picturesList = new AchievementList({
                 collection: collection
             });
             this.listenTo(this.picturesList, 'childview:click', function(view) {
