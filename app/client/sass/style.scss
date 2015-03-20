@@ -112,13 +112,6 @@ body > .splash {
                     max-height: none;
                 }
             }
-            .add-thumb {
-                color: inherit;
-                position: absolute;
-                &:hover {
-                    color: #aaa;
-                }
-            }
         }
         .crop[data-empty] {
             background-color: #eee;
