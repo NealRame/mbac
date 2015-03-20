@@ -42,6 +42,9 @@
 .achievement-editor {
     border-bottom: solid 1px lightgray;
     margin-bottom: 8px;
+    .thumbnails {
+        min-height: 128px,
+    }
     #add-pictures {
         @extend .button;
         @extend .expand;
