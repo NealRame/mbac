@@ -57,8 +57,6 @@ define(function(require) {
         template: _.template(thumbnailTemplate),
         templateHelpers: function() {
             var data = {
-                height: Marionette.getOption(this, 'height'),
-                width:  Marionette.getOption(this, 'width'),
                 actions: []
             };
 
