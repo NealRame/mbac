@@ -13,50 +13,17 @@ define(function(require) {
     var Thumbnail = require('Thumbnail');
 
     var editorTemplate = require('text!back/AchievementEditorDialog/editor.html');
-    var listAddTemplate = require('text!back/AchievementEditorDialog/list-add.html');
 
     if (_.indexOf($.event.props, 'dataTransfer') < 0) {
         $.event.props.push('dataTransfer');
     }
 
-    var AddItemButton = Marionette.ItemView.extend({
-        tagName: 'li',
-        className: 'thumb',
-        ui: {
-            addButton: '.add-thumb'
-        },
-        triggers: {
-            'click @ui.addButton': 'click'
-        },
-        title: '',
-        serializeData: function() {
-            var height = this.options.height;
-            var width = this.options.width;
-            var font_size = Math.max(8, Math.min(width, height) - 32);
-            return {
-                width: width,
-                height: height,
-                fontSize: font_size,
-                left: (width - font_size)/2,
-                top: (height - font_size)/2,
-                title: Marionette.getOption(this, 'title')
-            };
-        },
-        template: _.template(listAddTemplate),
-    });
-
     var AchievementPictureList = Marionette.CollectionView.extend({
         className: 'thumbnails',
         tagName: 'ul',
-        thumbnailHeight: 131,
-        thumbnailWidth: 196,
-        childViewOptions: function() {
-            return {
-                tagName: 'li',
-                width: Marionette.getOption(this, 'thumbnailWidth'),
-                height: Marionette.getOption(this, 'thumbnailHeight'),
-                removable: true,
-            };
+        childViewOptions: {
+            tagName: 'li',
+            removable: true,
         },
         childEvents: {
             'remove': 'onPictureRemoved'
@@ -69,14 +36,6 @@ define(function(require) {
             'drop':      'onDrop'
         },
         initialize: function() {
-            this.filesInput = $(document.createElement('input')).attr({
-                accept: '.gif,.jpeg,.jpg,.png',
-                multiple: '',
-                type: 'file',
-            });
-            this.filesInput.on('change', (function(e) {
-                this.addFiles(e.target.files);
-            }).bind(this));
             this.listenTo(this.collection, 'remove', function(model, col, opt) {
                 this.trigger('remove-picture', model.attributes, opt.index);
             });
@@ -91,20 +50,6 @@ define(function(require) {
         },
         addFiles: function(files) {
             _.each(files, this.addFile, this);
-        },
-        onBeforeRender: function() {
-            if (! this.addPictureButton) {
-                this.addPictureButton = new AddItemButton(
-                    _.extend(
-                        {title: 'Ajouter une image'},
-                        this.childViewOptions()
-                    )
-                );
-                this.$el.append(this.addPictureButton.render().el);
-                this.listenTo(this.addPictureButton, 'click', function() {
-                    this.filesInput.click();
-                });
-            }
         },
         onDragEnter: function(e) {
             console.log('-- AchievementPictureList:onDragEnter');
@@ -139,62 +84,28 @@ define(function(require) {
         }
     });
 
-    var AchievementEditor = Marionette.ItemView.extend({
+    var AchievementEditor = Marionette.LayoutView.extend({
         className: 'achievement-editor',
+        regions: {
+            pictures: '#pictures',
+        },
         ui: {
             descField: '#desc',
             nameField: '#name',
             tagsField: '#tags',
+            addPictures: '#add-pictures',
             publish:   '#publish'
         },
         events: {
             'blur   @ui.descField': 'onDescriptionChanged',
             'blur   @ui.nameField': 'onNameChanged',
             'blur   @ui.tagsField': 'onTagsChanged',
+            'click  @ui.addPictures': 'onAddPicturesClick',
             'click  @ui.publish': 'onPublishClick'
         },
         template: _.template(editorTemplate),
-        onDescriptionChanged: function() {
-            console.log('-- AchievementEditor:onDescriptionChanged');
-            this.model.set('description', this.ui.descField.val());
-            return false;
-        },
-        onNameChanged: function() {
-            console.log('-- AchievementEditor:onNameChanged');
-            this.model.set('name', this.ui.nameField.val().trim());
-            return false;
-        },
-        onTagsChanged: function() {
-            console.log('-- AchievementEditor:onTagsChanged');
-            this.model.setTags(this.ui.tagsField.val().split(','));
-            this.ui.tagsField.val(this.model.tags().join(', '));
-            return false;
-        },
-        onPublishClick: function(e) {
-            console.log('-- AchievementEditor:onPublishClick');
-
-            e.preventDefault();
-            e.stopPropagation();
-
-            this.ui.publish.removeClass();
-
-            if (this.model.togglePublish().published()) {
-                this.ui.publish.addClass('unpublish-button');
-            } else {
-                this.ui.publish.addClass('publish-button');
-            }
-
-            return false;
-        },
-        onRender: function() {
-            this.ui.nameField.val(this.model.get('name'));
-            this.ui.descField.val(this.model.get('description'));
-            this.ui.tagsField.val(this.model.tags().join(', '));
-            this.ui.publish.addClass(
-                this.model.published() ? 'unpublish-button':'publish-button'
-            );
+        initialize: function() {
             this.achievementPictureList = new AchievementPictureList({
-                el: this.$('#pictures'),
                 collection: this.model.pictures()
             });
             this.listenTo(
@@ -213,7 +124,58 @@ define(function(require) {
                     this.model.removePicture(index);
                 }
             );
-            this.achievementPictureList.render();
+            this.filesInput = $(document.createElement('input')).attr({
+                accept: '.gif,.jpeg,.jpg,.png',
+                multiple: '',
+                type: 'file',
+            });
+            this.filesInput.on('change', (function(e) {
+                this.achievementPictureList.addFiles(e.target.files);
+            }).bind(this));
+        },
+        onDescriptionChanged: function() {
+            console.log('-- AchievementEditor:onDescriptionChanged');
+            this.model.set('description', this.ui.descField.val());
+            return false;
+        },
+        onNameChanged: function() {
+            console.log('-- AchievementEditor:onNameChanged');
+            this.model.set('name', this.ui.nameField.val().trim());
+            return false;
+        },
+        onTagsChanged: function() {
+            console.log('-- AchievementEditor:onTagsChanged');
+            this.model.setTags(this.ui.tagsField.val().split(','));
+            this.ui.tagsField.val(this.model.tags().join(', '));
+            return false;
+        },
+        onAddPicturesClick: function(e) {
+            console.log('-- AchievementEditor:onAddPicturesClick');
+            e.preventDefault();
+            e.stopPropagation();
+            this.filesInput.click();
+            return false;
+        },
+        onPublishClick: function(e) {
+            console.log('-- AchievementEditor:onPublishClick');
+            e.preventDefault();
+            e.stopPropagation();
+            this.ui.publish.removeClass();
+            if (this.model.togglePublish().published()) {
+                this.ui.publish.addClass('unpublish-button');
+            } else {
+                this.ui.publish.addClass('publish-button');
+            }
+            return false;
+        },
+        onRender: function() {
+            this.ui.nameField.val(this.model.get('name'));
+            this.ui.descField.val(this.model.get('description'));
+            this.ui.tagsField.val(this.model.tags().join(', '));
+            this.ui.publish.addClass(
+                this.model.published() ? 'unpublish-button':'publish-button'
+            );
+            this.getRegion('pictures').show(this.achievementPictureList);
         }
     });
 
