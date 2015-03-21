@@ -5,14 +5,12 @@
 extends layout
 
 mixin achievement-item(achievement)
-    li.achievement(data-id='#{achievement.id}')
-        figure(title='#{achievement.name}')
-            each picture, index in achievement.pictures
-                - var thmb = picture.thumbnail
-                - var orig = picture.original
-                a.th(href='/files/#{orig}')
-                    img(src='/files/#{thmb}')
-            figcaption: | #{achievement.description}
+    li.achievement
+        a.th(href='/pages/achievements/#{achievement.id}')
+            figure(title='#{achievement.name}')
+                - var picture = achievement.pictures[0].thumbnail
+                img(src='/files/#{picture}')
+                figcaption: | #{achievement.description}
 
 block content
     section.wrapper
