@@ -1,3 +1,12 @@
+/// auth.js
+/// -------
+/// - author: Neal.Rame. <contact@nealrame.com>
+/// -  date: Wed Jan 14 22:49:30 CET 2015
+///
+/// The function of the middleware _'auth'_ is to initialize authentication
+/// related local variables and provide route to handle google oauth2
+/// login and logout.
+
 var Oauth2 = require('oauth2-js');
 var User = require('models/user');
 
