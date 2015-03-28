@@ -263,7 +263,7 @@ section.wrapper {
             width: 510px;
         }
 
-        @media #{$large-only} {
+        @media #{$large-up} {
             width: 768px;
         }
 
@@ -273,7 +273,7 @@ section.wrapper {
                 font-size: 0.75em;
             }
 
-            @media #{$large-only} {
+            @media #{$large-up} {
                 width: 256px;
             }
 
