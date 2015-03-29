@@ -1,33 +1,36 @@
 var express = require('express');
-var GridFs = require('gridfs-stream');
 var mongo = require('mongoose').mongo;
 
 var router = express.Router();
 
 /* GET home page. */
 router.get('/:id', function(req, res, next) {
-    var gfs = GridFs(req.db, mongo);
+    var db = req.db;
+    var file_id = new mongo.ObjectID(req.params.id);
+    var GridStore = mongo.GridStore;
 
-    gfs.collection('fs')
-        .findOne(
-            {_id: new mongo.ObjectID(req.params.id)},
-            function(err, item) {
+    GridStore.exist(db, file_id, function(err, exist) {
+        if (err) {
+            next(err);
+        } else if (! exist) {
+            next(Object.create(
+                new Error('File not found'), {status: {value: 404}}
+            ));
+        } else {
+            var grid_store = new GridStore(db, file_id, 'r');
+
+            grid_store.open(function(err) {
                 if (err) {
-                    return next(err);
-                }
+                    next(err);
+                } else {
+                    var stream = grid_store.stream();
 
-                if (! item) {
-                    return next(Object.create(
-                            new Error('File not found'),
-                            {status: {value: 404}}
-                        )
-                    );
+                    res.type(grid_store.contentType);
+                    stream.pipe(res);
                 }
-
-                gfs.createReadStream({_id: req.params.id})
-                    .pipe(res.type('image/jpeg'));
-            }
-        );
+            });
+        }
+    });
 });
 
 module.exports = router;
