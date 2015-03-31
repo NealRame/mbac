@@ -14,7 +14,7 @@ var Store = require('mongoose-express-session-store');
 
 var app;
 
-exports.getInstance = function() {
+exports.instance = function() {
     if (app) {
         return Promise.resolve(app);
     }

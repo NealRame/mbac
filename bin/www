@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-require('app').getInstance()
+require('app').instance()
     .then(function(app) {
         var config = app.get('config');
         var debug = app.get('debug');
