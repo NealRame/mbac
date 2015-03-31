@@ -85,8 +85,6 @@ if (config.env === 'development') {
         password: process.env.DB_PASSWORD || 'test'
     });
 
-
-
     /// ## Server settings
     /// These settings are defined in the `config/server.conf.json` file.
     ///
