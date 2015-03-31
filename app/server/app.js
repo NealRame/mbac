@@ -37,8 +37,9 @@ exports.getInstance = function() {
         app.set('debug', debug);
 
         // view engine setup
-        app.set('views', path.join(__dirname, 'views'));
         app.set('view engine', 'jade');
+        app.set('views', path.join(__dirname, 'views'));
+        app.locals.basedir = app.get('views');
 
         // middleware setup
         app.use(logger('dev'));
