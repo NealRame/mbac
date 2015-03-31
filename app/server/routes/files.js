@@ -18,17 +18,12 @@ router.get('/:id', function(req, res, next) {
             ));
         } else {
             var grid_store = new GridStore(db, file_id, 'r');
+            var stream = grid_store.stream();
 
-            grid_store.open(function(err) {
-                if (err) {
-                    next(err);
-                } else {
-                    var stream = grid_store.stream();
-
-                    res.type(grid_store.contentType);
-                    stream.pipe(res);
-                }
+            res.on('pipe', function() {
+                res.type(grid_store.contentType);
             });
+            stream.pipe(res);
         }
     });
 });
