@@ -8,7 +8,29 @@ var config = require('config');
 var debug = require('debug')('mbac:pages');
 var path = require('path');
 
-function setup_page(app, name, config) {
+function get_page_controllers(name) {
+    var controllers;
+    try {
+        var controllers_path = path.join('pages', name);
+        debug(['found controllers:', controllers_path].join(' '));
+        controllers = require(controllers_path);
+    } catch (err) {
+        debug('no controllers found');
+        controllers = {};
+    }
+    return _.defaults(controllers, {
+        front: function(req, res, next) {
+            debug('default front-end page controller');
+            next();
+        },
+        back: function(req, res, next) {
+            debug('default back-end page controller');
+            next();
+        }
+    });
+}
+
+function setup_page(app, name, controller, config) {
     var page = {
         name: name,
     };
@@ -39,8 +61,13 @@ function setup_page(app, name, config) {
     }
 
     // Setup page controller
-    app.get(route, function(req, res) {
-        res.render(template, {page: page, title: page_title});
+    app.get(route, function(req, res, next) {
+        controller(res, res, function(err) {
+            if (err) {
+                return next(err);
+            }
+            res.render(template, {page: page, title: page_title});
+        });
     });
 }
 
@@ -70,8 +97,10 @@ exports.setup = function(app) {
         admin:  []
     };
     _.each(config.pages, function(page_config, name) {
+        var page_controllers = get_page_controllers(name);
+
         if (page_config.back) {
-            setup_page(app, name, _.extend(page_config.back, {
+            setup_page(app, name, page_controllers.back, _.extend(page_config.back, {
                 menu: {
                     admin: page_config.back.menu || name
                 },
@@ -80,13 +109,13 @@ exports.setup = function(app) {
             }));
         }
         if (page_config.front) {
-            setup_page(app, name, _.extend(page_config.front, {
+            setup_page(app, name, page_controllers.front, _.extend(page_config.front, {
                 prefix: '/',
                 template: 'front.jade',
             }));
         }
         if (page_config.api) {
-            setup_api(app, name, page_config.api);
+            setup_api(app, name, page_controllers.api, page_config.api);
         }
     });
 };
