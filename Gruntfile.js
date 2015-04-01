@@ -85,6 +85,10 @@ module.exports = function(grunt) {
                             ]
                         },
                         {
+                            name: 'stickyfooter/main',
+                            exclude: ['common']
+                        },
+                        {
                             name: 'front/main',
                             exclude: ['common']
                         },
@@ -101,14 +105,17 @@ module.exports = function(grunt) {
         sass: {
             compile: {
                 options: {
-                    includePaths: ['<%= sass_libs_dir %>'],
+                    includePaths: [
+                        '<%= sass_libs_dir %>/foundation',
+                        '<%= sass_libs_dir %>/font-awesome'
+                    ],
                     outputStyle: isDev() ? 'nested' : 'compressed',
                     sourceMap: isDev()
                 },
                 files: [{
                     expand: true,
                     cwd: '<%= sass_srcs_dir %>',
-                    src: ['style.scss', 'admin_style.scss'],
+                    src: ['style.scss', 'pages/home/style.scss'],
                     dest: '<%= sass_build_dir %>',
                     ext: '.css'
                 }]
@@ -128,13 +135,8 @@ module.exports = function(grunt) {
             },
             requirejs: {
                 files: [
-                    '<%= js_srcs_dir %>/common/**/*.js',
-                    '<%= js_srcs_dir %>/common/**/*.html',
-                    '<%= js_srcs_dir %>/back/**/*.js',
-                    '<%= js_srcs_dir %>/back/**/*.html',
-                    '<%= js_srcs_dir %>/front/**/*.js',
-                    '<%= js_srcs_dir %>/front/**/*.html',
-                    '<%= js_srcs_dir %>/utils/**/*.js',
+                    '<%= js_srcs_dir %>/**/*.js',
+                    '<%= js_srcs_dir %>/**/*.html',
                 ],
                 tasks: ['clean:js', 'requirejs'],
                 options: {
