@@ -58,9 +58,9 @@ exports.instance = function() {
 
         // Routes setup
         // app.use('/',      require('routes/index'));
-        // app.use('/admin', require('routes/admin'));
+        app.use('/admin', require('routes/admin'));
         // app.use('/api',   require('routes/api'));
-        // app.use('/files', require('routes/files'));
+        app.use('/files', require('routes/files'));
 
         // error handlers setup
 
