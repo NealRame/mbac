@@ -12,7 +12,7 @@ div.sticky.menu
         section.top-bar-section
             ul.right
                 each entry in menu['topbar']
-                    - var entry_class = page && entry_page === page.name ? 'active':''
+                    - var entry_class = entry_page === page.name ? 'active':''
                     - var entry_page = entry.page
                     - var entry_slug = entry.slug
                     - var entry_title = entry.title
