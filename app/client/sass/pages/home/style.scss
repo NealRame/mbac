@@ -2,6 +2,8 @@
 @import "foundation/components/block-grid";
 @import "foundation/components/forms";
 @import "foundation/components/reveal";
+@import "foundation/components/tables";
+@import "foundation/components/visibility";
 
 body > .splash {
     display: none;
@@ -9,45 +11,33 @@ body > .splash {
 
 @media #{$medium-up} {
     body > .splash {
-        display: block;
-
         background-color: $splash-background-color;
-        position: fixed;
-
+        display: block;
         height: $splash-height;
         width: 100%;
-
+        position: fixed;
         z-index: 1;
-
         .logo {
             color: white;
-
             font-size: 112pt;
-
             @media #{$large-up} {
                 font-size: 128pt;
             }
-
             font-family: 'Georgia', serif;
             font-weight: bold;
             letter-spacing: -8px;
-
             text-shadow: 1px 0px 6px white;
             text-align: center;
-
             margin-top: 96px;
-
             .italic {
                 font-style: italic;
                 font-weight: normal;
                 letter-spacing: -26px;
             }
-
             .small {
                 font-size: smaller;
             }
         }
-
         & + section {
             margin-top: $splash-height;
         }
@@ -89,11 +79,9 @@ section.wrapper {
         margin: 0 auto;
         padding: 0;
         text-align: center;
-
         @media #{$medium-only} {
             width: 510px;
         }
-
         @media #{$large-up} {
             width: 768px;
         }
@@ -118,17 +106,13 @@ section.wrapper {
             background-color: #aaa;
             border-radius: 90px;
             color: $light-gray;
-
             font-family: FontAwesome;
             font-size: 2em;
             line-height: 64px;
-
             height: 64px;
             width: 64px;
-
             margin: 8px auto;
             text-align: center;
-
             @media #{$medium-up} {
                 font-size: 4em;
                 line-height: 96px;
