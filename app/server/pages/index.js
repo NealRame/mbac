@@ -29,13 +29,13 @@ function setup_page(app, name, config) {
     });
 
     // The page custom application
-    if (config.app) {
-        page.application = path.join('pages', config.app);
+    if (config.application) {
+        page.application = path.join('pages', config.application);
     }
 
     // The page custom stylesheet
-    if (config.css) {
-        page.style = path.join('/styles', config.css);
+    if (config.stylesheet) {
+        page.stylesheet = path.join('/css/pages', config.stylesheet);
     }
 
     // Setup page controller
