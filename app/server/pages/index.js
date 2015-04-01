@@ -20,11 +20,11 @@ function setup_page(app, name, config) {
 
     // Add this page to application menus
     _.each(config.menu, function(title, type) {
-        app.locals.menu[type] = {
+        app.locals.menu[type].push({
             page: name,
             slug: route,
             title: title,
-        };
+        });
     });
 
     // The page custom application
