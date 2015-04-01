@@ -41,7 +41,7 @@ exports.instance = function() {
         app.set('views', path.join(__dirname, 'views'));
         app.locals.basedir = app.get('views');
 
-        // middleware setup
+        // Middlewares setup
         app.use(logger('dev'));
         app.use(bodyParser.json());
         app.use(bodyParser.urlencoded({extended: true}));
@@ -52,13 +52,15 @@ exports.instance = function() {
 
         require('middlewares/auth').setup(app);
         require('middlewares/db').setup(app);
-        require('middlewares/menu').setup(app);
 
-        // routes setup
-        app.use('/',      require('routes/index'));
-        app.use('/admin', require('routes/admin'));
-        app.use('/api',   require('routes/api'));
-        app.use('/files', require('routes/files'));
+        // Pages setup
+        require('pages').setup(app);
+
+        // Routes setup
+        // app.use('/',      require('routes/index'));
+        // app.use('/admin', require('routes/admin'));
+        // app.use('/api',   require('routes/api'));
+        // app.use('/files', require('routes/files'));
 
         // error handlers setup
 
