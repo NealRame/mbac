@@ -1,0 +1,105 @@
+//- front.jade
+//- ===========
+//- - author: Neal.Rame. <contact@nealrame.com>
+//- -   date: Wed Apr  1 19:58:54 CEST 2015
+extends /frontend
+block content
+    div.splash
+        p.logo
+            span.italic m
+            span B
+            span à
+            span C...
+
+    section.wrapper
+        article
+            header
+                h1: | Le rendez-vous du «Prêt-à-créer»
+            section
+                p
+                    | mon Bar à Couture est le lieu destiné aux amateurs de
+                    | loisirs creatifs. Ouvert en continu tout au long de la
+                    | semaine, il vous offre un cadre privilégié pour réaliser
+                    | tous vos projets de couture.
+
+    section.wrapper
+        article
+            header
+                h1: | Horaires d'ouverture
+            section
+                .row
+                    table.schedule
+                        tbody
+                            tr
+                                td.left Mardi
+                                td.center: hr
+                                td.right 10H - 21H
+                            tr
+                                td.left Mercredi
+                                td.center: hr
+                                td.right 10H - 18H
+                            tr
+                                td.left Jeudi
+                                td.center: hr
+                                td.right 10H - 21H
+                            tr
+                                td.left Vendredi
+                                td.center: hr
+                                td.right 10H - 21H
+                            tr
+                                td.left Samedi
+                                td.center: hr
+                                td.right 10H - 21H
+
+    section.wrapper
+        article
+            header
+                h1: | Contact
+            section
+                ul.contact
+                    li
+                        div.contact-icon.phone
+                        | 03.20.39.72.44
+                    li
+                        div.contact-icon.address
+                        | mon Bar à Couture<br>
+                        | 32, rue Mourmant<br>
+                        | 59000 Lille
+                    li
+                        div.contact-icon.e-mail
+                        a(href='mailto:contact@monbaracouture.com')
+                            | contact@monbaracouture.com
+
+        article
+            header
+                h1: | Newsletter
+            section
+                p.text-center
+                    | Abonnez-vous à la newsletter et recevez toute l'actualité
+                    | et les bon plans mon Bar à Couture.
+                    a(href="#", data-reveal-id="newsletter-modal").button.text-center
+                        | Je m'abonne !
+
+    section.wrapper.filled
+        article
+            header
+                h1: | Dernières réalisations
+            section
+                ul.small-block-grid-1.medium-block-grid-3
+                    li: img(src="/images/84191566b67168a139c3b17378add6c4.jpg")
+                    li: img(src="/images/9ccd6eca84a062668b0c08bbf2c6b75a.jpg")
+                    li: img(src="/images/f2a3742840b9331f254a696b7361e6da.jpg")
+
+    div(class="reveal-modal", id="newsletter-modal" data-reveal)
+        a.close-reveal-modal &#215;
+        form
+            fieldset
+                label
+                    | Nom
+                    input(type="text", placeholder="Votre nom")
+                label
+                    | E-mail
+                    input(type="text", placeholder="Votre adresse mail")
+
+                a(href="#").button.center
+                    | Hop !
