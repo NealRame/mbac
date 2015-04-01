@@ -8,89 +8,58 @@ var config = require('config');
 var debug = require('debug')('mbac:pages');
 var path = require('path');
 
-function fatal_error(msg) {
-    throw new Error(msg);
+function setup_page(app, name, config) {
+    var route = path.join(config.prefix, name);
+    var page = {
+        name: name,
+        template: path.join(__dirname, name, 'views', config.template),
+        title: config.title || name
+    };
+
+    debug(['Setup', route].join(' '));
+
+    // Add this page to application menus
+    _.each(config.menu, function(title, type) {
+        app.locals.menu[type] = {
+            page: name,
+            slug: route,
+            title: title,
+        };
+    });
+
+    // The page custom application
+    if (config.app) {
+        page.application = path.join('pages', config.app);
+    }
+
+    // The page custom stylesheet
+    if (config.css) {
+        page.style = path.join('/styles', config.css);
+    }
+
+    // Setup page controller
+    app.get(route, function(res, req) {
+        res.render(config.layout, {page: page});
+    });
 }
 
-function require_page(name, part) {
+function setup_api(app, name, config) {
     var module;
-    var page = path.join('pages', name, part);
+    var module_path = path.join('pages', name, 'api');
+    var route = path.join('/api', name);
+
+    debug(['Setup', route].join(' '));
+
     try {
-        module = require(page);
+        module = require(module_path);
         if (! _.isFunction(module)) {
-            fatal_error([page, 'must export a function!'].join(' '));
+            throw new Error([module_path, 'must export a function!'].join(' '));
         }
     } catch (err) {
         throw err;
     }
-    return module;
-}
 
-function setup_frontend(app, name, config) {
-    if (config) {
-        debug(['Setup front-end page:', route].join(' '));
-
-        var page = require_page(name, 'front');
-        var route = path.join('/', name);
-
-        _.each(config.menu, function(entry) {
-            app.locals.menu[entry.type].push({
-                name: entry.name,
-                page: name,
-                slug: route
-            });
-        });
-        app.get(route, function(req, res) {
-            res.locals.page = {
-                name: name
-            };
-            if (config.app) {
-                res.locals.page.application = path.join('pages', config.app);
-            }
-            if (config.css) {
-                res.locals.page.style = path.join('/styles', config.css);
-            }
-            page(req, res);
-        });
-    }
-}
-
-function setup_backend(app, name, config) {
-    if (config) {
-        debug(['Setup back-end page:', route].join(' '));
-
-        var page = require_page(name, 'back');
-        var route = path.join('/admin', name);
-
-        app.locals.menu.admin.push({
-            name: config.entry,
-            page: name,
-            slug: route
-        });
-        app.get(route, function(req, res) {
-            res.locals.page =  {
-                name: name
-            };
-            if (config.app) {
-                res.locals.page.application = path.join('pages', config.app);
-            }
-            if (config.css) {
-                res.locals.page.style = path.join('/styles', config.css);
-            }
-            page(req, res);
-        });
-    }
-}
-
-function setup_api(app, name, config) {
-    if (config) {
-        debug(['Setup api endpoints:', route].join(' '));
-
-        var api = require_page(name, 'api');
-        var route = path.join('/api', name);
-
-        app.use(route, api);
-    }
+    app.use(route, require_api(name));
 }
 
 exports.setup = function(app) {
@@ -100,8 +69,25 @@ exports.setup = function(app) {
         admin:  []
     };
     _.each(config.pages, function(page_config, name) {
-        setup_frontend(app, name, page_config.front);
-        setup_backend(app, name, page_config.back);
-        setup_api(app, name, page_config.api);
+        if (page_config.back) {
+            setup_page(app, name, _.extend(page_config.back, {
+                layout: 'backend',
+                menu: {
+                    admin: page_config.back.menu || name
+                },
+                prefix: '/admin',
+                template: 'back.jade',
+            }));
+        }
+        if (page_config.front) {
+            setup_page(app, name, _.extend(page_config.front, {
+                layout: 'frontend',
+                prefix: '/',
+                template: 'front.jade',
+            }));
+        }
+        if (page_config.api) {
+            setup_api(app, name, page_config.api);
+        }
     });
 };
