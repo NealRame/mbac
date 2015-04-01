@@ -5,10 +5,10 @@
 footer
     div.links
         ul
-            if pages['footer']
-                each page in pages['footer']
-                    - var slug = page.slug()
-                    - var title = page.title
+            if menu['footer']
+                each entry in menu['footer']
+                    - var slug = entry.slug()
+                    - var title = entry.title
                     li: a(href=slug) #{title}
     div.socials
         ul

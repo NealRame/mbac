@@ -11,15 +11,17 @@ div.sticky.menu
                 a(href="#"): span
         section.top-bar-section
             ul.right
-                if pages['top-bar']
-                    each page in pages['top-bar']
-                        - var slug = page.slug()
-                        - var title = page.title
-                        li(class=slug === path ? 'active':'')
-                            if title === 'home'
-                                a(href=slug): i.fa.fa-home
-                            else
-                                a(href=slug) #{title}
+                each entry in menu['topbar']
+                    - var entry_class = page && entry_page === page.name ? 'active':''
+                    - var entry_page = entry.page
+                    - var entry_slug = entry.slug
+                    - var entry_title = entry.title
+                    li(class=entry_class)
+                        if entry_title === 'home'
+                            a(href=entry_slug): i.fa.fa-home
+                        else
+                            a(href=entry_slug) #{entry_title}
+                            
                 if loggedIn
                     li.has-dropdown
                         a
