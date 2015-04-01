@@ -9,12 +9,13 @@ var debug = require('debug')('mbac:pages');
 var path = require('path');
 
 function setup_page(app, name, config) {
-    var route = path.join(config.prefix, name);
     var page = {
         name: name,
-        template: path.join(__dirname, name, 'views', config.template),
-        title: config.title || name
     };
+    var prefix = config.prefix;
+    var route = (name === 'home' && prefix === '/') ? '/' : path.join(prefix, name);
+    var template = path.join(__dirname, name, 'views', config.template);
+    var page_title = config.title || name;
 
     debug(['Setup', route].join(' '));
 
@@ -38,8 +39,8 @@ function setup_page(app, name, config) {
     }
 
     // Setup page controller
-    app.get(route, function(res, req) {
-        res.render(config.layout, {page: page});
+    app.get(route, function(req, res) {
+        res.render(template, {page: page, title: page_title});
     });
 }
 
@@ -64,14 +65,13 @@ function setup_api(app, name, config) {
 
 exports.setup = function(app) {
     app.locals.menu = {
-        navbar: [],
+        topbar: [],
         footer: [],
         admin:  []
     };
     _.each(config.pages, function(page_config, name) {
         if (page_config.back) {
             setup_page(app, name, _.extend(page_config.back, {
-                layout: 'backend',
                 menu: {
                     admin: page_config.back.menu || name
                 },
@@ -81,7 +81,6 @@ exports.setup = function(app) {
         }
         if (page_config.front) {
             setup_page(app, name, _.extend(page_config.front, {
-                layout: 'frontend',
                 prefix: '/',
                 template: 'front.jade',
             }));
