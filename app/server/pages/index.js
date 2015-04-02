@@ -12,19 +12,19 @@ function get_page_controllers(name) {
     var controllers;
     try {
         var controllers_path = path.join('pages', name);
-        debug(['found controllers:', controllers_path].join(' '));
         controllers = require(controllers_path);
+        debug(['Try to load custom controllers:', controllers_path].join(' '));
     } catch (err) {
-        debug('no controllers found');
+        debug('No custom controllers found.');
         controllers = {};
     }
     return _.defaults(controllers, {
         front: function(req, res, next) {
-            debug('default front-end page controller');
+            debug('Default front-end page controller.');
             next();
         },
         back: function(req, res, next) {
-            debug('default back-end page controller');
+            debug('Default back-end page controller.');
             next();
         }
     });
