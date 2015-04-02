@@ -53,14 +53,13 @@ exports.instance = function() {
         require('middlewares/auth').setup(app);
         require('middlewares/db').setup(app);
 
-        // Pages setup
-        require('pages').setup(app);
-
         // Routes setup
-        // app.use('/',      require('routes/index'));
         app.use('/admin', require('routes/admin'));
         // app.use('/api',   require('routes/api'));
-        app.use('/files', require('routes/files'));
+        // app.use('/files', require('routes/files'));
+
+        // Pages setup
+        require('pages').setup(app);
 
         // error handlers setup
 
