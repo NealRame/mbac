@@ -11,9 +11,8 @@ var router = express.Router();
 router
     .get('/', function(req, res) {
         res.render('admin', {
-            app:   'back/main',
-            css:   '/css/admin_style.css',
-            title: 'mon Bar à Couture - l\'arrière boutique'
+            title: 'mon Bar à Couture - l\'arrière boutique',
+            page: {name: 'error'}
         });
     });
 

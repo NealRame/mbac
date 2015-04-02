@@ -1,4 +1,4 @@
-//- index.jade
+//- admin.jade
 //- ==========
 //- - author: Neal.Rame. <contact@nealrame.com>
 //- -   date: Thu Jul 10 00:00:00 CEST 2014
@@ -16,5 +16,7 @@ block content
                         a(href="#{loginLink}").button.text-center
                             | Login
     else
-        #dashboard
-    
+        
+        aside
+            | Will hold admin page menu.
+        block admin_content
