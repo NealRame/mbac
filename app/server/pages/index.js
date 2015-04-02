@@ -13,9 +13,9 @@ function get_page_controllers(name) {
     try {
         var controllers_path = path.join('pages', name);
         controllers = require(controllers_path);
-        debug(['Try to load custom controllers:', controllers_path].join(' '));
+        debug(['- custom controllers:', controllers_path].join(' '));
     } catch (err) {
-        debug('No custom controllers found.');
+        debug('- no custom controllers found.');
         controllers = {};
     }
     return _.defaults(controllers, {
@@ -39,7 +39,7 @@ function setup_page(app, name, controller, config) {
     var template = path.join(__dirname, name, 'views', config.template);
     var page_title = config.title || name;
 
-    debug(['Setup', route].join(' '));
+    debug(['- initialize route', route].join(' '));
 
     // Add this page to application menus
     _.each(config.menu, function(title, type) {
@@ -97,6 +97,8 @@ exports.setup = function(app) {
         admin:  []
     };
     _.each(config.pages, function(page_config, name) {
+        debug(['Setup page', name].join(' '));
+
         var page_controllers = get_page_controllers(name);
 
         if (page_config.back) {
