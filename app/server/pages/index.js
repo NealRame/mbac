@@ -18,16 +18,7 @@ function get_page_controllers(name) {
         debug('- no custom controllers found.');
         controllers = {};
     }
-    return _.defaults(controllers, {
-        front: function(req, res, next) {
-            debug('Default front-end page controller.');
-            next();
-        },
-        back: function(req, res, next) {
-            debug('Default back-end page controller.');
-            next();
-        }
-    });
+    return controllers;
 }
 
 function setup_page(app, name, controller, config) {
@@ -61,14 +52,13 @@ function setup_page(app, name, controller, config) {
     }
 
     // Setup page controller
-    app.get(route, function(req, res, next) {
-        controller(res, res, function(err) {
-            if (err) {
-                return next(err);
-            }
+    if (controller) {
+        app.use(route, controller);
+    } else {
+        app.get(route, function(req, res) {
             res.render(template, {page: page, title: page_title});
         });
-    });
+    }
 }
 
 function setup_api(app, name, config) {
