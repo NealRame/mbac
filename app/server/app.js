@@ -49,6 +49,10 @@ exports.instance = function() {
         app.use(session({store: new Store(), secret: 'IL0veK4t', proxy: true, resave: true, saveUninitialized: true}));
         app.use(serveFavicon(path.join(__dirname, '..', '..', 'public', 'mbac.ico')));
         app.use(serveStatic(path.join(__dirname, '..', '..', 'public')));
+        app.use('/api', function(req, res, next) {
+            req.api = true;
+            next();
+        });
 
         require('middlewares/auth').setup(app);
         require('middlewares/db').setup(app);
