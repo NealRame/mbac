@@ -162,7 +162,7 @@ module.exports = {
             next(is_authorized(res) ? null : error_401(message));
         };
     },
-    /// ### helpers.forbidden(message)
+    /// #### helpers.forbidden(message)
     /// Returns a middleware function aimed at terminate a request with a 403
     /// error status and the specified message.
     ///
@@ -173,7 +173,7 @@ module.exports = {
             next(error_403(message));
         };
     },
-    /// ### helpers.notFound(message)
+    /// #### helpers.notFound(message)
     /// Returns a middleware function aimed at terminate a request with a 404
     /// error status and the specified message.
     ///
