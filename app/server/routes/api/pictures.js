@@ -6,7 +6,7 @@
 var _ = require('underscore');
 var express = require('express');
 var formidableGrid = require('formidable-grid');
-var helpers = require('routes/api/_helpers');
+var helpers = require('helpers');
 var GridFs = require('gridfs-stream');
 var inspect = require('util').inspect;
 var mongoose = require('mongoose');
@@ -46,6 +46,7 @@ router
                 .then(res.send.bind(res))
                 .then(null, next);
         })
+        .use(helpers.authenticationChecker())
         .post(function(req, res, next) {
             parse_picture_data(req)
                 .then(function(data) {
@@ -61,7 +62,7 @@ router
         Picture
             .findById(id)
             .exec()
-            .then(helpers.assertIsDefined)
+            .then(helpers.valueChecker(helpers.error404))
             .then(function(picture) {
                 req.picture = picture;
                 next();
