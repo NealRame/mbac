@@ -39,7 +39,13 @@ exports.instance = function() {
         // view engine setup
         app.set('view engine', 'jade');
         app.set('views', path.join(__dirname, 'views'));
+
         app.locals.basedir = app.get('views');
+        app.locals.menu = {
+            topbar: [],
+            footer: [],
+            admin:  []
+        };
 
         // Middlewares setup
         app.use(logger('dev'));

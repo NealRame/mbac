@@ -81,11 +81,6 @@ function setup_api(app, name, config) {
 }
 
 exports.setup = function(app) {
-    app.locals.menu = {
-        topbar: [],
-        footer: [],
-        admin:  []
-    };
     _.each(config.pages, function(page_config, name) {
         debug(['Setup page', name].join(' '));
 
