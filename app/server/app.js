@@ -65,7 +65,7 @@ exports.instance = function() {
 
         // Routes setup
         app.use('/admin', require('routes/admin'));
-        // app.use('/api',   require('routes/api'));
+        app.use('/api',   require('routes/api'));
         app.use('/files', require('routes/files'));
 
         // Pages setup
