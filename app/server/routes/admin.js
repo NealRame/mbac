@@ -12,7 +12,7 @@ router
     .get('/', function(req, res) {
         res.render('admin', {
             title: 'mon Bar à Couture - l\'arrière boutique',
-            page: {name: 'error'}
+            page: {name: 'admin'}
         });
     });
 
