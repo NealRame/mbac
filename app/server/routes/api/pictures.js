@@ -40,24 +40,6 @@ function parse_picture_data(req) {
 }
 
 router
-    .route('/')
-        .get(function(req, res, next) {
-            Picture.find().exec()
-                .then(res.send.bind(res))
-                .then(null, next);
-        })
-        .use(helpers.authenticationChecker())
-        .post(function(req, res, next) {
-            parse_picture_data(req)
-                .then(function(data) {
-                    return Picture.create(data);
-                })
-                .then(res.send.bind(res))
-                .then(null, next);
-        })
-        .all(helpers.forbidden());
-
-router
     .param('id', function(req, res, next, id) {
         Picture
             .findById(id)
@@ -68,16 +50,43 @@ router
                 next();
             })
             .then(null, next);
-    })
+    });
+
+router
+    .route('/')
+    .get(function(req, res, next) {
+        Picture.find().exec()
+            .then(res.send.bind(res))
+            .then(null, next);
+    });
+
+router
     .route('/:id')
-        .get(function(req, res) {
-            res.send(req.picture);
-        })
-        .delete(function(req, res, next) {
-            req.picture.destroy()
-                .then(res.sendStatus.bind(res, 200))
-                .then(null, next);
-        })
-        .all(helpers.forbidden());
+    .get(function(req, res, next) {
+        res.send(req.picture);
+    });
+
+router.use(helpers.authenticationChecker());
+
+router
+    .route('/')
+    .post(function(req, res, next) {
+        parse_picture_data(req)
+            .then(function(data) {
+                return Picture.create(data);
+            })
+            .then(res.send.bind(res))
+            .then(null, next);
+    })
+    .all(helpers.forbidden());
+
+router
+    .route('/:id')
+    .delete(function(req, res, next) {
+        req.picture.destroy()
+            .then(res.sendStatus.bind(res, 200))
+            .then(null, next);
+    })
+    .all(helpers.forbidden());
 
 module.exports = router;
