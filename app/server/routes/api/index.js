@@ -10,7 +10,6 @@ router.use(function(req, res, next) {
     req.api = true;
     next();
 });
-
 router.use('/pictures', require('routes/api/pictures'));
 
 module.exports = router;
