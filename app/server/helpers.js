@@ -177,7 +177,7 @@ module.exports = {
     ///
     /// __Returns:__
     /// - `Function(req, res, next)`
-    authenticated: function(message) {
+    authenticationChecker: function(message) {
         return function(req, res, next) {
             next(is_authorized(res) ? null : error_401(message));
         };
