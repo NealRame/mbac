@@ -179,7 +179,7 @@ module.exports = {
     /// - `Function(req, res, next)`
     authenticationChecker: function(message) {
         return function(req, res, next) {
-            next(is_authorized(res) ? null : error_401(message));
+            next(is_authenticated(res) ? null : error_401(message));
         };
     },
     /// #### helpers.forbidden(message)
