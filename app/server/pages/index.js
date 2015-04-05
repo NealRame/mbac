@@ -11,7 +11,7 @@ var path = require('path');
 function get_page_controllers(name) {
     var controllers;
     try {
-        var controllers_path = path.join('pages', name);
+        var controllers_path = path.join(__dirname, name);
         controllers = require(controllers_path);
         debug(['- custom controllers:', controllers_path].join(' '));
     } catch (err) {
@@ -51,22 +51,34 @@ function setup_page(app, name, controller, config) {
         page.stylesheet = path.join('/css/pages', config.stylesheet);
     }
 
+    var locals = {
+        page: page,
+        title: page_title
+    };
+
     // Setup page controller
     if (controller) {
+        debug('  - setup custom controller', route);
+        app.use(route, function(req, res, next) {
+            _.extend(res.locals, locals);
+            next();
+        });
         app.use(route, controller);
     } else {
+        debug('  - setup default controller');
         app.get(route, function(req, res) {
-            res.render(template, {page: page, title: page_title});
+            _.extend(res.locals, locals);
+            res.render(template);
         });
     }
 }
 
-function setup_api(app, name, config) {
+function setup_api(app, name, controller) {
     var module;
     var module_path = path.join('pages', name, 'api');
     var route = path.join('/api', name);
 
-    debug(['Setup', route].join(' '));
+    debug(['- initialize api', route].join(' '));
 
     try {
         module = require(module_path);
@@ -74,10 +86,11 @@ function setup_api(app, name, config) {
             throw new Error([module_path, 'must export a function!'].join(' '));
         }
     } catch (err) {
+        debug(err);
         throw err;
     }
 
-    app.use(route, require_api(name));
+    app.use(route, controller);
 }
 
 exports.setup = function(app) {
@@ -85,7 +98,6 @@ exports.setup = function(app) {
         debug(['Setup page', name].join(' '));
 
         var page_controllers = get_page_controllers(name);
-
         if (page_config.back) {
             setup_page(app, name, page_controllers.back, _.extend(page_config.back, {
                 menu: {
@@ -101,8 +113,8 @@ exports.setup = function(app) {
                 template: 'front.jade',
             }));
         }
-        if (page_config.api) {
-            setup_api(app, name, page_controllers.api, page_config.api);
+        if (page_controllers.api) {
+            setup_api(app, name, page_controllers.api);
         }
     });
 };
