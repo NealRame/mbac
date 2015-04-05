@@ -10,7 +10,7 @@ router.use(function(req, res, next) {
     req.api = true;
     next();
 });
-router.use('/achievements', require('routes/api/achievements'));
+
 router.use('/pictures', require('routes/api/pictures'));
 
 module.exports = router;
