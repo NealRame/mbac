@@ -44,7 +44,7 @@ function is_authenticated(res) {
 }
 
 function value(value) {
-    return _.result({value: value}, 'value'};
+    return _.result({value: value}, 'value');
 }
 
 module.exports = {
