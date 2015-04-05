@@ -43,6 +43,10 @@ function is_authenticated(res) {
     return res.locals.loggedIn;
 }
 
+function value(value) {
+    return _.result({value: value}, 'value'};
+}
+
 module.exports = {
     /// #### helpers.error401([message])
     /// Create a 401 error with the given message. The error is returned as a
@@ -124,6 +128,16 @@ module.exports = {
     throw500: function(err) {
         throw error_500(err);
     },
+    /// #### helpers.value(v)
+    /// If the given value is a function return the value of the invocation,
+    /// otherwise return the given value.
+    ///
+    /// __Parameters:__
+    /// - `value`, a value or a function.
+    ///
+    /// __Returns:__
+    /// - `value` or `value()`.
+    value: value,
     /// #### helpers.checkValue(value)
     /// Returns a promise fulfilled or rejected if given value is defined or
     /// not.
@@ -133,8 +147,14 @@ module.exports = {
     ///
     /// __Returns:__
     /// - `Promise`.
-    checkValue: function(value) {
-        return (value == undefined) ? Promise.reject(error_404) : Promise.resolve(value);
+    valueChecker: function(fallback) {
+        var fallback_value = value(fallback);
+        return function(value)  {
+            if (value == undefined) {
+                return fallback_value;
+            }
+            return Promise.resolve(value);
+        };
     },
     /// #### helpers.isAuthorized(res)
     /// Returns true if and only if the current request has been marked as
