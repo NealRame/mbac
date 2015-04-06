@@ -84,13 +84,13 @@ PictureSchema.virtual('ratio').get(function() {
 /// #### `Picture#originalPath()`
 /// Returns the path of the original picture files.
 PictureSchema.methods.originalPath = function() {
-    return path.join('/', this.prefix, this.original);
+    return path.join('/', this.prefix, this.original.toString());
 };
 
 /// #### `Picture#thumbnailPath()`
 /// Returns the path of the thumbnail picture files.
 PictureSchema.methods.thumbnailPath = function() {
-    return path.join('/', this.prefix, this.thumbnail);
+    return path.join('/', this.prefix, this.thumbnail.toString());
 };
 
 /// #### `Picture#destroy([cb])`
