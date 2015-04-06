@@ -14,7 +14,6 @@
 }
 
 .menu {
-    // border-bottom: 2px solid $light-gray;
     .top-bar {
         h1 {
             font-family: 'Georgia', serif;
@@ -22,14 +21,12 @@
             font-weight: bold;
             text-shadow: 1px 0px 6px white;
         }
-
         img.user-picture {
             @extend .show-for-medium-up;
             height: $topbar-height - 8px;
             width: $topbar-height - 8px;
             margin: 4px;
         }
-
         span.user-name {
             @extend .show-for-small;
         }
@@ -109,17 +106,12 @@ section.wrapper {
     position: relative;
     -webkit-transform: translate3d(0,0,0);
     z-index: 2;
-
     & > article {
         margin: 32px;
-
         @media #{$large-up} {
             margin: 32px auto;
             width: #{upper-bound($medium-range)};
         }
-
-        // overflow: auto;
-
         & > header {
             margin: 16px 0;
             h1 {
@@ -130,12 +122,10 @@ section.wrapper {
                 font-weight: bold;
             }
         }
-
         & > section {
             margin: 0 32px;
         }
     }
-
     &.filled {
         background-color: $black;
         color: $light-gray;
@@ -144,36 +134,29 @@ section.wrapper {
             color: $light-gray;
         }
     }
-
     overflow: auto;
 }
 
 footer {
     background-color: #C14735;
     color: white;
-
     clear: both;
     margin: 0;
     padding: 0;
-
     width: 100%;
-
     text-align: center;
-
     a {
         color: inherit;
         &:hover {
             color: #282828;
         }
     }
-
     ul {
         list-style-type: none;
         padding: 0;
         margin: 0;
         li { display: inline; }
     }
-
     .links {
         background-color: #BF2F1A;
         a  { font-size: x-small; }
@@ -183,13 +166,11 @@ footer {
             content: "-"; // &#x2013;
         }
     }
-
     .socials {
         margin: 0 auto;
         a  { font-size: xx-large; }
         li { margin: .25em; }
     }
-
     .copyright {
         font-size: x-small;
         margin: 0 auto;
