@@ -1,0 +1,20 @@
+//- achievement.jade
+//- =================
+//- - author: Neal.Rame. <contact@nealrame.com>
+//- -   date: Mon Apr  6 11:14:20 2015
+extends /layout
+
+mixin picture-item(picture)
+    li.thumb: .crop: a(href=picture.originalPath())
+        img(src=picture.thumbnailPath())
+
+block content
+    section.wrapper
+        article
+            header
+                h1: | #{achievement.name}
+            section
+                p: | #{achievement.description}
+                ul.thumbnails
+                    each picture in achievement.pictures
+                        +picture-item(picture)
