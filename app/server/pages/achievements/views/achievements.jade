@@ -1,0 +1,22 @@
+//- realisations.jade
+//- =================
+//- - author: Neal.Rame. <contact@nealrame.com>
+//- -   date: Thu Jan 15 21:43:37 CET 2015
+extends /layout
+
+mixin achievement-item(achievement)
+    li.achievement
+        a.th(href='/achievements/#{achievement.id}')
+            figure(title='#{achievement.name}')
+                - var thumbnail = achievement.pictures[0].thumbnailPath()
+                img(src='#{thumbnail}')
+
+block content
+    section.wrapper
+        article
+            header: h1
+                | Réalisations des clients de mon Bar à Couture
+
+            ul.achievements
+                each achievement in achievements
+                    +achievement-item(achievement)

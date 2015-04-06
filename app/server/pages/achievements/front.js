@@ -11,14 +11,14 @@ var path = require('path');
 var Achievement = require(path.join(__dirname, 'models', 'achievement'));
 var router = express.Router();
 
-var template = path.join(__dirname, 'views', 'front.jade');
+var list_template = path.join(__dirname, 'views', 'achievements.jade');
 
 router
     // GET achievements page.
     .get('/', function(req, res, next) {
         Achievement.published()
             .then(function(achievements) {
-                res.render(template, {achievements: achievements});
+                res.render(list_template, {achievements: achievements});
             })
             .then(null, function(err) {
                 next(err);
