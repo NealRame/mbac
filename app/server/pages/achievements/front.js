@@ -20,9 +20,6 @@ router
             .then(function(achievements) {
                 res.render(list_template, {achievements: achievements});
             })
-            .then(null, function(err) {
-                next(err);
-            });
     });
 
 module.exports = router;
