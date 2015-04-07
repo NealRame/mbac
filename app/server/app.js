@@ -32,14 +32,15 @@ exports.instance = function() {
 
         app = express();
 
-        // configuration setup
+        // Configuration setup
         app.set('config', config);
         app.set('debug', debug);
 
-        // view engine setup
+        // View engine setup
         app.set('view engine', 'jade');
         app.set('views', path.join(__dirname, 'views'));
 
+        // Application locals setup
         app.locals.basedir = app.get('views');
         app.locals.menu = {
             topbar: [],
@@ -71,16 +72,16 @@ exports.instance = function() {
         // Pages setup
         require('pages').setup(app);
 
-        // error handlers setup
+        // Error handlers setup
 
-        // catch 404 and forward to error handler
+        // - catch 404 and forward to error handler
         app.use(function(req, res, next) {
             var err = new Error('Not Found');
             err.status = 404;
             next(err);
         });
 
-        // development env will print stacktrace
+        // - development env will print stacktrace
         app.use(function(err, req, res, next) {
             var error = _.defaults(
                 _.pick(err, 'message', 'status'),
