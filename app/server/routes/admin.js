@@ -10,9 +10,13 @@ var router = express.Router();
 /* GET admin page. */
 router
     .get('/', function(req, res) {
+        res.locals.page = {stylesheet: '/css/admin_style.css'};
         res.render('admin', {
             title: 'mon Bar à Couture - l\'arrière boutique',
-            page: {name: 'admin'}
+            page: {
+                name: 'admin',
+                stylesheets: ['/css/admin_style.css']
+            }
         });
     });
 

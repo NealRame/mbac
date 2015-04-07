@@ -100,7 +100,13 @@ exports.instance = function() {
             if (req.api) {
                 res.send(error);
             } else {
-                res.render('error', {error: error, page: {name: 'error'}});
+                res.render('error', {
+                    error: error,
+                    page: {
+                        name: 'error',
+                        stylesheets: ['/css/style.css']
+                    }
+                });
             }
         });
 

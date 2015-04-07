@@ -47,8 +47,10 @@ function setup_page(app, name, controller, config) {
     }
 
     // The page custom stylesheet
-    if (config.stylesheet) {
-        page.stylesheet = path.join('/css/pages', config.stylesheet);
+    if (config.stylesheets) {
+        page.stylesheets = _.map(config.stylesheets, function(style_path) {
+            return path.join('/css', style_path);
+        });
     }
 
     var locals = {
@@ -104,12 +106,18 @@ exports.setup = function(app) {
                     admin: page_config.back.menu || name
                 },
                 prefix: '/admin',
+                stylesheets: [
+                    'admin_style.css',
+                ].concat(page_config.stylesheets || []),
                 template: 'back.jade',
             }));
         }
         if (page_config.front) {
             setup_page(app, name, page_controllers.front, _.extend(page_config.front, {
                 prefix: '/',
+                stylesheets: [
+                    'style.css',
+                ].concat(page_config.stylesheets || []),
                 template: 'front.jade',
             }));
         }
