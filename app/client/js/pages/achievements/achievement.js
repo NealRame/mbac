@@ -48,7 +48,7 @@ define(function(require) {
             return this.set({published: ! this.published()});
         },
         pageURL: function() {
-            return '/pages/achievements/' + this.attributes._id;
+            return '/achievements/' + this.attributes._id;
         },
         picture: function(index) {
             return create_model(this.get('pictures')[index || 0]);

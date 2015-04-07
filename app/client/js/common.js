@@ -11,8 +11,6 @@ requirejs.config({
         'text': 'libs/text',
         'underscore': 'libs/underscore',
 
-        'Achievement': 'common/Achievement/achievement',
-        'AchievementList': 'common/AchievementList/achievement-list',
         'Dialog': 'common/Dialog/dialog',
         'LightBox': 'common/LightBox/lightbox',
         'Picture': 'common/Picture/picture',
@@ -22,7 +20,6 @@ requirejs.config({
         'AchievementEditorDialog': 'back/AchievementEditorDialog/editor',
         'Configuration': 'back/Configuration/configuration',
         'Dashboard': 'back/dashboard',
-        'Gallery': 'back/Gallery/gallery',
 
         'Test': 'back/Test/test',
     },

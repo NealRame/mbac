@@ -119,7 +119,7 @@ define(function(require) {
             this.$('.action-bar').fadeOut(100);
             return false;
         },
-        onShow: function() {
+        onRender: function() {
             this.ui.thumbLink.empty().append(this.placeholder('spinner'));
             thumb_render.call(this, this.model)
                 .bind(this)

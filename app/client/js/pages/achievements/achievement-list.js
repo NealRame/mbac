@@ -10,7 +10,7 @@ define(function(require) {
     var functional = require('utils/functional');
     var ui = require('utils/ui');
 
-    var AchievementEditorDialog = require('AchievementEditorDialog');
+    // var AchievementEditorDialog = require('AchievementEditorDialog');
     var Dialog = require('Dialog');
     var Thumbnail = require('Thumbnail');
 
@@ -60,7 +60,7 @@ define(function(require) {
         },
         onChildEdit: function(view, model) {
             console.log('-- AchievementList: edit request');
-            AchievementEditorDialog.open(model);
+            // AchievementEditorDialog.open(model);
         },
         onChildReady: function() {
             if (++this.ready_ >= this.collection.length) {
@@ -98,5 +98,8 @@ define(function(require) {
                 });
             }
         },
+        onRender: function() {
+            console.log('-- AchievementList::rendered!');
+        }
     });
 });

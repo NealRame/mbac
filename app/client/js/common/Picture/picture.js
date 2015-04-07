@@ -12,7 +12,7 @@ define(function(require) {
             return this.get('date');
         },
         prefix: function() {
-            return this.get('prefix');
+            return '/' + this.get('prefix');
         },
         originalURL: function() {
             return this.prefix() + '/' + this.get('original');

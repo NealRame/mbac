@@ -20,6 +20,9 @@ block content
         aside#admin-nav
             ul.side-nav
                 each entry in menu['admin']
-                    li: a(href="#{entry.slug}"): | #{entry.title}
+                    if href=entry.page !== page.name
+                        li: a(href='#{entry.slug}'): | #{entry.title}
+                    else
+                        li.active: a: | #{entry.title}
         
         block admin_content
