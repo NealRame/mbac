@@ -16,7 +16,6 @@ define(function(require) {
         url: '/api/achievements'
     }))();
 
-
     var achievementsList = new AchievementList({
         el: $('#achievements').get(0),
         collection: achievements,
