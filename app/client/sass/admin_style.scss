@@ -1,7 +1,7 @@
 @import "style";
+@import "foundation/components/icon-bar";
 
 // Gallery widget /////////////////////////////////////////////////////////////
-
 .action-bar {
     background-color: rgba(0, 0, 0, 0.5);
     position: absolute;
@@ -73,7 +73,6 @@
 }
 
 // Tabbed panels widget ///////////////////////////////////////////////////////
-
 .tab-bar > .items {
     @include icon-bar(
         // Set the background color of the icon bar.
@@ -119,4 +118,10 @@
     &.four-up  > .item { width: 25%; }
     &.five-up  > .item { width: 20%; }
     &.six-up   > .item { width: 16.6666%; }
+}
+
+// Admin menu /////////////////////////////////////////////////////////////////
+aside#admin-nav {
+    width: 256px;
+    float: left;
 }

@@ -17,7 +17,7 @@ block content
                         a(href="#{loginLink}").button.text-center: | Login
     else
         
-        aside.admin-nav
+        aside#admin-nav
             ul.side-nav
                 each entry in menu['admin']
                     li: a(href="#{entry.slug}"): | #{entry.title}
