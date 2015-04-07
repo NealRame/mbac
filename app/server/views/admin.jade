@@ -12,11 +12,14 @@ block content
                 section
                     p.text-center
                         | Vous devez d'abord vous authentifier avant de pouvoir
-                        | continuer:<br>
-                        a(href="#{loginLink}").button.text-center
-                            | Login
+                        | continuer:
+                        br
+                        a(href="#{loginLink}").button.text-center: | Login
     else
         
-        aside
-            | Will hold admin page menu.
+        aside.admin-nav
+            ul.side-nav
+                each entry in menu['admin']
+                    li: a(href="#{entry.slug}"): | #{entry.title}
+        
         block admin_content
