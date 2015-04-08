@@ -4,26 +4,32 @@ define(function(require) {
     var Backbone = require('backbone');
 
     var Achievement = require('pages/achievements/achievement');
-    // var AchievementEditorDialog = require('pages/achievements/editor');
+    var AchievementEditorDialog = require('pages/achievements/editor');
     var AchievementList = require('pages/achievements/achievement-list');
     var AchievementMenu = require('pages/achievements/menu');
 
     console.log('-- achievements: admin app!');
 
+    var channel = Backbone.Wreqr.radio.channel('global');
+
     var achievements = new (Backbone.Collection.extend({
         model: Achievement,
         url: '/api/achievements'
     }))();
-
-    var achievementMenu = new AchievementMenu();
-
-    $('#achievements-menu').append(achievementMenu.render().el);
-
+    var achievementMenu = new AchievementMenu({
+        collection: achievements,
+    });
     var achievementsList = new AchievementList({
         el: $('#achievements').get(0),
         collection: achievements,
         editable: true
     });
+
+    achievements.on('add', function(achievement) {
+        AchievementEditorDialog.open(achievement);
+    });
+
+    $('#achievements-menu').append(achievementMenu.render().el);
 
     achievements.fetch({reset: true});
     achievementsList.render();
