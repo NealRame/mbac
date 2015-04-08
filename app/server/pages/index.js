@@ -8,6 +8,16 @@ var config = require('config');
 var debug = require('debug')('mbac:pages');
 var path = require('path');
 
+function prefix(path_prefix, paths) {
+    if (_.isString(paths)) {
+        return path.join(path_prefix, paths);
+    }
+    if (_.isArray(paths)) {
+        return _.map(paths, prefix.bind(null, path_prefix));
+    }
+    throw new TypeError('Wrong type of argument!');
+}
+
 function get_page_controllers(name) {
     var controllers;
     try {
@@ -25,8 +35,7 @@ function setup_page(app, name, controller, config) {
     var page = {
         name: name,
     };
-    var prefix = config.prefix;
-    var route = (name === 'home' && prefix === '/') ? '/' : path.join(prefix, name);
+    var route = (name === 'home' && config.prefix === '/') ? '/' : path.join(config.prefix, name);
     var template = path.join(__dirname, name, 'views', config.template);
     var page_title = config.title || name;
 
@@ -48,9 +57,7 @@ function setup_page(app, name, controller, config) {
 
     // The page custom stylesheet
     if (config.stylesheets) {
-        page.stylesheets = _.map(config.stylesheets, function(style_path) {
-            return path.join('/css', style_path);
-        });
+        page.stylesheets = prefix('/css', config.stylesheets);
     }
 
     var locals = {
@@ -108,7 +115,7 @@ exports.setup = function(app) {
                 prefix: '/admin',
                 stylesheets: [
                     'admin_style.css',
-                ].concat(page_config.stylesheets || []),
+                ].concat(prefix('pages', page_config.back.stylesheets || [])),
                 template: 'back.jade',
             }));
         }
@@ -117,7 +124,7 @@ exports.setup = function(app) {
                 prefix: '/',
                 stylesheets: [
                     'style.css',
-                ].concat(page_config.stylesheets || []),
+                ].concat(prefix('pages', page_config.front.stylesheets || [])),
                 template: 'front.jade',
             }));
         }
