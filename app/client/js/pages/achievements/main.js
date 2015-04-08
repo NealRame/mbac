@@ -20,9 +20,9 @@ define(function(require) {
         collection: achievements,
     });
     var achievementsList = new AchievementList({
-        el: $('#achievements').get(0),
         collection: achievements,
-        editable: true
+        editable: true,
+        el: $('#achievements').get(0)
     });
 
     achievements.on('add', function(achievement) {
