@@ -7,11 +7,11 @@ define(function(require) {
     var $ = require('jquery');
     var Backbone = require('backbone');
 
-    var Achievement = require('Achievement');
+    var Achievement = require('pages/achievements/achievement');
     var Dialog = require('Dialog');
     var Thumbnail = require('Thumbnail');
 
-    var editorTemplate = require('text!back/AchievementEditorDialog/editor.html');
+    var editorTemplate = require('text!pages/achievements/editor.html');
 
     if (_.indexOf($.event.props, 'dataTransfer') < 0) {
         $.event.props.push('dataTransfer');
