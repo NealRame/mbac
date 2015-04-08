@@ -6,8 +6,7 @@ define(function(require) {
     var Achievement = require('pages/achievements/achievement');
     // var AchievementEditorDialog = require('pages/achievements/editor');
     var AchievementList = require('pages/achievements/achievement-list');
-
-    var template = require('text!pages/achievements/achievements.html');
+    var AchievementMenu = require('pages/achievements/menu');
 
     console.log('-- achievements: admin app!');
 
@@ -15,6 +14,10 @@ define(function(require) {
         model: Achievement,
         url: '/api/achievements'
     }))();
+
+    var achievementMenu = new AchievementMenu();
+
+    $('#achievements-menu').append(achievementMenu.render().el);
 
     var achievementsList = new AchievementList({
         el: $('#achievements').get(0),
