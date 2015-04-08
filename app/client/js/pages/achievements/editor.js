@@ -6,7 +6,6 @@ define(function(require) {
     var _ = require('underscore');
     var $ = require('jquery');
     var Backbone = require('backbone');
-    var configuration = require('Configuration');
 
     var Achievement = require('Achievement');
     var Dialog = require('Dialog');
