@@ -20,7 +20,7 @@
     "foundation": "~5.4.7",
     "jquery": "~2.1.1",
     "jquery.cookie": "~1.4.1",
-    "marionette": "~2.2.2",
+    "marionette": "~2.4.1",
     "modernizr": "~2.8.3",
     "monosocialiconsfont": "*",
     "requirejs": "~2.1.14",
@@ -38,7 +38,7 @@
       "app/client/js/libs": "lib/backbone.wreqr.js"
     },
     "bluebird": {
-        "app/client/js/libs": "js/browser/bluebird.js"
+      "app/client/js/libs": "js/browser/bluebird.js"
     },
     "fastclick": {
       "app/client/js/libs": "lib/fastclick.js"
