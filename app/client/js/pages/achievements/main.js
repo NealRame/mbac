@@ -8,31 +8,43 @@ define(function(require) {
     var AchievementList = require('pages/achievements/achievement-list');
     var AchievementMenu = require('pages/achievements/menu');
 
-    console.log('-- achievements: admin app!');
-
     var channel = Backbone.Wreqr.radio.channel('global');
+
+    var AchievementApp = Marionette.LayoutView.extend({
+        regions: {
+            'list': '#achievements-list',
+            'menu': '#achievements-menu'
+        },
+        template: false,
+        onRender: function() {
+            this.showChildView('list', new AchievementList({
+                collection: this.collection,
+                editable: true,
+            }));
+            this.showChildView('menu', new AchievementMenu({
+                collection: this.collection
+            }));
+        }
+    });
 
     var achievements = new (Backbone.Collection.extend({
         model: Achievement,
         url: '/api/achievements'
     }))();
-    var achievementMenu = new AchievementMenu({
-        collection: achievements,
-    });
-    var achievementsList = new AchievementList({
-        collection: achievements,
-        editable: true,
-        el: $('#achievements').get(0)
-    });
 
-    achievements.on('add', function(achievement) {
-        AchievementEditorDialog.open(achievement);
-    });
-
-    $('#achievements-menu').append(achievementMenu.render().el);
+    // achievements.on('add', function(achievement) {
+    //     AchievementEditorDialog.open(achievement);
+    // });
+    // achievementsList.on('childview:edit', function(view, achievement) {
+    //     AchievementEditorDialog.open(achievement);
+    // });
 
     achievements.fetch({reset: true});
-    achievementsList.render();
+
+    (new AchievementApp({
+        el: $('body').get(0),
+        collection: achievements
+    })).render();
 
     // var Gallery = Marionette.LayoutView.extend({
     //     template: _.template(template),
