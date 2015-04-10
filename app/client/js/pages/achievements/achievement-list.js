@@ -97,9 +97,6 @@ define(function(require) {
                     'padding-right': padding
                 });
             }
-        },
-        onRender: function() {
-            console.log('-- AchievementList::rendered!');
         }
     });
 });
