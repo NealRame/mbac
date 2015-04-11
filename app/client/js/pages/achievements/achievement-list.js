@@ -36,13 +36,14 @@ define(function(require) {
             };
         },
         filter: function(tags) {
-            this.children.each(function(child) {
-                if (tags.length === 0 || child.model.hasTags(tags)) {
-                    child.$el.fadeIn('fast');
-                } else {
-                    child.$el.fadeOut('fast');
-                }
-            });
+            return true;
+            // this.children.each(function(child) {
+            //     if (tags.length === 0 || child.model.hasTags(tags)) {
+            //         child.$el.fadeIn('fast');
+            //     } else {
+            //         child.$el.fadeOut('fast');
+            //     }
+            // });
         },
         initialize: function() {
             this.ready_ = 0;
@@ -97,6 +98,6 @@ define(function(require) {
                     'padding-right': padding
                 });
             }
-        }
+        },
     });
 });
