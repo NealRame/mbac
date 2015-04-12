@@ -16,35 +16,40 @@ define(function(require) {
             'menu': '#achievements-menu'
         },
         template: false,
-        onRender: function() {
-            this.showChildView('list', new AchievementList({
+        initialize: function() {
+            this.collection = new (Backbone.Collection.extend({
+                model: Achievement,
+                url: '/api/achievements'
+            }))();
+
+            this.listView = new AchievementList({
                 collection: this.collection,
-                editable: true,
-            }));
-            this.showChildView('menu', new AchievementMenu({
+                editable: true
+            });
+            this.menuView = new AchievementMenu({
                 collection: this.collection
-            }));
+            });
+
+            this.listenTo(this.collection, 'add', function(achievement) {
+                AchievementEditorDialog.open(achievement);
+            });
+            this.listenTo(this.listView, 'childview:edit', function(view, achievement) {
+                AchievementEditorDialog.open(achievement);
+            });
+
+            this.collection.fetch({reset: true});
+        },
+        onRender: function() {
+            this.showChildView('list', this.listView);
+            this.showChildView('menu', this.menuView);
         }
     });
 
-    var achievements = new (Backbone.Collection.extend({
-        model: Achievement,
-        url: '/api/achievements'
-    }))();
+    var app = new AchievementApp({
+        el: $('body')
+    });
 
-    // achievements.on('add', function(achievement) {
-    //     AchievementEditorDialog.open(achievement);
-    // });
-    // achievementsList.on('childview:edit', function(view, achievement) {
-    //     AchievementEditorDialog.open(achievement);
-    // });
-
-    achievements.fetch({reset: true});
-
-    (new AchievementApp({
-        el: $('body').get(0),
-        collection: achievements
-    })).render();
+    app.render();
 
     // var Gallery = Marionette.LayoutView.extend({
     //     template: _.template(template),
