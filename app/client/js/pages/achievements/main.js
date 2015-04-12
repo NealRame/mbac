@@ -13,7 +13,7 @@ define(function(require) {
     var AchievementApp = Marionette.LayoutView.extend({
         regions: {
             'list': '#achievements-list',
-            'menu': '#achievements-menu'
+            'menu': '#achievements-menu > .menu-content-wrapper'
         },
         template: false,
         initialize: function() {

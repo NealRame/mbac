@@ -23,8 +23,10 @@ block content
                     if href=entry.page !== page.name
                         li(id='#{entry.page}-menu')
                             a(href='#{entry.slug}'): | #{entry.title}
+                            .menu-content-wrapper
                     else
                         li.active(id='#{entry.page}-menu')
                             a: | #{entry.title}
+                            .menu-content-wrapper
         
         block admin_content
