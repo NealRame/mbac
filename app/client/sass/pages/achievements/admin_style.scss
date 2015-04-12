@@ -71,3 +71,13 @@
         @extend .expand;
     }
 }
+
+#filters {
+    padding-left: 8px;
+    ul {
+        list-style-type: none;
+    }
+    li label {
+        font-size: small;
+    }
+}
