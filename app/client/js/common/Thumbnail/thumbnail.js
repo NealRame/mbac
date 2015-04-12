@@ -75,7 +75,7 @@ define(function(require) {
             return data;
         },
         innerRect: function() {
-            return ui.rect(this.ui.crop);
+            return Marionette.getOption(this, 'rect') || ui.rect(this.ui.crop);
         },
         outerRect: function() {
             return ui.outerRect(this.el);
