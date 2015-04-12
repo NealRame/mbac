@@ -54,11 +54,9 @@ define(function(require) {
             return create_model(this.get('pictures')[index || 0]);
         },
         pictures: function() {
-            return new Backbone.Collection(
-                _.map(this.get('pictures'), function(data) {
-                    return create_model(data);
-                })
-            );
+            return _.map(this.get('pictures'), function(data) {
+                return create_model(data);
+            });
         },
         addPicture: function(picture) {
             var list = this.get('pictures').slice(0);

@@ -105,7 +105,7 @@ define(function(require) {
         template: _.template(editorTemplate),
         initialize: function() {
             this.achievementPictureList = new AchievementPictureList({
-                collection: this.model.pictures()
+                collection: new Backbone.Collection(this.model.pictures())
             });
             this.listenTo(
                 this.achievementPictureList,
