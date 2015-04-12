@@ -23,6 +23,10 @@ define(function(require) {
         childViewOptions: {
             tagName: 'li',
             removable: true,
+            rect: {
+                height: 128,
+                width: 192
+            }
         },
         childEvents: {
             'remove': 'onPictureRemoved'
