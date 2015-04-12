@@ -55,7 +55,6 @@ define(function(require) {
                 $(window).off('resize', resize_cb);
             });
             this.listenToOnce(this, 'childview:show', function() {
-                console.log('show a child');
                 this.center_();
             });
         },
@@ -98,6 +97,6 @@ define(function(require) {
                     'padding-right': padding
                 });
             }
-        },
+        }
     });
 });
