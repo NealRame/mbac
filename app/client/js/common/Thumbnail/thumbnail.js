@@ -119,7 +119,7 @@ define(function(require) {
             this.$('.action-bar').fadeOut(100);
             return false;
         },
-        onRender: function() {
+        onShow: function() {
             this.ui.thumbLink.empty().append(this.placeholder('spinner'));
             thumb_render.call(this, this.model)
                 .bind(this)
@@ -133,6 +133,6 @@ define(function(require) {
                 .catch(function() {
                     this.ui.thumbLink.empty().append(this.placeholder('error'));
                 });
-        }
+        },
     });
 });
