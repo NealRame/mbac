@@ -167,7 +167,7 @@ define(function(require) {
             }
             return false;
         },
-        onRender: function() {
+        onShow: function() {
             this.ui.nameField.val(this.model.get('name'));
             this.ui.descField.val(this.model.get('description'));
             this.ui.tagsField.val(this.model.tags().join(', '));
@@ -175,7 +175,7 @@ define(function(require) {
                 this.model.published() ? 'unpublish-button':'publish-button'
             );
             this.getRegion('pictures').show(this.achievementPictureList);
-        }
+        },
     });
 
     var AchievementEditorDialog = Dialog.extend({
