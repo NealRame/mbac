@@ -27,6 +27,7 @@ define(function(require) {
     });
 
     var TagCollection = Backbone.Collection.extend({
+        comparator: 'id',
         model: Tag,
         update: function(achievement) {
             if (_.isArray(achievement)) {
@@ -37,6 +38,14 @@ define(function(require) {
                     tag.inc();
                 }, this);
             }
+        },
+        checked: function() {
+            return (
+                _.chain(this.toJSON())
+                    .where({checked: true})
+                    .pluck('id')
+                    .value()
+            );
         }
     });
 
@@ -61,7 +70,25 @@ define(function(require) {
         tagName: 'ul',
         childView: TagView,
         initialize: function() {
-            this.collection = new TagCollection();
+            this._visible = false;
+        },
+        isVisible: function() {
+            return this._visible;
+        },
+        hide: function() {
+            if (this._visible) {
+                this.$el.hide();
+            }
+            this._visible = false;
+        },
+        show: function() {
+            if (! this._visible) {
+                this.$el.show();
+            }
+            this._visible = true;
+        },
+        toggle: function() {
+            this.isVisible() ? this.hide() : this.show();
         }
     });
 
@@ -82,9 +109,14 @@ define(function(require) {
             'click @ui.filterAchievement': 'onFilterAchievementClick'
         },
         initialize: function() {
-            this.tagListView = new TagListView();
+            this.tagList = new TagCollection();
+            this.tagListView = new TagListView({collection: this.tagList});
             this.listenToOnce(this.collection, 'sync', function() {
-                this.tagListView.collection.update(this.collection.models);
+                this.tagList.update(this.collection.models);
+            });
+            this.listenTo(this.tagList, 'change:checked', function() {
+                var checked = this.tagList.checked();
+                console.log(checked);
             });
         },
         onAddAchievementClick: function(ev) {
@@ -98,6 +130,9 @@ define(function(require) {
             console.log('-- achievement::menu::onFilterAchievementClick');
             ev.preventDefault();
             ev.stopPropagation();
+
+            this.tagListView.toggle();
+
             return false;
         },
         onShow: function() {
