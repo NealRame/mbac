@@ -6,7 +6,7 @@ define(function(require) {
     var _ = require('underscore');
     var Backbone = require('backbone');
 
-    var functional = require('utils/functional');
+    var functional = require('common/functional');
     var Picture = require('Picture');
 
     function isa(Model) {

@@ -8,9 +8,9 @@ define(function(require) {
     var Backbone = require('backbone');
     var Marionette = Backbone.Marionette;
 
-    var async = require('utils/async');
-    var functional = require('utils/functional');
-    var ui = require('utils/ui');
+    var async = require('common/async');
+    var functional = require('common/functional');
+    var ui = require('common/ui');
 
     return function(model) {
         if (functional.hasAllOfAttributes(model, 'file')) {

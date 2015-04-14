@@ -9,8 +9,8 @@ define(function(require) {
     var Marionette = Backbone.Marionette;
     var Promise = require('promise');
 
-    var async = require('utils/async');
-    var functional = require('utils/functional');
+    var async = require('common/async');
+    var functional = require('common/functional');
     var render_file = require('common/Thumbnail/file-render');
     var render_picture = require('common/Thumbnail/picture-render');
 

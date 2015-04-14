@@ -9,8 +9,8 @@ define(function(require) {
     var Marionette = Backbone.Marionette;
     var Promise = require('promise');
 
-    var functional = require('utils/functional');
-    var ui = require('utils/ui');
+    var functional = require('common/functional');
+    var ui = require('common/ui');
     var thumbnailTemplate = require('text!common/Thumbnail/thumbnail.html');
 
     var file_render = require('common/Thumbnail/file-render');

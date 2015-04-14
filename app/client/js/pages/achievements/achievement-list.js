@@ -7,8 +7,8 @@ define(function(require) {
     var $ = require('jquery');
     var Backbone = require('backbone');
 
-    var functional = require('utils/functional');
-    var ui = require('utils/ui');
+    var functional = require('common/functional');
+    var ui = require('common/ui');
 
     // var AchievementEditorDialog = require('AchievementEditorDialog');
     var Dialog = require('Dialog');
