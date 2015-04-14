@@ -14,6 +14,8 @@ define(function(require) {
     var Dialog = require('Dialog');
     var Thumbnail = require('Thumbnail');
 
+    var achievement_render = require('pages/achievements/achievement-thumbnail-render');
+
     function is_model_filterable(model) {
         return true;
     }
@@ -33,6 +35,7 @@ define(function(require) {
                 tagName: 'li',
                 removable: Marionette.getOption(this, 'editable'),
                 editable: Marionette.getOption(this, 'editable'),
+                renderers: [achievement_render]
             };
         },
         filter: function(tags) {
