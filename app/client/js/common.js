@@ -11,17 +11,12 @@ requirejs.config({
         'text': 'libs/text',
         'underscore': 'libs/underscore',
 
+        'Configuration': 'common/Configuration/configuration',
         'Dialog': 'common/Dialog/dialog',
         'LightBox': 'common/LightBox/lightbox',
         'Picture': 'common/Picture/picture',
         'TabbedPanels': 'common/TabbedPanels/tabbedpanels',
         'Thumbnail': 'common/Thumbnail/thumbnail',
-
-        'AchievementEditorDialog': 'back/AchievementEditorDialog/editor',
-        'Configuration': 'back/Configuration/configuration',
-        'Dashboard': 'back/dashboard',
-
-        'Test': 'back/Test/test',
     },
     shim: {
         'fastclick':  {exports: 'FastClick'},
