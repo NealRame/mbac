@@ -89,7 +89,7 @@ module.exports = function(grunt) {
                             exclude: ['common']
                         },
                         {
-                            name: 'pages/achievements/main',
+                            name: 'pages/achievements/back',
                             exclude: ['common']
                         }
                     ],
