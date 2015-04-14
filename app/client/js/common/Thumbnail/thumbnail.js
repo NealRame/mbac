@@ -13,12 +13,10 @@ define(function(require) {
     var ui = require('utils/ui');
     var thumbnailTemplate = require('text!common/Thumbnail/thumbnail.html');
 
-    var achievement_render = require('common/Thumbnail/achievement-render');
     var file_render = require('common/Thumbnail/file-render');
     var picture_render = require('common/Thumbnail/picture-render');
 
-    var thumb_render = functional.dispatch(
-        achievement_render,
+    var renderers = [
         file_render,
         picture_render,
         function() {
@@ -27,7 +25,13 @@ define(function(require) {
                 target: ''
             });
         }
-    );
+    ];
+
+    function make_renderer(custom_renderers) {
+        return functional.dispatch.apply(
+            null, functional.cat(custom_renderers || [], renderers)
+        );
+    }
 
     return Marionette.ItemView.extend({
         className: 'thumb',
@@ -121,7 +125,8 @@ define(function(require) {
         },
         onShow: function() {
             this.ui.thumbLink.empty().append(this.placeholder('spinner'));
-            thumb_render.call(this, this.model)
+            make_renderer(Marionette.getOption(this, 'renderers'))
+                .call(this, this.model)
                 .bind(this)
                 .then(function(thumbnail) {
                     this.ui.thumbLink
