@@ -11,7 +11,7 @@ define(function(require) {
     var MenuTemplate = require('text!pages/achievements/menu.html');
     var TagTemplate = require('text!pages/achievements/tag.html');
 
-    var channel = Backbone.Wreqr.radio.channel('global');
+    var app_channel = Backbone.Wreqr.radio.channel('achievements');
 
     var Tag = Backbone.Model.extend({
         defaults: {
@@ -115,8 +115,7 @@ define(function(require) {
                 this.tagList.update(this.collection.models);
             });
             this.listenTo(this.tagList, 'change:checked', function() {
-                var checked = this.tagList.checked();
-                console.log(checked);
+                app_channel.commands.execute('filter', this.tagList.checked());
             });
         },
         onAddAchievementClick: function(ev) {
@@ -132,6 +131,10 @@ define(function(require) {
             ev.stopPropagation();
 
             this.tagListView.toggle();
+            app_channel.commands.execute(
+                'filter',
+                this.tagListView.isVisible() ? this.tagList.checked() : []
+            );
 
             return false;
         },

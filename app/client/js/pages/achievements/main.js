@@ -8,7 +8,7 @@ define(function(require) {
     var AchievementList = require('pages/achievements/achievement-list');
     var AchievementMenu = require('pages/achievements/menu');
 
-    var channel = Backbone.Wreqr.radio.channel('global');
+    var app_channel = Backbone.Wreqr.radio.channel('achievements');
 
     var AchievementApp = Marionette.LayoutView.extend({
         regions: {
@@ -36,6 +36,17 @@ define(function(require) {
             this.listenTo(this.listView, 'childview:edit', function(view, achievement) {
                 AchievementEditorDialog.open(achievement);
             });
+
+            app_channel.commands.setHandler('filter', function(tags) {
+                if (_.isEmpty(tags)) {
+                    delete this.listView.filter;
+                } else {
+                    this.listView.filter = function(achievement) {
+                        return ! _.isEmpty(_.intersection(achievement.tags(), tags));
+                    };
+                }
+                this.listView.render();
+            }, this);
 
             this.collection.fetch({reset: true});
         },
