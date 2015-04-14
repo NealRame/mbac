@@ -88,7 +88,7 @@ function readOne(req, res, id) {
     Achievement.findById(id).exec()
         .then(helpers.checkValue)
         .then(function(achievement) {
-            if (! (achievement.published || helpers.isAuthorized(res))) {
+            if (! (achievement.published || helpers.isAuthenticated(res))) {
                 helpers.throw404(); // 401 or 404 ?
             }
             return Achievement.populate(achievement, {path: 'pictures'});
