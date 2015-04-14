@@ -18,9 +18,6 @@ define(function(require) {
             checked: false,
             count: 0
         },
-        inc: function() {
-            this.set('count', this.get('count') + 1);
-        },
         toggle: function() {
             this.set('checked', ! this.get('checked'));
         }
@@ -29,15 +26,24 @@ define(function(require) {
     var TagCollection = Backbone.Collection.extend({
         comparator: 'id',
         model: Tag,
-        update: function(achievement) {
-            if (_.isArray(achievement)) {
-                _.each(achievement, this.update, this);
-            } else {
-                _.each(achievement.tags(), function(tagname) {
-                    var tag = this.add({id: tagname});
-                    tag.inc();
-                }, this);
-            }
+        update: function(achievements) {
+            var checked = this.checked();
+
+            this.reset(_.chain(achievements)
+                .map(function(achievement) {
+                    return achievement.tags();
+                })
+                .flatten()
+                .countBy(_.identity)
+                .map(function(count, tag) {
+                    return new Tag({
+                        id: tag,
+                        count: count,
+                        checked: _.contains(checked, tag)
+                    });
+                })
+                .value()
+            );
         },
         checked: function() {
             return (
@@ -113,9 +119,14 @@ define(function(require) {
             this.tagListView = new TagListView({collection: this.tagList});
             this.listenToOnce(this.collection, 'sync', function() {
                 this.tagList.update(this.collection.models);
-            });
-            this.listenTo(this.tagList, 'change:checked', function() {
-                app_channel.commands.execute('filter', this.tagList.checked());
+                this.listenTo(this.tagList, 'reset change:checked', function() {
+                    app_channel.commands.execute('filter', this.tagList.checked());
+                });
+                this.listenTo(this.collection, 'add change:tags', function(model) {
+                    if (! _.isEmpty(model.tags)) {
+                        this.tagList.update(this.collection.models);
+                    }
+                });
             });
         },
         onAddAchievementClick: function(ev) {
