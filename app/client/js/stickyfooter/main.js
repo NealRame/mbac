@@ -1,5 +1,6 @@
 define(function(require) {
     var $ = require('jquery');
+    var Foundation = require('foundation');
     var footer = $('body > footer').first();
 
     function stick(offset) {
