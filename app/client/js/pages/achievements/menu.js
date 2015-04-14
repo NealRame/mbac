@@ -133,7 +133,7 @@ define(function(require) {
             console.log('-- achievement::menu::onAddAchievementClick');
             ev.preventDefault();
             ev.stopPropagation();
-            this.collection.add(new Achievement());
+            app_channel.commands.execute('create');
             return false;
         },
         onFilterAchievementClick: function(ev) {

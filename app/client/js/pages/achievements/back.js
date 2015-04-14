@@ -48,6 +48,10 @@ define(function(require) {
                 this.listView.render();
             }, this);
 
+            app_channel.commands.setHandler('create', function() {
+                this.collection.add(new Achievement());
+            }, this);
+
             this.collection.fetch({reset: true});
         },
         onRender: function() {
