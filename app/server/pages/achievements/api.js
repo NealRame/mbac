@@ -104,12 +104,16 @@ function create(req, res) {
 
 router
     .param('id', function(req, res, next, id) {
+        debug('load achievement[' + id + ']');
         readOne(req, res, id)
             .then(function(achievement) {
                 req.achievement = achievement;
                 next();
             })
-            .then(null, next);
+            .then(null, function(err) {
+                debug(err);
+                next(err);
+            });
     });
 
 router
