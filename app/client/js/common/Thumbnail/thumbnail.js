@@ -50,11 +50,6 @@ define(function(require) {
         },
         editable: false,
         removable: false,
-        initialize: function() {
-            if (!_.isUndefined(this.model)) {
-                this.listenTo(this.model, 'change', this.render);
-            }
-        },
         serializedData: function() {
             return {};
         },
@@ -106,6 +101,22 @@ define(function(require) {
                     width: font_size,
                 });
         },
+        refresh: function() {
+            this.ui.thumbLink.empty().append(this.placeholder('spinner'));
+            make_renderer(Marionette.getOption(this, 'renderers'))
+                .call(this, this.model)
+                .bind(this)
+                .then(function(thumbnail) {
+                    this.ui.thumbLink
+                        .empty()
+                        .append(thumbnail.el || this.placeholder('empty'))
+                        .attr('href', thumbnail.target);
+                    this.trigger('ready');
+                })
+                .catch(function() {
+                    this.ui.thumbLink.empty().append(this.placeholder('error'));
+                });
+        },
         target: function() {
             return this.ui.thumbLink.attr('href');
         },
@@ -124,20 +135,10 @@ define(function(require) {
             return false;
         },
         onShow: function() {
-            this.ui.thumbLink.empty().append(this.placeholder('spinner'));
-            make_renderer(Marionette.getOption(this, 'renderers'))
-                .call(this, this.model)
-                .bind(this)
-                .then(function(thumbnail) {
-                    this.ui.thumbLink
-                        .empty()
-                        .append(thumbnail.el || this.placeholder('empty'))
-                        .attr('href', thumbnail.target);
-                    this.trigger('ready');
-                })
-                .catch(function() {
-                    this.ui.thumbLink.empty().append(this.placeholder('error'));
-                });
+            this.refresh();
+            if (!_.isUndefined(this.model)) {
+                this.listenTo(this.model, 'change', this.refresh);
+            }
         },
     });
 });

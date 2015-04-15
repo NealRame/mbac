@@ -38,16 +38,6 @@ define(function(require) {
                 renderers: [achievement_render]
             };
         },
-        filter: function(tags) {
-            return true;
-            // this.children.each(function(child) {
-            //     if (tags.length === 0 || child.model.hasTags(tags)) {
-            //         child.$el.fadeIn('fast');
-            //     } else {
-            //         child.$el.fadeOut('fast');
-            //     }
-            // });
-        },
         initialize: function() {
             this.ready_ = 0;
             var resize_cb = _.debounce(this.center_.bind(this), 50);
