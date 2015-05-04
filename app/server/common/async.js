@@ -64,13 +64,14 @@ exports.make_promise = function make_promise(fun) {
 /// - `undefined` or `Promise`
 exports.nodify = function nodify(promise, callback) {
     if (callback) {
-        promise
-            .then(function() {
+        promise.then(
+            function() {
                 callback.apply(null, [null].concat(arguments));
-            })
-            .catch(function(err) {
+            },
+            function(err) {
                 callback.call(null, err);
-            });
+            }
+        );
     } else return promise;
 };
 
