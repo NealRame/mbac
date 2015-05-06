@@ -98,6 +98,8 @@ exports.instance = function() {
             res.status(error.status);
 
             if (req.api) {
+                // TODO log error
+                debug(error.message);
                 res.send(error);
             } else {
                 res.render('error', {
