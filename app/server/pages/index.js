@@ -6,6 +6,7 @@
 var _ = require('underscore');
 var config = require('config');
 var debug = require('debug')('mbac:pages');
+var fs = require('fs');
 var path = require('path');
 
 function prefix(path_prefix, paths) {
@@ -19,16 +20,13 @@ function prefix(path_prefix, paths) {
 }
 
 function get_page_controllers(name) {
-    var controllers;
-    try {
-        var controllers_path = path.join(__dirname, name);
-        controllers = require(controllers_path);
+    var controllers_path = path.join(__dirname, name);
+    if (fs.existsSync(path.join(controllers_path, 'index.js'))) {
         debug(['- custom controllers:', controllers_path].join(' '));
-    } catch (err) {
-        debug('- no custom controllers found.');
-        controllers = {};
+        return require(controllers_path);
     }
-    return controllers;
+    debug('- no custom controllers found.');
+    return {};
 }
 
 function setup_page(app, name, controller, config) {
@@ -105,31 +103,35 @@ function setup_api(app, name, controller) {
 exports.setup = function(app) {
     _.each(config.pages, function(page_config, name) {
         debug(['Setup page', name].join(' '));
-
-        var page_controllers = get_page_controllers(name);
-        if (page_config.back) {
-            setup_page(app, name, page_controllers.back, _.extend(page_config.back, {
-                menu: {
-                    admin: page_config.back.menu || name
-                },
-                prefix: '/admin',
-                stylesheets: [
-                    'admin_style.css',
-                ].concat(prefix('pages', page_config.back.stylesheets || [])),
-                template: 'back.jade',
-            }));
-        }
-        if (page_config.front) {
-            setup_page(app, name, page_controllers.front, _.extend(page_config.front, {
-                prefix: '/',
-                stylesheets: [
-                    'style.css',
-                ].concat(prefix('pages', page_config.front.stylesheets || [])),
-                template: 'front.jade',
-            }));
-        }
-        if (page_controllers.api) {
-            setup_api(app, name, page_controllers.api);
+        try {
+            var page_controllers = get_page_controllers(name);
+            if (page_config.back) {
+                setup_page(app, name, page_controllers.back, _.extend(page_config.back, {
+                    menu: {
+                        admin: page_config.back.menu || name
+                    },
+                    prefix: '/admin',
+                    stylesheets: [
+                        'admin_style.css',
+                    ].concat(prefix('pages', page_config.back.stylesheets || [])),
+                    template: 'back.jade',
+                }));
+            }
+            if (page_config.front) {
+                setup_page(app, name, page_controllers.front, _.extend(page_config.front, {
+                    prefix: '/',
+                    stylesheets: [
+                        'style.css',
+                    ].concat(prefix('pages', page_config.front.stylesheets || [])),
+                    template: 'front.jade',
+                }));
+            }
+            if (page_controllers.api) {
+                setup_api(app, name, page_controllers.api);
+            }
+        } catch (err) {
+            // TODO log error
+            console.log(err);
         }
     });
 };
