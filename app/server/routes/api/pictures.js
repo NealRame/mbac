@@ -7,7 +7,6 @@ var _ = require('underscore');
 var express = require('express');
 var formidableGrid = require('formidable-grid');
 var helpers = require('helpers');
-var GridFs = require('gridfs-stream');
 var inspect = require('util').inspect;
 var mongoose = require('mongoose');
 var mongo = mongoose.mongo;

@@ -9,7 +9,6 @@ var debug = require('debug')('mbac:routes.achievements');
 var express = require('express');
 var formidableGrid = require('formidable-grid');
 var helpers = require('helpers');
-var GridFs = require('gridfs-stream');
 var mongoose = require('mongoose');
 var path = require('path');
 var querystring = require('querystring');
