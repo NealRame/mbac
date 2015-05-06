@@ -118,7 +118,7 @@ module.exports = {
     /// __Returns:__
     /// - `Promise`.
     error500: function(err) {
-        return Promise.reject(error_500(message));
+        return Promise.reject(error_500(err));
     },
     /// #### helpers.throw500([message])
     /// Throw a 500 error with the given message.
