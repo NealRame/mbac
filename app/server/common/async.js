@@ -18,7 +18,7 @@ var _ = require('underscore');
 /// - `reject`, `Function`.
 /// **Return:**
 /// - `Function`
-exports.make_callback = function make_callback(resolve, reject) {
+function make_callback(resolve, reject) {
     return function(err) {
         if (err) {
             reject(err);
@@ -27,7 +27,8 @@ exports.make_callback = function make_callback(resolve, reject) {
             resolve.apply(null, args.length > 1 ? [args] : args);
         }
     };
-};
+}
+exports.make_callback = make_callback;
 
 /// ### common.make_promise(fun[, ...args])
 /// Wrap the given asynchronous function and returns a promise.
@@ -44,12 +45,13 @@ exports.make_callback = function make_callback(resolve, reject) {
 ///
 /// **Return:**
 /// - `Promise`.
-exports.make_promise = function make_promise(fun) {
+function make_promise(fun) {
     var args = _.rest(arguments);
     return new Promise(function(resolve, reject) {
         fun.apply(null, args.concat(make_callback(resolve, reject)));
     });
-};
+}
+exports.make_promise = make_promise;
 
 /// ### common.nodify(promise[, callback])
 /// If a callback function is passed as second argument, then it is called when
@@ -62,7 +64,7 @@ exports.make_promise = function make_promise(fun) {
 ///
 /// **Return:**
 /// - `undefined` or `Promise`
-exports.nodify = function nodify(promise, callback) {
+function nodify(promise, callback) {
     if (callback) {
         promise.then(
             function() {
@@ -73,7 +75,8 @@ exports.nodify = function nodify(promise, callback) {
             }
         );
     } else return promise;
-};
+}
+exports.nodify = nodify;
 
 /// ### common.promisify(fun[, self])
 /// Wrap the given asynchronous function/method to make a function returning
@@ -87,8 +90,9 @@ exports.nodify = function nodify(promise, callback) {
 ///
 /// **Return:**
 /// - `Function` returning a `Promise`.
-exports.promisify = function promisify(fun, self) {
+function promisify(fun, self) {
     return function() {
         return make_promise(fun.bind(self), _.toArray(arguments));
     };
-};
+}
+exports.promisify = promisify;
