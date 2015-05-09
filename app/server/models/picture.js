@@ -52,7 +52,6 @@ PictureSchema.pre('remove', function(next) {
     _.chain(this)
         .pick('original', 'thumbnail')
         .each(function(file_id) {
-            debug(util.format('removing file %s', file_id));
             gfs.unlinkAsync(file_id).catch(function(err) {
                 debug(err); // TODO log error
             });
