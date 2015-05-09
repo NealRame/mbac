@@ -50,7 +50,7 @@ function parse_data(req) {
     }
     return form.parse(req)
         .then(function(form_data) {
-            var data = make_object(form_data, {
+            return make_object(form_data, {
                 date: _.first,
                 description: _.first,
                 files: _.identity,
@@ -59,8 +59,6 @@ function parse_data(req) {
                 published: _.first,
                 tags: _.identity
             });
-            debug(inspect(data));
-            return data;
         });
 }
 
