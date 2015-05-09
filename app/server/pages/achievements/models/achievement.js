@@ -253,9 +253,6 @@ AchievementSchema.methods.patch = function(data, cb) {
                     .value()
             );
             return self.save();
-        })
-        .then(function(achievement) {
-            return achievement.populate.execPopulate();
         });
     return nodify(promise, cb);
 };
