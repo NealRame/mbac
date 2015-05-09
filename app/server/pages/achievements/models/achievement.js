@@ -229,7 +229,8 @@ AchievementSchema.methods.patch = function(data, cb) {
         .then(function(partition) {
             // Only keep pictures which are referenced both in achievement
             // pictures and in data.pictures. Others pictures are removed.
-            debug('delete task', partition[1]);
+            var ids = partition[1];
+            debug('delete task', ids);
             _.each(ids, function(id) {
                 Picture.findById(id).exec().then(
                     function(picture) { if (picture) picture.destroy(); },
@@ -240,7 +241,7 @@ AchievementSchema.methods.patch = function(data, cb) {
         })
         .then(function(pictures) {
             debug('create task', data.files);
-            return Picture.create(data.file)
+            return Picture.create(data.files)
                 .then(Array.prototype.concat.bind(pictures));
         })
         .then(function(pictures) {
