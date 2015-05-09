@@ -215,43 +215,35 @@ AchievementSchema.methods.getPictures = function(cb) {
 AchievementSchema.methods.patch = function(data, cb) {
     debug(util.format('patching %s with %s', this._id, util.inspect(data)));
     var self = this;
-    var promise = self.getPictures()
-        .then(function(pictures) {
-            return _.chain(pictures)
-                .pluck('_id')
-                .partition(function(id) {
-                    return _.any(data.pictures, id.equals.bind(id));
-                })
-                .value()
+    // Only keep pictures which are referenced both in achievement pictures and
+    // in data.pictures. Others pictures are removed.
+    var pictures = _.chain(this.pictures)
+        .map(function(picture) {
+            return _.has(picture, '_id') ? picture._id : picture;
         })
-        .then(function(partition) {
-            // Only keep pictures which are referenced both in achievement
-            // pictures and in data.pictures. Others pictures are removed.
-            var ids = partition[1];
-            debug('delete task', ids);
-            _.each(ids, function(id) {
-                Picture.findById(id).exec().then(
-                    function(picture) { if (picture) picture.destroy(); },
-                    console.log.bind(console) // TODO Log error
-                )
-            });
-            return partition[0];
-        })
+        .filter(function(id) {
+            if (! _.any(data.pictures, id.equals.bind(id))) {
+                Picture.delete(id).catch(function(err) {
+                    debug(err); // TODO log error
+                });
+                return false;
+            }
+            return true;
+        });
+    // Create pictures and patch the model.
+    var promise = Picture.create(data.files)
+        .then(_.partial(_.pluck, _, '_id'))
+        .then(Array.prototype.concat.bind(pictures))
         .then(function(pictures) {
-            debug('create task', data.files);
-            return Picture.create(data.files)
-                .then(Array.prototype.concat.bind(pictures));
-        })
-        .then(function(pictures) {
-            debug('patching task');
             self.set(
                 _.chain(data)
-                    .pick('date', 'name', 'description', 'tags', 'published')
+                    .pick('date', 'description', 'name', 'published', 'tags')
                     .extend({pictures: pictures})
                     .value()
             );
             return self.save();
         });
+    // That's all folks see you later, bye bye !
     return nodify(promise, cb);
 };
 
