@@ -28,6 +28,25 @@ define(function(require) {
         }
     );
 
+    function create_form_data(achievement) {
+        var data = achievement.attributes;
+        var form_data = new FormData();
+        _.each(_.pick(data, 'name', 'description', 'published'), function(value, attr) {
+            form_data.append(attr, value);
+        });
+        _.each(data.tags, function(tag) {
+            form_data.append('tags', tag);
+        });
+        _.each(data.pictures, function(picture) {
+            if (picture.file instanceof File) {
+                form_data.append('files', picture.file);
+            } else {
+                form_data.append('pictures', picture._id);
+            }
+        });
+        return form_data;
+    }
+
     return Backbone.Model.extend({
         idAttribute: '_id',
         defaults: {
@@ -131,39 +150,15 @@ define(function(require) {
             case 'update':
             case 'patch':
                 return (function() {
-                    var data = model.attributes;
-                    var form_data = new FormData();
-
-                    _.chain(data)
-                        .pick('name', 'description', 'published')
-                        .each(function(value, attr) {
-                            form_data.append(attr, value);
-                        });
-                    _.each(data.tags, function(tag) {
-                        form_data.append('tags', tag);
-                    });
-                    _.each(data.pictures, function(picture) {
-                        form_data.append(
-                            'pictures',
-                            picture.file instanceof File ? picture.file : picture._id
-                        );
-                    });
-
-                    var params = _.extend(
-                        {
-                            data: form_data,
-                            contentType: false,
-                            processData: false,
-                            type: method === 'create' ? 'POST' : 'PUT',
-                            url: options.url || model.url(),
-                        },
-                        options
-                    );
-
-                    var xhr = Backbone.ajax(params);
-
+                    var form_data = create_form_data(model);
+                    var xhr = Backbone.ajax(_.extend({
+                        data: form_data,
+                        contentType: false,
+                        processData: false,
+                        type: method === 'create' ? 'POST' : 'PUT',
+                        url: options.url || model.url(),
+                    }, options));
                     model.trigger('request', model, xhr, options);
-
                     return xhr;
                 })();
 
