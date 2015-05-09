@@ -56,7 +56,7 @@ var AchievementSchema = new Schema({
 });
 
 AchievementSchema.pre('remove', function(next) {
-    debug('removing', this._id);
+    debug(util.format('removing %s', this._id.toString()));
     _.chain(this.pictures)
         .map(function(picture) {
             return _.has(picture, '_id') ? picture._id : picture;
@@ -165,6 +165,7 @@ AchievementSchema.static('patch', function(achievement, data, cb) {
 /// **Return:**
 /// - `Promise`.
 AchievementSchema.static('delete', function(achievement, cb) {
+    debug('delete');
     return nodify(achievement.remove(), cb);
 });
 

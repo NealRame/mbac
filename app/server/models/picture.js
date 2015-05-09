@@ -47,6 +47,7 @@ var PictureSchema = new Schema({
 });
 
 PictureSchema.pre('remove', function(next) {
+    debug(util.format('removing %s', this._id.toString()));
     var gfs = new GridFs(mongo, mongoose.connection.db);
     _.chain(this)
         .pick('original', 'thumbnail')
