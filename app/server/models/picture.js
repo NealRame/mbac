@@ -13,6 +13,7 @@ var mongoose = require('mongoose');
 var path = require('path');
 var util = require('util');
 
+var make_callback = common.async.make_callback;
 var nodify = common.async.nodify;
 var Schema = mongoose.Schema;
 
@@ -60,40 +61,7 @@ PictureSchema.pre('remove', function(next) {
 
 /// ### Methods
 
-/// #### `Picture#originalPath()`
-/// Returns the path of the original picture files.
-///
-/// **Return:**
-/// `String`
-PictureSchema.methods.originalPath = function() {
-    return path.join('/', this.prefix, this.original.toString());
-};
-
-/// #### `Picture#thumbnailPath()`
-/// Returns the path of the thumbnail picture files.
-///
-/// **Return:**
-/// `String`
-PictureSchema.methods.thumbnailPath = function() {
-    return path.join('/', this.prefix, this.thumbnail.toString());
-};
-
-/// #### `Picture#destroy([cb])`
-/// Destroy this pictures and all its associated files
-///
-/// **Parameters:**
-/// - `cb`, _optional_, a node.js style callback.
-///
-/// **Return:**
-/// - `Promise` if no callback is provided, `undefined` otherwise.
-PictureSchema.methods.destroy = function(cb) {
-    // original and thumbnail files are destroyed by pre-middleware on
-    // 'remove'.
-    debug('removing', this._id);
-    return nodify(this.remove(), cb);
-};
-
-/// #### `Picture.create(original, [cb])`
+/// #### `Picture.create(original[, cb])`
 /// Create a picture instance with the given image.
 ///
 /// **Parameters:**
@@ -134,5 +102,68 @@ PictureSchema.static('create', function(file, cb) {
     });
     return nodify(promise, cb);
 });
+
+/// #### `Picture.read([id][, cb])`
+/// Return a picture given its id. Return all pictures if no id is provided.
+///
+/// **Parameters:**
+/// - `id`, _optional_, an `ObjectId`.
+/// - `cb`, _optional_, a node.js style callback.
+///
+/// **Return:**
+/// - `Promise` if no callback is provided, `undefined` otherwise.
+PictureSchema.static('read', function(id, cb) {
+    if (_.isFunction(id)) {
+        cb = id;
+        id = null;
+    }
+    var promise = new Promise(function(resolve, reject) {
+        (_.isNull(id) ? Picture.find() : Picture.findById(id))
+            .exec(make_callback(resolve, reject));
+    });
+    return nodify(promise, cb);
+});
+
+/// #### `Picture.delete(id[, cb])`
+/// Remove pictures given their id.
+///
+/// **Parameters:**
+/// - `id`, an `ObjectId` or an `Array` of `ObjectId`.
+/// - `cb`, _optional_, a node.js style callback.
+///
+/// **Return:**
+/// - `Promise` if no callback is provided, `undefined` otherwise.
+PictureSchema.static('delete', function(id, cb) {
+    if (_.isArray(id)) {
+        return nodify(Promise.all(_.map(id, Picture.delete)), cb);
+    }
+    var promise = Picture.read(id).then(function(picture) {
+        if (picture) {
+            return new Promise(function(resolve, reject) {
+                picture.remove(make_callback(resolve, reject));
+            });
+        }
+        return Promise.resolve();
+    });
+    return nodify(promise, cb);
+});
+
+/// #### `Picture#originalPath()`
+/// Returns the path of the original picture files.
+///
+/// **Return:**
+/// `String`
+PictureSchema.methods.originalPath = function() {
+    return path.join('/', this.prefix, this.original.toString());
+};
+
+/// #### `Picture#thumbnailPath()`
+/// Returns the path of the thumbnail picture files.
+///
+/// **Return:**
+/// `String`
+PictureSchema.methods.thumbnailPath = function() {
+    return path.join('/', this.prefix, this.thumbnail.toString());
+};
 
 var Picture = module.exports = mongoose.model('Picture', PictureSchema);
