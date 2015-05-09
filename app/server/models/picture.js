@@ -46,18 +46,16 @@ var PictureSchema = new Schema({
 });
 
 PictureSchema.pre('remove', function(next) {
-    var gfs = new GridFs(mongoose.connection.db, mongo);
-    nodify(
-        Promise.all(
-            _.chain(this)
-                .pick('original', 'thumbnail')
-                .map(function(file_id) {
-                    debug(util.format('removing file %s', file_id));
-                    return gfs.unlinkAsync(file_id);
-                })
-        ),
-        next
-    );
+    var gfs = new GridFs(mongo, mongoose.connection.db);
+    _.chain(this)
+        .pick('original', 'thumbnail')
+        .each(function(file_id) {
+            debug(util.format('removing file %s', file_id));
+            gfs.unlinkAsync(file_id).catch(function(err) {
+                debug(err); // TODO log error
+            });
+        });
+    next();
 });
 
 /// ### Methods
