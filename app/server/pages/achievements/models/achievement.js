@@ -186,23 +186,6 @@ AchievementSchema.static('published', function(cb) {
     return nodify(promise, cb);
 });
 
-/// #### `Achievement#getPictures([cb])`
-/// Return an array of pictures document.
-///
-/// __Parameters:__
-/// - `cb`, a node.js style callback.
-///
-/// __Returns:__
-/// - `Promise`.
-AchievementSchema.methods.getPictures = function(cb) {
-    debug('getPictures');
-    var promise = this.populate().execPopulate()
-        .then(function(achievement) {
-            return achievement.pictures;
-        });
-    return nodify(promise, cb);
-};
-
 /// #### `Achievement#patch(data, [cb])`
 /// Patch this achievement with the given data.
 ///
