@@ -82,8 +82,8 @@ define(function(require) {
             return false;
         },
         onPictureRemoved: function(view, model) {
-            view.remove();
-            model.destroy();
+            // view.remove();
+            this.collection.remove(model);
         }
     });
 
