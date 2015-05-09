@@ -70,25 +70,25 @@ function read_one(req, res) {
     return Achievement.findById(id).exec()
         .then(helpers.exist)
         .then(function(achievement) {
-            // if (! (achievement.published || helpers.isAuthenticated(res))) {
-            //     helpers.throw404(); // 401 or 404 ?
-            // }
+            if (! (achievement.published || helpers.isAuthenticated(res))) {
+                helpers.throw404(); // 401 or 404 ?
+            }
             return Achievement.populate(achievement, {path: 'pictures'});
         });
 }
 
 function read_all(req, res) {
     var query = {};
-    // if (! helpers.isAuthenticated(res)) {
-    //     // Unauthorized client only get published and non-empty achievements
-    //     // items.
-    //     _.chain(query).extend({
-    //         published: true,
-    //         pictures: {$not: {$size: 0}}
-    //     });
-    // }
-    return Achievement.find(query).exec().then(function(collection) {
-        return Achievement.populate(collection, {path: 'pictures'});
+    if (! helpers.isAuthenticated(res)) {
+        // Unauthorized client only get published and non-empty achievements
+        // items.
+        _.chain(query).extend({
+            published: true,
+            pictures: {$not: {$size: 0}}
+        });
+    }
+    return Achievement.find(query).exec().then(function(achievements) {
+        return Achievement.populate(achievements, {path: 'pictures'});
     });
 }
 
