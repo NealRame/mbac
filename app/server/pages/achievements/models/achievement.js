@@ -8,6 +8,7 @@ var common = require('common');
 var debug = require('debug')('mbac:models.Achievement');
 var mongoose = require('mongoose');
 var Picture = require('models/picture');
+var util = require('util');
 
 var make_promise = common.async.make_promise;
 var nodify = common.async.nodify;
@@ -215,7 +216,7 @@ AchievementSchema.methods.getPictures = function(cb) {
 /// __Returns:__
 /// - `Promise`.
 AchievementSchema.methods.patch = function(data, cb) {
-    debug('patching', this._id, 'with', data);
+    debug(util.format('patching %s with %s', this._id, util.inspect(data)));
     var self = this;
     var promise = self.getPictures()
         .then(function(pictures) {
