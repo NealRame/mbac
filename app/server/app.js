@@ -100,6 +100,7 @@ exports.instance = function() {
             if (req.api) {
                 // TODO log error
                 debug(error.message);
+                // debug(error.stack);
                 res.send(error);
             } else {
                 res.render('error', {
