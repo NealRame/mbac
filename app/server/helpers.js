@@ -138,7 +138,7 @@ module.exports = {
     /// __Returns:__
     /// - `value` or `value()`.
     value: value,
-    /// #### helpers.checkValue(value)
+    /// #### helpers.exist(value)
     /// Returns a promise fulfilled or rejected if given value is defined or
     /// not.
     ///
@@ -147,11 +147,26 @@ module.exports = {
     ///
     /// __Returns:__
     /// - `Promise`.
+    exist: function(value) {
+        if (value == undefined) {
+            return Promise.reject(error_404());
+        }
+        return Promise.resolve(value);
+    },
+    /// #### helpers.valueChecker(fallback)
+    /// Returns a function that check a value and returns it if it exists or
+    /// a fallback value if not.
+    ///
+    /// __Parameters:__
+    /// - `fallback`, the to be return if the checked value is not defined.
+    ///
+    /// __Returns:__
+    /// - `Promise`.
     valueChecker: function(fallback) {
         var fallback_value = value(fallback);
         return function(value)  {
             if (value == undefined) {
-                return fallback_value;
+                return Promise.resolve(fallback_value);
             }
             return Promise.resolve(value);
         };
