@@ -57,15 +57,12 @@ var AchievementSchema = new Schema({
 
 AchievementSchema.pre('remove', function(next) {
     debug('removing', this._id);
-    nodify(
-        this.getPictures()
-            .then(function(pictures) {
-                return Promise.all(_.map(pictures, function(picture) {
-                    return picture.remove();
-                }));
-            }),
-        next
-    );
+    _.chain(this.pictures)
+        .map(function(picture) {
+            return _.has(picture, '_id') ? picture._id : picture;
+        })
+        .each(Picture.delete);
+    next();
 });
 
 /// #### `Achievement.create(data, [cb])`
