@@ -74,8 +74,13 @@ PictureSchema.pre('remove', function(next) {
 /// **Return:**
 /// - `Promise` if no callback is provided, `undefined` otherwise.
 PictureSchema.static('create', function(file, cb) {
+    debug(util.format('create picture width %s', util.inspect(file)));
     if (_.isArray(file)) {
-        return nodify(Promise.all(_.map(file, Picture.create.bind(Picture))), cb);
+        return nodify(Promise.all(
+            _.map(file, function(file_id) {
+                return Picture.create(file_id);
+            })
+        ), cb);
     }
     var promise = new Promise(function(resolve, reject) {
         var gfs = new GridFs(mongo, mongoose.connection.db);
