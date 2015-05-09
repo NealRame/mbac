@@ -8,12 +8,12 @@ var common = require('common');
 var debug = require('debug')('mbac:models.Picture');
 var GridFs = require('gridfs');
 var gm = require('gm');
+var mongo = require('mongodb');
 var mongoose = require('mongoose');
 var path = require('path');
 var util = require('util');
 
 var nodify = common.async.nodify;
-var mongo = mongoose.mongo;
 var Schema = mongoose.Schema;
 
 /// ### Fields
@@ -111,8 +111,8 @@ PictureSchema.static('create', function(file, cb) {
         return nodify(Promise.all(_.map(file, Picture.create.bind(Picture))), cb);
     }
     var promise = new Promise(function(resolve, reject) {
-        var gfs = new GridFs(mongoose.connection.db, mongo);
-        var orig_id = _.isString(file) ? new this.mongo.ObjectId(file) : file;
+        var gfs = new GridFs(mongo, mongoose.connection.db);
+        var orig_id = _.isString(file) ? new mongo.ObjectId(file) : file;
         var thmb_id = new mongo.ObjectId();
         var istream = gfs.createReadStream(orig_id);
         var ostream = gfs.createWriteStream(thmb_id, {
@@ -121,10 +121,16 @@ PictureSchema.static('create', function(file, cb) {
         ostream
             .once('error', reject)
             .once('end', function() {
-                resolve(new Picture({
-                    original: orig_id,
-                    thumbnail: thmb_id,
-                }));
+                gfs.closeAsync(ostream.gs)
+                    .then(function() {
+                        var picture = new Picture({
+                            original: orig_id,
+                            thumbnail: thmb_id,
+                        });
+                        return picture.save();
+                    })
+                    .then(resolve)
+                    .catch(reject);
             });
         gm(istream).resize(256).stream('png').pipe(ostream);
     });
