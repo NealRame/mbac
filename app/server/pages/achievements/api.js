@@ -113,8 +113,11 @@ function achievement_update(req, res, next) {
 }
 
 function achievement_delete(req, res, next) {
-    Achievement.delete(req.params.id)
-        .then(res.sendStatus.bind(res, 200), next);
+    read_one(req, res)
+        .then(function(achievement) {
+            return Achievement.delete(achievement);
+        })
+        .then(res.send.bind(res), next);
 }
 
 router
