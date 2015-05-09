@@ -93,8 +93,8 @@ AchievementSchema.static('create', function(data, cb) {
                 achievement.save.bind(achievement)
             );
         })
-        .then(function(achievement) {
-            return achievement.populate().execPopulate();
+        .then(function(achievements) {
+            return _.first(achievements).populate('pictures').execPopulate();
         });
     return nodify(promise, cb);
 });
@@ -112,7 +112,7 @@ AchievementSchema.static('read', function(id, cb) {
     debug('read');
     var promise = Achievement.findById(id).exec()
         .then(function(achievement) {
-            return achievement.populate().execPopulate();
+            return achievement.populate('pictures').execPopulate();
         });
     return nodify(promise, cb);
 });
@@ -132,7 +132,7 @@ AchievementSchema.static('readAll', function(cb) {
             return Promise.all(
                 _.map(achievements)
                     .each(function(achievement) {
-                        return achievement.populate().execPopulate();
+                        return achievement.populate('pictures').execPopulate();
                     })
             );
         });
@@ -152,7 +152,7 @@ AchievementSchema.static('readAll', function(cb) {
 AchievementSchema.static('patch', function(achievement, data, cb) {
     debug('patch');
     var promise = achievement.patch(data).then(function(achievement) {
-        return achievement.populate().execPopulate();
+        return achievement.populate('pictures').execPopulate();
     });
     return nodify(promise, cb);
 });
