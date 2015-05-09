@@ -65,14 +65,14 @@ AchievementSchema.pre('remove', function(next) {
     next();
 });
 
-/// #### `Achievement.create(data, [cb])`
+/// #### `Achievement.create(data[, cb])`
 /// Creates an `Achievement` instance with the given data.
 ///
-/// __Parameters:__
+/// **Parameters:**
 /// - `data`.
 /// - `cb`, a node.js style callback.
 ///
-/// __Returns:__
+/// **Return:**
 /// - `Promise`.
 AchievementSchema.static('create', function(data, cb) {
     debug('creating Achievement', data);
@@ -97,14 +97,14 @@ AchievementSchema.static('create', function(data, cb) {
     return nodify(promise, cb);
 });
 
-/// #### `Achievement.read(id, [cb])`
+/// #### `Achievement.read(id[, cb])`
 /// Returns an `Achievement` given its id.
 ///
-/// __Parameters:__
+/// **Parameters:**
 /// - `id`.
 /// - `cb`, a node.js style callback.
 ///
-/// __Returns:__
+/// **Return:**
 /// - `Promise`.
 AchievementSchema.static('read', function(id, cb) {
     debug('read');
@@ -118,10 +118,10 @@ AchievementSchema.static('read', function(id, cb) {
 /// #### `Achievement.readAll([cb])`
 /// Returns all `Achievement` instances.
 ///
-/// __Parameters:__
+/// **Parameters:**
 /// - `cb`, a node.js style callback.
 ///
-/// __Returns:__
+/// **Return:**
 /// - `Promise`.
 AchievementSchema.static('readAll', function(cb) {
     debug('readAll');
@@ -137,15 +137,15 @@ AchievementSchema.static('readAll', function(cb) {
     return nodify(promise, cb);
 });
 
-/// #### `Achievement.patch(achievement, data, [cb])`
+/// #### `Achievement.patch(achievement, data[, cb])`
 /// Patch the given `Achievement` instance, with the given data.
 ///
-/// __Parameters:__
+/// **Parameters:**
 /// - `achievement`,
 /// - `data`,
 /// - `cb`, a node.js style callback.
 ///
-/// __Returns:__
+/// **Return:**
 /// - `Promise`.
 AchievementSchema.static('patch', function(achievement, data, cb) {
     debug('patch');
@@ -155,14 +155,14 @@ AchievementSchema.static('patch', function(achievement, data, cb) {
     return nodify(promise, cb);
 });
 
-/// #### `Achievement.delete(achievement, [cb])`
+/// #### `Achievement.delete(achievement[, cb])`
 /// Deletes the given `Achievement` instance.
 ///
-/// __Parameters:__
+/// **Parameters:**
 /// - `achievement`,
 /// - `cb`, a node.js style callback.
 ///
-/// __Returns:__
+/// **Return:**
 /// - `Promise`.
 AchievementSchema.static('delete', function(achievement, cb) {
     return nodify(achievement.remove(), cb);
@@ -172,10 +172,10 @@ AchievementSchema.static('delete', function(achievement, cb) {
 /// Returns a collection of all published `Achievement` instances. Documents
 /// are populated.
 ///
-/// __Parameters:__
+/// **Parameters:**
 /// - `cb`, a node.js style callback.
 ///
-/// __Returns:__
+/// **Return:**
 /// - `Promise`.
 AchievementSchema.static('published', function(cb) {
     var promise = Achievement.find({published: true, 'pictures': {$not: {$size: 0}}})
@@ -186,14 +186,14 @@ AchievementSchema.static('published', function(cb) {
     return nodify(promise, cb);
 });
 
-/// #### `Achievement#patch(data, [cb])`
+/// #### `Achievement#patch(data[, cb])`
 /// Patch this achievement with the given data.
 ///
-/// __Parameters:__
+/// **Parameters:**
 /// - `data`, data to patch this `Achievement` with.
 /// - `cb`, a node.js style callback.
 ///
-/// __Returns:__
+/// **Return:**
 /// - `Promise`.
 AchievementSchema.methods.patch = function(data, cb) {
     debug(util.format('patching %s with %s', this._id, util.inspect(data)));
