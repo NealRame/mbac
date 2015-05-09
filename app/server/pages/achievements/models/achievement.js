@@ -59,7 +59,7 @@ AchievementSchema.pre('remove', function(next) {
     debug(util.format('removing %s', this._id.toString()));
     _.chain(this.pictures)
         .map(function(picture) {
-            return _.has(picture, '_id') ? picture._id : picture;
+            return (!!picture._id) ? picture._id : picture;
         })
         .each(Picture.delete);
     next();
@@ -203,7 +203,7 @@ AchievementSchema.methods.patch = function(data, cb) {
     // in data.pictures. Others pictures are removed.
     var pictures = _.chain(this.pictures)
         .map(function(picture) {
-            return _.has(picture, '_id') ? picture._id : picture;
+            return (!!picture._id) ? picture._id : picture;
         })
         .filter(function(id) {
             if (! _.any(data.pictures, id.equals.bind(id))) {
@@ -213,7 +213,8 @@ AchievementSchema.methods.patch = function(data, cb) {
                 return false;
             }
             return true;
-        });
+        })
+        .value();
     // Create pictures and patch the model.
     var promise = Picture.create(data.files)
         .then(_.partial(_.pluck, _, '_id'))
