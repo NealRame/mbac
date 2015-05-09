@@ -7,8 +7,9 @@ var _ = require('underscore');
 var async = require('async');
 var debug = require('debug')('mbac:routes.achievements');
 var express = require('express');
-var formidableGrid = require('formidable-grid');
+var FormidableGrid = require('formidable-grid');
 var helpers = require('helpers');
+var mongo = require('mongodb');
 var mongoose = require('mongoose');
 var path = require('path');
 var querystring = require('querystring');
@@ -16,141 +17,122 @@ var inspect = require('util').inspect;
 
 var Achievement = require(path.join(__dirname, 'models', 'achievement'));
 var ObjectId = mongoose.Types.ObjectId;
-var Promise = mongoose.Promise;
-var mongo = mongoose.mongo;
 var router = express.Router();
 
 function parse_data(req) {
-    var promise = new mongoose.Promise();
-    var data = {files: [], pictures: [], tags: []};
-    var form = formidableGrid(req.db, mongo, {
-        accept: ['image/.*']
+    var form = new FormidableGrid(req.db, mongo, {
+        accepted_mime_types: [/image\/.*/],
+        accepted_field_names: ['name', 'date', 'description', 'files', 'pictures', 'published', 'tags']
     });
-
-    _.bindAll(promise, 'fulfill', 'error');
-
-    form
-    .on('file', function(name, file) {
-        if (name === 'pictures') {
-            data.files.push({original: file.id});
-        }
-    })
-    .on('field', function(name, value) {
-        switch (name) {
-        case 'pictures':
-            data.pictures.push(new ObjectId(value));
-            break;
-        case 'tags':
-            data.tags.push(value);
-            break;
-        default:
-            _.extend(data, querystring.parse(name + '=' + value));
-            break;
-        }
-    })
-    .once('error', promise.error)
-    .once('end', function() {
-        promise.fulfill(data);
-    })
-    .parse(req);
-
-    return promise;
-}
-
-function read(req, res) {
-    var promise = new Promise();
-    var query = {};
-
-    if (! helpers.isAuthenticated(res)) {
-        // Unauthorized client only get published and non-empty achievements
-        // items.
-        _.chain(query)
-            .extend({published: true})
-            .extend({pictures: {$not: {$size: 0}}});
+    function get_field(data, key, transform) {
+        transform = transform || _.identity;
+        return transform(
+            _.chain(data)
+                .filter(function(part) {
+                    return part.field === key;
+                })
+                .map(_.property('value'))
+                .value()
+        );
     }
-
-    _.bindAll(promise, 'fulfill', 'error');
-    Achievement.find(query).exec()
-        .then(function(collection) {
-            return Achievement.populate(collection, {path: 'pictures'});
-        })
-        .then(promise.fulfill)
-        .then(null, promise.error);
-
-    return promise;
-}
-
-function readOne(req, res, id) {
-    var promise = new Promise();
-
-    _.bindAll(promise, 'fulfill', 'error');
-    Achievement.findById(id).exec()
-        .then(helpers.checkValue)
-        .then(function(achievement) {
-            if (! (achievement.published || helpers.isAuthenticated(res))) {
-                helpers.throw404(); // 401 or 404 ?
-            }
-            return Achievement.populate(achievement, {path: 'pictures'});
-        })
-        .then(promise.fulfill)
-        .then(null, promise.error);
-
-    return promise;
-}
-
-function create(req, res) {
-}
-
-router
-    .param('id', function(req, res, next, id) {
-        debug('load achievement[' + id + ']');
-        readOne(req, res, id)
-            .then(function(achievement) {
-                req.achievement = achievement;
-                next();
-            })
-            .then(null, function(err) {
-                debug(err);
-                next(err);
+    function make_object(data, attr_map) {
+        return _.object(
+            _.chain(attr_map)
+                .map(function(transform, key) {
+                    var value = get_field(data, key, transform);
+                    if (value) {
+                        return [key, value];
+                    }
+                })
+                .compact()
+                .value()
+        );
+    }
+    return form.parse(req)
+        .then(function(form_data) {
+            var data = make_object(form_data, {
+                date: _.first,
+                description: _.first,
+                files: _.identity,
+                name: _.first,
+                pictures: _.identity,
+                published: _.first,
+                tags: _.identity
             });
+            debug(inspect(data));
+            return data;
+        });
+}
+
+function read_one(req, res) {
+    var id = req.params.id;
+    debug('-- load achievement[' + id + ']');
+    return Achievement.findById(id).exec()
+        .then(helpers.exist)
+        .then(function(achievement) {
+            // if (! (achievement.published || helpers.isAuthenticated(res))) {
+            //     helpers.throw404(); // 401 or 404 ?
+            // }
+            return Achievement.populate(achievement, {path: 'pictures'});
+        });
+}
+
+function read_all(req, res) {
+    var query = {};
+    // if (! helpers.isAuthenticated(res)) {
+    //     // Unauthorized client only get published and non-empty achievements
+    //     // items.
+    //     _.chain(query).extend({
+    //         published: true,
+    //         pictures: {$not: {$size: 0}}
+    //     });
+    // }
+    return Achievement.find(query).exec().then(function(collection) {
+        return Achievement.populate(collection, {path: 'pictures'});
     });
+}
+
+function achievement_create(req, res, next) {
+    parse_data(req)
+        .then(Achievement.create).then(res.send.bind(res), next);
+}
+
+function achievement_read(req, res, next) {
+    var promise = _.isUndefined(req.params.id)
+        ? read_all(req, res)
+        : read_one(req, res);
+    promise.then(res.send.bind(res), next);
+}
+
+function achievement_update(req, res, next) {
+    Promise.all([read_one(req, res), parse_data(req, res)])
+        .then(function() {
+            return Achievement.patch.apply(null, _.first(arguments));
+        })
+        .then(res.send.bind(res), next);
+}
+
+function achievement_delete(req, res, next) {
+    Achievement.delete(req.params.id)
+        .then(res.sendStatus.bind(res, 200), next);
+}
 
 router
-    .get('/', function(req, res, next) {
-        read(req, res)
-            .then(res.send.bind(res))
-            .then(null, next);
-    })
-    .get('/:id', function(req, res, next) {
-        res.send(req.achievement);
-    });
+    .get('/', achievement_read)
+    .get('/:id', achievement_read);
 
 // router
 // .use('/', helpers.authorized())
 
 router
     .route('/')
-    .post(function(req, res, next) {
-        parse_data(req)
-            .then(Achievement.create)
-            .then(res.send.bind(res))
-            .then(null, next);
-    })
+    .post(achievement_create)
     .all(helpers.forbidden());
 
 router
     .route('/:id')
-    .put(function(req, res, next) {
-        parse_data(req)
-            .then(Achievement.patch.bind(null, req.achievement))
-            .then(res.send.bind(res))
-            .then(null, next);
-    })
-    .delete(function(req, res, next) {
-        Achievement.delete(req.achievement)
-            .then(res.sendStatus.bind(res, 200))
-            .then(null, next);
-    })
+    .put(achievement_update)
+    .delete(achievement_delete)
     .all(helpers.forbidden());
 
 module.exports = router;
