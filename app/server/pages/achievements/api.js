@@ -106,8 +106,8 @@ function achievement_read(req, res, next) {
 
 function achievement_update(req, res, next) {
     Promise.all([read_one(req, res), parse_data(req, res)])
-        .then(function() {
-            return Achievement.patch.apply(null, _.first(arguments));
+        .then(function(args) {
+            return Achievement.patch.apply(null, args);
         })
         .then(res.send.bind(res), next);
 }
