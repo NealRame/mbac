@@ -6,7 +6,7 @@ define(function(require) {
     var _ = require('underscore');
     var $ = require('jquery');
     var Backbone = require('backbone');
-    var Marionette = Backbone.Marionette;
+    var Marionette = require('marionette');
     var Promise = require('promise');
 
     var functional = require('common/functional');
