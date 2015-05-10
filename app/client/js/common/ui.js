@@ -6,11 +6,20 @@ define(function(require) {
     var _ = require('underscore');
     var $ = require('jquery');
 
-    function sticky_footer(footer, offset) {
-        footer.css(
+    /// #### ui.pushDown(source, target, offset)
+    /// Position the given source element in the bottom of the target element.
+    ///
+    /// __Parameters__:
+    /// - `source`, a jquery element or a dom object.
+    /// - `target`, a jquery element or a dom object.
+    /// - `offset`, _optional_, default value is 0.
+    function push_down(source, target, offset) {
+        offset = offset || 0;
+        source.css('margin-top', 0);
+        source.css(
             'margin-top',
             Math.max(
-                $(this).height() - footer.position().top - footer.height() + offset,
+                $(target).height() - $(source).position().top - $(source).height() + offset,
                 0
             )
         );
@@ -26,7 +35,7 @@ define(function(require) {
     /// Both `source` and `target` are objects with `width` and `height`
     /// attributes.
     ///
-    /// __Returns:__
+    /// __Return:__
     /// - An object with `left` attribute.
     function h_center(source, target) {
         try {
@@ -51,7 +60,7 @@ define(function(require) {
     /// Both `source` and `target` are objects with `width` and `height`
     /// attributes.
     ///
-    /// __Returns:__
+    /// __Return:__
     /// - An object with `top` attribute.
     function v_center(source, target) {
         try {
@@ -75,7 +84,7 @@ define(function(require) {
     /// Both `source` and `target` are objects with `width` and `height`
     /// attributes.
     ///
-    /// __Returns:__
+    /// __Return:__
     /// - An object with `left` and `top` attributes.
     function center(source, target) {
         return _.extend(h_center(source, target), v_center(source, target));
@@ -92,7 +101,7 @@ define(function(require) {
     /// Both `source` and `target` are objects with `width` and `height`
     /// attributes.
     ///
-    /// __Returns:__
+    /// __Return:__
     /// - An object with `width` and `height` attributes.
     function crop_fit(source, target) {
         try {
@@ -123,7 +132,7 @@ define(function(require) {
     /// Both `source` and `target` are objects with `width` and `height`
     /// attributes.
     ///
-    /// __Returns:__
+    /// __Return:__
     /// - An object with `width` and `height` attributes.
     function fit(source, target) {
         try {
@@ -150,7 +159,7 @@ define(function(require) {
     /// - `source`, an object with `width` and `height` attributes,
     /// - `ratio`, the ratio use to scale the given rectangle.
     ///
-    /// __Returns:__
+    /// __Return:__
     /// - An object with `width` and `height` attributes.
     function scale(source, ratio) {
         try {
@@ -169,7 +178,7 @@ define(function(require) {
     /// __Parameters:__
     /// - `element`, a dom or jquery object.
     ///
-    /// __Returns:__
+    /// __Return:__
     /// - An object with `width` and `height` attributes.
     function rect(element) {
         try {
@@ -190,7 +199,7 @@ define(function(require) {
     /// __Parameters:__
     /// - `element`, a dom or jquery object.
     ///
-    /// __Returns:__
+    /// __Return:__
     /// - An object with `width` and `height` attributes.
     function outer_rect(element) {
         try {
@@ -211,7 +220,7 @@ define(function(require) {
     /// __Parameters:__
     /// - `element`, a dom or jquery object.
     ///
-    /// __Returns:__
+    /// __Return:__
     /// - An object with `width` and `height` attributes.
     function natural_rect(element) {
         try {
@@ -237,6 +246,6 @@ define(function(require) {
         outerRect: outer_rect,
         rect: rect,
         scale: scale,
-        stickyFooter: sticky_footer,
+        pushDown: push_down,
     };
 });
