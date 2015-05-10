@@ -8,10 +8,10 @@ define(function(require) {
     var Marionette = require('marionette');
     var Promise = require('promise');
 
-    var async = require('utils/async');
-    var functional = require('utils/functional');
-    var ui = require('utils/ui');
     var Thumbnail = require('Thumbnail');
+    var async = require('common/async');
+    var functional = require('common/functional');
+    var ui = require('common/ui');
     var template = require('text!common/Lightbox/lightbox.html');
 
     var ESC_KEY = 27;
