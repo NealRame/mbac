@@ -57,7 +57,7 @@ define(function(require) {
     });
 
     function current_achievement_id() {
-        return _.last(window.location.href.split('/'));
+        return _.last(window.location.pathname.split('/'));
     }
 
     var AchievementApp = Marionette.LayoutView.extend({
