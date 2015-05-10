@@ -8,7 +8,6 @@ define(function(require) {
     var Marionette = require('marionette');
     var Promise = require('promise');
 
-    var Thumbnail = require('Thumbnail');
     var async = require('common/async');
     var functional = require('common/functional');
     var ui = require('common/ui');
@@ -17,46 +16,6 @@ define(function(require) {
     var ESC_KEY = 27;
     var PREV_KEY = 37;
     var NEXT_KEY = 39;
-
-    var ThumbnailList = Marionette.CollectionView.extend({
-        className: 'thumbnails',
-        tagName: 'ul',
-        thumbnailHeight: 131,
-        thumbnailWidth: 196,
-        thumbnailMargin: 4,
-        childView: Thumbnail,
-        childEvents: {
-            'ready': 'onChildReady'
-        },
-        initialize: function() {
-            this._ready = 0;
-        },
-        childViewOptions: function() {
-            return {
-                tagName: 'li',
-                height: Marionette.getOption(this, 'thumbnailHeight'),
-                width: Marionette.getOption(this, 'thumbnailWidth'),
-                margin: Marionette.getOption(this, 'thumbnailMargin'),
-            };
-        },
-        onRender: function() {
-            var thumb_count = this.collection.length;
-            var thumb_width = Marionette.getOption(this, 'thumbnailWidth');
-            var thumb_margin = Marionette.getOption(this, 'thumbnailMargin');
-            var width = thumb_count*(thumb_width + 2*thumb_margin + 4);
-            var max_width = $(window).width() - 32;
-
-            this.$el.width(width);
-        },
-        onChildReady: function() {
-            if (++this._ready >= this.collection.length) {
-                this.trigger('ready');
-            }
-        },
-        onShow: function() {
-
-        },
-    });
 
     var Lightbox = Marionette.LayoutView.extend({
         className: 'lightbox',
