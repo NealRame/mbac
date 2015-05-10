@@ -29,13 +29,14 @@ define(function(require) {
             'click': 'close',
             'click @ui.picture > img': 'onPictureClick',
             'click @ui.picture > .error': 'onPictureClick',
-            'click @ui.arrows': 'onArrowClick'
+            'click @ui.forward': 'onForwardClick',
+            'click @ui.rewind': 'onRewindClick'
         },
         template: _.template(template),
+        startIndex: 0,
         initialize: function() {
             this.count = this.collection.length;
-            this.current = 0;
-
+            this.current = Math.min(Marionette.getOption(this, 'startIndex'), this.count)%this.count;
             var keyup_cb = this.onKeypress.bind(this);
             var resize_cb = _.debounce(this.onWindowResized.bind(this), 100);
             var show_arrow_cb = _.debounce(
@@ -45,7 +46,6 @@ define(function(require) {
                 300,
                 true
             );
-
             this.listenToOnce(this, 'opened', function() {
                 this.$el.on('mousemove', show_arrow_cb);
                 $(window).on('keyup', keyup_cb);
@@ -101,13 +101,14 @@ define(function(require) {
             }
         },
         showNextPicture: function() {
-            this.showPicture((this.current + 1) % this.count);
+            this.current = ((this.current + 1)%this.count);
+            this.showPicture();
         },
         showPreviousPicture: function() {
-            this.showPicture((this.current - 1 + this.count) % this.count);
+            this.current = ((this.current - 1 + this.count)%this.count);
+            this.showPicture();
         },
-        showPicture: function(index) {
-            this.current = index;
+        showPicture: function() {
             this.ui.picture.empty().append(this.spinner());
             this.setGeometry();
             this.image()
@@ -129,7 +130,7 @@ define(function(require) {
         open: function() {
             this.$el.fadeIn((function() {
                 this.trigger('opened');
-                this.showPicture(0);
+                this.showPicture();
             }).bind(this));
         },
         close: function() {
@@ -138,11 +139,17 @@ define(function(require) {
                 this.trigger('closed');
             }).bind(this));
         },
-        onArrowClick: function(e) {
+        onForwardClick: function(e) {
+            this.onArrowClick(e, true);
+        },
+        onRewindClick: function(e) {
+            this.onArrowClick(e, false);
+        },
+        onArrowClick: function(e, forward) {
             e.preventDefault();
             e.stopPropagation();
             this.scheduleHideNavigationArrows();
-            if ($(e.target).attr('id') === 'forward') {
+            if (forward) {
                 this.showNextPicture();
             } else {
                 this.showPreviousPicture();
@@ -255,19 +262,23 @@ define(function(require) {
         }
     });
 
-    Lightbox.open = function(collection) {
+    Lightbox.open = function(collection, start_index) {
+        start_index = start_index || 0;
         var lightbox;
         if (collection instanceof Backbone.Collection) {
             lightbox = new Lightbox({
-                collection: collection
+                collection: collection,
+                startIndex: start_index
             });
         } else if (_.isArray(collection)) {
             lightbox = new Lightbox({
-                collection: new Backbone.Collection(collection)
+                collection: new Backbone.Collection(collection),
+                startIndex: start_index
             });
         } else if (collection instanceof Backbone.Model) {
             lightbox = new Lightbox({
-                collection: new Backbone.Collection([collection])
+                collection: new Backbone.Collection([collection]),
+                startIndex: start_index
             });
         } else {
             throw new TypeError('Need a an array or a collection of pictures or a single picture model');
