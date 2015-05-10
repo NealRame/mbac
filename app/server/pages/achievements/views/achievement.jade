@@ -15,6 +15,7 @@ block content
                 h1: | #{achievement.name}
             section
                 p: | #{achievement.description}
-                ul.thumbnails
-                    each picture in achievement.pictures
-                        +picture-item(picture)
+                #content-wrapper
+                    ul(style='display: none;')
+                        each picture in achievement.pictures
+                            +picture-item(picture)

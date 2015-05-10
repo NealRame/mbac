@@ -16,7 +16,7 @@ block content
         article
             header: h1
                 | Réalisations des clients de mon Bar à Couture
-
-            ul.achievements
-                each achievement in achievements
-                    +achievement-item(achievement)
+            #content-wrapper
+                ul.achievements
+                    each achievement in achievements
+                        +achievement-item(achievement)
