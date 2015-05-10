@@ -24,7 +24,8 @@ define(function(require) {
 
             this.listView = new AchievementList({
                 collection: this.collection,
-                editable: true
+                editable: true,
+                clickBehavior: 'default'
             });
             this.menuView = new AchievementMenu({
                 collection: this.collection
@@ -36,7 +37,6 @@ define(function(require) {
             this.listenTo(this.listView, 'childview:edit', function(view, achievement) {
                 AchievementEditorDialog.open(achievement);
             });
-
             app_channel.commands.setHandler('filter', function(tags) {
                 if (_.isEmpty(tags)) {
                     delete this.listView.filter;
