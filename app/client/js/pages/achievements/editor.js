@@ -23,6 +23,7 @@ define(function(require) {
         childViewOptions: {
             tagName: 'li',
             removable: true,
+            clickBehavior: 'none',
             rect: {
                 height: 128,
                 width: 192
