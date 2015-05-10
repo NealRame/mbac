@@ -7,11 +7,9 @@ define(function(require) {
     var Achievement = require('pages/achievements/achievement');
     var AchievementList = require('pages/achievements/achievement-list');
 
-    $('ul.achievements').empty();
-
     var AchievementApp = Marionette.LayoutView.extend({
         regions: {
-            'list': 'ul.achievements',
+            'list': '#content-wrapper',
         },
         template: false,
         initialize: function() {
@@ -20,7 +18,8 @@ define(function(require) {
                 url: '/api/achievements'
             }))();
             this.listView = new AchievementList({
-                collection: this.collection
+                collection: this.collection,
+                clickBehavior: 'default'
             });
             this.listenTo(this.listView, 'ready', function() {
                 ui.pushDown($('body > footer').first(), window, 0);
@@ -28,7 +27,9 @@ define(function(require) {
             this.collection.fetch({reset: true});
         },
         onRender: function() {
-            this.showChildView('list', this.listView);
+            var region = this.getRegion('list');
+            region.$el.empty().show();
+            region.show(this.listView);
         }
     });
 
