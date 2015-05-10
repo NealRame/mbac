@@ -33,6 +33,20 @@ define(function(require) {
         );
     }
 
+    var ThumbnailLinkBehavior = Marionette.Behavior.extend({
+        events: {
+            'click @ui.thumbLink': 'onThumbLinkClicked'
+        },
+        onThumbLinkClicked: function(ev) {
+            if (Marionette.getOption(this.view, 'clickBehavior') === 'trigger') {
+                ev.preventDefault();
+                ev.stopPropagation();
+                this.view.trigger('click');
+                return false;
+            }
+        }
+    });
+
     return Marionette.ItemView.extend({
         className: 'thumb',
         ui: {
@@ -45,9 +59,12 @@ define(function(require) {
             'mouseenter': 'onMouseEnter',
             'mouseleave': 'onMouseLeave',
         },
-        triggers: {
-            'click @ui.thumbLink': 'click',
+        behaviors: {
+            thumbLink: {
+                behaviorClass: ThumbnailLinkBehavior
+            }
         },
+        clickBehavior: 'trigger',
         editable: false,
         removable: false,
         serializedData: function() {
