@@ -13,19 +13,21 @@ define(function(require) {
 	var ui = require('common/ui');
 
 	return function(model) {
-		if (functional.hasAllOfAttributes(model, 'original', 'thumbnail'))
-		return async.loadImage(model.thumbnailURL())
-			.bind(this)
-			.then(function(image) {
-				var rect = this.innerRect();
-				$(image).css(ui.center(ui.cropFit(ui.naturalRect(image), rect), rect));
-				return {
-					el: image,
-					target: model.originalURL()
-				};
-			})
-			.catch(function() {
-				throw new Error('Failed to load image: ' + source);
-			});
+		debugger;
+		if (functional.hasAllOfAttributes(model, 'original', 'thumbnail')) {
+			return async.loadImage(model.thumbnailURL())
+				.bind(this)
+				.then(function(image) {
+					var rect = this.innerRect();
+					$(image).css(ui.center(ui.cropFit(ui.naturalRect(image), rect), rect));
+					return {
+						el: image,
+						target: model.originalURL()
+					};
+				})
+				.catch(function() {
+					throw new Error('Failed to load image: ' + source);
+				});
+		}
 	};
 });
