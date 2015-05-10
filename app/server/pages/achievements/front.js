@@ -17,6 +17,7 @@ var page_template = path.join(__dirname, 'views', 'achievement.jade');
 router
     // GET achievements page.
     .get('/', function(req, res, next) {
+        res.locals.page.application = path.join('pages/achievements/front-main-list');
         Achievement.published()
             .then(function(achievements) {
                 res.render(list_template, {achievements: achievements});
@@ -24,6 +25,7 @@ router
             .then(null, next);
     })
     .get('/:id', function(req, res, next) {
+        res.locals.page.application = path.join('pages/achievements/front-main-view');
         Achievement.findById(req.params.id)
             .populate('pictures')
             .where('published', true)
