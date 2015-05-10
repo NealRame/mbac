@@ -126,8 +126,10 @@ define(function(require) {
                 .then(function(thumbnail) {
                     this.ui.thumbLink
                         .empty()
-                        .append(thumbnail.el || this.placeholder('empty'))
-                        .attr('href', thumbnail.target);
+                        .append(thumbnail.el || this.placeholder('empty'));
+                    if (Marionette.getOption(this, 'clickBehavior') !== 'none') {
+                        this.ui.thumbLink.attr('href', thumbnail.target);
+                    }
                     this.trigger('ready');
                 })
                 .catch(function() {
