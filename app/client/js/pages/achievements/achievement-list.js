@@ -24,6 +24,7 @@ define(function(require) {
         className: 'thumbnails',
         tagName: 'ul',
         editable: false,
+        clickBehavior: 'trigger',
         childView: Thumbnail,
         childEvents: {
             edit: 'onChildEdit',
@@ -35,6 +36,7 @@ define(function(require) {
                 tagName: 'li',
                 removable: Marionette.getOption(this, 'editable'),
                 editable: Marionette.getOption(this, 'editable'),
+                clickBehavior: Marionette.getOption(this, 'clickBehavior'),
                 renderers: [achievement_render]
             };
         },
