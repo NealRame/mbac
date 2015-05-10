@@ -13,7 +13,6 @@ define(function(require) {
 	var ui = require('common/ui');
 
 	return function(model) {
-		debugger;
 		if (functional.hasAllOfAttributes(model, 'original', 'thumbnail')) {
 			return async.loadImage(model.thumbnailURL())
 				.bind(this)
