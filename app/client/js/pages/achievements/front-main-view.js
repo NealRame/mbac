@@ -23,8 +23,11 @@ define(function(require) {
             this.listenToOnce(this, 'childview:show', function() {
                 this.center_();
             });
-
+            this.listenTo(this, 'childview:click', function(view) {
+                LightBox.open(this.collection, view._index);
+            });
         },
+        childView: Thumbnail,
         childViewOptions: function() {
             return {
                 tagName: 'li',
@@ -34,7 +37,6 @@ define(function(require) {
                 }
             };
         },
-        childView: Thumbnail,
         onChildReady: function() {
             if (++this.ready_ >= this.collection.length) {
                 ui.pushDown($('body > footer').first(), window, 0);
@@ -69,10 +71,6 @@ define(function(require) {
             this.achievementPictureList = new AchievementPictureList({
                 collection: new Backbone.Collection(this.model.pictures())
             });
-            this.listenTo(this.achievementPictureList, 'childview:click', function(view) {
-                LightBox.open(this.achievementPictureList.collection);
-                console.log(view);
-            });
         },
         onRender: function() {
             var region = this.getRegion('list');
@@ -93,7 +91,4 @@ define(function(require) {
         });
         app.render();
     })
-
-
-
 });
