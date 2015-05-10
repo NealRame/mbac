@@ -1,21 +1,14 @@
 define(function(require) {
     var $ = require('jquery');
     var Foundation = require('foundation');
-    var footer = $('body > footer').first();
-
-    function stick(offset) {
-        footer.css(
-            'margin-top',
-            Math.max(
-                $(this).height() - footer.position().top - footer.height() + offset,
-                0
-            )
-        );
-    }
-
-    $(document).foundation();
-    $(window)
-        .bind('load', stick.bind(null, 0))
-        .bind('resize', Foundation.utils.throttle(stick.bind(null, 0), 150));
-    stick(0);
+    var ui = require('common/ui');
+    $(function() {
+        var footer = $('body > footer').first();
+        var push_footer_down = ui.pushDown.bind(null, footer, window, 0);
+        $(document).foundation();
+        $(window)
+            .bind('load', push_footer_down)
+            .bind('resize', Foundation.utils.throttle(push_footer_down, 150));
+        push_footer_down();
+    });
 });
