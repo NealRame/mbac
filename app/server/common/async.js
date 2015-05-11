@@ -68,7 +68,7 @@ function nodify(promise, callback) {
     if (callback) {
         promise.then(
             function() {
-                callback.apply(null, [null].concat(arguments));
+                callback.apply(null, [null].concat(_.toArray(arguments)));
             },
             function(err) {
                 callback.call(null, err);
