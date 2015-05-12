@@ -4,6 +4,7 @@
 // -   date: Mon Jan 19 22:25:36 CET 2015
 
 var _ = require('underscore');
+var async = require('async');
 var common = require('common');
 var debug = require('debug')('mbac:models.Picture');
 var GridFs = require('gridfs');
@@ -44,6 +45,30 @@ var PictureSchema = new Schema({
         type: Schema.Types.ObjectId,
         required: true
     },
+    /// #### `Picture#originalWidth`
+    /// _REQUIRED_, _read only_. Width of the original image.
+    originalWidth: {
+        type: Number,
+        required: true,
+    },
+    /// #### `Picture#originalHeight`
+    /// _REQUIRED_, _read only_. Height of the original image.
+    originalHeight: {
+        type: Number,
+        required: true,
+    },
+    /// #### `Picture#thumbnailWidth`
+    /// _REQUIRED_, _read only_. Width of the thumbnail image.
+    thumbnailWidth: {
+        type: Number,
+        required: true,
+    },
+    /// #### `Picture#thumbnailHeight`
+    /// _REQUIRED_, _read only_. Height of the thumbnail image.
+    thumbnailHeight: {
+        type: Number,
+        required: true,
+    }
 });
 
 PictureSchema.pre('remove', function(next) {
@@ -61,6 +86,20 @@ PictureSchema.pre('remove', function(next) {
 
 /// ### Methods
 
+function picture_size(file_id) {
+    return new Promise(function(resolve, reject) {
+        var gfs = new GridFs(mongo, mongoose.connection.db);
+        gm(gfs.createReadStream(file_id))
+            .size({bufferStream: true}, function(err, size) {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(size);
+                }
+            });
+    });
+}
+
 /// #### `Picture.create(original[, cb])`
 /// Create a picture instance with the given image.
 ///
@@ -75,35 +114,43 @@ PictureSchema.pre('remove', function(next) {
 PictureSchema.static('create', function(file, cb) {
     debug(util.format('create picture width %s', util.inspect(file)));
     if (_.isArray(file)) {
-        return nodify(Promise.all(
-            _.map(file, function(file_id) {
-                return Picture.create(file_id);
-            })
-        ), cb);
+        return nodify(new Promise(function(resolve, reject) {
+            async.mapSeries(file, Picture.create, make_callback(resolve, reject));
+        }), cb);
     }
     var promise = new Promise(function(resolve, reject) {
         var gfs = new GridFs(mongo, mongoose.connection.db);
         var orig_id = _.isString(file) ? new mongo.ObjectId(file) : file;
         var thmb_id = new mongo.ObjectId();
-        var istream = gfs.createReadStream(orig_id);
-        var ostream = gfs.createWriteStream(thmb_id, {
-            content_type: 'image/png'
-        });
-        ostream
-            .once('error', reject)
-            .once('end', function() {
-                gfs.closeAsync(ostream.gs)
-                    .then(function() {
-                        var picture = new Picture({
-                            original: orig_id,
-                            thumbnail: thmb_id,
-                        });
-                        return picture.save();
-                    })
-                    .then(resolve)
-                    .catch(reject);
-            });
-        gm(istream).resize(256).stream('png').pipe(ostream);
+        picture_size(orig_id)
+            .then(function(size) {
+                var data = {
+                    original: orig_id,
+                    thumbnail: thmb_id,
+                    originalWidth: size.width,
+                    originalHeight: size.height,
+                    thumbnailWidth: 256,
+                    thumbnailHeight: 256/(size.width/size.height)
+                };
+                var istream = gfs.createReadStream(orig_id);
+                var ostream = gfs.createWriteStream(thmb_id, {
+                    content_type: 'image/png'
+                });
+                ostream
+                    .once('error', reject)
+                    .once('end', function() {
+                        debug('end of thumbnail', thmb_id);
+                        gfs.closeAsync(ostream.gs)
+                            .then(function() {
+                                var picture = new Picture(data);
+                                return picture.save();
+                            })
+                            .then(resolve)
+                            .catch(reject);
+                    });
+                gm(istream).resize(256).stream('png').pipe(ostream);
+            })
+            .catch(reject);
     });
     return nodify(promise, cb);
 });
