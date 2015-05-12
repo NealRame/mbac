@@ -10,10 +10,10 @@ var mongoose = require('mongoose');
 var Picture = require('models/picture');
 var util = require('util');
 
+var make_callback = common.async.make_callback;
 var make_promise = common.async.make_promise;
 var nodify = common.async.nodify;
 var ObjectId = mongoose.Schema.Types.ObjectId;
-var Promise = mongoose.Promise;
 var Schema = mongoose.Schema;
 
 /// ### Fields
@@ -169,21 +169,31 @@ AchievementSchema.static('delete', function(achievement, cb) {
     return nodify(achievement.remove(), cb);
 });
 
-/// #### `Achievement.published([cb])`
-/// Returns a collection of all published `Achievement` instances. Documents
-/// are populated.
+/// #### `Achievement.published([limit][,cb])`
+/// Returns a collection of published `Achievement` instances. Documents are
+/// populated. If no limit is specified, all the `Achievement` will be
+/// returned.
 ///
 /// **Parameters:**
-/// - `cb`, a node.js style callback.
+/// - `limit`, _optional_. The limit number of `Achievement` to be returned.
+/// - `cb`, _optional_. A node.js style callback.
 ///
 /// **Return:**
 /// - `Promise`.
-AchievementSchema.static('published', function(cb) {
-    var promise = Achievement.find({published: true, 'pictures': {$not: {$size: 0}}})
-        .exec()
-        .then(function(collection) {
-            return Achievement.populate(collection, {path: 'pictures'});
-        });
+AchievementSchema.static('published', function(count, cb) {
+    if (_.isFunction(count)) {
+        cb = count;
+        count = null;
+    }
+    var promise = new Promise(function(resolve, reject) {
+        Achievement.find({published: true, 'pictures': {$not: {$size: 0}}})
+            .limit(count || 0)
+            .exec()
+            .then(function(collection) {
+                return Achievement.populate(collection, {path: 'pictures'});
+            })
+            .then(resolve, reject);
+    });
     return nodify(promise, cb);
 });
 
