@@ -71,6 +71,12 @@ var PictureSchema = new Schema({
     }
 });
 
+/// #### `Picture#ratio`
+/// _Read only_. The ratio of the `originalWidth` by the `originalHeight`.
+PictureSchema.virtual('ratio').get(function() {
+    return this.originalWidth/this.originalHeight;
+});
+
 PictureSchema.pre('remove', function(next) {
     debug(util.format('removing %s', this._id.toString()));
     var gfs = new GridFs(mongo, mongoose.connection.db);
