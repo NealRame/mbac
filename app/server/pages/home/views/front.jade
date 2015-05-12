@@ -2,6 +2,14 @@
 //- ===========
 //- - author: Neal.Rame. <contact@nealrame.com>
 //- -   date: Wed Apr  1 19:58:54 CEST 2015
+
+mixin achievement-item(achievement)
+    li.thumb
+        a(href='/achievements/#{achievement.id}')
+            figure.crop(title='#{achievement.name}')
+                - var thumbnail = achievement.pictures[0].thumbnailPath()
+                img(src='#{thumbnail}')
+
 extends /layout
 block content
     div.splash
@@ -80,15 +88,15 @@ block content
                     a(href="#", data-reveal-id="newsletter-modal").button.text-center
                         | Je m'abonne !
 
-    section.wrapper.filled
-        article
-            header
-                h1: | Dernières réalisations
-            section
-                ul.small-block-grid-1.medium-block-grid-3
-                    li: img(src="/images/84191566b67168a139c3b17378add6c4.jpg")
-                    li: img(src="/images/9ccd6eca84a062668b0c08bbf2c6b75a.jpg")
-                    li: img(src="/images/f2a3742840b9331f254a696b7361e6da.jpg")
+    if achievements.length > 0
+        section.wrapper.filled
+            article
+                header
+                    h1: | Dernières réalisations
+                section
+                    ul#achievements.small-block-grid-1.medium-block-grid-3
+                        each achievement in achievements
+                            +achievement-item(achievement)
 
     div(class="reveal-modal", id="newsletter-modal" data-reveal)
         a.close-reveal-modal &#215;
