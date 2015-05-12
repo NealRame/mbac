@@ -19,55 +19,77 @@ var nodify = common.async.nodify;
 var Schema = mongoose.Schema;
 
 /// ### Fields
+
 var PictureSchema = new Schema({
-    /// #### date
+    /// #### `Picture#date`
     /// Date of creation of this picture. Default value is 'Date.now'.
     date: {
         type: Date,
         default: Date.now
     },
-    /// #### prefix
+    /// #### `Picture#prefix`
     /// Prepended to `original` or `thumbnail` ids to create path.
-    /// Default value is 'files'.
+    /// _Read only_. Default value is 'files'.
     prefix: {
         type: String,
-        default: 'files'
+        default: 'files',
+        set: function(val) {
+            return this.prefix = this.prefix || val;
+        }
     },
-    /// #### original
-    /// _REQUIRED_. Id of the original file.
+    /// #### `Picture#original`
+    /// _REQUIRED_, _read only_. Id of the original file.
     original: {
         type: Schema.Types.ObjectId,
-        required: true
+        required: true,
+        set: function(val) {
+            return this.original = this.original || val;
+        }
     },
-    /// #### thumbnail
-    /// _REQUIRED_. Id of the thumbnail file.
+    /// #### `Picture#thumbnail`
+    /// _REQUIRED_, _read only_. Id of the thumbnail file.
     thumbnail: {
         type: Schema.Types.ObjectId,
-        required: true
+        required: true,
+        set: function(val) {
+            return this.thumbnail = this.thumbnail || val;
+        }
     },
     /// #### `Picture#originalWidth`
     /// _REQUIRED_, _read only_. Width of the original image.
     originalWidth: {
         type: Number,
         required: true,
+        set: function(val) {
+            return this.originalWidth = this.originalWidth || Math.round(val);
+        }
     },
     /// #### `Picture#originalHeight`
     /// _REQUIRED_, _read only_. Height of the original image.
     originalHeight: {
         type: Number,
         required: true,
+        set: function(val) {
+            return this.originalHeight = this.originalHeight || Math.round(val);
+        }
     },
     /// #### `Picture#thumbnailWidth`
     /// _REQUIRED_, _read only_. Width of the thumbnail image.
     thumbnailWidth: {
         type: Number,
         required: true,
+        set: function(val) {
+            return this.thumbnailWidth = this.thumbnailWidth || Math.round(val);
+        }
     },
     /// #### `Picture#thumbnailHeight`
     /// _REQUIRED_, _read only_. Height of the thumbnail image.
     thumbnailHeight: {
         type: Number,
         required: true,
+        set: function(val) {
+            return this.thumbnailHeight = this.thumbnailHeight || Math.round(val);
+        }
     }
 });
 
