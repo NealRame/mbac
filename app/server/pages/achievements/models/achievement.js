@@ -187,6 +187,7 @@ AchievementSchema.static('published', function(count, cb) {
     }
     var promise = new Promise(function(resolve, reject) {
         Achievement.find({published: true, 'pictures': {$not: {$size: 0}}})
+            .sort('-date')
             .limit(count || 0)
             .exec()
             .then(function(collection) {
