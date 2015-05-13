@@ -85,7 +85,7 @@ function read_all(req, res) {
             pictures: {$not: {$size: 0}}
         });
     }
-    return Achievement.find(query).exec().then(function(achievements) {
+    return Achievement.find(query).sort('-date').exec().then(function(achievements) {
         return Achievement.populate(achievements, {path: 'pictures'});
     });
 }
