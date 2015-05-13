@@ -43,6 +43,23 @@ body > .splash {
     }
 }
 
+#achievements {
+    li {
+        figure {
+            border: 4px solid white;
+            margin: 0;
+            padding: 0;
+            position: relative;
+            overflow: hidden;
+            img {
+                position: absolute;
+                max-width: none;
+                max-height: none;
+            }
+        }
+    }
+}
+
 section.wrapper {
     table.schedule {
         background-color: inherit;

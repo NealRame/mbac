@@ -4,11 +4,10 @@
 //- -   date: Wed Apr  1 19:58:54 CEST 2015
 
 mixin achievement-item(achievement)
+    - var thumbnail = achievement.pictures[0].thumbnailPath()
     li.thumb
         a(href='/achievements/#{achievement.id}')
-            figure.crop(title='#{achievement.name}')
-                - var thumbnail = achievement.pictures[0].thumbnailPath()
-                img(src='#{thumbnail}')
+            figure.crop(title='#{achievement.name}' data-uri='#{thumbnail}')
 
 extends /layout
 block content
