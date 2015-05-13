@@ -55,48 +55,6 @@ var PictureSchema = new Schema({
             return this.thumbnail = this.thumbnail || val;
         }
     },
-    /// #### `Picture#originalWidth`
-    /// _REQUIRED_, _read only_. Width of the original image.
-    originalWidth: {
-        type: Number,
-        required: true,
-        set: function(val) {
-            return this.originalWidth = this.originalWidth || Math.round(val);
-        }
-    },
-    /// #### `Picture#originalHeight`
-    /// _REQUIRED_, _read only_. Height of the original image.
-    originalHeight: {
-        type: Number,
-        required: true,
-        set: function(val) {
-            return this.originalHeight = this.originalHeight || Math.round(val);
-        }
-    },
-    /// #### `Picture#thumbnailWidth`
-    /// _REQUIRED_, _read only_. Width of the thumbnail image.
-    thumbnailWidth: {
-        type: Number,
-        required: true,
-        set: function(val) {
-            return this.thumbnailWidth = this.thumbnailWidth || Math.round(val);
-        }
-    },
-    /// #### `Picture#thumbnailHeight`
-    /// _REQUIRED_, _read only_. Height of the thumbnail image.
-    thumbnailHeight: {
-        type: Number,
-        required: true,
-        set: function(val) {
-            return this.thumbnailHeight = this.thumbnailHeight || Math.round(val);
-        }
-    }
-});
-
-/// #### `Picture#ratio`
-/// _Read only_. The ratio of the `originalWidth` by the `originalHeight`.
-PictureSchema.virtual('ratio').get(function() {
-    return this.originalWidth/this.originalHeight;
 });
 
 PictureSchema.pre('remove', function(next) {
@@ -113,20 +71,6 @@ PictureSchema.pre('remove', function(next) {
 });
 
 /// ### Methods
-
-function picture_size(file_id) {
-    return new Promise(function(resolve, reject) {
-        var gfs = new GridFs(mongo, mongoose.connection.db);
-        gm(gfs.createReadStream(file_id))
-            .size({bufferStream: true}, function(err, size) {
-                if (err) {
-                    reject(err);
-                } else {
-                    resolve(size);
-                }
-            });
-    });
-}
 
 /// #### `Picture.create(original[, cb])`
 /// Create a picture instance with the given image.
@@ -150,35 +94,26 @@ PictureSchema.static('create', function(file, cb) {
         var gfs = new GridFs(mongo, mongoose.connection.db);
         var orig_id = _.isString(file) ? new mongo.ObjectId(file) : file;
         var thmb_id = new mongo.ObjectId();
-        picture_size(orig_id)
-            .then(function(size) {
-                var data = {
-                    original: orig_id,
-                    thumbnail: thmb_id,
-                    originalWidth: size.width,
-                    originalHeight: size.height,
-                    thumbnailWidth: 256,
-                    thumbnailHeight: 256/(size.width/size.height)
-                };
-                var istream = gfs.createReadStream(orig_id);
-                var ostream = gfs.createWriteStream(thmb_id, {
-                    content_type: 'image/png'
-                });
-                ostream
-                    .once('error', reject)
-                    .once('end', function() {
-                        debug('end of thumbnail', thmb_id);
-                        gfs.closeAsync(ostream.gs)
-                            .then(function() {
-                                var picture = new Picture(data);
-                                return picture.save();
-                            })
-                            .then(resolve)
-                            .catch(reject);
-                    });
-                gm(istream).resize(256).stream('png').pipe(ostream);
-            })
-            .catch(reject);
+        var istream = gfs.createReadStream(orig_id);
+        var ostream = gfs.createWriteStream(thmb_id, {
+            content_type: 'image/png'
+        });
+        ostream
+            .once('error', reject)
+            .once('end', function() {
+                debug('end of thumbnail', thmb_id);
+                gfs.closeAsync(ostream.gs)
+                    .then(function() {
+                        var picture = new Picture({
+                            original: orig_id,
+                            thumbnail: thmb_id,
+                        });
+                        return picture.save();
+                    })
+                    .then(resolve)
+                    .catch(reject);
+            });
+        gm(istream).resize(256).stream('png').pipe(ostream);
     });
     return nodify(promise, cb);
 });
