@@ -25,7 +25,8 @@
     "monosocialiconsfont": "*",
     "requirejs": "~2.1.14",
     "requirejs-text": "~2.0.12",
-    "bluebird": "~2.9.13"
+    "bluebird": "~2.9.13",
+    "marked": "~0.3.3"
   },
   "exportsOverride": {
     "backbone": {
@@ -61,6 +62,9 @@
     },
     "jquery-placeholder": {
       "app/client/js/libs": "jquery.placeholder.js"
+    },
+    "marked": {
+      "app/client/js/libs": "lib/marked.js"
     },
     "marionette": {
       "app/client/js/libs": "lib/backbone.marionette.js"
