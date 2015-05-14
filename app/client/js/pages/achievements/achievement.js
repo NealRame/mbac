@@ -69,6 +69,9 @@ define(function(require) {
         pageURL: function() {
             return '/achievements/' + this.attributes._id;
         },
+        description: function() {
+            return this.get('description') || '';
+        },
         picture: function(index) {
             return create_model(this.get('pictures')[index || 0]);
         },
