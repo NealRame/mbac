@@ -37,6 +37,7 @@ define(function(require) {
         initialize: function() {
             this.count = this.collection.length;
             this.current = Math.min(Marionette.getOption(this, 'startIndex'), this.count)%this.count;
+            this._cache = {};
             var keyup_cb = this.onKeypress.bind(this);
             var resize_cb = _.debounce(this.onWindowResized.bind(this), 100);
             var show_arrow_cb = _.debounce(
@@ -57,13 +58,26 @@ define(function(require) {
                 $(window).off('resize', resize_cb);
             });
         },
+        loadImage: function(index) {
+            var picture = this.collection.at(this.current);
+            var cache = this._cache;
+            return (functional.hasAllOfAttributes(picture, 'file')
+                ? async.loadImage(picture.attributes.file)
+                : async.loadImage(picture.originalURL())
+            ).then(function(image) {
+                return cache[index] = image;
+            });
+        },
+        detachImage: function() {
+            this.ui.picture.find('img').first().detach();
+            this.ui.picture.append(this.spinner());
+        },
         image: function() {
             try {
-                var picture = this.collection.at(this.current);
-                if (functional.hasAllOfAttributes(picture, 'file')) {
-                    return async.loadImage(picture.attributes.file);
+                if (this._cache[this.current]) {
+                    return Promise.resolve(this._cache[this.current]);
                 } else {
-                    return async.loadImage(picture.originalURL());
+                    return this.loadImage(this.current);
                 }
             } catch (err) {
                 return Promise.reject(err);
@@ -109,7 +123,8 @@ define(function(require) {
             this.showPicture();
         },
         showPicture: function() {
-            this.ui.picture.empty().append(this.spinner());
+            debugger;
+            this.detachImage();
             this.setGeometry();
             this.image()
                 .bind(this)
