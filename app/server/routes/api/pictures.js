@@ -6,7 +6,7 @@
 var _ = require('underscore');
 var express = require('express');
 var formidableGrid = require('formidable-grid');
-var helpers = require('helpers');
+var api = require('common/api');
 var inspect = require('util').inspect;
 var mongoose = require('mongoose');
 var mongo = mongoose.mongo;
@@ -43,7 +43,7 @@ router
         Picture
             .findById(id)
             .exec()
-            .then(helpers.valueChecker(helpers.error404))
+            .then(api.valueChecker(api.error404))
             .then(function(picture) {
                 req.picture = picture;
                 next();
@@ -65,7 +65,7 @@ router
         res.send(req.picture);
     });
 
-router.use(helpers.authenticationChecker());
+router.use(api.authenticationChecker());
 
 router
     .route('/')
@@ -77,7 +77,7 @@ router
             .then(res.send.bind(res))
             .then(null, next);
     })
-    .all(helpers.forbidden());
+    .all(api.forbidden());
 
 router
     .route('/:id')
@@ -86,6 +86,6 @@ router
             .then(res.sendStatus.bind(res, 200))
             .then(null, next);
     })
-    .all(helpers.forbidden());
+    .all(api.forbidden());
 
 module.exports = router;

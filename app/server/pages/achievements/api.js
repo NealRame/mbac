@@ -8,7 +8,7 @@ var async = require('async');
 var debug = require('debug')('mbac:routes.achievements');
 var express = require('express');
 var FormidableGrid = require('formidable-grid');
-var helpers = require('helpers');
+var api = require('common/api');
 var mongo = require('mongodb');
 var mongoose = require('mongoose');
 var path = require('path');
@@ -66,10 +66,10 @@ function read_one(req, res) {
     var id = req.params.id;
     debug('-- load achievement[' + id + ']');
     return Achievement.findById(id).exec()
-        .then(helpers.exist)
+        .then(api.exist)
         .then(function(achievement) {
-            if (! (achievement.published || helpers.isAuthenticated(res))) {
-                helpers.throw404(); // 401 or 404 ?
+            if (! (achievement.published || api.isAuthenticated(res))) {
+                api.throw404(); // 401 or 404 ?
             }
             return Achievement.populate(achievement, {path: 'pictures'});
         });
@@ -77,7 +77,7 @@ function read_one(req, res) {
 
 function read_all(req, res) {
     var query = {};
-    if (! helpers.isAuthenticated(res)) {
+    if (! api.isAuthenticated(res)) {
         // Unauthorized client only get published and non-empty achievements
         // items.
         _.chain(query).extend({
@@ -123,17 +123,17 @@ router
     .get('/:id', achievement_read);
 
 // router
-// .use('/', helpers.authorized())
+// .use('/', api.authorized())
 
 router
     .route('/')
     .post(achievement_create)
-    .all(helpers.forbidden());
+    .all(api.forbidden());
 
 router
     .route('/:id')
     .put(achievement_update)
     .delete(achievement_delete)
-    .all(helpers.forbidden());
+    .all(api.forbidden());
 
 module.exports = router;
