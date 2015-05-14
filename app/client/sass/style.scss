@@ -107,24 +107,35 @@ section.wrapper {
     position: relative;
     -webkit-transform: translate3d(0,0,0);
     z-index: 2;
-    & > article {
-        margin: 32px;
-        @media #{$large-up} {
-            margin: 32px auto;
-            width: #{upper-bound($medium-range)};
-        }
+    article {
+        width: 100%;
         & > header {
-            margin: 16px 0;
             h1 {
                 color: $page-section-title-color;
-                font-size: xx-large;
+                font-size: x-large;
                 font-family: 'Georgia';
                 font-style: italic;
                 font-weight: bold;
             }
         }
         & > section {
-            margin: 0 32px;
+            @media #{$large-up} {
+                margin: 0 32px;
+            }
+        }
+    }
+    & > article {
+        @media #{$large-up} {
+            margin: 32px;            
+        }
+        @media #{$large-up} {
+            margin: 32px auto;
+            width: #{upper-bound($medium-range)};
+        }
+        & > header {
+            @media #{$large-up} {
+                margin: 16px 0;
+            }
         }
     }
     &.filled {
