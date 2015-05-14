@@ -1,7 +1,10 @@
-// helpers.js
-// ==========
-// - author: Neal.Rame. <contact@nealrame.com>
-// -   date: Fri Apr  3 01:40:23 2015
+/// common/api.js
+/// =============
+/// - author: Neal.Rame. <contact@nealrame.com>
+/// -   date: Fri Apr  3 01:40:23 2015
+///
+/// Provides common helper for API controllers.
+
 var _ = require('underscore');
 
 function error(err, status) {
@@ -48,104 +51,104 @@ function value(value) {
 }
 
 module.exports = {
-    /// #### helpers.error401([message])
+    /// #### api.error401([message])
     /// Create a 401 error with the given message. The error is returned as a
     /// rejected promise and so can be used in a chain of promise.
     ///
-    /// __Parameters:__
+    /// **Parameters:**
     /// - `message`, the error message. _optional_.
     ///
-    /// __Returns:__
+    /// **Returns:**
     /// - `Promise`.
     error401: function(message) {
         return Promise.reject(error_401(message));
     },
-    /// #### helpers.throw401([message])
+    /// #### api.throw401([message])
     /// Throw a 401 error with the given message.
     ///
-    /// __Parameters:__
+    /// **Parameters:**
     /// - `message`, the error message. _optional_.
     throw401: function(message) {
         throw error_401(message);
     },
-    /// #### helpers.error403([message])
+    /// #### api.error403([message])
     /// Create a 403 error with the given message. The error is returned as a
     /// rejected promise and so can be used in a chain of promise.
     ///
-    /// __Parameters:__
+    /// **Parameters:**
     /// - `message`, the error message. _optional_.
     ///
-    /// __Returns:__
+    /// **Returns:**
     /// - `Promise`.
     error403: function(message) {
         return Promise.reject(error_403(message));
     },
-    /// #### helpers.throw403([message])
+    /// #### api.throw403([message])
     /// Throw a 403 error with the given message.
     ///
-    /// __Parameters:__
+    /// **Parameters:**
     /// - `message`, the error message. _optional_.
     throw403: function(message) {
         throw error_403(message);
     },
-    /// #### helpers.error404([message])
+    /// #### api.error404([message])
     /// Create a 404 error with the given message. The error is returned as a
     /// rejected promise and so can be used in a chain of promise.
     ///
-    /// __Parameters:__
+    /// **Parameters:**
     /// - `message`, the error message. _optional_.
     ///
-    /// __Returns:__
+    /// **Returns:**
     /// - `Promise`.
     error404: function(message) {
         return Promise.reject(error_404(message));
     },
-    /// #### helpers.throw404([message])
+    /// #### api.throw404([message])
     /// Throw a 404 error with the given message.
     ///
-    /// __Parameters:__
+    /// **Parameters:**
     /// - `message`, the error message. _optional_.
     throw404: function(message) {
         throw error_404(message);
     },
-    /// #### helpers.error500([message])
+    /// #### api.error500([message])
     /// Create a 500 error with the given message. The error is returned as a
     /// rejected promise and so can be used in a chain of promise.
     ///
-    /// __Parameters:__
+    /// **Parameters:**
     /// - `message`, the error message. _optional_.
     ///
-    /// __Returns:__
+    /// **Returns:**
     /// - `Promise`.
     error500: function(err) {
         return Promise.reject(error_500(err));
     },
-    /// #### helpers.throw500([message])
+    /// #### api.throw500([message])
     /// Throw a 500 error with the given message.
     ///
-    /// __Parameters:__
+    /// **Parameters:**
     /// - `message`, the error message. _optional_.
     throw500: function(err) {
         throw error_500(err);
     },
-    /// #### helpers.value(v)
+    /// #### api.value(v)
     /// If the given value is a function return the value of the invocation,
     /// otherwise return the given value.
     ///
-    /// __Parameters:__
+    /// **Parameters:**
     /// - `value`, a value or a function.
     ///
-    /// __Returns:__
+    /// **Returns:**
     /// - `value` or `value()`.
     value: value,
-    /// #### helpers.exist(value)
+    /// #### api.exist(value)
     /// Returns a promise fulfilled or rejected if given value is defined or
     /// not.
     ///
-    /// __Parameters:__
+    /// **Parameters:**
     /// - `value`, the value to be checked.
     ///
-    /// __Returns:__
+    /// **Returns:**
     /// - `Promise`.
     exist: function(value) {
         if (value == undefined) {
@@ -153,14 +156,15 @@ module.exports = {
         }
         return Promise.resolve(value);
     },
-    /// #### helpers.valueChecker(fallback)
+    /// #### api.valueChecker(fallback)
     /// Returns a function that check a value and returns it if it exists or
     /// a fallback value if not.
     ///
-    /// __Parameters:__
-    /// - `fallback`, the to be return if the checked value is not defined.
+    /// **Parameters:**
+    /// - `fallback`, a value to be returned if the checked value is not
+    /// defined. If `fallback` is a `Function`, return value of `fallback()`.
     ///
-    /// __Returns:__
+    /// **Returns:**
     /// - `Promise`.
     valueChecker: function(fallback) {
         var fallback_value = value(fallback);
@@ -171,48 +175,48 @@ module.exports = {
             return Promise.resolve(value);
         };
     },
-    /// #### helpers.isAuthorized(res)
+    /// #### api.isAuthorized(res)
     /// Returns true if and only if the current request has been marked as
     /// authenticated.
     ///
-    /// __Parameters:__
+    /// **Parameters:**
     /// - `res`, ...
     ///
-    /// __Returns:__
+    /// **Returns:**
     /// - `Boolean`.
     isAuthenticated: is_authenticated,
-    /// #### helpers.authenticated(message)
+    /// #### api.authenticated(message)
     /// Returns a middleware function aimed to check if a request if
     /// authenticated or not. If the request is authenticated then the normal
     /// execution flow continues, otherwise the request is interrupted with 401
     /// error status and specified message.
     ///
-    /// __Parameters:__
+    /// **Parameters:**
     /// - `message`, an optional message for the 401 error.
     ///
-    /// __Returns:__
+    /// **Returns:**
     /// - `Function(req, res, next)`
     authenticationChecker: function(message) {
         return function(req, res, next) {
             next(is_authenticated(res) ? null : error_401(message));
         };
     },
-    /// #### helpers.forbidden(message)
+    /// #### api.forbidden(message)
     /// Returns a middleware function aimed at terminate a request with a 403
     /// error status and the specified message.
     ///
-    /// _Parameters:__
+    /// **Parameters:**
     /// - `message`, an optional message for the 403 error.
     forbidden: function(message) {
         return function(req, res, next) {
             next(error_403(message));
         };
     },
-    /// #### helpers.notFound(message)
+    /// #### api.notFound(message)
     /// Returns a middleware function aimed at terminate a request with a 404
     /// error status and the specified message.
     ///
-    /// _Parameters:__
+    /// **Parameters:**
     /// - `message`, an optional message for the 403 error.
     notFound: function(message) {
         return function(req, res, next) {
