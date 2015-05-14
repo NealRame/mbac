@@ -9,7 +9,7 @@ define(function(require) {
 
     var AchievementApp = Marionette.LayoutView.extend({
         regions: {
-            'list': '#content-wrapper',
+            'list': '#pictures-wrapper',
         },
         template: false,
         initialize: function() {

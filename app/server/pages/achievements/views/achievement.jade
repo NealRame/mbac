@@ -14,8 +14,9 @@ block content
             header
                 h1: | #{achievement.name}
             section
-                p: | #{achievement.description}
-                #content-wrapper
+                #description-wrapper
+                    p: | #{achievement.description}
+                #pictures-wrapper
                     ul(style='display: none;')
                         each picture in achievement.pictures
                             +picture-item(picture)
