@@ -5,7 +5,7 @@
 extends /layout
 
 mixin picture-item(picture)
-    li.thumb: .crop: a(href=picture.originalPath())
+    li.thumb: a(href=picture.originalPath())
         img(src=picture.thumbnailPath())
 
 block content
