@@ -13,7 +13,7 @@ define(function(require) {
     var ui = require('common/ui');
     var template = require('text!common/Lightbox/lightbox.html');
 
-    var ESC_KEY = 27;
+    var ESC_KEY  = 27;
     var PREV_KEY = 37;
     var NEXT_KEY = 39;
 
@@ -123,7 +123,6 @@ define(function(require) {
             this.showPicture();
         },
         showPicture: function() {
-            debugger;
             this.detachImage();
             this.setGeometry();
             this.image()
