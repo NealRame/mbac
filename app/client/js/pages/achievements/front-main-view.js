@@ -2,6 +2,7 @@ define(function(require) {
     var _ = require('underscore');
     var $ = require('jquery');
     var Backbone = require('backbone');
+    var marked = require('marked');
     var ui = require('common/ui');
 
     var LightBox = require('LightBox');
@@ -66,6 +67,9 @@ define(function(require) {
         regions: {
             'pictures-list': '#pictures-wrapper',
         },
+        ui: {
+            description: '#description-wrapper'
+        },
         template: false,
         initialize: function() {
             this.achievementPictureList = new AchievementPictureList({
@@ -73,9 +77,13 @@ define(function(require) {
             });
         },
         onRender: function() {
-            var region = this.getRegion('list');
+            var region = this.getRegion('pictures-list');
             region.$el.empty().show();
             region.show(this.achievementPictureList);
+            this.ui.description
+                .empty()
+                .html(marked(this.model.description(), {headerPrefix: '__'}))
+                .show();
         }
     });
 
