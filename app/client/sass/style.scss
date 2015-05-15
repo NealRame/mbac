@@ -34,6 +34,14 @@
     }
 }
 
+.small {
+    font-size: x-small;
+}
+
+.super {
+    vertical-align: super;
+}
+
 .thumbnails {
     list-style-type: none;
     margin: 0;
@@ -126,7 +134,7 @@ section.wrapper {
     }
     & > article {
         @media #{$large-up} {
-            margin: 32px;            
+            margin: 32px;
         }
         @media #{$large-up} {
             margin: 32px auto;
