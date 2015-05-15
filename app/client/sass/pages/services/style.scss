@@ -1,0 +1,16 @@
+@import "settings";
+.emphasized {
+    background-color: $light-gray;
+    border-radius: 4px;
+    color: $gray;
+    font-size: 0.95em;
+    font-weight: 200;
+    margin: 8px;
+    padding: 8px;
+    header {
+        border-bottom: 1px solid darken($light-gray, 5);
+        font-weight: bold;
+        margin-bottom: 8px;
+        text-align: center;
+    }
+}

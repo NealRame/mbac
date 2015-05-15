@@ -114,10 +114,11 @@ module.exports = function(grunt) {
                     src: [
                         'style.scss',
                         'admin_style.scss',
-                        'pages/home/style.scss',
                         'pages/achievements/admin_style.scss',
                         'pages/achievements/style.scss',
-                        'pages/prices/style.scss'
+                        'pages/home/style.scss',
+                        'pages/prices/style.scss',
+                        'pages/services/style.scss'
                     ],
                     dest: '<%= sass_build_dir %>',
                     ext: '.css'
