@@ -3,11 +3,9 @@
 @import "foundation/components/forms";
 @import "foundation/components/reveal";
 @import "foundation/components/tables";
-
 body > .splash {
     display: none;
 }
-
 @media #{$medium-up} {
     body > .splash {
         background-color: $splash-background-color;
@@ -42,7 +40,6 @@ body > .splash {
         }
     }
 }
-
 #achievements {
     li {
         figure {
@@ -60,7 +57,6 @@ body > .splash {
         }
     }
 }
-
 section.wrapper {
     table.schedule {
         background-color: inherit;
@@ -89,7 +85,6 @@ section.wrapper {
             }
         }
     }
-
     .contact {
         list-style-type: none;
         overflow: auto;
@@ -102,21 +97,17 @@ section.wrapper {
         @media #{$large-up} {
             width: 768px;
         }
-
         li {
             @media #{$medium-only} {
                 width: 168px;
                 font-size: 0.75em;
             }
-
             @media #{$large-up} {
                 width: 256px;
             }
-
             @media #{$medium-up} {
                 float: left;
             }
-
             margin: 32px auto;
         }
         .contact-icon {
