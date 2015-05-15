@@ -67,7 +67,7 @@ var prices = {
         },
         {
             link: 'sewing-machine',
-            title: 'Prise en mains de votre machine à coudre',
+            title: 'Prise en mains de votre machine',
             price: 18
         },
         {
