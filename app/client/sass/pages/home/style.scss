@@ -3,6 +3,7 @@
 @import "foundation/components/forms";
 @import "foundation/components/reveal";
 @import "foundation/components/tables";
+
 body > .splash {
     display: none;
 }
@@ -11,15 +12,16 @@ body > .splash {
         background-color: $splash-background-color;
         display: block;
         height: $splash-height;
+        font-size: 10em;
         width: 100%;
         position: fixed;
         z-index: 1;
+        @media #{$large-up} {
+            font-size: 12em;
+        }
         .logo {
             color: white;
-            font-size: 112pt;
-            @media #{$large-up} {
-                font-size: 128pt;
-            }
+            font-size: inherit;
             font-family: 'Georgia', serif;
             font-weight: bold;
             letter-spacing: -8px;
@@ -31,8 +33,9 @@ body > .splash {
                 font-weight: normal;
                 letter-spacing: -26px;
             }
-            .small {
-                font-size: smaller;
+            & > span {
+                font-size: inherit;
+                font-family: inherit;
             }
         }
         & + section {
@@ -63,26 +66,32 @@ section.wrapper {
         border-collapse: collapse;
         border: none;
         color: inherit;
-        z-index: 2;
         margin: 0 auto;
+        width: 100%;
+        z-index: 2;
         tr {
-            background-color: inherit;
-        }
-        td {
-            &.center {
-                width: 33%;
-                @media #{$medium-only} {
-                    width: 66%;
+            margin: 0;
+            td {
+                border: none;
+                font-size: 1em;
+                &.center {
+                    & > hr {
+                        border: none;
+                        border-bottom: 2px dotted #999;
+                        height: 1ex;
+                        margin: 0;
+                        margin-bottom: 1ex;
+                    }
+                    width: 100%;
                 }
-                @media #{$large-up} {
-                    width: 80%;
+                &.day {
+                    text-align: right;
                 }
-
-                hr {
-                    border: 0;
-                    border-bottom: 1px dashed;
-                    margin: 0;
+                &.hour {
+                    text-align: left;
                 }
+                vertical-align: bottom;
+                white-space: nowrap;
             }
         }
     }
@@ -123,11 +132,14 @@ section.wrapper {
             margin: 8px auto;
             text-align: center;
             @media #{$medium-up} {
-                font-size: 4em;
+                font-size: 3.9em;
                 line-height: 96px;
                 height: 96px;
                 width: 96px;
                 margin: 16px auto;
+            }
+            @media #{$large-up} {
+                font-size: 3em;
             }
             &.phone:before {
                 content: "\f10b";

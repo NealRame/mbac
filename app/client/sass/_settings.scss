@@ -1,9 +1,13 @@
-@import "foundation/settings";
-@import "foundation/components/global";
-
 // We use these to define default font weights
 $font-weight-normal: normal !default;
 $font-weight-bold: bold !default;
+$font-weight-normal: 300;
+$body-font-family: "Raleway", sans-serif;
+$body-font-weight: $font-weight-normal;
+$font-smoothing: antialiased;
+
+@import "foundation/settings";
+@import "foundation/components/global";
 
 // Global
 // ------
@@ -23,13 +27,7 @@ $page-section-title-color: #aaa;
 $body-bg: $page-background-color;
 $body-font-color: $black;
 
-$font-weight-normal: 300;
-$body-font-family: "Raleway", sans-serif;
-$body-font-weight: $font-weight-normal;
-// $body-font-style: normal;
-
-// We use this to control font-smoothing
-$font-smoothing: antialiased;
+$footer-background-color: $red;
 
 // Splash
 // ------

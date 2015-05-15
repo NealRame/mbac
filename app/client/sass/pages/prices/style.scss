@@ -21,6 +21,11 @@
             &.left {
                 text-align: left;
             }
+            &.euro {
+                &::after {
+                    content: ' €';
+                }
+            }
             vertical-align: bottom;
             white-space: nowrap;
         }
@@ -29,8 +34,13 @@
     width: 100%;
 }
 .price-list {
+    font-size: small;
+    margin: 0;
+    padding: 0;
     .price-list {
-        padding-left: 16px;
+        @media #{$medium-up} {
+            padding-left: 16px;
+        }
     }
     & > li {
         list-style-type: none;
@@ -43,12 +53,18 @@
         margin: 0;
     }
     h1 {
-        font-size: x-large;
+        font-size: small;
         margin-top: 8px;
+        @media #{$medium-up} {
+            font-size: 2em;
+        }
     }
     h2 {
-        font-size: large;
+        font-size: small;
         margin-top: 4px;
+        @media #{$medium-up} {
+            font-size: 1.75em;
+        }
     }
     a {
         color: #08c;
@@ -59,8 +75,6 @@
             color: inherit;
         }
     }
-    margin: 0;
-    padding: 0;
 }
 .price-notes {
     counter-reset: index;

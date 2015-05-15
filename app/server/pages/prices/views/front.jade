@@ -51,8 +51,7 @@ mixin price-header(item, depth)
                             | #{item.noteRef}
                 if item.price
                     td.center: hr
-                    td.right
-                        | #{item.price} €
+                    td.right.euro: | #{item.price}
     
 mixin price-item(item, depth)
     +price-header(item, depth)

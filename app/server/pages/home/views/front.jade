@@ -17,7 +17,6 @@ block content
             span B
             span à
             span C...
-
     section.wrapper
         article
             header
@@ -28,36 +27,33 @@ block content
                     | loisirs creatifs. Ouvert en continu tout au long de la
                     | semaine, il vous offre un cadre privilégié pour réaliser
                     | tous vos projets de couture.
-
     section.wrapper
         article
             header
                 h1: | Horaires d'ouverture
-            section
-                .row
+            section                    
+                div
                     table.schedule
-                        tbody
-                            tr
-                                td.left Mardi
-                                td.center: hr
-                                td.right 10H - 21H
-                            tr
-                                td.left Mercredi
-                                td.center: hr
-                                td.right 10H - 18H
-                            tr
-                                td.left Jeudi
-                                td.center: hr
-                                td.right 10H - 21H
-                            tr
-                                td.left Vendredi
-                                td.center: hr
-                                td.right 10H - 21H
-                            tr
-                                td.left Samedi
-                                td.center: hr
-                                td.right 10H - 21H
-
+                        tr
+                            td.day: | Mardi
+                            td.center: hr
+                            td.hour: | 10H - 21H
+                        tr
+                            td.day: | Mercredi
+                            td.center: hr
+                            td.hour: | 10H - 18H
+                        tr
+                            td.day: | Jeudi
+                            td.center: hr
+                            td.hour: | 10H - 21H
+                        tr
+                            td.day: | Vendredi
+                            td.center: hr
+                            td.hour: | 10H - 21H
+                        tr
+                            td.day: | Samedi
+                            td.center: hr
+                            td.hour: | 10H - 21H
     section.wrapper
         article
             header
@@ -76,7 +72,6 @@ block content
                         div.contact-icon.e-mail
                         a(href='mailto:contact@monbaracouture.com')
                             | contact@monbaracouture.com
-
         article
             header
                 h1: | Newsletter
@@ -87,7 +82,6 @@ block content
                     br
                     a(href="#", data-reveal-id="newsletter-modal").button.text-center
                         | Je m'abonne !
-
     if achievements.length > 0
         section.wrapper.filled
             article
@@ -101,7 +95,6 @@ block content
                     | Voir toutes les réalisations des client(e)s de mon Bar à 
                     | couture :
                     a(href="/achievements"): | &nbsp;ici !
-
     div(class="reveal-modal", id="newsletter-modal" data-reveal)
         a.close-reveal-modal &#215;
         form
@@ -112,6 +105,6 @@ block content
                 label
                     | E-mail
                     input(type="text", placeholder="Votre adresse mail")
-
+    
                 a(href="#").button.center
                     | Hop !
