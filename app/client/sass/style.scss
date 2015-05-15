@@ -109,7 +109,21 @@
         }
     }
 }
-
+h1, h2, h3 {
+    font-family: 'Georgia', serif;
+    font-style: italic;
+    font-weight: bold;
+    color: $gray;
+}
+h1 {
+    font-size: 2rem;
+}
+h2 {
+    font-size: 1.75rem;
+}
+h3 {
+    font-size: 1.5rem;
+}
 section.wrapper {
     background-color: inherit;
     position: relative;
@@ -120,10 +134,6 @@ section.wrapper {
         & > header {
             h1 {
                 color: $page-section-title-color;
-                font-size: x-large;
-                font-family: 'Georgia';
-                font-style: italic;
-                font-weight: bold;
             }
         }
         & > section {
