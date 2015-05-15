@@ -137,6 +137,7 @@ section.wrapper {
             }
         }
         & > section {
+            margin: 8px;
             @media #{$large-up} {
                 margin: 0 32px;
             }
