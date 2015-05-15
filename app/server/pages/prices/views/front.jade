@@ -1,0 +1,62 @@
+//- pages/prices/front.jade
+//- =======================
+//- - author: Neal.Rame. <contact@nealrame.com>
+//- -   date: Thu May 14 23:19:21 CEST 2015
+
+mixin price-title(title, depth)
+    if title
+        case depth
+            when 0
+            when 1
+                h1: | #{title}
+            when 2
+                h2: | #{title}
+            default
+                | #{title}
+
+mixin price-note(notes)
+    ol.price-notes
+        each note, index in notes
+            li
+                a(id='price-note-#{index + 1}')
+                span.small= note
+
+mixin price-descriptions(descriptions)
+    p
+        each description in descriptions
+            | #{description}
+            br
+
+mixin price-list(list, depth)
+    ul.price-list
+        each item in list
+            li: +price-item(item, depth + 1)
+
+mixin price-item(item, depth)
+    if item.link
+        a(id='#{item.link}')
+    if item.list
+        +price-title(item.title, depth)
+        +price-list(item.list, depth)
+    else if item.price
+        table.price-table
+            tr
+                td.left
+                    +price-title(item.title, depth)
+                    if item.noteRef
+                        a.small.super(href='#price-note-#{item.noteRef}')= item.noteRef
+                td.center: hr
+                td.right
+                    | #{item.price} €
+    else if item.descriptions
+        +price-title(item.title, depth)
+        +price-descriptions(item.descriptions)
+    if depth === 0 && item.notes
+        +price-note(item.notes)
+
+extends /layout
+block content
+    section.wrapper
+        article
+            section
+                +price-item(prices, 0)

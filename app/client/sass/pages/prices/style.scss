@@ -1,0 +1,63 @@
+@import "../../settings";
+.price-table {
+    width: 100%;
+    margin: 0 auto;
+    td {
+        border: none;
+        white-space: nowrap;
+        &.left {
+            text-align: left;
+        }
+        &.center {
+            width: 100%;
+            & > hr {
+                border: none;
+                border-bottom: 2px dotted #999;
+                height: 1ex;
+                margin: 0;
+            }
+        }
+        &.right {
+            text-align: right;
+        }
+    }
+}
+.price-list {
+    margin: 0;
+    padding: 0;
+    .price-list {
+        padding-left: 16px;
+    }
+    & > li {
+        list-style-type: none;
+        margin: 0;
+    }
+    p {
+        margin-bottom: 0;
+    }
+    h1, h2 {
+        font-family: 'Georgia', serif;
+        font-style: italic;
+        font-weight: bold;
+        color: $gray;
+    }
+    h1 {
+        font-size: x-large;
+    }
+    h2 {
+        font-size: large;
+    }
+}
+.price-notes {
+    counter-reset: index;
+    li {
+        list-style-type: none;
+        counter-increment: index;
+        &:before {
+            content: counter(index) '. ';
+            font-size: x-small;
+        }
+    }
+    margin: 0;
+    padding: 0;
+}
