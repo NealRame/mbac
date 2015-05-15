@@ -1,25 +1,58 @@
 @import "settings";
 @import "icons";
 
+article {
+    font-size: 16px;
+    font-family: $body-font-family;
+}
+
 @import "foundation/components/grid";
 @import "foundation/components/top-bar";
 @import "foundation/components/side-nav";
 @import "foundation/components/type";
 @import "foundation/components/visibility";
 
+body, div, p, ol, section, span, ul {
+    font-size: 16px;
+    font-family: $body-font-family;
+    @media #{$medium-up} {
+        font-size: 1.25rem;
+    }
+}
+
+h1, h2, h3 {
+    font-family: 'Georgia', serif;
+    font-style: italic;
+    font-weight: bold;
+    color: $gray;
+}
+h1 {
+    font-size: 1.25em;
+    @media #{$large-up} {
+        font-size: 2em;
+    }
+}
+h2 {
+    font-size: 1em;
+    @media #{$large-up} {
+        font-size: 1.75em;
+    }
+}
+h3 {
+    font-size: 1em;
+    @media #{$large-up} {
+        font-size: 1.5em;
+    }
+}
 .toggle-button {
     @extend .button;
     &[data-state='disabled'] {
         @extend .secondary;
     }
 }
-
 .menu {
     .top-bar {
         h1 {
-            font-family: 'Georgia', serif;
-            font-style: italic;
-            font-weight: bold;
             text-shadow: 1px 0px 6px white;
         }
         img.user-picture {
@@ -33,96 +66,11 @@
         }
     }
 }
-
 .small {
     font-size: x-small;
 }
-
 .super {
     vertical-align: super;
-}
-
-.thumbnails {
-    list-style-type: none;
-    margin: 0;
-    margin-bottom: 16px;
-    overflow: auto;
-    .thumb {
-        border: 4px solid white;
-        float: left;
-        margin: 4px;
-        position: relative;
-        .crop {
-            color: #ccc;
-            display: block;
-            height: 128px;
-            width: 192px;
-            overflow: hidden;
-            position: relative;
-            .thumb-link {
-                color: inherit;
-                * {
-                    color: inherit;
-                    position: absolute;
-                }
-                img {
-                    max-width: none;
-                    max-height: none;
-                }
-            }
-        }
-        .crop[data-empty] {
-            background-color: #eee;
-        }
-    }
-}
-
-.lightbox {
-    background-color: rgba(64, 64, 64, 0.9);
-    color: #fff;
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
-    z-index: 100;
-    #rewind, #forward {
-        color: white;
-        display: none;
-        font-size: 32px;
-        position: absolute;
-        text-align: center;
-        text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
-    }
-    #picture {
-        position: absolute;
-        * {
-            position: absolute;
-        }
-        img {
-            border: 4px solid white;
-        }
-        .error {
-            margin: 0;
-            font-size: larger;
-        }
-    }
-}
-h1, h2, h3 {
-    font-family: 'Georgia', serif;
-    font-style: italic;
-    font-weight: bold;
-    color: $gray;
-}
-h1 {
-    font-size: 2rem;
-}
-h2 {
-    font-size: 1.75rem;
-}
-h3 {
-    font-size: 1.5rem;
 }
 section.wrapper {
     background-color: inherit;
@@ -130,30 +78,22 @@ section.wrapper {
     -webkit-transform: translate3d(0,0,0);
     z-index: 2;
     article {
-        width: 100%;
+        @media #{$large-up} {
+            margin: 0 auto;
+            width: lower-bound($large-range);
+        }
         & > header {
             h1 {
                 color: $page-section-title-color;
             }
         }
-        & > section {
-            margin: 8px;
-            @media #{$large-up} {
-                margin: 0 32px;
+        & > header, & > section {
+            margin: 16px 8px 8px;
+            @media #{$medium-up} {
+                margin: 16px 16px 8px;
             }
-        }
-    }
-    & > article {
-        @media #{$large-up} {
-            margin: 32px;
-        }
-        @media #{$large-up} {
-            margin: 32px auto;
-            width: #{upper-bound($medium-range)};
-        }
-        & > header {
             @media #{$large-up} {
-                margin: 16px 0;
+                margin: 16px 32px 8px;
             }
         }
     }
@@ -167,9 +107,8 @@ section.wrapper {
     }
     overflow: auto;
 }
-
 footer {
-    background-color: #C14735;
+    background-color: $footer-background-color;
     color: white;
     clear: both;
     margin: 0;

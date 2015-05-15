@@ -1,0 +1,35 @@
+@import "settings";
+.thumbnails {
+    list-style-type: none;
+    margin: 0;
+    margin-bottom: 16px;
+    overflow: auto;
+    .thumb {
+        border: 4px solid white;
+        float: left;
+        margin: 4px;
+        position: relative;
+        .crop {
+            color: #ccc;
+            display: block;
+            height: 128px;
+            width: 192px;
+            overflow: hidden;
+            position: relative;
+            .thumb-link {
+                color: inherit;
+                * {
+                    color: inherit;
+                    position: absolute;
+                }
+                img {
+                    max-width: none;
+                    max-height: none;
+                }
+            }
+        }
+        .crop[data-empty] {
+            background-color: #eee;
+        }
+    }
+}
