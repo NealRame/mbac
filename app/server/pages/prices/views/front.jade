@@ -44,6 +44,7 @@ mixin price-item(item, depth)
                 td.left
                     +price-title(item.title, depth)
                     if item.noteRef
+                        | &nbsp;
                         a.small.super(href='#price-note-#{item.noteRef}')= item.noteRef
                 td.center: hr
                 td.right
@@ -52,6 +53,7 @@ mixin price-item(item, depth)
         +price-title(item.title, depth)
         +price-descriptions(item.descriptions)
     if depth === 0 && item.notes
+        hr
         +price-note(item.notes)
 
 extends /layout
