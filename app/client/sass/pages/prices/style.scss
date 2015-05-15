@@ -35,6 +35,9 @@
 }
 .price-list {
     font-size: small;
+    @media #{$medium-up} {
+        font-size: 1em;
+    }
     margin: 0;
     padding: 0;
     .price-list {
@@ -56,6 +59,9 @@
         font-size: small;
         margin-top: 8px;
         @media #{$medium-up} {
+            font-size: 1.25em;
+        }
+        @media #{$large-up} {
             font-size: 2em;
         }
     }
@@ -63,6 +69,9 @@
         font-size: small;
         margin-top: 4px;
         @media #{$medium-up} {
+            font-size: 1em;
+        }
+        @media #{$large-up} {
             font-size: 1.75em;
         }
     }
