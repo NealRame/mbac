@@ -2,6 +2,7 @@ define(function(require) {
     var _ = require('underscore');
     var $ = require('jquery');
     var async = require('common/async');
+    var functional = require('common/functional');
     var ui = require('common/ui');
     var Promise = require('promise');
 
@@ -19,12 +20,6 @@ define(function(require) {
         __lock = true;
     }
 
-    function map_object(o, iteratee) {
-        return _.object(_.map(o, function(val, key) {
-            return [key, iteratee(val, key)];
-        }));
-    }
-
     function load_image(figure) {
         return (figure.find('img').first().length > 0
             ? Promise.resolve(figure)
@@ -39,7 +34,7 @@ define(function(require) {
     function fit_image(figure) {
         figure.show().height(Math.round(2*figure.width()/3));
         var image = figure.find('img');
-        var fig_rect = map_object(ui.naturalRect(figure), function(v) {
+        var fig_rect = functional.mapObject(ui.naturalRect(figure), function(v) {
             return v - 8;
         });
         $(image).css(

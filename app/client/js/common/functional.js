@@ -126,6 +126,22 @@ define(function(require) {
 		};
 	}
 
+	/// #### functional.mapObject(object, fun)
+	/// Return an object wich each fields is the result of the call of the
+	/// given function to the corresponding field of the given object.
+	///
+	/// __Parameters:__
+	/// - `o`, an `Object`.
+	/// - `fun`, a `Function`.
+	///
+	/// __Return:__
+	/// - `Object`.
+	function map_object(o, iteratee) {
+        return _.object(_.map(o, function(val, key) {
+            return [key, iteratee(val, key)];
+        }));
+    }
+
     return {
 		applyIf: apply_if,
         cat: cat,
@@ -133,6 +149,7 @@ define(function(require) {
         dispatch: dispatch,
 		existy: existy,
 		hasAllOfKeys: has_all_of_keys,
-		hasAllOfAttributes: has_all_of_attributes
+		hasAllOfAttributes: has_all_of_attributes,
+		mapObject: map_object
     };
 });
