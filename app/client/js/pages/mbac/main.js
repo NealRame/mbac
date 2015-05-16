@@ -27,7 +27,7 @@ define(function(require) {
     Promise.all(_.map($('.responsive-picture-wrapper > img'), function(img) {
         return new Promise(function(resolve, reject) {
             var rect = ui.naturalRect(img);
-            if (rect.width === 0 && rect.height == 0) {
+            if (rect.width === 0 && rect.height === 0) {
                 img.onload = function(ev) {
                     resolve(ev.target.result);
                 };
@@ -35,7 +35,7 @@ define(function(require) {
             } else {
                 return resolve(img);
             }
-        })
+        });
     })).then(function(res) {
         $(document).on('after-height-change.fndtn.equalizer', function(ev) {
             image_wrappers().each(function() {
@@ -49,7 +49,7 @@ define(function(require) {
 
                     next();
                 });
-            })
+            });
         });
         $(document).foundation();
     }).catch(function(err) {
