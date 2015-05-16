@@ -18,6 +18,7 @@ requirejs.config({
         'Picture': 'common/Picture/picture',
         'TabbedPanels': 'common/TabbedPanels/tabbedpanels',
         'Thumbnail': 'common/Thumbnail/thumbnail',
+        'ThumbnailList': 'common/ThumbnailList/thumbnail-list'
     },
     shim: {
         'fastclick':  {exports: 'FastClick'},
