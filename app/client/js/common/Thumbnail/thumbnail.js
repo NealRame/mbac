@@ -85,16 +85,19 @@ define(function(require) {
                     icon: 'fa fa-trash'
                 });
             }
-            if (functional.valueOf(Marionette.getOption(this, 'editable'))) {
+            if (functional.valueOf(this.isEditable())) {
                 data.actions.push({
                     name: 'edit',
                     icon: 'fa fa-pencil'
                 });
             }
-            return _.extend(data, functional.valueOf(Marionette.getOption(this, 'rect')));
+            return _.extend(data, this.innerRect());
         },
         innerRect: function() {
-            return Marionette.getOption(this, 'rect') || ui.rect(this.ui.crop);
+            return functional.valueOf(
+                Marionette.getOption(this, 'rect'),
+                this
+            );
         },
         outerRect: function() {
             return ui.outerRect(this.el);
