@@ -13,7 +13,7 @@ define(function(require) {
     // var AchievementEditorDialog = require('AchievementEditorDialog');
     var Dialog = require('Dialog');
     var Thumbnail = require('Thumbnail');
-
+    var ThumbnailList = require('ThumbnailList');
     var achievement_render = require('pages/achievements/achievement-thumbnail-render');
 
     function is_model_filterable(model) {
@@ -42,7 +42,7 @@ define(function(require) {
         },
         initialize: function() {
             this.ready_ = 0;
-            var resize_cb = _.debounce(this.center_.bind(this), 50);
+            var resize_cb = _.debounce(this.center_.bind(this), 150);
             this.listenTo(this, 'show', function() {
                 $(window).on('resize', resize_cb);
             });
@@ -50,7 +50,7 @@ define(function(require) {
                 $(window).off('resize', resize_cb);
             });
             this.listenToOnce(this, 'childview:show', function() {
-                this.center_();
+                resize_cb();
             });
         },
         onChildEdit: function(view, model) {
@@ -78,18 +78,15 @@ define(function(require) {
         center_: function() {
             var child = this.children.first();
             if (child) {
+                this.$el.removeAttr('style');
+                var container_width = ui.rect(this.el).width;
                 var thumb_width = child.outerRect().width;
-                var container_width = ui.rect(this.el).width - 2;
-
-                // how many thumb can we have per row ?
-                var count = Math.floor(container_width/thumb_width);
-
-                // deduce padding to center thumb in the container view
-                var padding = (container_width - count*thumb_width)/2;
-
+                var thumb_count_by_row = Math.min(
+                    this.collection.length,
+                    Math.floor(container_width/thumb_width)
+                );
                 this.$el.css({
-                    'padding-left': padding,
-                    'padding-right': padding
+                    width: thumb_count_by_row*thumb_width,
                 });
             }
         }
