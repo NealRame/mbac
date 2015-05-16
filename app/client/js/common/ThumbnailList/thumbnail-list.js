@@ -8,10 +8,9 @@ define(function(require) {
     var Backbone = require('backbone');
     var marked = require('marked');
     var ui = require('common/ui');
-
     var Thumbnail = require('Thumbnail');
 
-    var ThumbnailList = Marionette.CollectionView.extend({
+    return Marionette.CollectionView.extend({
         className: 'thumbnails',
         tagName: 'ul',
         childEvents: {
@@ -60,6 +59,4 @@ define(function(require) {
         onReady: _.noop,
         onClick: _.noop
     });
-
-    return ThumbnailList;
 });
