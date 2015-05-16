@@ -54,7 +54,12 @@ define(function(require) {
         console.log(err);
     });
 
-    // $(window).resize(function() {
-    //     console.log(Foundation.utils.is_medium_only());
-    // });
+    $(window).resize(function() {
+        if (Foundation.utils.is_medium_only()) {
+            image_wrappers().each(function() {
+                $(this).removeAttr('style');
+                $(this).find('img').removeAttr('style');
+            });
+        }
+    });
 });
