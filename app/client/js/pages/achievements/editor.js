@@ -10,18 +10,15 @@ define(function(require) {
     var Achievement = require('pages/achievements/achievement');
     var Dialog = require('Dialog');
     var Thumbnail = require('Thumbnail');
-
+    var ThumbnailList = require('ThumbnailList');
     var editorTemplate = require('text!pages/achievements/editor.html');
 
     if (_.indexOf($.event.props, 'dataTransfer') < 0) {
         $.event.props.push('dataTransfer');
     }
 
-    var AchievementPictureList = Marionette.CollectionView.extend({
-        className: 'thumbnails',
-        tagName: 'ul',
-        childViewOptions: {
-            tagName: 'li',
+    var AchievementPictureList = ThumbnailList.extend({
+        thumbnailOptions: {
             removable: true,
             clickBehavior: 'none',
             rect: {
@@ -32,7 +29,6 @@ define(function(require) {
         childEvents: {
             'remove': 'onPictureRemoved'
         },
-        childView: Thumbnail,
         events: {
             'dragenter': 'onDragEnter',
             'dragleave': 'onDragLeave',
@@ -40,6 +36,7 @@ define(function(require) {
             'drop':      'onDrop'
         },
         initialize: function() {
+            ThumbnailList.prototype.initialize.call(this);
             this.listenTo(this.collection, 'remove', function(model, col, opt) {
                 this.trigger('remove-picture', model.attributes, opt.index);
             });

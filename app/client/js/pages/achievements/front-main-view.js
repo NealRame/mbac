@@ -7,57 +7,28 @@ define(function(require) {
 
     var LightBox = require('LightBox');
     var Thumbnail = require('Thumbnail');
+    var ThumbnailList = require('ThumbnailList');
     var AchievementBase = require('pages/achievements/achievement');
 
     var Achievement = AchievementBase.extend({
         urlRoot: '/api/achievements/'
     });
 
-    var AchievementPictureList = Marionette.CollectionView.extend({
-        className: 'thumbnails',
-        tagName: 'ul',
-        childEvents: {
-            ready: 'onChildReady',
+    var AchievementPictureList = ThumbnailList.extend({
+        thumbnailsOptions: {
+            rect: {
+                height: 128,
+                width: 192
+            },
         },
         initialize: function() {
-            var center = _.bind(function() {
-                var child = this.children.first();
-                if (child) {
-                    this.$el.removeAttr('style');
-                    var container_width = ui.rect(this.el).width;
-                    var thumb_width = child.outerRect().width;
-                    var thumb_count_by_row = Math.min(
-                        this.collection.length,
-                        Math.floor(container_width/thumb_width)
-                    );
-                    this.$el.css({
-                        width: thumb_count_by_row*thumb_width,
-                    });
-                }
-            }, this);
-            this.ready_ = 0;
-            this.listenToOnce(this, 'childview:show', function() {
-                $(window).bind('resize', _.debounce(center, 150));
-                center();
-            });
-            this.listenTo(this, 'childview:click', function(view) {
-                LightBox.open(this.collection, view._index);
-            });
+            ThumbnailList.prototype.initialize.call(this);
         },
-        childView: Thumbnail,
-        childViewOptions: function() {
-            return {
-                tagName: 'li',
-                rect: {
-                    height: 128,
-                    width: 192
-                }
-            };
+        onClick: function(thumbnail) {
+            LightBox.open(this.collection, thumbnail._index);
         },
-        onChildReady: function() {
-            if (++this.ready_ >= this.collection.length) {
-                ui.pushDown($('body > footer').first(), window, 0);
-            }
+        onReady: function() {
+            ui.pushDown($('body > footer').first(), window, 0);
         }
     });
 
