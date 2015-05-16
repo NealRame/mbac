@@ -1,7 +1,7 @@
-// Thumbnail/thumbnail.js
-// ----------------------
-// - author: Neal.Rame. <contact@nealrame.com>
-// -   date: Tue Mar 10 21:55:49 2015
+/// Thumbnail/thumbnail.js
+/// ----------------------
+/// - author: Neal.Rame. <contact@nealrame.com>
+/// -   date: Tue Mar 10 21:55:49 2015
 define(function(require) {
     var _ = require('underscore');
     var $ = require('jquery');
