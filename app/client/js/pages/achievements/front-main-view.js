@@ -20,9 +20,25 @@ define(function(require) {
             ready: 'onChildReady',
         },
         initialize: function() {
+            var center = _.bind(function() {
+                var child = this.children.first();
+                if (child) {
+                    this.$el.removeAttr('style');
+                    var container_width = ui.rect(this.el).width;
+                    var thumb_width = child.outerRect().width;
+                    var thumb_count_by_row = Math.min(
+                        this.collection.length,
+                        Math.floor(container_width/thumb_width)
+                    );
+                    this.$el.css({
+                        width: thumb_count_by_row*thumb_width,
+                    });
+                }
+            }, this);
             this.ready_ = 0;
             this.listenToOnce(this, 'childview:show', function() {
-                this.center_();
+                $(window).bind('resize', _.debounce(center, 150));
+                center();
             });
             this.listenTo(this, 'childview:click', function(view) {
                 LightBox.open(this.collection, view._index);
@@ -41,20 +57,6 @@ define(function(require) {
         onChildReady: function() {
             if (++this.ready_ >= this.collection.length) {
                 ui.pushDown($('body > footer').first(), window, 0);
-            }
-        },
-        center_: function() {
-            var child = this.children.first();
-            if (child) {
-                var thumb_width = child.outerRect().width;
-                var container_width = ui.rect(this.el).width;
-                var required_width = this.collection.length*thumb_width;
-                var margin = (container_width - required_width)/2;
-                this.$el.css({
-                    width: required_width,
-                    'margin-left': margin,
-                    'margin-right': margin,
-                });
             }
         }
     });
