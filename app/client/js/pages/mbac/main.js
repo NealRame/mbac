@@ -9,14 +9,12 @@ define(function(require) {
 
     function lock(elt, fun) {
         if (! $(elt).data('locked')) {
-            console.log('-- lock', elt);
             $(elt).data('locked', true);
             fun.call(elt, unlock.bind(null, elt));
         }
     }
 
     function unlock(elt) {
-        console.log('-- unlock', elt);
         $(elt).data('locked', false);
     }
 
