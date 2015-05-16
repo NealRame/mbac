@@ -37,16 +37,20 @@ define(function(require) {
     })).then(function(res) {
         $(document).on('after-height-change.fndtn.equalizer', function(ev) {
             image_wrappers().each(function() {
-                lock(this, function(next) {
-                    var $img = $(this).find('img');
-                    var image_rect = ui.naturalRect($img);
-                    var wrapper_rect = ui.naturalRect(this);
-
-                    $(this).css(wrapper_rect);
-                    $img.css(ui.cropFit(image_rect, wrapper_rect));
-
-                    next();
-                });
+                if (Foundation.utils.is_large_only()) {
+                    lock(this, function(next) {
+                        var $img = $(this).find('img');
+                        var wrapper_rect = ui.naturalRect(this);
+                        $(this).css(wrapper_rect);
+                        $img.css(
+                            ui.vCenter(
+                                ui.cropFit(ui.naturalRect($img), wrapper_rect),
+                                wrapper_rect
+                            )
+                        );
+                        next();
+                    });
+                }
             });
         });
         $(document).foundation();
