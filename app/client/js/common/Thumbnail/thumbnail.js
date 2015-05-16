@@ -79,19 +79,31 @@ define(function(require) {
             var data = {
                 actions: []
             };
-            if (functional.valueOf(Marionette.getOption(this, 'removable'))) {
+            if (this.isRemovable()) {
                 data.actions.push({
                     name: 'remove',
                     icon: 'fa fa-trash'
                 });
             }
-            if (functional.valueOf(this.isEditable())) {
+            if (this.isEditable()) {
                 data.actions.push({
                     name: 'edit',
                     icon: 'fa fa-pencil'
                 });
             }
             return _.extend(data, this.innerRect());
+        },
+        isEditable: function() {
+            return functional.valueOf(
+                Marionette.getOption(this, 'editable'),
+                this
+            );
+        },
+        isRemovable: function() {
+            return functional.valueOf(
+                Marionette.getOption(this, 'removable'),
+                this
+            );
         },
         innerRect: function() {
             return functional.valueOf(
