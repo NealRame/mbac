@@ -1,0 +1,22 @@
+@import "../../settings";
+
+.responsive-picture-wrapper {
+    position: relative;
+    @media #{$large-up} {
+        overflow: hidden;
+        img {
+            position: absolute;
+            max-width: none;
+            max-height: none;
+        }
+    }
+    @media #{$medium-up} {
+        img {
+            display: block;
+            max-width: none;
+            width: 50%;
+            height: auto;
+            margin: 0 auto;
+        }
+    }
+}

@@ -117,6 +117,7 @@ module.exports = function(grunt) {
                         'pages/achievements/admin_style.scss',
                         'pages/achievements/style.scss',
                         'pages/home/style.scss',
+                        'pages/mbac/style.scss',
                         'pages/prices/style.scss',
                         'pages/services/style.scss'
                     ],
