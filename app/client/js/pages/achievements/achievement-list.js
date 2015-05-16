@@ -20,18 +20,13 @@ define(function(require) {
         return true;
     }
 
-    return Marionette.CollectionView.extend({
-        className: 'thumbnails',
-        tagName: 'ul',
+    return ThumbnailList.extend({
         editable: false,
         clickBehavior: 'trigger',
-        childView: Thumbnail,
         childEvents: {
-            edit: 'onChildEdit',
-            ready: 'onChildReady',
             remove: 'onChildRemove',
         },
-        childViewOptions: function() {
+        thumbnailOptions: function() {
             return {
                 tagName: 'li',
                 removable: Marionette.getOption(this, 'editable'),
@@ -41,26 +36,10 @@ define(function(require) {
             };
         },
         initialize: function() {
-            this.ready_ = 0;
-            var resize_cb = _.debounce(this.center_.bind(this), 150);
-            this.listenTo(this, 'show', function() {
-                $(window).on('resize', resize_cb);
-            });
-            this.listenTo(this, 'destroy', function() {
-                $(window).off('resize', resize_cb);
-            });
-            this.listenToOnce(this, 'childview:show', function() {
-                resize_cb();
-            });
+            ThumbnailList.prototype.initialize.call(this);
         },
         onChildEdit: function(view, model) {
             console.log('-- AchievementList: edit request');
-            // AchievementEditorDialog.open(model);
-        },
-        onChildReady: function() {
-            if (++this.ready_ >= this.collection.length) {
-                this.trigger('ready');
-            }
         },
         onChildRemove: function(view, model) {
             console.log('-- AchievementList: remove request');
@@ -74,21 +53,6 @@ define(function(require) {
                     refuseLabel: 'Non'
                 }
             );
-        },
-        center_: function() {
-            var child = this.children.first();
-            if (child) {
-                this.$el.removeAttr('style');
-                var container_width = ui.rect(this.el).width;
-                var thumb_width = child.outerRect().width;
-                var thumb_count_by_row = Math.min(
-                    this.collection.length,
-                    Math.floor(container_width/thumb_width)
-                );
-                this.$el.css({
-                    width: thumb_count_by_row*thumb_width,
-                });
-            }
         }
     });
 });
