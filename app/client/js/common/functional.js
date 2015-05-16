@@ -142,6 +142,19 @@ define(function(require) {
         }));
     }
 
+	/// #### functional.value_of(v, context)
+	/// If `v` is a function returns the result of its invocation, otherwise
+	/// simply returns `v`.
+	///
+	/// __Parameters:__
+	/// - `v`, what ever you want
+	/// - `context`, an `Object` to which the possibly given function will be
+	/// bind to.
+	function value_of(v, context) {
+		return _.isFunction(v) ? v.call(context) : v;
+	}
+
+
     return {
 		applyIf: apply_if,
         cat: cat,
@@ -150,6 +163,7 @@ define(function(require) {
 		existy: existy,
 		hasAllOfKeys: has_all_of_keys,
 		hasAllOfAttributes: has_all_of_attributes,
-		mapObject: map_object
+		mapObject: map_object,
+		valueOf: value_of
     };
 });
