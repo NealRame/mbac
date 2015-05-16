@@ -67,6 +67,10 @@ define(function(require) {
         clickBehavior: 'trigger',
         editable: false,
         removable: false,
+        rect: {
+            height: 128,
+            width: 192
+        },
         serializedData: function() {
             return {};
         },
@@ -75,20 +79,19 @@ define(function(require) {
             var data = {
                 actions: []
             };
-
-            if (Marionette.getOption(this, 'removable')) {
+            if (functional.valueOf(Marionette.getOption(this, 'removable'))) {
                 data.actions.push({
                     name: 'remove',
                     icon: 'fa fa-trash'
                 });
             }
-            if (Marionette.getOption(this, 'editable')) {
+            if (functional.valueOf(Marionette.getOption(this, 'editable'))) {
                 data.actions.push({
                     name: 'edit',
                     icon: 'fa fa-pencil'
                 });
             }
-            return data;
+            return _.extend(data, functional.valueOf(Marionette.getOption(this, 'rect')));
         },
         innerRect: function() {
             return Marionette.getOption(this, 'rect') || ui.rect(this.ui.crop);
