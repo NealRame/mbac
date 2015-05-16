@@ -45,8 +45,8 @@
     border-bottom: solid 1px lightgray;
     margin-bottom: 8px;
     .thumbnails {
-        // border: 1px solid lightgray;
-        min-height: 128px,
+        min-height: 128px;
+        width: 100%;
     }
     #add-pictures {
         @extend .button;

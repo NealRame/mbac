@@ -52,6 +52,13 @@ define(function(require) {
         addFiles: function(files) {
             _.each(files, this.addFile, this);
         },
+        center: function() {
+            this.$el.removeAttr('style');
+            if (this.children.length > 0) {
+                var th_width = this.children.first().outerRect().width;
+                this.$el.css('width', th_width*Math.floor(this.$el.width()/th_width));
+            }
+        },
         onDragEnter: function(e) {
             console.log('-- AchievementPictureList:onDragEnter');
             e.preventDefault();
@@ -82,7 +89,7 @@ define(function(require) {
         onPictureRemoved: function(view, model) {
             // view.remove();
             this.collection.remove(model);
-        }
+        },
     });
 
     var AchievementEditor = Marionette.LayoutView.extend({
