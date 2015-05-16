@@ -60,96 +60,68 @@ body > .splash {
         }
     }
 }
-section.wrapper {
-    table.schedule {
-        background-color: inherit;
-        border-collapse: collapse;
-        border: none;
-        color: inherit;
-        margin: 0 auto;
-        width: 100%;
-        z-index: 2;
-        tr {
-            margin: 0;
-            td {
-                border: none;
-                font-size: 1em;
-                &.center {
-                    & > hr {
-                        border: none;
-                        border-bottom: 2px dotted #999;
-                        height: 1ex;
-                        margin: 0;
-                        margin-bottom: 1ex;
-                    }
-                    width: 100%;
+table.schedule {
+    background-color: inherit;
+    border-collapse: collapse;
+    border: none;
+    color: inherit;
+    margin: 0 auto;
+    width: 100%;
+    z-index: 2;
+    tr {
+        margin: 0;
+        td {
+            border: none;
+            font-size: 1em;
+            &.center {
+                & > hr {
+                    border: none;
+                    border-bottom: 2px dotted #999;
+                    height: 1ex;
+                    margin: 0;
+                    margin-bottom: 1ex;
                 }
-                &.day {
-                    text-align: right;
-                }
-                &.hour {
-                    text-align: left;
-                }
-                vertical-align: bottom;
-                white-space: nowrap;
+                width: 100%;
             }
+            &.day {
+                text-align: right;
+            }
+            &.hour {
+                text-align: left;
+            }
+            vertical-align: bottom;
+            white-space: nowrap;
         }
     }
-    .contact {
-        list-style-type: none;
-        overflow: auto;
-        margin: 0 auto;
-        padding: 0;
+}
+.contact {
+    text-align: center;
+    .contact-icon {
+        background-color: #aaa;
+        border-radius: 90px;
+        color: $light-gray;
+        font-family: FontAwesome;
+        font-size: 2em;
+        line-height: 64px;
+        height: 64px;
+        width: 64px;
+        margin: 8px auto;
         text-align: center;
-        @media #{$medium-only} {
-            width: 510px;
+        @media #{$medium-up} {
+            font-size: 3em;
+            line-height: 96px;
+            height: 96px;
+            width: 96px;
+            margin: 16px auto;
         }
-        @media #{$large-up} {
-            width: 768px;
+        &.phone:before {
+            content: "\f10b";
         }
-        li {
-            @media #{$medium-only} {
-                width: 168px;
-                font-size: 0.75em;
-            }
-            @media #{$large-up} {
-                width: 256px;
-            }
-            @media #{$medium-up} {
-                float: left;
-            }
-            margin: 32px auto;
+        &.address:before {
+            content: "\f041";
         }
-        .contact-icon {
-            background-color: #aaa;
-            border-radius: 90px;
-            color: $light-gray;
-            font-family: FontAwesome;
-            font-size: 2em;
-            line-height: 64px;
-            height: 64px;
-            width: 64px;
-            margin: 8px auto;
-            text-align: center;
-            @media #{$medium-up} {
-                font-size: 3.9em;
-                line-height: 96px;
-                height: 96px;
-                width: 96px;
-                margin: 16px auto;
-            }
-            @media #{$large-up} {
-                font-size: 3em;
-            }
-            &.phone:before {
-                content: "\f10b";
-            }
-            &.address:before {
-                content: "\f041";
-            }
-            &.e-mail:before {
-                content: "\f003";
-            }
+        &.e-mail:before {
+            content: "\f003";
         }
     }
 }
