@@ -7,6 +7,7 @@ define(function(require) {
 	var $ = require('jquery');
 	var Backbone = require('backbone');
 	var Marionette = require('marionette');
+	var Promise = require('promise');
     var async = require('common/async');
 	var functional = require('common/functional');
 	var ui = require('common/ui');
