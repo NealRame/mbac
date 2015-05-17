@@ -137,6 +137,7 @@ define(function(require) {
                 });
         },
         refresh: function() {
+            this.$el.find('.crop').css(this.innerRect());
             this.ui.thumbLink.empty().append(this.placeholder('spinner'));
             make_renderer(Marionette.getOption(this, 'renderers'))
                 .call(this, this.model)
