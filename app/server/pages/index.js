@@ -35,7 +35,6 @@ function setup_page(app, name, controller, config) {
     };
     var route = (name === 'home' && config.prefix === '/') ? '/' : path.join(config.prefix, name);
     var template = path.join(__dirname, name, 'views', config.template);
-    var page_title = config.title || name;
 
     debug(['- initialize route', route].join(' '));
 
@@ -60,7 +59,7 @@ function setup_page(app, name, controller, config) {
 
     var locals = {
         page: page,
-        title: page_title
+        title: config.title
     };
 
     // Setup page controller
