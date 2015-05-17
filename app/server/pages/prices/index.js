@@ -4,7 +4,7 @@
 // -  date:  Tue May 12 20:57:49 CEST 2015
 
 var _ = require('underscore');
-var debug = require('debug')('mbac:routes:home');
+var debug = require('debug')('mbac:routes:prices');
 var express = require('express');
 var mongoose = require('mongoose');
 var path = require('path');
