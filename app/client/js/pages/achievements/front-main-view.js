@@ -15,12 +15,6 @@ define(function(require) {
     });
 
     var AchievementPictureList = ThumbnailList.extend({
-        thumbnailsOptions: {
-            rect: {
-                height: 128,
-                width: 192
-            },
-        },
         initialize: function() {
             ThumbnailList.prototype.initialize.call(this);
         },
