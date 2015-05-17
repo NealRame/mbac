@@ -28,14 +28,14 @@ define(function(require) {
         },
         thumbnailOptions: function() {
             return {
-                tagName: 'li',
                 removable: Marionette.getOption(this, 'editable'),
                 editable: Marionette.getOption(this, 'editable'),
                 clickBehavior: Marionette.getOption(this, 'clickBehavior'),
-                renderers: [achievement_render]
+                renderers: [achievement_render],
             };
         },
         initialize: function() {
+            _.bindAll(this, 'thumbnailOptions');
             ThumbnailList.prototype.initialize.call(this);
         },
         onChildEdit: function(view, model) {
