@@ -37,7 +37,7 @@ define(function(require) {
     })).then(function(res) {
         $(document).on('after-height-change.fndtn.equalizer', function(ev) {
             image_wrappers().each(function() {
-                if (Foundation.utils.is_large_only()) {
+                if (Foundation.utils.is_large_up()) {
                     lock(this, function(next) {
                         var $img = $(this).find('img');
                         var wrapper_rect = ui.naturalRect(this);
