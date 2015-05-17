@@ -236,6 +236,21 @@ define(function(require) {
         }
     }
 
+    /// #### ui.mediaQuery()
+    /// Return the current media query.
+    ///
+    /// __Return:__
+    /// `'small'`|`'medium'`|`'large'`
+    function media_query() {
+        if (Foundation.utils.is_small_only()) {
+            return 'small';
+        }
+        if (Foundation.utils.is_medium_only()) {
+            return 'medium';
+        }
+        return 'large';
+    }
+
     return {
         hCenter: h_center,
         vCenter: v_center,
@@ -247,5 +262,6 @@ define(function(require) {
         rect: rect,
         scale: scale,
         pushDown: push_down,
+        mediaQuery: media_query
     };
 });
