@@ -6,7 +6,7 @@ define(function(require) {
     var _ = require('underscore');
     var $ = require('jquery');
     var Backbone = require('backbone');
-    var marked = require('marked');
+    var functional = require('common/functional');
     var ui = require('common/ui');
     var Thumbnail = require('Thumbnail');
 
@@ -16,16 +16,43 @@ define(function(require) {
         childEvents: {
             ready: 'onChildReady',
         },
+        defaultThumbnailOptions: {
+            tagName: 'li',
+            rect: function() {
+                if (Foundation.utils.is_small_only()) {
+                    return {
+                        width: 64, height: 64
+                    };
+                }
+                if (Foundation.utils.is_medium_only()) {
+                    return {
+                        width: 192, height: 128
+                    };
+                }
+                return {
+                    width: 256, height: 171
+                };
+            }
+        },
         initialize: function() {
             var ready_ = 0;
-            var center_ = _.debounce(_.bind(this.center, this), 150);
+            var reflow_ = _.debounce(_.bind(function() {
+                if (this.needRefresh()) {
+                    ready_ = 0;
+                    this.children.each(function(view) {
+                        view.refresh();
+                    });
+                }
+                this.center();
+            }, this), 150);
+            this.currentMediaQuery_ = ui.mediaQuery();
             this.listenTo(this, 'show', function() {
-                $(window).on('resize', center_);
+                $(window).on('resize', reflow_);
             });
             this.listenTo(this, 'destroy', function() {
-                $(window).off('resize', center_);
+                $(window).off('resize', reflow_);
             });
-            this.listenTo(this, 'childview:show', center_);
+            this.listenTo(this, 'childview:show', reflow_);
             this.listenTo(this, 'childview:ready', function() {
                 if (++ready_ >= this.collection.length) {
                     Marionette.triggerMethod.call(this, 'ready');
@@ -35,11 +62,20 @@ define(function(require) {
         },
         childView: Thumbnail,
         childViewOptions: function() {
-            var thumbnail_options = Marionette.getOption(this, 'thumbnailOptions');
-            if (_.isFunction(thumbnail_options)) {
-                thumbnail_options = thumbnail_options.call(this);
+            return _.defaults(
+                functional.valueOf(
+                    Marionette.getOption(this, 'thumbnailOptions') || {}
+                ),
+                this.defaultThumbnailOptions
+            );
+        },
+        needRefresh: function() {
+            var mq = ui.mediaQuery();
+            if (this.currentMediaQuery_ === mq) {
+                return false;
             }
-            return _.defaults(thumbnail_options || {}, {tagName: 'li'});
+            this.currentMediaQuery_ = mq;
+            return true;
         },
         center: function() {
             var child = this.children.first();
