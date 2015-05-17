@@ -80,6 +80,7 @@ module.exports = function(grunt) {
                                 'backbone',
                                 'foundation',
                                 'jquery',
+                                'marked',
                                 'marionette',
                                 'underscore'
                             ]
@@ -91,7 +92,23 @@ module.exports = function(grunt) {
                         {
                             name: 'pages/achievements/back',
                             exclude: ['common']
-                        }
+                        },
+                        {
+                            name: 'pages/achievements/front-main-list',
+                            exclude: ['common']
+                        },
+                        {
+                            name: 'pages/achievements/front-main-view',
+                            exclude: ['common']
+                        },
+                        {
+                            name: 'pages/home/main',
+                            exclude: ['common']
+                        },
+                        {
+                            name: 'pages/mbac/main',
+                            exclude: ['common']
+                        },
                     ],
                     logLevel: 4
                 }
