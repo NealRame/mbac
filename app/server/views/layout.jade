@@ -6,7 +6,7 @@ doctype html
 html
     head
         meta(name="viewport", content="width=device-width, initial-scale=1.0")
-        title= title
+        title= 'mon Bar à Couture' + (title ? (' - ' + title) : '')
         link(rel='stylesheet', href='//fonts.googleapis.com/css?family=Lobster|Raleway:300,700', type='text/css')
         each style in page.stylesheets
             link(rel='stylesheet', href=style)
