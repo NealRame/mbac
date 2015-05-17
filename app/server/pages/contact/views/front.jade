@@ -1,0 +1,46 @@
+//- pages/contact/front.jade
+//- ========================
+//- - author: Neal.Rame. <contact@nealrame.com>
+//- -   date: Thu May 14 23:19:21 CEST 2015
+
+mixin row(label)
+    .row
+        .small-12.columns
+            if label
+                label: | #{label}
+                    block
+            else
+                block
+
+extends /layout
+block content
+    section.wrapper
+        article
+            header
+                h1: | Contactez nous
+            section
+                h2: | Par courier à l'adresse suivante :
+                p
+                    | mon Bar à Couture<br>
+                    | 32, rue Mourmant<br>
+                    | 59000 Lille
+                h2: | Par téléphone au :
+                p
+                    | 03.20.39.72.44
+                h2: | Par mail à l'adresse suivante :
+                p
+                    | contact@monbaracouture.com
+                h2: | Ou directement en utilisant le formulaire ci-dessous :
+                    form#contact-form
+                        +row('*Nom :')
+                            input#name(type='text', placeholder='Votre nom')
+                        +row('*Email :')
+                            input#email(type='text', placeholder='Votre adresse e-mail')
+                        +row('*Objet :')
+                            select#subject
+                                option(value='info'):  | Demande d'informations
+                                option(value='autre'): | Autre
+                        +row('Votre message :')
+                            textarea#message(rows=10)
+                    +row
+                        a#contact-form-submit.button(role='button' href='#'): | Envoyer

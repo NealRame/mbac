@@ -102,6 +102,10 @@ module.exports = function(grunt) {
                             exclude: ['common']
                         },
                         {
+                            name: 'pages/contact/main',
+                            exclude: ['common']
+                        },
+                        {
                             name: 'pages/home/main',
                             exclude: ['common']
                         },
