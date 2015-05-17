@@ -128,12 +128,18 @@ footer {
         list-style-type: none;
         padding: 0;
         margin: 0;
-        li { display: inline; }
+        li {
+            display: inline;
+        }
     }
     .links {
-        background-color: #BF2F1A;
-        a  { font-size: x-small; }
-        li { margin: 0;}
+        background-color: darken($footer-background-color, 10);
+        a  {
+            font-size: small;
+        }
+        li {
+            margin: 0;
+        }
         li:not(:last-child):after {
             margin: 0 1ch;
             content: "-"; // &#x2013;
@@ -141,8 +147,12 @@ footer {
     }
     .socials {
         margin: 0 auto;
-        a  { font-size: xx-large; }
-        li { margin: .25em; }
+        a  {
+            font-size: xx-large;
+        }
+        li {
+            margin: .25em;
+        }
     }
     .copyright {
         font-size: x-small;
