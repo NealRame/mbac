@@ -7,7 +7,7 @@ define(function(require) {
         return re.test(address);
     }
 
-    function add_error_message(elt, message) {
+    function set_error_message(elt, message) {
         elt.css('margin-bottom', 0)
             .parent()
             .append(
@@ -22,24 +22,28 @@ define(function(require) {
         elt.parent().find('.error').remove();
     }
 
+    function field_value(field) {
+        var value = _.result($(field), 'val');
+        if (! _.isUndefined(value)) {
+            return value;
+        }
+        console.log(field);
+        throw new Error(field + ' is not a valid form field!');
+    }
+
     function make_validator() {
         var args = _.toArray(arguments);
-        return function(form, init, error, callback) {
+        return function(form, clear_error, set_error, callback) {
             try {
-                var data = _.reduce(args, function(memo, validator) {
-                    var $field = $('#' + validator.id, form);
-                    if ($field.length > 0 && $field.val) {
-                        init($field);
-                        var value = validator.validate($field.val(), error.bind(null, $field));
-                        if (value && memo) {
-                            memo[validator.id] = value;
-                            return memo;
-                        }
-                    } else {
-                        throw new Error(validator.id + ' is not a valid form field!');
+                var data = _.reduce(args, function(memo, validate) {
+                    var value = validate(form, clear_error, set_error);
+                    if (value && memo) {
+                        return _.extend(memo, value);
                     }
                 }, {});
-                if (data) callback(data);
+                if (data) {
+                    callback(data);
+                }
             } catch (err) {
                 console.error(err);
             }
@@ -47,51 +51,52 @@ define(function(require) {
     }
 
     var validate = make_validator(
-        {
-            id: 'name',
-            validate: function(data, error_callback) {
-                var value = data.trim();
-                if (value.length > 0) {
-                    return value;
-                }
-                error_callback('Vous devez indiquez votre nom');
+        function(form, clear_error, set_error) {
+            var $field = $('#name', form);
+            var value = field_value($field).trim();
+            clear_error($field);
+            if (value.length > 0) {
+                return {'name': value};
+            }
+            set_error($field, 'Vous devez indiquez votre nom');
+        },
+        function(form, clear_error, set_error) {
+            var $field = $('#from', form);
+            var value = field_value($field).trim();
+            clear_error($field);
+            if (check_mail_address(value)) {
+                return {'from': value};
+            }
+            set_error($field, 'Adresse email invalide');
+        },
+        function(form, clear_error, set_error) {
+            var $field = $('#subject', form);
+            var value = field_value($field);
+            clear_error($field);
+            switch (value) {
+                case 'info':
+                case 'other':
+                    return {'subject': value};
+                default:
+                    set_error($field, 'Valeur du champ invalide');
+                    break;
             }
         },
-        {
-            id: 'email',
-            validate: function(data, error_callback) {
-                var value = data.trim();
-                if (check_mail_address(value)) {
-                    return value;
-                }
-                error_callback('Adresse email invalide');
+        function(form, clear_error, set_error) {
+            var $field = $('#message', form);
+            var value = field_value($field);
+            clear_error($field);
+            if (value.trim().length > 0) {
+                return {'message': value};
             }
-        },
-        {
-            id: 'subject',
-            validate: function(data, error_callback) {
-                var value = data.trim();
-                if (value === 'info' || value === 'other') {
-                    return value;
-                }
-                error_callback('Valeur du champ invalide');
-            }
-        },
-        {
-            id: 'message',
-            validate: function(data, error_callback) {
-                if (data.trim().length > 0) {
-                    return data;
-                }
-                error_callback('Votre message est vide');
-            }
+            set_error($field, 'Votre message est vide');
         }
     );
 
     $('#contact-form-submit').click(function(ev) {
         ev.preventDefault();
         ev.stopPropagation();
-        validate($('#contact-form'), clear_error_message, add_error_message, function(data) {
+        validate($('#contact-form'), clear_error_message, set_error_message, function(data) {
             console.log(data);
         });
         return false;
