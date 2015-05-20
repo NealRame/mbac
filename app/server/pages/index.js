@@ -85,17 +85,6 @@ function setup_api(app, name, controller) {
     var route = path.join('/api', name);
 
     debug(['- initialize api', route].join(' '));
-
-    try {
-        module = require(module_path);
-        if (! _.isFunction(module)) {
-            throw new Error([module_path, 'must export a function!'].join(' '));
-        }
-    } catch (err) {
-        debug(err);
-        throw err;
-    }
-
     app.use(route, controller);
 }
 
