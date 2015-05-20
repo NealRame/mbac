@@ -1,5 +1,5 @@
-/// utils/async.js
-/// --------------
+/// common/async.js
+/// ---------------
 /// - author: Neal.Rame. <contact@nealrame.com>
 /// -   date: Wed Mar 12 03:58:30 2015
 define(function(require) {

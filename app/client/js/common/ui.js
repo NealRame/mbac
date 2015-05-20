@@ -1,5 +1,5 @@
-/// utils/ui.js
-/// -----------
+/// common/ui.js
+/// ------------
 /// - author: Neal.Rame. <contact@nealrame.com>
 /// -   date: Wed Mar 12 03:40:07 2015
 define(function(require) {

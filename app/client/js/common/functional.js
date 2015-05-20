@@ -1,5 +1,5 @@
-/// utils/functional.js
-/// -------------------
+/// common/functional.js
+/// --------------------
 /// - author: Neal.Rame. <contact@nealrame.com>
 /// -   date: Wed Mar 12 03:49:48 2015
 define(function(require) {
