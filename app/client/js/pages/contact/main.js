@@ -1,26 +1,7 @@
 define(function(require) {
     var _ = require('underscore');
     var $ = require('jquery');
-
-    function check_mail_address(address) {
-        var re = /^[-a-z0-9~!$%^&*_=+}{\'?]+(\.[-a-z0-9~!$%^&*_=+}{\'?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+)*\.(aero|arpa|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$/i;
-        return re.test(address);
-    }
-
-    function set_error_message(elt, message) {
-        elt.css('margin-bottom', 0)
-            .parent()
-            .append(
-                $(document.createElement('span'))
-                    .addClass('error')
-                    .append(message)
-            );
-    }
-
-    function clear_error_message(elt) {
-        elt.css('margin-bottom', 16);
-        elt.parent().find('.error').remove();
-    }
+    var util = require('common/util');
 
     function field_value(field) {
         var value = _.result($(field), 'val');
@@ -31,26 +12,26 @@ define(function(require) {
         throw new Error(field + ' is not a valid form field!');
     }
 
-    function make_validator() {
-        var args = _.toArray(arguments);
-        return function(form, clear_error, set_error, callback) {
-            try {
-                var data = _.reduce(args, function(memo, validate) {
-                    var value = validate(form, clear_error, set_error);
-                    if (value && memo) {
-                        return _.extend(memo, value);
-                    }
-                }, {});
-                if (data) {
-                    callback(data);
-                }
-            } catch (err) {
-                console.error(err);
-            }
-        };
+    function set_error(elt, message) {
+        elt.css('margin-bottom', 0)
+            .parent()
+            .append(
+                $(document.createElement('span'))
+                    .addClass('error')
+                    .append(message)
+            );
     }
 
-    var validate = make_validator(
+    function clear_error(elt) {
+        elt.css('margin-bottom', 16);
+        elt.parent().find('.error').remove();
+    }
+
+    var validate = util.makeFormValidator(
+        {
+            clearError: clear_error,
+            setError: set_error
+        },
         function(form, clear_error, set_error) {
             var $field = $('#name', form);
             var value = field_value($field).trim();
@@ -64,7 +45,7 @@ define(function(require) {
             var $field = $('#from', form);
             var value = field_value($field).trim();
             clear_error($field);
-            if (check_mail_address(value)) {
+            if (util.checkMailAddress(value)) {
                 return {'from': value};
             }
             set_error($field, 'Adresse email invalide');
@@ -96,9 +77,10 @@ define(function(require) {
     $('#contact-form-submit').click(function(ev) {
         ev.preventDefault();
         ev.stopPropagation();
-        validate($('#contact-form'), clear_error_message, set_error_message, function(data) {
+        var data = validate($('#contact-form'));
+        if (data) {
             console.log(data);
-        });
+        }
         return false;
     });
 
