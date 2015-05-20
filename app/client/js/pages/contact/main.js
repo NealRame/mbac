@@ -80,6 +80,15 @@ define(function(require) {
         var data = validate($('#contact-form'));
         if (data) {
             console.log(data);
+            $.post('/api/contact', data)
+                .done(function() {
+                    console.log('success');
+                    console.log(arguments);
+                })
+                .fail(function() {
+                    console.log('error');
+                    console.log(arguments);
+                });
         }
         return false;
     });
