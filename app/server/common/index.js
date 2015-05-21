@@ -6,5 +6,6 @@
 /// Provides common functions.
 ///
 module.exports = {
+    api: require('./api'),
     async: require('./async')
 };
