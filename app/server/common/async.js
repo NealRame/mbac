@@ -7,7 +7,7 @@
 ///
 var _ = require('underscore');
 
-/// ### common.make_callback(resolve, reject)
+/// #### common.async.make_callback(resolve, reject)
 /// Make a nodejs style callback, wrapping the two given function. If callback
 /// is called with its first argument defined then the `reject` function is
 /// called with that arguments, otherwise the `resolve` is called with the rest
@@ -30,7 +30,7 @@ function make_callback(resolve, reject) {
 }
 exports.make_callback = make_callback;
 
-/// ### common.make_promise(fun[, ...args])
+/// #### common.async.make_promise(fun[, ...args])
 /// Wrap the given asynchronous function and returns a promise.
 ///
 /// The given function signature has to be of the form:
@@ -53,7 +53,7 @@ function make_promise(fun) {
 }
 exports.make_promise = make_promise;
 
-/// ### common.nodify(promise[, callback])
+/// #### common.async.nodify(promise[, callback])
 /// If a callback function is passed as second argument, then it is called when
 /// the given promise is fulfilled or rejected, otherwise simply return the
 /// given promise.
@@ -78,7 +78,7 @@ function nodify(promise, callback) {
 }
 exports.nodify = nodify;
 
-/// ### common.promisify(fun[, self])
+/// #### common.async.promisify(fun[, self])
 /// Wrap the given asynchronous function/method to make a function returning
 /// a `Promise`.
 ///

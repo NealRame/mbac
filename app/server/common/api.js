@@ -51,7 +51,7 @@ function value(value) {
 }
 
 module.exports = {
-    /// #### api.error401([message])
+    /// #### common.api.error401([message])
     /// Create a 401 error with the given message. The error is returned as a
     /// rejected promise and so can be used in a chain of promise.
     ///
@@ -63,7 +63,7 @@ module.exports = {
     error401: function(message) {
         return Promise.reject(error_401(message));
     },
-    /// #### api.throw401([message])
+    /// #### common.api.throw401([message])
     /// Throw a 401 error with the given message.
     ///
     /// **Parameters:**
@@ -71,7 +71,7 @@ module.exports = {
     throw401: function(message) {
         throw error_401(message);
     },
-    /// #### api.error403([message])
+    /// #### common.api.error403([message])
     /// Create a 403 error with the given message. The error is returned as a
     /// rejected promise and so can be used in a chain of promise.
     ///
@@ -83,7 +83,7 @@ module.exports = {
     error403: function(message) {
         return Promise.reject(error_403(message));
     },
-    /// #### api.throw403([message])
+    /// #### common.api.throw403([message])
     /// Throw a 403 error with the given message.
     ///
     /// **Parameters:**
@@ -91,7 +91,7 @@ module.exports = {
     throw403: function(message) {
         throw error_403(message);
     },
-    /// #### api.error404([message])
+    /// #### common.api.error404([message])
     /// Create a 404 error with the given message. The error is returned as a
     /// rejected promise and so can be used in a chain of promise.
     ///
@@ -103,7 +103,7 @@ module.exports = {
     error404: function(message) {
         return Promise.reject(error_404(message));
     },
-    /// #### api.throw404([message])
+    /// #### common.api.throw404([message])
     /// Throw a 404 error with the given message.
     ///
     /// **Parameters:**
@@ -111,7 +111,7 @@ module.exports = {
     throw404: function(message) {
         throw error_404(message);
     },
-    /// #### api.error500([message])
+    /// #### common.api.error500([message])
     /// Create a 500 error with the given message. The error is returned as a
     /// rejected promise and so can be used in a chain of promise.
     ///
@@ -123,7 +123,7 @@ module.exports = {
     error500: function(err) {
         return Promise.reject(error_500(err));
     },
-    /// #### api.throw500([message])
+    /// #### common.api.throw500([message])
     /// Throw a 500 error with the given message.
     ///
     /// **Parameters:**
@@ -131,7 +131,7 @@ module.exports = {
     throw500: function(err) {
         throw error_500(err);
     },
-    /// #### api.value(v)
+    /// #### common.api.value(v)
     /// If the given value is a function return the value of the invocation,
     /// otherwise return the given value.
     ///
@@ -141,7 +141,7 @@ module.exports = {
     /// **Returns:**
     /// - `value` or `value()`.
     value: value,
-    /// #### api.exist(value)
+    /// #### common.api.exist(value)
     /// Returns a promise fulfilled or rejected if given value is defined or
     /// not.
     ///
@@ -156,7 +156,7 @@ module.exports = {
         }
         return Promise.resolve(value);
     },
-    /// #### api.valueChecker(fallback)
+    /// #### common.api.valueChecker(fallback)
     /// Returns a function that check a value and returns it if it exists or
     /// a fallback value if not.
     ///
@@ -175,7 +175,7 @@ module.exports = {
             return Promise.resolve(value);
         };
     },
-    /// #### api.isAuthorized(res)
+    /// #### common.api.isAuthorized(res)
     /// Returns true if and only if the current request has been marked as
     /// authenticated.
     ///
@@ -185,7 +185,7 @@ module.exports = {
     /// **Returns:**
     /// - `Boolean`.
     isAuthenticated: is_authenticated,
-    /// #### api.authenticated(message)
+    /// #### common.api.authenticated(message)
     /// Returns a middleware function aimed to check if a request if
     /// authenticated or not. If the request is authenticated then the normal
     /// execution flow continues, otherwise the request is interrupted with 401
@@ -201,7 +201,7 @@ module.exports = {
             next(is_authenticated(res) ? null : error_401(message));
         };
     },
-    /// #### api.forbidden(message)
+    /// #### common.api.forbidden(message)
     /// Returns a middleware function aimed at terminate a request with a 403
     /// error status and the specified message.
     ///
@@ -212,7 +212,7 @@ module.exports = {
             next(error_403(message));
         };
     },
-    /// #### api.notFound(message)
+    /// #### common.api.notFound(message)
     /// Returns a middleware function aimed at terminate a request with a 404
     /// error status and the specified message.
     ///
