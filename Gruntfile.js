@@ -82,7 +82,8 @@ module.exports = function(grunt) {
                                 'jquery',
                                 'marked',
                                 'marionette',
-                                'underscore'
+                                'promise',
+                                'underscore',
                             ]
                         },
                         {
