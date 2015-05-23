@@ -26,7 +26,8 @@
     "requirejs": "~2.1.14",
     "requirejs-text": "~2.0.12",
     "bluebird": "~2.9.13",
-    "marked": "~0.3.3"
+    "marked": "~0.3.3",
+    "requirejs-plugins": "~1.0.3"
   },
   "exportsOverride": {
     "backbone": {
@@ -80,6 +81,9 @@
     },
     "requirejs-text": {
       "app/client/js/libs": "text.js"
+    },
+    "requirejs-plugins": {
+      "app/client/js/libs": "src/async.js"
     },
     "underscore": {
       "app/client/js/libs": "underscore.js"
