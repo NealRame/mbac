@@ -1,6 +1,7 @@
 requirejs.config({
     baseUrl: '/js',
     paths: {
+        'async': 'libs/async',
         'backbone': 'libs/backbone',
         'fastclick': 'libs/fastclick',
         'foundation': 'libs/foundation',
