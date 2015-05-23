@@ -114,6 +114,10 @@ module.exports = function(grunt) {
                             name: 'pages/mbac/main',
                             exclude: ['common']
                         },
+                        {
+                            name: 'pages/plan/main',
+                            exclude: ['common']
+                        }
                     ],
                     logLevel: 4
                 }
@@ -140,6 +144,7 @@ module.exports = function(grunt) {
                         'pages/achievements/style.scss',
                         'pages/home/style.scss',
                         'pages/mbac/style.scss',
+                        'pages/plan/style.scss',
                         'pages/prices/style.scss',
                         'pages/services/style.scss'
                     ],
