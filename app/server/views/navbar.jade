@@ -10,23 +10,12 @@ div.sticky.menu
             li.toggle-topbar.menu-icon
                 a(href="#"): span
         section.top-bar-section
-            ul.right
-                each entry in menu['topbar']
-                    - var entry_page = entry.page
-                    - var entry_class = entry_page === page.name ? 'active':''
-                    - var entry_slug = entry.slug
-                    - var entry_title = entry.title
-                    li(class=entry_class)
-                        if entry_title === 'home'
-                            a(href=entry_slug): i.fa.fa-home
-                        else
-                            a(href=entry_slug) #{entry_title}
-                            
-                if loggedIn
+            if loggedIn
+                ul#user-menu
                     li.has-dropdown
                         a
-                            img.user-picture(src=user.picture)
-                            span.user-name #{user.name.full}
+                            img#user-picture(src=user.picture)
+                            span#user-name #{user.name.full}
                         ul.dropdown
                             li: a(href='/admin')
                                 i.fa.fa-gear
@@ -34,3 +23,15 @@ div.sticky.menu
                             li: a(href=logoutLink)
                                 i.fa.fa-sign-out
                                 |  Logout
+            .container
+                ul#page-list
+                    each entry in menu['topbar']
+                        - var entry_page = entry.page
+                        - var entry_class = entry_page === page.name ? 'active':''
+                        - var entry_slug = entry.slug
+                        - var entry_title = entry.title
+                        li(class=entry_class)
+                            if entry_title === 'home'
+                                a(href=entry_slug): i.fa.fa-home
+                            else
+                                a(href=entry_slug) #{entry_title}
