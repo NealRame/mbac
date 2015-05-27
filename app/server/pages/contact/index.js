@@ -8,6 +8,7 @@ var _ = require('underscore');
 var debug = require('debug')('mbac:routes:contact');
 var express = require('express');
 var mail_transport_config = require('config').mailtransport;
+var mailchimp_config = require('config').mailchimp;
 var nodemailer = require('nodemailer');
 var path = require('path');
 var util = require('util');
@@ -22,6 +23,7 @@ var front_controller = express.Router()
 var api_controller = express.Router();
 
 // debug(mail_transport_config);
+// debug(mailchimp_config);
 
 // POST to /api/contact/mail
 if (mail_transport_config) {
@@ -44,6 +46,16 @@ if (mail_transport_config) {
         });
     });
 }
+
+// POST to /api/contact/subscribe
+if (mailchimp_config) {
+    api_controller.post('/subscribe', function(req, res, nect) {
+        var data = req.body;
+        debug(util.format('received subscribe data %s', util.inspect(data)));
+        res.send('OK');
+    });
+}
+
 
 module.exports = {
     api: api_controller,
