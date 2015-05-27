@@ -5,12 +5,14 @@
 
 var _ = require('underscore');
 
+var api =  require('common/api');
 var debug = require('debug')('mbac:routes:contact');
 var express = require('express');
 var mail_transport_config = require('config').mailtransport;
 var mailchimp_config = require('config').mailchimp;
 var nodemailer = require('nodemailer');
 var path = require('path');
+var url = require('url');
 var util = require('util');
 
 var page_template = path.join(__dirname, 'views', 'front.jade');
@@ -22,11 +24,9 @@ var front_controller = express.Router()
 
 var api_controller = express.Router();
 
-// debug(mail_transport_config);
-// debug(mailchimp_config);
-
 // POST to /api/contact/mail
 if (mail_transport_config) {
+    // debug(mail_transport_config);
     var smtp_transporter = nodemailer.createTransport(mail_transport_config);
     api_controller.post('/mail', function(req, res, next) {
         var data = req.body;
@@ -49,13 +49,41 @@ if (mail_transport_config) {
 
 // POST to /api/contact/subscribe
 if (mailchimp_config) {
-    api_controller.post('/subscribe', function(req, res, nect) {
-        var data = req.body;
+    // debug(mailchimp_config);
+    var mailchimp = url.parse(mailchimp_config.endpoint + '/lists/' + mailchimp_config.list_id + '/members');
+    var protocol = require(mailchimp.protocol === 'https:' ? 'https':'http');
+    _.extend(mailchimp, {
+        auth: 'mbac:' + mailchimp_config.apikey,
+        method: 'POST'
+    });
+    // debug(mailchimp);
+    api_controller.post('/subscribe', function(req, res, next) {
+        var data = JSON.stringify(
+            _.chain(req.body)
+                .pick('email_address')
+                .defaults({status: 'subscribed'})
+                .value()
+        );
+
         debug(util.format('received subscribe data %s', util.inspect(data)));
-        res.send('OK');
+        var req = protocol.request(_.extend({
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Content-Length': data.length
+                }}, mailchimp), function(remote_res) {
+            var status = remote_res.statusCode;
+            if (status > 299) {
+                debug('mailchimp respond with status: ' + status);
+                next(api.error500());
+            } else {
+                res.send('OK');
+            }
+        });
+        req.on('error', next);
+        req.write(data);
+        req.end();
     });
 }
-
 
 module.exports = {
     api: api_controller,

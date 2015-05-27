@@ -1,10 +1,11 @@
 define(function(require) {
     var _ = require('underscore');
     var $ = require('jquery');
+    var Promise = require('promise');
+    var SubscribeDialog = require('pages/home/subscribe-dialog');
     var async = require('common/async');
     var functional = require('common/functional');
     var ui = require('common/ui');
-    var Promise = require('promise');
 
     var __lock = true;
 
@@ -54,4 +55,10 @@ define(function(require) {
 
     update_figures();
     $(window).bind('resize', Foundation.utils.throttle(update_figures, 150));
+    $('#subscribe').click(function(ev) {
+        ev.preventDefault();
+        ev.stopPropagation();
+        SubscribeDialog.open();
+        return false;
+    });
 });
