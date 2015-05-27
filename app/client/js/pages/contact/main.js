@@ -80,7 +80,7 @@ define(function(require) {
         var data = validate($('#contact-form'));
         if (data) {
             console.log(data);
-            $.post('/api/contact', data)
+            $.post('/api/contact/mail', data)
                 .done(function() {
                     console.log('success');
                     console.log(arguments);
