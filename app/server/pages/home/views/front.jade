@@ -83,7 +83,7 @@ block content
                     | Abonnez-vous à la newsletter et recevez toute l'actualité
                     | et les bon plans mon Bar à Couture.
                     br
-                    a(href="#", data-reveal-id="newsletter-modal").button.text-center
+                    a#subscribe.button.text-center(href="#")
                         | Je m'abonne !
     if achievements.length > 0
         section.wrapper.filled
@@ -98,16 +98,3 @@ block content
                     | Voir toutes les réalisations des client(e)s de mon Bar à 
                     | couture :
                     a(href="/achievements"): | &nbsp;ici !
-    div(class="reveal-modal", id="newsletter-modal" data-reveal)
-        a.close-reveal-modal &#215;
-        form
-            fieldset
-                label
-                    | Nom
-                    input(type="text", placeholder="Votre nom")
-                label
-                    | E-mail
-                    input(type="text", placeholder="Votre adresse mail")
-    
-                a(href="#").button.center
-                    | Hop !
