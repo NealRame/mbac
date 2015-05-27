@@ -59,6 +59,9 @@ h3 {
             #user-name {
                 display: inline-block;
             }
+            #page-list {
+                text-align: center;
+            }
             @media #{$medium-up} {
                 #user-menu {
                     float: right;
