@@ -8,7 +8,6 @@ define(function(require) {
         if (! _.isUndefined(value)) {
             return value;
         }
-        console.log(field);
         throw new Error(field + ' is not a valid form field!');
     }
 
@@ -79,7 +78,6 @@ define(function(require) {
         ev.stopPropagation();
         var data = validate($('#contact-form'));
         if (data) {
-            console.log(data);
             $.post('/api/contact/mail', data)
                 .done(function() {
                     console.log('success');
