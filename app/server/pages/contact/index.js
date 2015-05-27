@@ -4,9 +4,10 @@
 // -  date:  Tue May 12 20:57:49 CEST 2015
 
 var _ = require('underscore');
-var config = require('config').mail;
+
 var debug = require('debug')('mbac:routes:contact');
 var express = require('express');
+var mail_transport_config = require('config').mailtransport;
 var nodemailer = require('nodemailer');
 var path = require('path');
 var util = require('util');
@@ -18,34 +19,31 @@ var front_controller = express.Router()
         res.render(page_template);
     });
 
-var smtp_transporter =
-    config
-        ? nodemailer.createTransport(config)
-        : null;
+var api_controller = express.Router();
 
-var api_controller = express.Router()
-    // POST to /api/contact
-    .post('/', function(req, res, next) {
+// debug(mail_transport_config);
+
+// POST to /api/contact/mail
+if (mail_transport_config) {
+    var smtp_transporter = nodemailer.createTransport(mail_transport_config);
+    api_controller.post('/mail', function(req, res, next) {
         var data = req.body;
-        debug(util.format('received %s', util.inspect(data)));
-        if (smtp_transporter) {
-            smtp_transporter.sendMail({
-                to: config.to,
-                from: util.format('<%s> %s', data.name, data.from),
-                replyTo: data.from,
-                sender: data.from,
-                subject: data.subject,
-                text: data.message
-            }, function(err) {
-                if (err) {
-                    return next(err);
-                }
-                res.send('OK');
-            });
-        } else {
-            res.sendStatus(500);
-        }
+        debug(util.format('received mail data %s', util.inspect(data)));
+        smtp_transporter.sendMail({
+            to: mail_transport_config.to,
+            from: util.format('<%s> %s', data.name, data.from),
+            replyTo: data.from,
+            sender: data.from,
+            subject: data.subject,
+            text: data.message
+        }, function(err) {
+            if (err) {
+                return next(err);
+            }
+            res.send('OK');
+        });
     });
+}
 
 module.exports = {
     api: api_controller,
