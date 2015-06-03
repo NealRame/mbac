@@ -6,7 +6,6 @@ var express = require('express');
 var logger = require('morgan');
 var mongoose = require('mongoose');
 var path = require('path');
-var Promise = require('Promise');
 var serveFavicon = require('serve-favicon');
 var serveStatic = require('serve-static');
 var session = require('express-session');
