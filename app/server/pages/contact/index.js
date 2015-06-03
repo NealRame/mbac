@@ -27,7 +27,17 @@ var api_controller = express.Router();
 // POST to /api/contact/mail
 if (mail_transport_config) {
     // debug(mail_transport_config);
-    var smtp_transporter = nodemailer.createTransport(mail_transport_config);
+    var smtp_transporter = nodemailer.createTransport((function(type, config) {
+        switch (type) {
+            case 'sendmail':
+                return require('nodemailer-sendmail-transport')(config);
+            case 'smtp':
+                return config;
+            default:
+                return null;
+        }
+    })(mail_transport_config.type, _.omit(mail_transport_config, 'type', 'to')));
+
     api_controller.post('/mail', function(req, res, next) {
         var data = req.body;
         debug(util.format('received mail data %s', util.inspect(data)));
@@ -37,9 +47,10 @@ if (mail_transport_config) {
             replyTo: data.from,
             sender: data.from,
             subject: data.subject,
-            text: data.message
+            text: util.format('Message de: %s\n%s', data.name, data.message)
         }, function(err) {
             if (err) {
+                debug(err); // TODO log error.
                 return next(err);
             }
             res.send('OK');
@@ -64,9 +75,8 @@ if (mailchimp_config) {
                 .defaults({status: 'subscribed'})
                 .value()
         );
-
         debug(util.format('received subscribe data %s', util.inspect(data)));
-        var req = protocol.request(_.extend({
+        var request = protocol.request(_.extend({
                 headers: {
                     'Content-Type': 'application/json',
                     'Content-Length': data.length
@@ -79,9 +89,9 @@ if (mailchimp_config) {
                 res.send('OK');
             }
         });
-        req.on('error', next);
-        req.write(data);
-        req.end();
+        request.on('error', next);
+        request.write(data);
+        request.end();
     });
 }
 
