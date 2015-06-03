@@ -1,6 +1,7 @@
 define(function(require) {
     var _ = require('underscore');
     var $ = require('jquery');
+    var Dialog = require('Dialog');
     var util = require('common/util');
 
     function field_value(field) {
@@ -24,6 +25,12 @@ define(function(require) {
     function clear_error(elt) {
         elt.css('margin-bottom', 16);
         elt.parent().find('.error').remove();
+    }
+
+    function reset(form) {
+        $('#name', form).val('');
+        $('#from', form).val('');
+        $('#message', form).val('');
     }
 
     var validate = util.makeFormValidator(
@@ -76,12 +83,15 @@ define(function(require) {
     $('#contact-form-submit').click(function(ev) {
         ev.preventDefault();
         ev.stopPropagation();
-        var data = validate($('#contact-form'));
+        var $form = $('#contact-form');
+        var data = validate($form);
         if (data) {
             $.post('/api/contact/mail', data)
                 .done(function() {
-                    console.log('success');
-                    console.log(arguments);
+                    Dialog.message('Votre message a bien été transmis.', {
+                        acceptLabel: 'Ok',
+                        accept: reset.bind(null, $form)
+                    });
                 })
                 .fail(function() {
                     console.log('error');
