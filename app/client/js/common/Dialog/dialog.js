@@ -50,10 +50,10 @@ define(function(require) {
                 this.remove();
             }
         },
-        accept: function() {
-        },
-        refuse: function() {
-        },
+        // accept: function() {
+        // },
+        // refuse: function() {
+        // },
         setContent: function() {
         },
         getContent: function() {
@@ -112,6 +112,26 @@ define(function(require) {
             refuse: function() {
                 if (options.refuse) {
                     options.refuse();
+                }
+                this.close();
+            },
+            setContent: function(region) {
+                region.$el.append($(document.createElement('p')).html(message));
+            }
+        }))(settings)).run();
+    };
+
+    Dialog.message = function(message, options) {
+        var settings = {
+            el: options.el,
+            className: 'small',
+            id: 'message-box',
+            accept: options.acceptLabel || 'Yes',
+        };
+        (new (Dialog.extend({
+            accept: function() {
+                if (options.accept) {
+                    options.accept();
                 }
                 this.close();
             },
