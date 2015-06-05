@@ -1,4 +1,7 @@
-#!/usr/bin/env node
+#!/usr/bin/env node --use-strict
+
+/*eslint-env node*/
+/*eslint-disable strict, no-process-exit*/
 
 require('app').instance()
     .then(function(app) {
