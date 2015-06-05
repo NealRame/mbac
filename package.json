@@ -16,7 +16,7 @@
     "gm": "^1.17.0",
     "gridfs": "NealRame/gridfs#v0.5.7",
     "jade": "^1.9.1",
-    "mongodb": "^2.0.28",
+    "mongodb": "^2.0.33",
     "mongoose": "4.0.3",
     "mongoose-express-session-store": "NealRame/mongoose-express-session-store#v0.3",
     "morgan": "^1.5.1",
