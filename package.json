@@ -40,6 +40,11 @@
   },
   "eslintConfig": {
     "rules": {
+      "camelcase": 0,
+      "new-cap": [1, {
+        "newIsCap": true,
+        "capIsNew": false
+      }],
       "quotes": [1, "single"]
     }
   }
