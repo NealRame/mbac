@@ -3,11 +3,10 @@
 // - author: Neal.Rame. <contact@nealrame.com>
 // -   date: Tue Mar 10 21:57:37 2015
 define(function(require) {
+    'use strict';
+
     var _ = require('underscore');
     var $ = require('jquery');
-    var Backbone = require('backbone');
-    var Marionette = Backbone.Marionette;
-
     var async = require('common/async');
     var functional = require('common/functional');
     var ui = require('common/ui');
@@ -33,7 +32,7 @@ define(function(require) {
                         target: image.src
                     };
                 })
-                .catch(function(err) {
+                .catch(function() {
                     throw new Error('Error while load file: ' + file.name);
                 });
         }
