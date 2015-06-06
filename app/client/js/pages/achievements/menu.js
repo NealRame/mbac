@@ -3,11 +3,11 @@
 // - author: Neal.Rame. <contact@nealrame.com>
 // -   date: Wed Apr  8 13:05:44 CEST 2015
 define(function(require) {
-    var _ = require('underscore');
-    var $ = require('jquery');
-    var Backbone = require('backbone');
+    'use strict';
 
-    var Achievement = require('pages/achievements/achievement');
+    var _ = require('underscore');
+    var Backbone = require('backbone');
+    var Marionette = require('marionette');
     var MenuTemplate = require('text!pages/achievements/menu.html');
     var TagTemplate = require('text!pages/achievements/tag.html');
 
@@ -19,7 +19,7 @@ define(function(require) {
             count: 0
         },
         toggle: function() {
-            this.set('checked', ! this.get('checked'));
+            this.set('checked', !this.get('checked'));
         }
     });
 
@@ -67,7 +67,7 @@ define(function(require) {
         initialize: function() {
             this.listenTo(this.model, 'change', this.render);
         },
-        onCheckboxChange: function(ev) {
+        onCheckboxChange: function() {
             this.model.toggle();
         }
     });
@@ -76,25 +76,29 @@ define(function(require) {
         tagName: 'ul',
         childView: TagView,
         initialize: function() {
-            this._visible = false;
-        },
-        isVisible: function() {
-            return this._visible;
+            var visible = false;
+            this.isVisible = function() {
+                return visible;
+            };
+            this.setVisible = function(enabled) {
+                if (visible !== enabled) {
+                    if (enabled) {
+                        this.$el.show();
+                    } else {
+                        this.$el.hide();
+                    }
+                    visible = enabled;
+                }
+            };
         },
         hide: function() {
-            if (this._visible) {
-                this.$el.hide();
-            }
-            this._visible = false;
+            this.setVisible(false);
         },
         show: function() {
-            if (! this._visible) {
-                this.$el.show();
-            }
-            this._visible = true;
+            this.setVisible(true);
         },
         toggle: function() {
-            this.isVisible() ? this.hide() : this.show();
+            this.setVisible(!this.isVisible());
         }
     });
 
@@ -108,7 +112,7 @@ define(function(require) {
         },
         ui: {
             addAchievement: '#add-achievement',
-            filterAchievement: '#filter-achievement',
+            filterAchievement: '#filter-achievement'
         },
         events: {
             'click @ui.addAchievement': 'onAddAchievementClick',
@@ -123,21 +127,19 @@ define(function(require) {
                     app_channel.commands.execute('filter', this.tagList.checked());
                 });
                 this.listenTo(this.collection, 'add change:tags', function(model) {
-                    if (! _.isEmpty(model.tags)) {
+                    if (!_.isEmpty(model.tags)) {
                         this.tagList.update(this.collection.models);
                     }
                 });
             });
         },
         onAddAchievementClick: function(ev) {
-            console.log('-- achievement::menu::onAddAchievementClick');
             ev.preventDefault();
             ev.stopPropagation();
             app_channel.commands.execute('create');
             return false;
         },
         onFilterAchievementClick: function(ev) {
-            console.log('-- achievement::menu::onFilterAchievementClick');
             ev.preventDefault();
             ev.stopPropagation();
 

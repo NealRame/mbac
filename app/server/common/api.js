@@ -16,21 +16,21 @@ function error(err, status) {
 }
 
 function error_401(message) {
-    if (_.isUndefined(message) || ! _.isString(message)) {
+    if (_.isUndefined(message) || !_.isString(message)) {
         message = 'Unauthorized';
     }
     return error(message, 401);
 }
 
 function error_403(message) {
-    if (_.isUndefined(message) || ! _.isString(message)) {
+    if (_.isUndefined(message) || !_.isString(message)) {
         message = 'Forbidden';
     }
     return error(message, 403);
 }
 
 function error_404(message) {
-    if (_.isUndefined(message) || ! _.isString(message)) {
+    if (_.isUndefined(message) || !_.isString(message)) {
         message = 'Not Found';
     }
     return error(message, 404);
@@ -46,8 +46,8 @@ function is_authenticated(res) {
     return res.locals.loggedIn;
 }
 
-function value(value) {
-    return _.result({value: value}, 'value');
+function value(v) {
+    return _.result({value: v}, 'value');
 }
 
 module.exports = {
@@ -150,11 +150,13 @@ module.exports = {
     ///
     /// **Returns:**
     /// - `Promise`.
-    exist: function(value) {
-        if (value == undefined) {
+    exist: function(v) {
+        /*eslint-disable eqeqeq*/
+        if (v == undefined) { // true if v is null or undefined
             return Promise.reject(error_404());
         }
-        return Promise.resolve(value);
+        /*eslint-enable eqeqeq*/
+        return Promise.resolve(v);
     },
     /// #### common.api.valueChecker(fallback)
     /// Returns a function that check a value and returns it if it exists or
@@ -168,11 +170,13 @@ module.exports = {
     /// - `Promise`.
     valueChecker: function(fallback) {
         var fallback_value = value(fallback);
-        return function(value)  {
-            if (value == undefined) {
+        return function(v) {
+            /*eslint-disable eqeqeq*/
+            if (v == undefined) { // true if v is null or undefined
                 return Promise.resolve(fallback_value);
             }
-            return Promise.resolve(value);
+            /*eslint-enabled eqeqeq*/
+            return Promise.resolve(v);
         };
     },
     /// #### common.api.isAuthorized(res)
@@ -222,5 +226,5 @@ module.exports = {
         return function(req, res, next) {
             next(error_404(message));
         };
-    },
+    }
 };

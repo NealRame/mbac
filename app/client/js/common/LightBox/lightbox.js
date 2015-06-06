@@ -3,7 +3,10 @@
 // - author: Neal.Rame. <contact@nealrame.com>
 // -   date: Fri Jan 16 23:33:01 CET 2015
 define(function(require) {
+    'use strict';
+
     var _ = require('underscore');
+    var $ = require('jquery');
     var Backbone = require('backbone');
     var Marionette = require('marionette');
     var Promise = require('promise');
@@ -23,7 +26,7 @@ define(function(require) {
             arrows: '#rewind,#forward',
             rewind: '#rewind',
             forward: '#forward',
-            picture: '#picture',
+            picture: '#picture'
         },
         events: {
             'click': 'close',
@@ -35,9 +38,32 @@ define(function(require) {
         template: _.template(template),
         startIndex: 0,
         initialize: function() {
+            var cache = {};
+
             this.count = this.collection.length;
             this.current = Math.min(Marionette.getOption(this, 'startIndex'), this.count)%this.count;
-            this._cache = {};
+            this.image = function() {
+                try {
+                    var index = this.current;
+                    var current = cache[index];
+                    if (current) {
+                        return Promise.resolve(current);
+                    } else {
+                        var picture = this.collection.at(this.current);
+                        return (
+                            functional.hasAllOfAttributes(picture, 'file')
+                                ? async.loadImage(picture.attributes.file)
+                                : async.loadImage(picture.originalURL())
+                        ).then(function(image) {
+                            cache[index] = image;
+                            return image;
+                        });
+                    }
+                } catch (err) {
+                    return Promise.reject(err);
+                }
+            };
+
             var keyup_cb = this.onKeypress.bind(this);
             var resize_cb = _.debounce(this.onWindowResized.bind(this), 100);
             var show_arrow_cb = _.debounce(
@@ -47,6 +73,7 @@ define(function(require) {
                 300,
                 true
             );
+
             this.listenToOnce(this, 'opened', function() {
                 this.$el.on('mousemove', show_arrow_cb);
                 $(window).on('keyup', keyup_cb);
@@ -58,30 +85,9 @@ define(function(require) {
                 $(window).off('resize', resize_cb);
             });
         },
-        loadImage: function(index) {
-            var picture = this.collection.at(this.current);
-            var cache = this._cache;
-            return (functional.hasAllOfAttributes(picture, 'file')
-                ? async.loadImage(picture.attributes.file)
-                : async.loadImage(picture.originalURL())
-            ).then(function(image) {
-                return cache[index] = image;
-            });
-        },
         detachImage: function() {
             this.ui.picture.find('img').first().detach();
             this.ui.picture.append(this.spinner());
-        },
-        image: function() {
-            try {
-                if (this._cache[this.current]) {
-                    return Promise.resolve(this._cache[this.current]);
-                } else {
-                    return this.loadImage(this.current);
-                }
-            } catch (err) {
-                return Promise.reject(err);
-            }
         },
         error: function() {
             return $(document.createElement('p'))
@@ -130,7 +136,7 @@ define(function(require) {
                 .then(function(image) {
                     this.ui.picture.empty().append(image);
                 })
-                .catch(function(err) {
+                .catch(function() {
                     this.ui.picture.empty().append(this.error());
                 })
                 .finally(function() {
@@ -192,7 +198,7 @@ define(function(require) {
             this.showNextPicture();
             return false;
         },
-        onWindowResized: function(e) {
+        onWindowResized: function() {
             this.setGeometry();
         },
         scheduleHideNavigationArrows: function() {
@@ -212,11 +218,11 @@ define(function(require) {
                         Promise.join(
                             rwd.animate({
                                 left: 0,
-                                opacity: 0,
+                                opacity: 0
                             }, 250).promise(),
                             fwd.animate({
                                 right: -fwd.width(),
-                                opacity: 0,
+                                opacity: 0
                             }, 250).promise()
                         )
                         .then(function() {
@@ -258,11 +264,11 @@ define(function(require) {
                 Promise.join(
                     rwd.animate({
                         left: 64,
-                        opacity: 1,
+                        opacity: 1
                     }, 250).promise(),
                     fwd.animate({
                         right: 64,
-                        opacity: 1,
+                        opacity: 1
                     }, 250).promise()
                 )
                 .bind(this)

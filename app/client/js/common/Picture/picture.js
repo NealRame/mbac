@@ -3,7 +3,8 @@
 // - author: Neal.Rame. <contact@nealrame.com>
 // -   date: Wed Mar 11 02:55:31 CET 2015
 define(function(require) {
-    var _ = require('underscore');
+    'use strict';
+
     var Backbone = require('backbone');
 
     return Backbone.Model.extend({

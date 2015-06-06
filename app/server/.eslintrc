@@ -1,0 +1,10 @@
+{
+    "env": {
+        "node": true,
+    },
+    "rules": {
+        "strict": [2, "never"],
+        "key-spacing": 0,
+        "no-multi-spaces": 0
+    }
+}

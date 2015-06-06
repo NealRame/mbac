@@ -1,15 +1,16 @@
+/*global File: false*/
 // AchievementEditor/editor.js
 // ---------------------------
 // - author: Neal.Rame. <contact@nealrame.com>
 // -   date: Wed Feb 18 21:40:04 CET 2015
 define(function(require) {
+    'use strict';
+
     var _ = require('underscore');
     var $ = require('jquery');
     var Backbone = require('backbone');
-
-    var Achievement = require('pages/achievements/achievement');
+    var Marionette = require('marionette');
     var Dialog = require('Dialog');
-    var Thumbnail = require('Thumbnail');
     var ThumbnailList = require('ThumbnailList');
     var editorTemplate = require('text!pages/achievements/editor.html');
 
@@ -60,28 +61,24 @@ define(function(require) {
             }
         },
         onDragEnter: function(e) {
-            console.log('-- AchievementPictureList:onDragEnter');
             e.preventDefault();
             e.stopPropagation();
             this.$el.attr('data-state', 'over');
             return false;
         },
         onDragLeave: function(e) {
-            console.log('-- AchievementPictureList:onDragLeave');
             e.preventDefault();
             e.stopPropagation();
             this.$el.removeAttr('data-state');
             return false;
         },
         onDragOver: function(e) {
-            console.log('-- AchievementPictureList:onDragOver');
             e.dataTransfer.dropEffect = 'copy';
             e.preventDefault();
             e.stopPropagation();
             return false;
         },
         onDrop: function(e) {
-            console.log('-- AchievementPictureList:onDrop');
             this.onDragLeave.call(this, e);
             this.addFiles(e.dataTransfer.files);
             return false;
@@ -89,13 +86,13 @@ define(function(require) {
         onPictureRemoved: function(view, model) {
             // view.remove();
             this.collection.remove(model);
-        },
+        }
     });
 
     var AchievementEditor = Marionette.LayoutView.extend({
         className: 'achievement-editor',
         regions: {
-            pictures: '#pictures',
+            pictures: '#pictures'
         },
         ui: {
             descField: '#desc',
@@ -119,8 +116,7 @@ define(function(require) {
             this.listenTo(
                 this.achievementPictureList,
                 'add-picture',
-                function(picture, index) {
-                    console.log('add-picture: ', picture, index);
+                function(picture) {
                     this.model.addPicture(picture);
                 }
             );
@@ -128,44 +124,38 @@ define(function(require) {
                 this.achievementPictureList,
                 'remove-picture',
                 function(picture, index) {
-                    console.log('remove-picture: ', picture, index);
                     this.model.removePicture(index);
                 }
             );
             this.filesInput = $(document.createElement('input')).attr({
                 accept: '.gif,.jpeg,.jpg,.png',
                 multiple: '',
-                type: 'file',
+                type: 'file'
             });
             this.filesInput.on('change', (function(e) {
                 this.achievementPictureList.addFiles(e.target.files);
             }).bind(this));
         },
         onDescriptionChanged: function() {
-            console.log('-- AchievementEditor:onDescriptionChanged');
             this.model.set('description', this.ui.descField.val());
             return false;
         },
         onNameChanged: function() {
-            console.log('-- AchievementEditor:onNameChanged');
             this.model.set('name', this.ui.nameField.val().trim());
             return false;
         },
         onTagsChanged: function() {
-            console.log('-- AchievementEditor:onTagsChanged');
             this.model.setTags(this.ui.tagsField.val().split(','));
             this.ui.tagsField.val(this.model.tags().join(', '));
             return false;
         },
         onAddPicturesClick: function(e) {
-            console.log('-- AchievementEditor:onAddPicturesClick');
             e.preventDefault();
             e.stopPropagation();
             this.filesInput.click();
             return false;
         },
         onPublishClick: function(e) {
-            console.log('-- AchievementEditor:onPublishClick');
             e.preventDefault();
             e.stopPropagation();
             this.ui.publish.removeClass();
@@ -184,7 +174,7 @@ define(function(require) {
                 this.model.published() ? 'unpublish-button':'publish-button'
             );
             this.getRegion('pictures').show(this.achievementPictureList);
-        },
+        }
     });
 
     var AchievementEditorDialog = Dialog.extend({
@@ -194,15 +184,14 @@ define(function(require) {
             Dialog.prototype.initialize.call(this);
         },
         accept: function() {
-            console.log('-- AchievementEditorDialog:onAcceptClicked');
-
             var commit = (function() {
-                this.model.set(this.getContent().currentView.model.toJSON());
+                var attributes = this.getContent().currentView.model.toJSON();
+                this.model.set(attributes);
                 this.model.save();
                 this.close();
             }).bind(this);
 
-            if (! this.model.isNew()) {
+            if (!this.model.isNew()) {
                 var editor = this;
                 Dialog.prompt(
                     'Êtes vous sûr de vouloir continuer ?',
@@ -210,14 +199,12 @@ define(function(require) {
                         accept: commit,
                         acceptLabel: 'Continuer',
                         refuse: editor.open.bind(editor),
-                        refuseLabel: 'Annuler',
+                        refuseLabel: 'Annuler'
                     }
                 );
             } else commit();
         },
         refuse: function() {
-            console.log('-- AchievementEditorDialog:onCancelClicked');
-
             var commit = (function() {
                 if (this.model.isNew()) {
                     this.model.destroy();

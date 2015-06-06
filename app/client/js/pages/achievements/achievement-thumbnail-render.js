@@ -3,13 +3,9 @@
 // - author: Neal.Rame. <contact@nealrame.com>
 // -   date: Tue Mar 10 23:06:45 2015
 define(function(require) {
-    var _ = require('underscore');
-    var $ = require('jquery');
-    var Backbone = require('backbone');
-    var Marionette = Backbone.Marionette;
-    var Promise = require('promise');
+    'use strict';
 
-    var async = require('common/async');
+    var Promise = require('promise');
     var functional = require('common/functional');
     var render_file = require('common/Thumbnail/file-render');
     var render_picture = require('common/Thumbnail/picture-render');

@@ -1,21 +1,23 @@
+/*global Foundation:false*/
 define(function(require) {
+    'use strict';
+
     var _ = require('underscore');
     var $ = require('jquery');
-    var async = require('common/async');
     var ui = require('common/ui');
     var Promise = require('promise');
 
     var __lock = true;
 
+    function unlock(elt) {
+        $(elt).data('locked', false);
+    }
+
     function lock(elt, fun) {
-        if (! $(elt).data('locked')) {
+        if (!$(elt).data('locked')) {
             $(elt).data('locked', true);
             fun.call(elt, unlock.bind(null, elt));
         }
-    }
-
-    function unlock(elt) {
-        $(elt).data('locked', false);
     }
 
     function image_wrappers() {
@@ -34,7 +36,7 @@ define(function(require) {
                 return resolve(img);
             }
         });
-    })).then(function(res) {
+    })).then(function() {
         $(document).on('after-height-change.fndtn.equalizer', function(ev) {
             image_wrappers().each(function() {
                 if (Foundation.utils.is_large_up()) {

@@ -1,11 +1,14 @@
+/*global File: false*/
+/*eslint-disable no-underscore-dangle*/
 // common/Achievement/achievement.js
 // ---------------------------------
 // - author: Neal.Rame. <contact@nealrame.com>
 // -   date: Fri Jan 16 23:33:01 CET 2015
 define(function(require) {
+    'use strict';
+
     var _ = require('underscore');
     var Backbone = require('backbone');
-
     var functional = require('common/functional');
     var Picture = require('Picture');
 
@@ -52,7 +55,7 @@ define(function(require) {
         defaults: {
             published: false,
             pictures: [],
-            tags: [],
+            tags: []
         },
         published: function() {
             return this.get('published');
@@ -64,7 +67,7 @@ define(function(require) {
             return this.set({published: false});
         },
         togglePublish: function() {
-            return this.set({published: ! this.published()});
+            return this.set({published: !this.published()});
         },
         pageURL: function() {
             return '/achievements/' + this.attributes._id;
@@ -82,7 +85,7 @@ define(function(require) {
         },
         addPicture: function(picture) {
             var list = this.get('pictures').slice(0);
-            if (! _.contains(list, picture)) {
+            if (!_.contains(list, picture)) {
                 var index = list.length;
                 list.push(picture);
                 this.set({pictures: list});
@@ -106,7 +109,7 @@ define(function(require) {
             if (_.isString(tags)) {
                 return this.hasTags(
                     tags.split(',')
-                        .map(function(tag){return tag.trim().toLowerCase();})
+                        .map(function(tag){ return tag.trim().toLowerCase(); })
                 );
             } else if (_.isArray(tags)) {
                 return _.intersection(tags, this.tags()).length > 0;
@@ -122,27 +125,27 @@ define(function(require) {
             tags =
                 _.chain(tags || [])
                     .compact()
-                    .map(function(tag) {return tag.trim().toLowerCase();})
+                    .map(function(tag) { return tag.trim().toLowerCase(); })
                     .uniq()
                     .value();
             return this.set('tags', tags);
         },
-        validate: function(attributes, options) {
+        validate: function(attributes) {
             var isValidPicture = function(picture) {
                 return picture.file instanceof File || (picture.original && picture.thumbnail);
             };
 
-            if (! attributes.name instanceof String) {
+            if (!_.isString(attributes.name)) {
                 return new Error('name must be a String');
             }
-            if (! attributes.description instanceof String) {
+            if (!_.isString(attributes.description)) {
                 return new Error('description mus be a String');
             }
-            if (! (attributes.pictures instanceof Array
+            if (!(_.isArray(attributes.pictures)
                     && _.every(attributes.pictures, isValidPicture))) {
                 return new Error('pictures must be a non empty Array of valid pictures');
             }
-            if (! (attributes.tags instanceof Array
+            if (!(_.isArray(attributes.tags)
                     && _.every(attributes.tags, _.isString))) {
                 return new Error('tags must be an Array of String');
             }
@@ -159,7 +162,7 @@ define(function(require) {
                         contentType: false,
                         processData: false,
                         type: method === 'create' ? 'POST' : 'PUT',
-                        url: options.url || model.url(),
+                        url: options.url || model.url()
                     }, options));
                     model.trigger('request', model, xhr, options);
                     return xhr;

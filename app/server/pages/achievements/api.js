@@ -1,22 +1,16 @@
 // api/achievements.js
-// -------------------
 // - author: Neal.Rame. <contact@nealrame.com>
 // -   date: Thu Apr  2 13:10:19 2015
 
 var _ = require('underscore');
-var async = require('async');
 var debug = require('debug')('mbac:routes.achievements');
 var express = require('express');
 var FormidableGrid = require('formidable-grid');
 var api = require('common/api');
 var mongo = require('mongodb');
-var mongoose = require('mongoose');
 var path = require('path');
-var querystring = require('querystring');
-var inspect = require('util').inspect;
 
 var Achievement = require(path.join(__dirname, 'models', 'achievement'));
-var ObjectId = mongoose.Types.ObjectId;
 var router = express.Router();
 
 function parse_data(req) {
@@ -68,7 +62,7 @@ function read_one(req, res) {
     return Achievement.findById(id).exec()
         .then(api.exist)
         .then(function(achievement) {
-            if (! (achievement.published || api.isAuthenticated(res))) {
+            if (!(achievement.published || api.isAuthenticated(res))) {
                 api.throw404(); // 401 or 404 ?
             }
             return Achievement.populate(achievement, {path: 'pictures'});
@@ -77,7 +71,7 @@ function read_one(req, res) {
 
 function read_all(req, res) {
     var query = {};
-    if (! api.isAuthenticated(res)) {
+    if (!api.isAuthenticated(res)) {
         // Unauthorized client only get published and non-empty achievements
         // items.
         _.chain(query).extend({

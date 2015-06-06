@@ -18,7 +18,7 @@ var util = require('util');
 var page_template = path.join(__dirname, 'views', 'front.jade');
 var front_controller = express.Router()
     // GET /contact page.
-    .get('/', function(req, res, next) {
+    .get('/', function(req, res) {
         res.render(page_template);
     });
 
@@ -62,7 +62,7 @@ if (mail_transport_config) {
 if (mailchimp_config) {
     // debug(mailchimp_config);
     var mailchimp = url.parse(mailchimp_config.endpoint + '/lists/' + mailchimp_config.list_id + '/members');
-    var protocol = require(mailchimp.protocol === 'https:' ? 'https':'http');
+    var protocol = require(mailchimp.protocol === 'https:' ? 'https' : 'http');
     _.extend(mailchimp, {
         auth: 'mbac:' + mailchimp_config.apikey,
         method: 'POST'

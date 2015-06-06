@@ -3,6 +3,8 @@
 // - author: Neal.Rame. <contact@nealrame.com>
 // -   date: Sat Jan 10 15:05:32 CET 2015
 define(function(require) {
+    'use strict';
+
     var _ = require('underscore');
     var Backbone = require('backbone');
 
@@ -10,7 +12,7 @@ define(function(require) {
         initialize: function() {
             this.listenTo(this, 'change', function(model) {
                 _.each(model.changedAttributes(), (function(value, key) {
-                    if (! (value instanceof Configuration)) {
+                    if (!(value instanceof Configuration)) {
                         this.trigger('config', key, value);
                     }
                 }).bind(this));
@@ -31,7 +33,7 @@ define(function(require) {
 
                     if (path.length > 1) {
                         // is old value an instance of a Configuration ?
-                        if (! (val instanceof Configuration)) {
+                        if (!(val instanceof Configuration)) {
                             val = new Configuration();
                             this.listenTo(val, 'config', config_ev_cb.bind(this, key));
                         }

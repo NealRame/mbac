@@ -1,15 +1,16 @@
 define(function(require) {
-    var _ = require('underscore');
+    'use strict';
+
     var $ = require('jquery');
     var Backbone = require('backbone');
+    var Marionette = require('marionette');
     var ui = require('common/ui');
-
     var Achievement = require('pages/achievements/achievement');
     var AchievementList = require('pages/achievements/achievement-list');
 
     var AchievementApp = Marionette.LayoutView.extend({
         regions: {
-            'list': '#pictures-wrapper',
+            'list': '#pictures-wrapper'
         },
         template: false,
         initialize: function() {

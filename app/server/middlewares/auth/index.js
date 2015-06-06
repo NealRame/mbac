@@ -14,7 +14,7 @@ var oauth2;
 
 exports.setup = function(app) {
     var auth_config;
-    if (! oauth2 && (auth_config = app.get('config').auth)) {
+    if (!oauth2 && (auth_config = app.get('config').auth)) {
 
         oauth2 = new Oauth2(auth_config, {
             findUser: function(id, callback) {

@@ -3,6 +3,8 @@
 /// - author: Neal.Rame. <contact@nealrame.com>
 /// -   date: Wed Mar 12 03:49:48 2015
 define(function(require) {
+	'use strict';
+
 	var _ = require('underscore');
 
 	/// #### applyIf(pred, fun)

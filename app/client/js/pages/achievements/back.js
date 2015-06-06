@@ -1,8 +1,10 @@
 define(function(require) {
+    'use strict';
+
     var _ = require('underscore');
     var $ = require('jquery');
     var Backbone = require('backbone');
-
+    var Marionette = require('marionette');
     var Achievement = require('pages/achievements/achievement');
     var AchievementEditorDialog = require('pages/achievements/editor');
     var AchievementList = require('pages/achievements/achievement-list');
@@ -42,7 +44,7 @@ define(function(require) {
                     delete this.listView.filter;
                 } else {
                     this.listView.filter = function(achievement) {
-                        return ! _.isEmpty(_.intersection(achievement.tags(), tags));
+                        return !_.isEmpty(_.intersection(achievement.tags(), tags));
                     };
                 }
                 this.listView.render();

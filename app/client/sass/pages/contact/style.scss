@@ -1,0 +1,13 @@
+@import "../../settings";
+@import "foundation/components/button-groups";
+@import "foundation/components/forms";
+@import "foundation/components/reveal";
+
+#message-box {
+    .centered {
+        text-align: center;
+        .button {
+            margin: 0;
+        }
+    }
+}

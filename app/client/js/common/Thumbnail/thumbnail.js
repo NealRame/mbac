@@ -3,9 +3,10 @@
 /// - author: Neal.Rame. <contact@nealrame.com>
 /// -   date: Tue Mar 10 21:55:49 2015
 define(function(require) {
+    'use strict';
+
     var _ = require('underscore');
     var $ = require('jquery');
-    var Backbone = require('backbone');
     var Marionette = require('marionette');
     var Promise = require('promise');
 
@@ -52,12 +53,12 @@ define(function(require) {
         ui: {
             actions: '.action-bar > a',
             crop: '.crop',
-            thumbLink: '.thumb-link',
+            thumbLink: '.thumb-link'
         },
         events: {
             'click @ui.actions': 'onActionRequested',
             'mouseenter': 'onMouseEnter',
-            'mouseleave': 'onMouseLeave',
+            'mouseleave': 'onMouseLeave'
         },
         behaviors: {
             thumbLink: {
@@ -133,7 +134,7 @@ define(function(require) {
                     height: font_size,
                     left: (rect.width - font_size)/2,
                     top: (rect.height - font_size)/2,
-                    width: font_size,
+                    width: font_size
                 });
         },
         refresh: function() {
@@ -164,11 +165,11 @@ define(function(require) {
             this.trigger($(e.currentTarget).attr('data-action'), this.model);
             return false;
         },
-        onMouseEnter: function(e) {
+        onMouseEnter: function() {
             this.$('.action-bar').fadeIn(100);
             return false;
         },
-        onMouseLeave: function(e) {
+        onMouseLeave: function() {
             this.$('.action-bar').fadeOut(100);
             return false;
         },
@@ -177,6 +178,6 @@ define(function(require) {
             if (!_.isUndefined(this.model)) {
                 this.listenTo(this.model, 'change', this.refresh);
             }
-        },
+        }
     });
 });

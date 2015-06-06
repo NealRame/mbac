@@ -1,7 +1,9 @@
-// models/Picture
-// --------------
-// - author: Neal.Rame. <contact@nealrame.com>
-// -   date: Mon Jan 19 22:25:36 CET 2015
+/* eslint-disable no-underscore-dangle*/
+
+/// models/Picture
+/// --------------
+/// - author: Neal.Rame. <contact@nealrame.com>
+/// -   date: Mon Jan 19 22:25:36 CET 2015
 
 var _ = require('underscore');
 var async = require('async');
@@ -17,6 +19,8 @@ var util = require('util');
 var make_callback = common.async.make_callback;
 var nodify = common.async.nodify;
 var Schema = mongoose.Schema;
+
+var Picture = null;
 
 /// ### Fields
 
@@ -34,7 +38,8 @@ var PictureSchema = new Schema({
         type: String,
         default: 'files',
         set: function(val) {
-            return this.prefix = this.prefix || val;
+            this.prefix = this.prefix || val;
+            return this.prefix;
         }
     },
     /// #### `Picture#original`
@@ -43,7 +48,8 @@ var PictureSchema = new Schema({
         type: Schema.Types.ObjectId,
         required: true,
         set: function(val) {
-            return this.original = this.original || val;
+            this.original = this.original || val;
+            return this.original;
         }
     },
     /// #### `Picture#thumbnail`
@@ -52,9 +58,10 @@ var PictureSchema = new Schema({
         type: Schema.Types.ObjectId,
         required: true,
         set: function(val) {
-            return this.thumbnail = this.thumbnail || val;
+            this.thumbnail = this.thumbnail || val;
+            return this.thumbnail;
         }
-    },
+    }
 });
 
 PictureSchema.pre('remove', function(next) {
@@ -106,7 +113,7 @@ PictureSchema.static('create', function(file, cb) {
                     .then(function() {
                         var picture = new Picture({
                             original: orig_id,
-                            thumbnail: thmb_id,
+                            thumbnail: thmb_id
                         });
                         return picture.save();
                     })
@@ -181,4 +188,4 @@ PictureSchema.methods.thumbnailPath = function() {
     return path.join('/', this.prefix, this.thumbnail.toString());
 };
 
-var Picture = module.exports = mongoose.model('Picture', PictureSchema);
+Picture = module.exports = mongoose.model('Picture', PictureSchema);

@@ -1,5 +1,5 @@
-path = require('path');
-
+/* eslint-env node*/
+/* eslint-disable strict*/
 module.exports = function(grunt) {
     ///////////////////////////////////////////////////////////////////////
     // Configure tasks
@@ -15,7 +15,7 @@ module.exports = function(grunt) {
     };
 
     var isProd = function() {
-        return ! isDev();
+        return !isDev();
     };
 
     grunt.initConfig({
@@ -43,9 +43,9 @@ module.exports = function(grunt) {
         bower: {
             options: {
                 cleanBowerDir: true,
-                layout: function(type) {return type;},
+                layout: function(type) { return type; },
                 targetDir: '.',
-                verbose: false,
+                verbose: false
             },
             install: { }
         },
@@ -83,7 +83,7 @@ module.exports = function(grunt) {
                                 'marked',
                                 'marionette',
                                 'promise',
-                                'underscore',
+                                'underscore'
                             ]
                         },
                         {
@@ -142,6 +142,7 @@ module.exports = function(grunt) {
                         'admin_style.scss',
                         'pages/achievements/admin_style.scss',
                         'pages/achievements/style.scss',
+                        'pages/contact/style.scss',
                         'pages/home/style.scss',
                         'pages/mbac/style.scss',
                         'pages/plan/style.scss',
@@ -151,7 +152,7 @@ module.exports = function(grunt) {
                     dest: '<%= sass_build_dir %>',
                     ext: '.css'
                 }]
-            },
+            }
         },
 
         watch: {
@@ -162,18 +163,18 @@ module.exports = function(grunt) {
                 ],
                 tasks: ['sass'],
                 options: {
-                    spawn: true,
-                },
+                    spawn: true
+                }
             },
             requirejs: {
                 files: [
                     '<%= js_srcs_dir %>/**/*.js',
-                    '<%= js_srcs_dir %>/**/*.html',
+                    '<%= js_srcs_dir %>/**/*.html'
                 ],
                 tasks: ['clean:js', 'requirejs'],
                 options: {
-                    spawn: true,
-                },
+                    spawn: true
+                }
             }
         }
 

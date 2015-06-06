@@ -29,37 +29,37 @@ function get_page_controllers(name) {
     return {};
 }
 
-function setup_page(app, name, controller, config) {
+function setup_page(app, name, controller, page_config) {
     var page = {
-        name: name,
+        name: name
     };
-    var route = (name === 'home' && config.prefix === '/') ? '/' : path.join(config.prefix, name);
-    var template = path.join(__dirname, name, 'views', config.template);
+    var route = (name === 'home' && page_config.prefix === '/') ? '/' : path.join(page_config.prefix, name);
+    var template = path.join(__dirname, name, 'views', page_config.template);
 
     debug(['- initialize route', route].join(' '));
 
     // Add this page to application menus
-    _.each(config.menu, function(title, type) {
+    _.each(page_config.menu, function(title, type) {
         app.locals.menu[type].push({
             page: name,
             slug: route,
-            title: title,
+            title: title
         });
     });
 
     // The page custom application
-    if (config.application) {
-        page.application = path.join('pages', config.application);
+    if (page_config.application) {
+        page.application = path.join('pages', page_config.application);
     }
 
     // The page custom stylesheet
-    if (config.stylesheets) {
-        page.stylesheets = prefix('/css', config.stylesheets);
+    if (page_config.stylesheets) {
+        page.stylesheets = prefix('/css', page_config.stylesheets);
     }
 
     var locals = {
         page: page,
-        title: config.title
+        title: page_config.title
     };
 
     // Setup page controller
@@ -80,10 +80,7 @@ function setup_page(app, name, controller, config) {
 }
 
 function setup_api(app, name, controller) {
-    var module;
-    var module_path = path.join('pages', name, 'api');
     var route = path.join('/api', name);
-
     debug(['- initialize api', route].join(' '));
     app.use(route, controller);
 }
@@ -100,18 +97,18 @@ exports.setup = function(app) {
                     },
                     prefix: '/admin',
                     stylesheets: [
-                        'admin_style.css',
+                        'admin_style.css'
                     ].concat(prefix('pages', page_config.back.stylesheets || [])),
-                    template: 'back.jade',
+                    template: 'back.jade'
                 }));
             }
             if (page_config.front) {
                 setup_page(app, name, page_controllers.front, _.extend(page_config.front, {
                     prefix: '/',
                     stylesheets: [
-                        'style.css',
+                        'style.css'
                     ].concat(prefix('pages', page_config.front.stylesheets || [])),
-                    template: 'front.jade',
+                    template: 'front.jade'
                 }));
             }
             if (page_controllers.api) {

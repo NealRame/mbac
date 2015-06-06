@@ -1,17 +1,19 @@
-// config.js
-// =========
-// - author: Neal.Rame. <contact@nealrame.com>
-// -  date: Sun Jul 27 00:00:00 CEST 2014
-//
-// In _production_ environement, some module settings are required and the
-// application will not execute as long as the module file does not exists and
-// does not provide all the required settings.
-// In _development_ environment, you still can use the config file, however you
-// can use environment variable or _by default_ values as well.
-//
-// Required modules are:
-// - database
-// - server
+/* eslint-disable no-underscore-dangle */
+
+/// config.js
+/// =========
+/// - author: Neal.Rame. <contact@nealrame.com>
+/// -  date: Sun Jul 27 00:00:00 CEST 2014
+///
+/// In _production_ environement, some module settings are required and the
+/// application will not execute as long as the module file does not exists and
+/// does not provide all the required settings.
+/// In _development_ environment, you still can use the config file, however you
+/// can use environment variable or _by default_ values as well.
+///
+/// Required modules are:
+/// - database
+/// - server
 
 var _ = require('underscore');
 var debug = require('debug')('mbac:config');
@@ -103,7 +105,7 @@ if (config.env === 'development') {
     });
 }
 
-if (! (typeof(config.database) === 'object'
+if (!(typeof config.database === 'object'
         && config.database.host
         && config.database.port
         && config.database.name
@@ -112,7 +114,7 @@ if (! (typeof(config.database) === 'object'
     throw new error.DBConfigError();
 }
 
-if (! (typeof(config.server) ===  'object'
+if (!(typeof config.server ===  'object'
         && config.server.address
         && config.server.port)) {
     throw new error.AppConfigError();

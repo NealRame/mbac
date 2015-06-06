@@ -1,8 +1,11 @@
+/*global Foundation: false*/
 /// common/ui.js
 /// ------------
 /// - author: Neal.Rame. <contact@nealrame.com>
 /// -   date: Wed Mar 12 03:40:07 2015
 define(function(require) {
+    'use strict';
+
     var _ = require('underscore');
     var $ = require('jquery');
 
@@ -42,7 +45,7 @@ define(function(require) {
             return _.extend(
                 source,
                 {
-                    left: (target.width  - source.width)/2,
+                    left: (target.width  - source.width)/2
                 }
             );
         } catch (err) {
@@ -67,7 +70,7 @@ define(function(require) {
             return _.extend(
                 source,
                 {
-                    top: (target.height - source.height)/2,
+                    top: (target.height - source.height)/2
                 }
             );
         } catch (err) {
@@ -114,7 +117,7 @@ define(function(require) {
 
             return {
                 height: source.height*scale_ratio,
-                width: source.width*scale_ratio,
+                width: source.width*scale_ratio
             };
         } catch (err) {
             throw new TypeError('Wrong types of parameters supplied');
@@ -145,7 +148,7 @@ define(function(require) {
 
             return {
                 height: source.height*scale_ratio,
-                width: source.width*scale_ratio,
+                width: source.width*scale_ratio
             };
         } catch (err) {
             throw new TypeError('Wrong types of parameters supplied');
@@ -165,7 +168,7 @@ define(function(require) {
         try {
             return {
                 height: source.height*ratio,
-                width: source.width*ratio,
+                width: source.width*ratio
             };
         } catch (err) {
             throw new TypeError('Wrong types of parameters supplied');

@@ -1,0 +1,11 @@
+{
+    "env": {
+        "amd": true,
+        "browser": true,
+    },
+    "rules": {
+        "strict": [2, "function"],
+        "key-spacing": 0,
+        "no-multi-spaces": 0
+    }
+}

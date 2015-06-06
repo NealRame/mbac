@@ -1,8 +1,11 @@
+/*global File:false*/
 /// common/async.js
 /// ---------------
 /// - author: Neal.Rame. <contact@nealrame.com>
 /// -   date: Wed Mar 12 03:58:30 2015
 define(function(require) {
+    'use strict';
+
     var $ = require('jquery');
     var Promise = require('promise');
 
@@ -51,6 +54,6 @@ define(function(require) {
 
     return {
         loadFileAsDataURL: load_file_as_data_url,
-        loadImage: load_image,
+        loadImage: load_image
     };
 });
