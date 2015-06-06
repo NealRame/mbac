@@ -3,19 +3,20 @@
 // - author: Neal.Rame. <contact@nealrame.com>
 // -   date: Wed May 27 23:07:32 CEST 2015
 define(function(require) {
+    'use strict';
+
     var _ = require('underscore');
     var $ = require('jquery');
-    var Backbone = require('backbone');
     var Dialog = require('Dialog');
+    var Marionette = require('marionette');
     var subscribeTemplate = require('text!pages/home/subscribe-dialog.html');
     var util = require('common/util');
 
     function field_value(field) {
         var value = _.result($(field), 'val');
-        if (! _.isUndefined(value)) {
+        if (!_.isUndefined(value)) {
             return value;
         }
-        console.log(field);
         throw new Error(field + ' is not a valid form field!');
     }
 
@@ -64,7 +65,6 @@ define(function(require) {
             Dialog.prototype.initialize.call(this);
         },
         accept: function() {
-            console.log('-- SubscribeDialog:onAcceptClicked');
             var data = validate(this.$('#subscribe-form > form'));
             if (data) {
                 $.post('/api/contact/subscribe', data)
@@ -80,7 +80,6 @@ define(function(require) {
             }
         },
         refuse: function() {
-            console.log('-- SubscribeDialog:onCancelClicked');
             this.close();
         },
         setContent: function(region) {
@@ -93,4 +92,4 @@ define(function(require) {
     };
 
     return SubscribeDialog;
-})
+});
