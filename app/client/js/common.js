@@ -27,6 +27,6 @@ requirejs.config({
         'foundation': {
             deps: ['fastclick', 'jquery', 'modernizr'],
             exports: 'Foundation'
-        },
+        }
     }
 });
