@@ -1,4 +1,7 @@
+/*global Foundation: false*/
 define(function(require) {
+    'use strict';
+
     var _ = require('underscore');
     var $ = require('jquery');
     var Promise = require('promise');
