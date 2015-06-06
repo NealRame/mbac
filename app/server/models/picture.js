@@ -1,7 +1,7 @@
-// models/Picture
-// --------------
-// - author: Neal.Rame. <contact@nealrame.com>
-// -   date: Mon Jan 19 22:25:36 CET 2015
+/// models/Picture
+/// --------------
+/// - author: Neal.Rame. <contact@nealrame.com>
+/// -   date: Mon Jan 19 22:25:36 CET 2015
 
 var _ = require('underscore');
 var async = require('async');
