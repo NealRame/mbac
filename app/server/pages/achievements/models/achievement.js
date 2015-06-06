@@ -1,3 +1,5 @@
+/*eslint-disable no-underscore-dangle*/
+
 /// models/Achievement
 /// ------------------
 /// - author: Neal.Rame. <contact@nealrame.com>
@@ -10,11 +12,12 @@ var mongoose = require('mongoose');
 var Picture = require('models/picture');
 var util = require('util');
 
-var make_callback = common.async.make_callback;
 var make_promise = common.async.make_promise;
 var nodify = common.async.nodify;
 var ObjectId = mongoose.Schema.Types.ObjectId;
 var Schema = mongoose.Schema;
+
+var Achievement = null;
 
 /// ### Fields
 var AchievementSchema = new Schema({
@@ -22,13 +25,13 @@ var AchievementSchema = new Schema({
     /// Date of creation of this product. Default value is `Date.now`.
     date: {
         default: Date.now,
-        type: Date,
+        type: Date
     },
     /// #### Achievement#name
     /// Name of this achievement.
     name: {
         trim: true,
-        type: String,
+        type: String
     },
     /// #### Achievement#description
     /// Description of this achievement.
@@ -38,20 +41,20 @@ var AchievementSchema = new Schema({
     /// for more details.
     pictures: [{
         ref: 'Picture',
-        type: ObjectId,
+        type: ObjectId
     }],
     /// #### Achievement#tags
     /// A list of tags associated to this product.
     tags: [{
         lowercase: true,
         trim: true,
-        type: String,
+        type: String
     }],
     /// #### Achievement#published
     /// Published flag.
     published: {
         default: false,
-        type: Boolean,
+        type: Boolean
     }
 });
 
@@ -59,7 +62,7 @@ AchievementSchema.pre('remove', function(next) {
     debug(util.format('removing %s', this._id.toString()));
     _.chain(this.pictures)
         .map(function(picture) {
-            return (!!picture._id) ? picture._id : picture;
+            return picture._id ? picture._id : picture;
         })
         .each(Picture.delete);
     next();
@@ -149,7 +152,7 @@ AchievementSchema.static('readAll', function(cb) {
 /// - `Promise`.
 AchievementSchema.static('patch', function(achievement, data, cb) {
     debug('patch');
-    var promise = achievement.patch(data).then(function(achievement) {
+    var promise = achievement.patch(data).then(function() {
         return achievement.populate('pictures').execPopulate();
     });
     return nodify(promise, cb);
@@ -214,10 +217,10 @@ AchievementSchema.methods.patch = function(data, cb) {
     // in data.pictures. Others pictures are removed.
     var pictures = _.chain(this.pictures)
         .map(function(picture) {
-            return (!!picture._id) ? picture._id : picture;
+            return picture._id ? picture._id : picture;
         })
         .filter(function(id) {
-            if (! _.any(data.pictures, id.equals.bind(id))) {
+            if (!_.any(data.pictures, id.equals.bind(id))) {
                 Picture.delete(id).catch(function(err) {
                     debug(err); // TODO log error
                 });
@@ -230,11 +233,11 @@ AchievementSchema.methods.patch = function(data, cb) {
     var promise = Picture.create(data.files)
         .then(_.partial(_.pluck, _, '_id'))
         .then(Array.prototype.concat.bind(pictures))
-        .then(function(pictures) {
+        .then(function(achievement_pictures) {
             self.set(
                 _.chain(data)
                     .pick('date', 'description', 'name', 'published', 'tags')
-                    .extend({pictures: pictures})
+                    .extend({pictures: achievement_pictures})
                     .value()
             );
             return self.save();
@@ -243,4 +246,4 @@ AchievementSchema.methods.patch = function(data, cb) {
     return nodify(promise, cb);
 };
 
-var Achievement = module.exports = mongoose.model('Achievement', AchievementSchema);
+Achievement = module.exports = mongoose.model('Achievement', AchievementSchema);
