@@ -135,17 +135,17 @@ define(function(require) {
                 return picture.file instanceof File || (picture.original && picture.thumbnail);
             };
 
-            if (!(attributes.name instanceof String)) {
+            if (!_.isString(attributes.name)) {
                 return new Error('name must be a String');
             }
-            if (!(attributes.description instanceof String)) {
+            if (!_.isString(attributes.description)) {
                 return new Error('description mus be a String');
             }
-            if (!(attributes.pictures instanceof Array
+            if (!(_.isArray(attributes.pictures)
                     && _.every(attributes.pictures, isValidPicture))) {
                 return new Error('pictures must be a non empty Array of valid pictures');
             }
-            if (!(attributes.tags instanceof Array
+            if (!(_.isArray(attributes.tags)
                     && _.every(attributes.tags, _.isString))) {
                 return new Error('tags must be an Array of String');
             }
