@@ -12,7 +12,7 @@ router.get('/:id', function(req, res, next) {
     GridStore.exist(db, file_id, function(err, exist) {
         if (err) {
             next(err);
-        } else if (! exist) {
+        } else if (!exist) {
             next(Object.create(
                 new Error('File not found'), {status: {value: 404}}
             ));
