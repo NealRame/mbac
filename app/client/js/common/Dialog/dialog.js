@@ -1,7 +1,7 @@
-// Dialog/dialog.js
-// ----------------
-// - author: Neal.Rame. <contact@nealrame.com>
-// -   date: Sun Jan 12
+/// Dialog/dialog.js
+/// ----------------
+/// - author: Neal.Rame. <contact@nealrame.com>
+/// -   date: Sun Jan 12
 define(function(require) {
     'use strict';
 
