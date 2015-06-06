@@ -1,12 +1,14 @@
 define(function(require) {
+    'use strict';
+
     var _ = require('underscore');
     var $ = require('jquery');
     var Backbone = require('backbone');
+    var Marionette = require('marionette');
     var marked = require('marked');
     var ui = require('common/ui');
 
     var LightBox = require('LightBox');
-    var Thumbnail = require('Thumbnail');
     var ThumbnailList = require('ThumbnailList');
     var AchievementBase = require('pages/achievements/achievement');
 
@@ -32,7 +34,7 @@ define(function(require) {
 
     var AchievementApp = Marionette.LayoutView.extend({
         regions: {
-            'pictures-list': '#pictures-wrapper',
+            'pictures-list': '#pictures-wrapper'
         },
         ui: {
             description: '#description-wrapper'
@@ -65,5 +67,5 @@ define(function(require) {
             model: achievement
         });
         app.render();
-    })
+    });
 });
