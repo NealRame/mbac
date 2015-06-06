@@ -1,7 +1,10 @@
 define(function(require) {
+    'use strict';
+
     var $ = require('jquery');
     var Foundation = require('foundation');
     var ui = require('common/ui');
+
     $(function() {
         var footer = $('body > footer').first();
         var push_footer_down = ui.pushDown.bind(null, footer, window, 0);
