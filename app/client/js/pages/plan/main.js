@@ -1,4 +1,7 @@
+/* global google: false*/
 define(function(require) {
+    'use strict';
+
     require('async!http://maps.googleapis.com/maps/api/js?key=AIzaSyBm7fdJUdMXrRbKJNDSM5Huds2Jjns8kzE&sensor=true');
     var _ = require('underscore');
     var $ = require('jquery');
@@ -6,7 +9,7 @@ define(function(require) {
 
     var PIN_IMAGE_URL = 'http://maps.google.com/mapfiles/ms/icons/green-dot.png';
     var map_canvas = $('#map-canvas');
-    var mbac_lat_lng = new google.maps.LatLng(50.627557,3.052719);
+    var mbac_lat_lng = new google.maps.LatLng(50.627557, 3.052719);
 
     var options = {
         draggable: true,
@@ -23,28 +26,28 @@ define(function(require) {
         home: new google.maps.Marker({
             position: mbac_lat_lng,
             map: map,
-            title: "mon Bar à Couture",
+            title: 'mon Bar à Couture'
         }),
         bicycle: new google.maps.Marker({
             position: new google.maps.LatLng(50.626093, 3.051778),
             map: map,
             title: 'Station V\'Lille 40 métro Gambetta',
             visible: false,
-            icon: PIN_IMAGE_URL,
+            icon: PIN_IMAGE_URL
         }),
         subway: new google.maps.Marker({
             position: new google.maps.LatLng(50.626368, 3.052228),
             map: map,
             title: 'Station métro Gambetta',
             visible: false,
-            icon: PIN_IMAGE_URL,
+            icon: PIN_IMAGE_URL
         }),
         car: new google.maps.Marker({
             position: new google.maps.LatLng(50.626056, 3.049799),
             map: map,
             title: 'Parking de la place de la Bonne Aventure',
             visible: false,
-            icon: PIN_IMAGE_URL,
+            icon: PIN_IMAGE_URL
         })
     };
 
