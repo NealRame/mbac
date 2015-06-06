@@ -41,6 +41,7 @@
   "eslintConfig": {
     "rules": {
       "camelcase": 0,
+      "curly": [1, "multi-line"],
       "new-cap": [1, {
         "newIsCap": true,
         "capIsNew": false
