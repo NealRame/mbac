@@ -1,12 +1,13 @@
-// front.js
-// ========
-// - author: Neal.Rame. <contact@nealrame.com>
-// -  date:  Fri Apr  3 01:05:57 2015
+/*eslint-disable no-underscore-dangle*/
 
-var _ = require('underscore');
+// front.js
+// - author: Neal.Rame. <contact@nealrame.com>
+// -   date:  Fri Apr  3 01:05:57 2015
+
 var debug = require('debug')('mbac:routes:achievements');
 var express = require('express');
 var path = require('path');
+var util = require('util');
 
 var Achievement = require(path.join(__dirname, 'models', 'achievement'));
 var router = express.Router();
@@ -20,6 +21,7 @@ router
         res.locals.page.application = path.join('pages/achievements/front-main-list');
         Achievement.published()
             .then(function(achievements) {
+                debug(util.format('rendering %d achievements', achievements.length));
                 res.render(list_template, {achievements: achievements});
             })
             .then(null, next);
@@ -31,6 +33,7 @@ router
             .where('published', true)
             .exec()
             .then(function(achievement) {
+                debug(util.format('rendering achievement: %s', achievement._id));
                 res.render(page_template, {achievement: achievement});
             })
             .then(null, next);
