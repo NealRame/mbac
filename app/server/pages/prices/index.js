@@ -3,12 +3,8 @@
 // - author: Neal.Rame. <contact@nealrame.com>
 // -  date:  Tue May 12 20:57:49 CEST 2015
 
-var _ = require('underscore');
-var debug = require('debug')('mbac:routes:prices');
 var express = require('express');
-var mongoose = require('mongoose');
 var path = require('path');
-var util = require('util');
 
 var router = express.Router();
 var page_template = path.join(__dirname, 'views', 'front.jade');
@@ -58,7 +54,7 @@ var prices = {
                         }
                     ]
                 }
-            ],
+            ]
         },
         {
             link: 'introduction',
@@ -224,7 +220,7 @@ var prices = {
 
 router
     // GET achievements page.
-    .get('/', function(req, res, next) {
+    .get('/', function(req, res) {
         res.locals.prices = prices;
         res.render(page_template);
     });
