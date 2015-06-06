@@ -3,6 +3,8 @@
 /// - author: Neal.Rame. <contact@nealrame.com>
 /// -   date: Mon Jan  5 00:59:15 2015
 define(function(require) {
+    'use strict';
+
     var _ = require('underscore');
     var Backbone = require('backbone');
     var Marionette = Backbone.Marionette;
@@ -11,23 +13,20 @@ define(function(require) {
     var tabbarItemTemplate = require('text!common/TabbedPanels/tabbar-item.html');
     var menuClasses = {
         1: 'one-up',  2: 'two-up',  3: 'three-up',
-        4: 'four-up', 5: 'five-up', 6: 'six-up',
+        4: 'four-up', 5: 'five-up', 6: 'six-up'
     };
-    var nextPanelId_ = 0;
-    var called = 0;
+    var next_panel_id = 0;
 
     var Panel = Backbone.Model.extend({
         defaults: function() {
-            var id = nextPanelId_++;
+            var id = next_panel_id++;
             return {
                 active: false,
                 id: 'item' + id,
                 label: 'Item' + id,
                 view: function() {
                     return new Marionette.ItemView({
-                        template: (function() {
-                            console.log('-- Panel: [' + this.id + '] rendering');
-                        }).bind(this)
+                        template: false
                     });
                 }
             };
@@ -46,7 +45,6 @@ define(function(require) {
         }
     });
 
-
     var ItemView = Marionette.ItemView.extend({
         tagName: 'a',
         className: 'item',
@@ -60,7 +58,6 @@ define(function(require) {
             this.$el.attr('data-state', this.model.isActive() ? 'active':'');
         }
     });
-
 
     var TabBarView = Marionette.CollectionView.extend({
         childView: ItemView,
@@ -103,14 +100,12 @@ define(function(require) {
         },
         template: _.template(tabbedPanelsTemplate),
         initialize: function() {
-            console.log('-- TabbedPanels: initialization');
             this.collection = new Backbone.Collection([], {
                 model: Panel
             });
             this.tabBar = new TabBarView({
                 collection: this.collection
             });
-            console.log('-- TabbedPanels: initialization - done');
         },
         configure: function(config) {
             this.tabBar.configure(config);
@@ -126,18 +121,12 @@ define(function(require) {
                     : this.collection.at).call(this.collection, panel_id);
 
             if (panel) {
-                console.log('-- TabbedPanels: switching to panel ' + panel.id);
                 this.tabBar.setActiveItem(panel);
                 this.getRegion('panel').show(panel.createView());
-                console.log('-- TabbedPanels: switching to panel ' + panel.id + ' - done');
-            } else {
-                console.error('-- TabbedPanels: cannot switch to panel ' + panel_id);
             }
         },
         onRender: function() {
-            console.log('-- TabbedPanels: renderering');
             this.getRegion('tabBar').show(this.tabBar);
-            console.log('-- TabbedPanels: renderering - done');
         }
     });
 
