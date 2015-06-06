@@ -1,3 +1,5 @@
+/* eslint-disable no-underscore-dangle */
+
 /// config.js
 /// =========
 /// - author: Neal.Rame. <contact@nealrame.com>
@@ -103,7 +105,7 @@ if (config.env === 'development') {
     });
 }
 
-if (! (typeof(config.database) === 'object'
+if (!(typeof config.database === 'object'
         && config.database.host
         && config.database.port
         && config.database.name
@@ -112,7 +114,7 @@ if (! (typeof(config.database) === 'object'
     throw new error.DBConfigError();
 }
 
-if (! (typeof(config.server) ===  'object'
+if (!(typeof config.server ===  'object'
         && config.server.address
         && config.server.port)) {
     throw new error.AppConfigError();
