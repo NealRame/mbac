@@ -3,7 +3,6 @@
 // - author: Neal.Rame. <contact@nealrame.com>
 // -   date: Wed Oct 22 22:40:49 CEST 2014
 
-var _ = require('underscore');
 var express = require('express');
 var router = express.Router();
 
