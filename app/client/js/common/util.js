@@ -3,6 +3,8 @@
 /// - author: Neal.Rame. <contact@nealrame.com>
 /// -   date: Wed May 20 20:59:53 CEST 2015
 define(function(require) {
+    'use strict';
+
     var _ = require('underscore');
 
     var mail_regex = /^[-a-z0-9~!$%^&*_=+}{\'?]+(\.[-a-z0-9~!$%^&*_=+}{\'?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+)*\.(aero|arpa|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$/i;
@@ -47,16 +49,12 @@ define(function(require) {
         }
         options = _.defaults(options, {clearError: _.noop, setError: _.noop});
         return function(form) {
-            try {
-                return _.reduce(args, function(memo, validate) {
-                    var value = validate(form, options.clearError, options.setError);
-                    if (value && memo) {
-                        return _.extend(memo, value);
-                    }
-                }, {});
-            } catch (err) {
-                console.error(err);
-            }
+            return _.reduce(args, function(memo, validate) {
+                var value = validate(form, options.clearError, options.setError);
+                if (value && memo) {
+                    return _.extend(memo, value);
+                }
+            }, {});
         };
     }
 
