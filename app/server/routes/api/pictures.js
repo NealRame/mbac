@@ -3,14 +3,11 @@
 // - author: Neal.Rame. <contact@nealrame.com>
 // -   date: Thu Jan 22 12:56:31 CET 2015
 
-var _ = require('underscore');
 var express = require('express');
 var formidableGrid = require('formidable-grid');
 var api = require('common/api');
-var inspect = require('util').inspect;
 var mongoose = require('mongoose');
 var mongo = mongoose.mongo;
-var path = require('path');
 var Picture = require('models/picture');
 var Promise = mongoose.Promise;
 
@@ -61,7 +58,7 @@ router
 
 router
     .route('/:id')
-    .get(function(req, res, next) {
+    .get(function(req, res) {
         res.send(req.picture);
     });
 
