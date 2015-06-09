@@ -12,10 +12,6 @@ define(function(require) {
     var dialogTemplate = require('text!common/Dialog/dialog.template.html');
 
     var Dialog = Marionette.LayoutView.extend({
-        className: 'reveal-modal',
-        attributes: {
-            'data-reveal': ''
-        },
         ui: {
             accept: '#accept',
             refuse: '#refuse'
@@ -53,13 +49,13 @@ define(function(require) {
                 this.remove();
             }
         },
-        setContent: function() {
-        },
-        getContent: function() {
-            return this.getRegion('contentWrapper');
-        },
         onRender: function() {
+            var ChildView = Marionette.getOption(this, 'childView');
+            var options = Marionette.getOption(this, 'childViewOptions');
             var dialog = this;
+
+            this.child = new ChildView(functional.valueOf(options, this));
+            this.$el.addClass('reveal-modal').attr('data-reveal', '');
             this.addRegions({
                 'contentWrapper': {
                     regionClass: Marionette.Region.extend({
@@ -67,27 +63,26 @@ define(function(require) {
                     })
                 }
             });
-            this.$el.addClass('reveal-modal').attr('data-reveal', '');
+
             $().add(this.ui.accept).add(this.ui.refuse)
                 .off('click')
                 .on('click', function(e) {
                     e.preventDefault();
                     e.stopPropagation();
+                    var data = _.result(dialog.child, 'data');
                     switch($(this).attr('id')) {
                         case 'accept':
-                            dialog.onAccept();
+                            dialog.onAccept(data);
                             break;
                         case 'refuse':
-                            dialog.onRefuse();
+                            dialog.onRefuse(data);
                             break;
                     }
                     return false;
                 });
-            var ChildView = Marionette.getOption(this, 'childView');
-            var options = Marionette.getOption(this, 'childViewOptions');
-            var region = this.getRegion('contentWrapper');
+
             if (ChildView) {
-                region.show(new ChildView(functional.valueOf(options, this)));
+                this.getRegion('contentWrapper').show(this.child);
             }
         }
     });
