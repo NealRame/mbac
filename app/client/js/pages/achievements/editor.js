@@ -174,19 +174,27 @@ define(function(require) {
                 this.model.published() ? 'unpublish-button':'publish-button'
             );
             this.getRegion('pictures').show(this.achievementPictureList);
+        },
+        data: function() {
+            return this.model;
         }
     });
 
     var AchievementEditorDialog = Dialog.extend({
+        childView: AchievementEditor,
+        childViewOptions: function() {
+            return {
+                model: this.model.clone()
+            };
+        },
         initialize: function() {
             this.options.accept = this.model.isNew() ? 'Ajouter' : 'Modifier';
             this.options.refuse = 'Annuler';
             Dialog.prototype.initialize.call(this);
         },
-        accept: function() {
+        onAccept: function(model) {
             var commit = (function() {
-                var attributes = this.getContent().currentView.model.toJSON();
-                this.model.set(attributes);
+                this.model.set(model.toJSON());
                 this.model.save();
                 this.close();
             }).bind(this);
@@ -204,7 +212,7 @@ define(function(require) {
                 );
             } else commit();
         },
-        refuse: function() {
+        onRefuse: function(model) {
             var commit = (function() {
                 if (this.model.isNew()) {
                     this.model.destroy();
@@ -212,7 +220,7 @@ define(function(require) {
                 this.close();
             }).bind(this);
 
-            if (this.getContent().currentView.model.hasChanged()) {
+            if (model.hasChanged()) {
                 var editor = this;
                 Dialog.prompt(
                     'Les modifications apportées seront perdues! Êtes vous sûr de vouloir continuer ?',
@@ -226,11 +234,6 @@ define(function(require) {
             } else commit();
 
             return false;
-        },
-        setContent: function(region) {
-            region.show(new AchievementEditor({
-                model: this.model.clone()
-            }));
         }
     });
 
