@@ -55,7 +55,10 @@ define(function(require) {
             nameField: '#name',
             emailField: '#email'
         },
-        template: _.template(subscribeTemplate)
+        template: _.template(subscribeTemplate),
+        data: function() {
+            return validate(this.$el);
+        }
     });
 
     var SubscribeDialog = Dialog.extend({
@@ -67,8 +70,7 @@ define(function(require) {
             this.options.refuse = 'Annuler';
             Dialog.prototype.initialize.call(this);
         },
-        onAccept: function() {
-            var data = validate(this.$('#subscribe-form > form'));
+        onAccept: function(data) {
             if (data) {
                 $.post('/api/contact/subscribe', data)
                     .done(function() {
