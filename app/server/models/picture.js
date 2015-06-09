@@ -91,7 +91,7 @@ PictureSchema.pre('remove', function(next) {
 /// **Return:**
 /// - `Promise` if no callback is provided, `undefined` otherwise.
 PictureSchema.static('create', function(file, cb) {
-    debug(util.format('create picture width %s', util.inspect(file)));
+    debug(util.format('create picture with %s', util.inspect(file)));
     if (_.isArray(file)) {
         return nodify(new Promise(function(resolve, reject) {
             async.mapSeries(file, Picture.create, make_callback(resolve, reject));
