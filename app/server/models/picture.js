@@ -38,8 +38,7 @@ var PictureSchema = new Schema({
         type: String,
         default: 'files',
         set: function(val) {
-            this.prefix = this.prefix || val;
-            return this.prefix;
+            return this.prefix || val;
         }
     },
     /// #### `Picture#original`
@@ -48,8 +47,7 @@ var PictureSchema = new Schema({
         type: Schema.Types.ObjectId,
         required: true,
         set: function(val) {
-            this.original = this.original || val;
-            return this.original;
+            return this.original || val;
         }
     },
     /// #### `Picture#thumbnail`
@@ -58,8 +56,7 @@ var PictureSchema = new Schema({
         type: Schema.Types.ObjectId,
         required: true,
         set: function(val) {
-            this.thumbnail = this.thumbnail || val;
-            return this.thumbnail;
+            return this.thumbnail || val;
         }
     }
 });
@@ -91,7 +88,7 @@ PictureSchema.pre('remove', function(next) {
 /// **Return:**
 /// - `Promise` if no callback is provided, `undefined` otherwise.
 PictureSchema.static('create', function(file, cb) {
-    debug(util.format('create picture width %s', util.inspect(file)));
+    debug(util.format('create picture with %s', util.inspect(file)));
     if (_.isArray(file)) {
         return nodify(new Promise(function(resolve, reject) {
             async.mapSeries(file, Picture.create, make_callback(resolve, reject));

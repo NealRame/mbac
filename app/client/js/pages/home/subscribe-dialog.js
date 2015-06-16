@@ -55,35 +55,36 @@ define(function(require) {
             nameField: '#name',
             emailField: '#email'
         },
-        template: _.template(subscribeTemplate)
+        template: _.template(subscribeTemplate),
+        data: function() {
+            return validate(this.$el);
+        }
     });
 
     var SubscribeDialog = Dialog.extend({
+        childView: SubscribeForm,
+        className: 'medium',
+        id: 'subscribe-dialog-box',
         initialize: function() {
             this.options.accept = 'Hop!';
             this.options.refuse = 'Annuler';
             Dialog.prototype.initialize.call(this);
         },
-        accept: function() {
-            var data = validate(this.$('#subscribe-form > form'));
+        onAccept: function(data) {
             if (data) {
                 $.post('/api/contact/subscribe', data)
                     .done(function() {
-                        console.log('success');
-                        console.log(arguments);
+                        Dialog.message('Votre addresse email a bien été ajoutée à la liste de diffusion.', {
+                            acceptLabel: 'Ok'
+                        });
                     })
                     .fail(function() {
-                        console.log('error');
-                        console.log(arguments);
+                        Dialog.message('Votre addresse n\'a pas pu être ajoutée à la liste de diffusion.', {
+                            acceptLabel: 'Ok'
+                        });
                     });
                 this.close();
             }
-        },
-        refuse: function() {
-            this.close();
-        },
-        setContent: function(region) {
-            region.show(new SubscribeForm());
         }
     });
 

@@ -3,37 +3,17 @@
 // - author: Neal.Rame. <contact@nealrame.com>
 // -   date: Thu Jan 22 12:56:31 CET 2015
 
-var express = require('express');
-var formidableGrid = require('formidable-grid');
-var api = require('common/api');
-var mongoose = require('mongoose');
-var mongo = mongoose.mongo;
+var _ = require('underscore');
+
+var FormidableGrid = require('formidable-grid');
 var Picture = require('models/picture');
-var Promise = mongoose.Promise;
 
+var api = require('common/api');
+var express = require('express');
+var mongoose = require('mongoose');
+
+var mongo = mongoose.mongo;
 var router = express.Router();
-
-function parse_picture_data(req) {
-    var promise = new Promise();
-    var files = [];
-    var form = formidableGrid(req.db, mongo, {
-        accept: ['image/.*']
-    });
-
-    form.multiples = false;
-    form.maxFields = 1;
-    form
-        .on('file', function(name, file) {
-            files.push({original: file.id});
-        })
-        .once('error', promise.error.bind(promise))
-        .once('end', function() {
-            promise.fulfill(files[0]);
-        })
-        .parse(req);
-
-    return promise;
-}
 
 router
     .param('id', function(req, res, next, id) {
@@ -67,12 +47,23 @@ router.use(api.authenticationChecker());
 router
     .route('/')
     .post(function(req, res, next) {
-        parse_picture_data(req)
-            .then(function(data) {
-                return Picture.create(data);
+        var form = new FormidableGrid(req.db, mongo, {
+            accepted_mime_types: [/image\/.*/]
+        });
+        form.parse(req)
+            .then(function(form_data) {
+                var files = _.chain(form_data)
+                    .filter(function(part) {
+                        return part.field === 'files';
+                    })
+                    .map(_.property('value'))
+                    .value();
+                return Picture.create(files);
             })
-            .then(res.send.bind(res))
-            .then(null, next);
+            .then(function(pictures) {
+                res.send(pictures);
+            })
+            .catch(next);
     })
     .all(api.forbidden());
 

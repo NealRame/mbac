@@ -26,7 +26,7 @@ exports.instance = function() {
                 .once('error', reject)
                 .once('open', resolve);
         })
-    ).then(function(conn) {
+    ).then(function() {
         debug('Connected to db at ' + config.database.URI);
 
         app = express();
