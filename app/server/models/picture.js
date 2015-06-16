@@ -38,8 +38,7 @@ var PictureSchema = new Schema({
         type: String,
         default: 'files',
         set: function(val) {
-            this.prefix = this.prefix || val;
-            return this.prefix;
+            return this.prefix || val;
         }
     },
     /// #### `Picture#original`
@@ -48,8 +47,7 @@ var PictureSchema = new Schema({
         type: Schema.Types.ObjectId,
         required: true,
         set: function(val) {
-            this.original = this.original || val;
-            return this.original;
+            return this.original || val;
         }
     },
     /// #### `Picture#thumbnail`
@@ -58,8 +56,7 @@ var PictureSchema = new Schema({
         type: Schema.Types.ObjectId,
         required: true,
         set: function(val) {
-            this.thumbnail = this.thumbnail || val;
-            return this.thumbnail;
+            return this.thumbnail || val;
         }
     }
 });
