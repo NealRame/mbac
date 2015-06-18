@@ -156,6 +156,12 @@ section.wrapper {
     }
     overflow: auto;
 }
+.uncolapser {
+    &::before {
+        content: ' ';
+        display: table;
+    }
+}
 footer {
     background-color: $footer-background-color;
     color: white;
