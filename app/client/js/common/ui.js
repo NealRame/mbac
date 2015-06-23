@@ -8,6 +8,7 @@ define(function(require) {
 
     var _ = require('underscore');
     var $ = require('jquery');
+    var functional = require('common/functional');
 
     /// #### ui.pushDown(source, target, offset)
     /// Position the given source element in the bottom of the target element.
@@ -254,6 +255,18 @@ define(function(require) {
         return 'large';
     }
 
+    /// #### ui.mediaQuerySelect(o[, context])
+    /// Return a value from the given object according to the current media
+    /// query value.
+    ///
+    /// __Parameters:__
+    /// - `obj` a hash object containing the value for the different media
+    /// query. Values can be function.
+    /// - `context`, if value is a function, bind it to that.
+    function media_query_select(o, context) {
+        return functional.valueOf(o[media_query()], context);
+    }
+
     return {
         hCenter: h_center,
         vCenter: v_center,
@@ -265,6 +278,7 @@ define(function(require) {
         rect: rect,
         scale: scale,
         pushDown: push_down,
-        mediaQuery: media_query
+        mediaQuery: media_query,
+        mediaQuerySelect: media_query_select
     };
 });
