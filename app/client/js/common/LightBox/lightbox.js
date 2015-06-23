@@ -20,6 +20,9 @@ define(function(require) {
     var PREV_KEY = 37;
     var NEXT_KEY = 39;
 
+    var MOVE_LEFT = 0;
+    var MOVE_RIGHT = 1;
+
     var Lightbox = Marionette.LayoutView.extend({
         className: 'lightbox',
         ui: {
@@ -32,6 +35,9 @@ define(function(require) {
             'click': 'close',
             'click @ui.picture > img': 'onPictureClick',
             'click @ui.picture > .error': 'onPictureClick',
+            'touchstart @ui.picture > img': 'onPictureTouchStart',
+            'touchmove @ui.picture > img': 'onPictureTouchMove',
+            'touchend @ui.picture > img': 'onPictureTouchEnd',
             'click @ui.forward': 'onForwardClick',
             'click @ui.rewind': 'onRewindClick'
         },
@@ -180,15 +186,15 @@ define(function(require) {
             e.preventDefault();
             e.stopPropagation();
             switch (e.which) {
-            case ESC_KEY:
-                this.close();
-                break;
-            case NEXT_KEY:
-                this.showNextPicture();
-                break;
-            case PREV_KEY:
-                this.showPreviousPicture();
-                break;
+                case ESC_KEY:
+                    this.close();
+                    break;
+                case NEXT_KEY:
+                    this.showNextPicture();
+                    break;
+                case PREV_KEY:
+                    this.showPreviousPicture();
+                    break;
             }
             return false;
         },
@@ -196,6 +202,46 @@ define(function(require) {
             e.preventDefault();
             e.stopPropagation();
             this.showNextPicture();
+            return false;
+        },
+        onPictureTouchStart: function(e) {
+            var touch = e.originalEvent.changedTouches[0];
+            e.preventDefault();
+            e.stopPropagation();
+            if (!this.touch_origin) {
+                this.touch_origin = {
+                    id: touch.identifier,
+                    x: touch.screenX
+                };
+            }
+            return false;
+        },
+        onPictureTouchEnd: function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            switch (this.move) {
+                case MOVE_RIGHT:
+                    this.showNextPicture();
+                    break;
+                case MOVE_LEFT:
+                    this.showPreviousPicture();
+                    break;
+                default:
+                    this.close();
+                    break;
+            }
+            delete this.move;
+            return false;
+        },
+        onPictureTouchMove: function(e) {
+            var touch = e.originalEvent.changedTouches[0];
+            e.preventDefault();
+            e.stopPropagation();
+            if (this.touch_origin.id === touch.identifier) {
+                this.move = this.touch_origin.x - touch.screenX > 0
+                    ? this.move = MOVE_RIGHT
+                    : this.move = MOVE_LEFT;
+            }
             return false;
         },
         onWindowResized: function() {
