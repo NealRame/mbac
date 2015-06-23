@@ -113,7 +113,12 @@ define(function(require) {
             spinner.css(ui.center(ui.rect(spinner), viewport));
 
             var img = this.ui.picture.find('img');
-            img.css(ui.center(ui.fit(ui.naturalRect(img), ui.scale(viewport, 0.96)), viewport));
+            var scale = ui.mediaQuerySelect({
+                small: 1,
+                medium: 0.96,
+                large: 0.96
+            });
+            img.css(ui.center(ui.fit(ui.naturalRect(img), ui.scale(viewport, scale)), viewport));
 
             var error = this.ui.picture.find('.error');
             error.css(ui.center(ui.rect(error), viewport));
@@ -230,6 +235,7 @@ define(function(require) {
                     this.close();
                     break;
             }
+            delete this.touch_origin;
             delete this.move;
             return false;
         },
