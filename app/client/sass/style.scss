@@ -156,10 +156,15 @@ section.wrapper {
     }
     overflow: auto;
 }
+.uncolapser {
+    &::before {
+        content: ' ';
+        display: table;
+    }
+}
 footer {
     background-color: $footer-background-color;
     color: white;
-    clear: both;
     margin: 0;
     padding: 0;
     width: 100%;
