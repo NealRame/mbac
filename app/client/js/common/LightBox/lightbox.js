@@ -11,17 +11,16 @@ define(function(require) {
     var Marionette = require('marionette');
     var Promise = require('promise');
 
+    var TouchNavigationBehavior = require('common/Behaviors/touchnavigation');
     var async = require('common/async');
     var functional = require('common/functional');
     var ui = require('common/ui');
+
     var template = require('text!common/Lightbox/lightbox.html');
 
     var ESC_KEY  = 27;
     var PREV_KEY = 37;
     var NEXT_KEY = 39;
-
-    var MOVE_LEFT = 0;
-    var MOVE_RIGHT = 1;
 
     var Lightbox = Marionette.LayoutView.extend({
         className: 'lightbox',
@@ -29,17 +28,20 @@ define(function(require) {
             arrows: '#rewind,#forward',
             rewind: '#rewind',
             forward: '#forward',
-            picture: '#picture'
+            picture: '#picture',
+            touchZone: '#picture'
         },
         events: {
             'click': 'close',
             'click @ui.picture > img': 'onPictureClick',
             'click @ui.picture > .error': 'onPictureClick',
-            'touchstart @ui.picture > img': 'onPictureTouchStart',
-            'touchmove @ui.picture > img': 'onPictureTouchMove',
-            'touchend @ui.picture > img': 'onPictureTouchEnd',
             'click @ui.forward': 'onForwardClick',
             'click @ui.rewind': 'onRewindClick'
+        },
+        behaviors: {
+            touchZone: {
+                behaviorClass: TouchNavigationBehavior
+            }
         },
         template: _.template(template),
         startIndex: 0,
@@ -69,6 +71,18 @@ define(function(require) {
                     return Promise.reject(err);
                 }
             };
+
+            this.scale = ui.mediaQuerySelect.bind(null, {
+                small: function() {
+                    return Marionette.getOption(this, 'smallViewoortScale')  || 1;
+                },
+                medium: function() {
+                    return Marionette.getOption(this, 'mediumViewportScale') || 0.96;
+                },
+                large: function() {
+                    return Marionette.getOption(this, 'largeViewportScale')  || 0.96;
+                }
+            }, this);
 
             var keyup_cb = this.onKeypress.bind(this);
             var resize_cb = _.debounce(this.onWindowResized.bind(this), 100);
@@ -113,12 +127,7 @@ define(function(require) {
             spinner.css(ui.center(ui.rect(spinner), viewport));
 
             var img = this.ui.picture.find('img');
-            var scale = ui.mediaQuerySelect({
-                small: 1,
-                medium: 0.96,
-                large: 0.96
-            });
-            img.css(ui.center(ui.fit(ui.naturalRect(img), ui.scale(viewport, scale)), viewport));
+            img.css(ui.center(ui.fit(ui.naturalRect(img), ui.scale(viewport, this.scale())), viewport));
 
             var error = this.ui.picture.find('.error');
             error.css(ui.center(ui.rect(error), viewport));
@@ -209,46 +218,14 @@ define(function(require) {
             this.showNextPicture();
             return false;
         },
-        onPictureTouchStart: function(e) {
-            var touch = e.originalEvent.changedTouches[0];
-            e.preventDefault();
-            e.stopPropagation();
-            if (!this.touch_origin) {
-                this.touch_origin = {
-                    id: touch.identifier,
-                    x: touch.screenX
-                };
-            }
-            return false;
+        onCloseRequest: function() {
+            this.close();
         },
-        onPictureTouchEnd: function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            switch (this.move) {
-                case MOVE_RIGHT:
-                    this.showNextPicture();
-                    break;
-                case MOVE_LEFT:
-                    this.showPreviousPicture();
-                    break;
-                default:
-                    this.close();
-                    break;
-            }
-            delete this.touch_origin;
-            delete this.move;
-            return false;
+        onPreviousItem: function() {
+            this.showPreviousPicture();
         },
-        onPictureTouchMove: function(e) {
-            var touch = e.originalEvent.changedTouches[0];
-            e.preventDefault();
-            e.stopPropagation();
-            if (this.touch_origin.id === touch.identifier) {
-                this.move = this.touch_origin.x - touch.screenX > 0
-                    ? this.move = MOVE_RIGHT
-                    : this.move = MOVE_LEFT;
-            }
-            return false;
+        onNextItem: function() {
+            this.showNextPicture();
         },
         onWindowResized: function() {
             this.setGeometry();
