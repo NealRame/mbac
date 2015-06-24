@@ -12,15 +12,12 @@ define(function(require) {
     var Promise = require('promise');
 
     var TouchNavigationBehavior = require('common/Behaviors/touchnavigation');
+    var KeyboardNavigationBehavior = require('common/Behaviors/keyboardnavigation');
     var async = require('common/async');
     var functional = require('common/functional');
     var ui = require('common/ui');
 
     var template = require('text!common/Lightbox/lightbox.html');
-
-    var ESC_KEY  = 27;
-    var PREV_KEY = 37;
-    var NEXT_KEY = 39;
 
     var Lightbox = Marionette.LayoutView.extend({
         className: 'lightbox',
@@ -39,8 +36,11 @@ define(function(require) {
             'click @ui.rewind': 'onRewindClick'
         },
         behaviors: {
-            touchZone: {
+            touchNavigation: {
                 behaviorClass: TouchNavigationBehavior
+            },
+            keyboardNavigation: {
+                behaviorClass: KeyboardNavigationBehavior
             }
         },
         template: _.template(template),
@@ -84,7 +84,9 @@ define(function(require) {
                 }
             }, this);
 
-            var keyup_cb = this.onKeypress.bind(this);
+            var keyup_cb = (function(ev) {
+                this.triggerMethod('keypressed', ev);
+            }).bind(this);
             var resize_cb = _.debounce(this.onWindowResized.bind(this), 100);
             var show_arrow_cb = _.debounce(
                 this.count > 1
@@ -193,22 +195,6 @@ define(function(require) {
                 this.showNextPicture();
             } else {
                 this.showPreviousPicture();
-            }
-            return false;
-        },
-        onKeypress: function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            switch (e.which) {
-                case ESC_KEY:
-                    this.close();
-                    break;
-                case NEXT_KEY:
-                    this.showNextPicture();
-                    break;
-                case PREV_KEY:
-                    this.showPreviousPicture();
-                    break;
             }
             return false;
         },
