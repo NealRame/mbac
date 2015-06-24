@@ -175,8 +175,8 @@ define(function(require) {
         },
         close: function() {
             this.$el.fadeOut((function() {
-                this.remove();
                 this.trigger('closed');
+                this.remove();
             }).bind(this));
         },
         onForwardClick: function(e) {
