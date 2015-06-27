@@ -81,7 +81,7 @@ exports.instance = function() {
         });
 
         // - development env will print stacktrace
-        app.use(function(err, req, res, next) {
+        app.use(function(err, req, res, next) { // eslint-disable-line no-unused-vars
             var error = _.defaults(
                 _.pick(err, 'message', 'status'),
                 {
