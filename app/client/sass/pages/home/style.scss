@@ -69,6 +69,7 @@ table.schedule {
     width: 100%;
     z-index: 2;
     tr {
+        background: none;
         margin: 0;
         td {
             border: none;
@@ -76,7 +77,7 @@ table.schedule {
             &.center {
                 & > hr {
                     border: none;
-                    border-bottom: 2px dotted #999;
+                    border-bottom: 2px dotted $light-gray;
                     height: 1ex;
                     margin: 0;
                     margin-bottom: 1ex;
