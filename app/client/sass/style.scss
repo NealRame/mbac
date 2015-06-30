@@ -150,7 +150,7 @@ section.wrapper {
         background-color: $green;
         color: $white;
         z-index: 2;
-        & > article > header > h1{
+        article > header > h1{
             color: $light-gray;
         }
     }
@@ -158,7 +158,7 @@ section.wrapper {
         background-color: $blue;
         color: $white;
         z-index: 2;
-        & > article > header > h1{
+        article > header > h1{
             color: $light-gray;
         }
         a {
@@ -169,7 +169,7 @@ section.wrapper {
         background-color: $yellow;
         color: $black;
         z-index: 2;
-        & > article > header > h1{
+        article > header > h1{
             color: $gray;
         }
         a:not(.button) {
@@ -180,7 +180,7 @@ section.wrapper {
         background-color: $purple;
         color: $white;
         z-index: 2;
-        & > article > header > h1{
+        article > header > h1{
             color: $gray;
         }
         a {
