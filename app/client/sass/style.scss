@@ -172,11 +172,8 @@ section.wrapper {
         & > article > header > h1{
             color: $gray;
         }
-        a {
+        a:not(.button) {
             color: $blue;
-        }
-        a.button {
-            color: $button-font-color;
         }
     }
     &.purple-filled {
@@ -187,7 +184,7 @@ section.wrapper {
             color: $gray;
         }
         a {
-            color: $blue;
+            color: $white;
         }
     }
     overflow: auto;
