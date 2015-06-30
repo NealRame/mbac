@@ -39,10 +39,10 @@ define(function(require) {
             var touch = ev.originalEvent.changedTouches[0];
             ev.preventDefault();
             ev.stopPropagation();
-            if (this.touchOrigin) {
+            if (this.touchOrigin.id === touch.identifier) {
                 Marionette.triggerMethod.call(
                     this.view,
-                    this.touchOrigin.id === touch.identifier
+                    this.touchOrigin.x < touch.screenX
                         ? 'nextItem'
                         : 'previousItem'
                 );
