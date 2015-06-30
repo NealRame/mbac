@@ -9,7 +9,7 @@ mixin picture-item(picture)
         img(src=picture.thumbnailPath())
 
 block content
-    section.wrapper
+    section.wrapper.blue-filled
         article
             header
                 h1: | #{achievement.name}
@@ -18,5 +18,8 @@ block content
                     ul(style='display: none;')
                         each picture in achievement.pictures
                             +picture-item(picture)
+    section.wrapper
+        article
+            section
                 #description-wrapper
                     p: | #{achievement.description}
