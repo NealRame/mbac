@@ -1,9 +1,11 @@
+'use strict';
+
 // error.js
 // ========
 // - author: Neal.Rame. <contact@nealrame.com>
 // -   date: Sun Jul 27 00:00:00 CEST 2014
 
-var util = require('util');
+const util = require('util');
 
 function DBError(message) {
     if (this instanceof DBError) {
