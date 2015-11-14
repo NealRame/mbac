@@ -54,7 +54,6 @@
           "capIsNew": false
         }
       ],
-      "no-var": 2,
       "quotes": [
         1,
         "single"
