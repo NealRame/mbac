@@ -19,10 +19,20 @@
 
 const _ = require('underscore');
 const debug = require('debug')('mbac:config');
-const error = require('error');
 const format = require('util').format;
 const fs = require('fs');
 const path = require('path');
+
+const db_config_error_message = [
+    'Database configuration missing!',
+    'Please provide a "database.conf.json" in the "config" directory.',
+    'See "doc/config.md" for more information.'
+].join('\n');
+const app_config_error = [
+    'Database configuration missing!',
+    'Please provide a "database.conf.json" in the "config" directory.',
+    'See "doc/config.md" for more information.'
+].join('\n');
 
 const config_dir = path.join(__dirname, '..', '..', 'config');
 const config = {
@@ -113,13 +123,13 @@ if (!(typeof config.database === 'object'
         && config.database.name
         && config.database.user
         && config.database.password)) {
-    throw new error.DBConfigError();
+    throw new Error(db_config_error_message);
 }
 
-if (!(typeof config.server ===  'object'
+if (!(typeof config.server === 'object'
         && config.server.address
         && config.server.port)) {
-    throw new error.AppConfigError();
+    throw new Error(app_config_error);
 }
 
 config.database.__defineGetter__('URI', function() {
