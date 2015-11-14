@@ -1,3 +1,5 @@
+'use strict';
+
 /* eslint-disable no-underscore-dangle */
 
 /// config.js
@@ -15,15 +17,15 @@
 /// - database
 /// - server
 
-var _ = require('underscore');
-var debug = require('debug')('mbac:config');
-var error = require('error');
-var format = require('util').format;
-var fs = require('fs');
-var path = require('path');
+const _ = require('underscore');
+const debug = require('debug')('mbac:config');
+const error = require('error');
+const format = require('util').format;
+const fs = require('fs');
+const path = require('path');
 
-var config_dir = path.join(__dirname, '..', '..', 'config');
-var config = {
+const config_dir = path.join(__dirname, '..', '..', 'config');
+const config = {
     env: process.env.NODE_ENV || 'development'
 };
 
@@ -45,8 +47,8 @@ var config = {
 fs.readdirSync(config_dir).forEach(function (file) {
     file = path.join(config_dir, file);
     if (path.extname(file) === '.json') {
-        var module = path.basename(file, '.conf.json');
-        var o = JSON.parse(fs.readFileSync(file));
+        const module = path.basename(file, '.conf.json');
+        const o = JSON.parse(fs.readFileSync(file));
 
         debug('loading: ' + module);
         config[module] = _.defaults(o[config.env] || {}, o.common);
