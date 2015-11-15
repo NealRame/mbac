@@ -1,32 +1,33 @@
-// api/pictures
-// ------------
-// - author: Neal.Rame. <contact@nealrame.com>
-// -   date: Thu Jan 22 12:56:31 CET 2015
+'use strict';
 
-var _ = require('underscore');
+/// api/pictures
+/// ------------
+/// - author: Neal.Rame. <contact@nealrame.com>
+/// -   date: Thu Jan 22 12:56:31 CET 2015
 
-var FormidableGrid = require('formidable-grid');
-var Picture = require('models/picture');
+const _ = require('underscore');
 
-var api = require('common/api');
-var express = require('express');
-var mongoose = require('mongoose');
+const FormidableGrid = require('formidable-grid');
+const Picture = require('models/picture');
 
-var mongo = mongoose.mongo;
-var router = express.Router();
+const api = require('common/api');
+const express = require('express');
+const mongoose = require('mongoose');
+
+const mongo = mongoose.mongo;
+const router = express.Router();
 
 router
-    .param('id', function(req, res, next, id) {
-        Picture
-            .findById(id)
-            .exec()
-            .then(api.valueChecker(api.error404))
-            .then(function(picture) {
-                req.picture = picture;
-                next();
-            })
-            .then(null, next);
-    });
+    .param('id', (req, res, next, id) => Picture
+        .findById(id)
+        .exec()
+        .then(api.exist)
+        .then((picture) => {
+            req.picture = picture;
+            next();
+        })
+        .then(null, next)
+    );
 
 router
     .route('/')
@@ -47,12 +48,12 @@ router.use(api.authenticationChecker());
 router
     .route('/')
     .post(function(req, res, next) {
-        var form = new FormidableGrid(req.db, mongo, {
+        const form = new FormidableGrid(req.db, mongo, {
             accepted_mime_types: [/image\/.*/]
         });
         form.parse(req)
             .then(function(form_data) {
-                var files = _.chain(form_data)
+                const files = _.chain(form_data)
                     .filter(function(part) {
                         return part.field === 'files';
                     })
