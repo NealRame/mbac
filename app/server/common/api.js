@@ -1,3 +1,5 @@
+'use strict';
+
 /// common/api.js
 /// =============
 /// - author: Neal.Rame. <contact@nealrame.com>
@@ -5,7 +7,7 @@
 ///
 /// Provides common helper for API controllers.
 
-var _ = require('underscore');
+const _ = require('underscore');
 
 function error(err, status) {
     if (_.isString(err)) {
@@ -169,7 +171,7 @@ module.exports = {
     /// **Returns:**
     /// - `Promise`.
     valueChecker: function(fallback) {
-        var fallback_value = value(fallback);
+        const fallback_value = value(fallback);
         return function(v) {
             /*eslint-disable eqeqeq*/
             if (v == undefined) { // true if v is null or undefined
