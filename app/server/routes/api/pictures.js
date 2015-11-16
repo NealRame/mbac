@@ -35,7 +35,7 @@ router
     .route('/:id')
     .get((req, res) => res.send(req.picture));
 
-// router.use(api.authenticationChecker());
+router.use(api.authenticationChecker());
 
 function form_data_to_pictures_data(form_data) {
     return (form_data
