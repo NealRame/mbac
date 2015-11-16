@@ -1,3 +1,5 @@
+'use strict';
+
 /* eslint-disable no-underscore-dangle*/
 
 /// models/Picture
@@ -5,26 +7,26 @@
 /// - author: Neal.Rame. <contact@nealrame.com>
 /// -   date: Mon Jan 19 22:25:36 CET 2015
 
-var _ = require('underscore');
-var async = require('async');
-var common = require('common');
-var debug = require('debug')('mbac:models.Picture');
-var GridFs = require('gridfs');
-var gm = require('gm');
-var mongo = require('mongodb');
-var mongoose = require('mongoose');
-var path = require('path');
-var util = require('util');
+const _ = require('underscore');
+const async = require('async');
+const common = require('common');
+const debug = require('debug')('mbac:models.Picture');
+const GridFs = require('gridfs');
+const gm = require('gm');
+const mongo = require('mongodb');
+const mongoose = require('mongoose');
+const path = require('path');
+const util = require('util');
 
-var make_callback = common.async.make_callback;
-var nodify = common.async.nodify;
-var Schema = mongoose.Schema;
+const make_callback = common.async.make_callback;
+const nodify = common.async.nodify;
+const Schema = mongoose.Schema;
 
-var Picture = null;
+let Picture = null;
 
 /// ### Fields
 
-var PictureSchema = new Schema({
+const PictureSchema = new Schema({
     /// #### `Picture#date`
     /// Date of creation of this picture. Default value is 'Date.now'.
     date: {
@@ -63,7 +65,7 @@ var PictureSchema = new Schema({
 
 PictureSchema.pre('remove', function(next) {
     debug(util.format('removing %s', this._id.toString()));
-    var gfs = new GridFs(mongo, mongoose.connection.db);
+    const gfs = new GridFs(mongo, mongoose.connection.db);
     _.chain(this)
         .pick('original', 'thumbnail')
         .each(function(file_id) {
@@ -90,16 +92,16 @@ PictureSchema.pre('remove', function(next) {
 PictureSchema.static('create', function(file, cb) {
     debug(util.format('create picture with %s', util.inspect(file)));
     if (_.isArray(file)) {
-        return nodify(new Promise(function(resolve, reject) {
+        return nodify(new Promise((resolve, reject) => {
             async.mapSeries(file, Picture.create, make_callback(resolve, reject));
         }), cb);
     }
-    var promise = new Promise(function(resolve, reject) {
-        var gfs = new GridFs(mongo, mongoose.connection.db);
-        var orig_id = _.isString(file) ? new mongo.ObjectId(file) : file;
-        var thmb_id = new mongo.ObjectId();
-        var istream = gfs.createReadStream(orig_id);
-        var ostream = gfs.createWriteStream(thmb_id, {
+    const promise = new Promise((resolve, reject) => {
+        const gfs = new GridFs(mongo, mongoose.connection.db);
+        const orig_id = _.isString(file) ? new mongo.ObjectId(file) : file;
+        const thmb_id = new mongo.ObjectId();
+        const istream = gfs.createReadStream(orig_id);
+        const ostream = gfs.createWriteStream(thmb_id, {
             content_type: 'image/png'
         });
         ostream
@@ -108,7 +110,7 @@ PictureSchema.static('create', function(file, cb) {
                 debug('end of thumbnail', thmb_id);
                 gfs.closeAsync(ostream.gs)
                     .then(function() {
-                        var picture = new Picture({
+                        const picture = new Picture({
                             original: orig_id,
                             thumbnail: thmb_id
                         });
@@ -131,12 +133,12 @@ PictureSchema.static('create', function(file, cb) {
 ///
 /// **Return:**
 /// - `Promise` if no callback is provided, `undefined` otherwise.
-PictureSchema.static('read', function(id, cb) {
+PictureSchema.static('read', (id, cb) => {
     if (_.isFunction(id)) {
         cb = id;
         id = null;
     }
-    var promise = new Promise(function(resolve, reject) {
+    const promise = new Promise((resolve, reject) => {
         (_.isNull(id) ? Picture.find() : Picture.findById(id))
             .exec(make_callback(resolve, reject));
     });
@@ -152,13 +154,13 @@ PictureSchema.static('read', function(id, cb) {
 ///
 /// **Return:**
 /// - `Promise` if no callback is provided, `undefined` otherwise.
-PictureSchema.static('delete', function(id, cb) {
+PictureSchema.static('delete', (id, cb) => {
     if (_.isArray(id)) {
         return nodify(Promise.all(_.map(id, Picture.delete)), cb);
     }
-    var promise = Picture.read(id).then(function(picture) {
+    const promise = Picture.read(id).then((picture) => {
         if (picture) {
-            return new Promise(function(resolve, reject) {
+            return new Promise((resolve, reject) => {
                 picture.remove(make_callback(resolve, reject));
             });
         }
