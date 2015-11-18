@@ -8,6 +8,7 @@
 /// Provides common helper for API controllers.
 
 const _ = require('underscore');
+const config = require('config');
 
 function error(err, status) {
     if (_.isString(err)) {
@@ -45,6 +46,9 @@ function error_500(err) {
 }
 
 function is_authenticated(res) {
+    if (config.env === 'development' && !!process.env.BYPASS_AUTH) {
+        return true;
+    }
     return res.locals.loggedIn;
 }
 
