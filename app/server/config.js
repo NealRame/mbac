@@ -19,7 +19,6 @@
 
 const _ = require('underscore');
 const debug = require('debug')('mbac:config');
-const format = require('util').format;
 const fs = require('fs');
 const path = require('path');
 
@@ -132,20 +131,18 @@ if (!(typeof config.server === 'object'
     throw new Error(app_config_error);
 }
 
-config.database.__defineGetter__('URI', function() {
-    return format(
-        'mongodb://%s:%d/%s',
-        this.host, this.port, this.name
-    );
+Object.defineProperty(config.database, 'URI', {
+    enumerable: true,
+    get: function() {
+        return `mongodb://${this.host}:${this.port}/${this.name}`;
+    }
 });
 
-config.database.__defineGetter__('fullURI', function() {
-    return format(
-        'mongodb://%s:%s@%s:%d/%s',
-        this.user, this.password,
-        this.host, this.port,
-        this.name
-    );
+Object.defineProperty(config.database, 'fullURI', {
+    enumerable: true,
+    get: function() {
+        return `mongodb://${this.user}:${this.password}@${this.host}:${this.port}/${this.name}`;
+    }
 });
 
 module.exports = config;
