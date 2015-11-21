@@ -1,6 +1,7 @@
 'use strict';
 
 /// pages.js
+/// ========
 /// - author: Neal.Rame. <contact@nealrame.com>
 /// -   date: Thu Apr  2 13:06:10 CEST 2015
 

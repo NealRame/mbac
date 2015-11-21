@@ -1,6 +1,7 @@
 'use strict';
 
 /// front.js
+/// ========
 /// - author: Neal.Rame. <contact@nealrame.com>
 /// -   date:  Fri Apr  3 01:05:57 2015
 
