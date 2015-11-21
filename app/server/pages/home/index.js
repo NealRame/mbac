@@ -1,23 +1,23 @@
-// pages/home/front.js
-// ===================
-// - author: Neal.Rame. <contact@nealrame.com>
-// -  date:  Tue May 12 20:57:49 CEST 2015
+'use strict';
 
-var _ = require('underscore');
-var debug = require('debug')('mbac:routes:home');
-var express = require('express');
-var mongoose = require('mongoose');
-var path = require('path');
-var util = require('util');
+/// pages/home/front.js
+/// ===================
+/// - author: Neal.Rame. <contact@nealrame.com>
+/// -  date:  Tue May 12 20:57:49 CEST 2015
 
-var router = express.Router();
-var page_template = path.join(__dirname, 'views', 'front.jade');
+const existy = require('common/functional').existy;
+const debug = require('debug')('mbac:routes:home');
+const express = require('express');
+const mongoose = require('mongoose');
+const path = require('path');
 
+const router = express.Router();
+const page_template = path.join(__dirname, 'views', 'front.jade');
 
 function last_achievement(count) {
-    return new Promise(function(resolve, reject) {
-        var Achievement = mongoose.model('Achievement');
-        if (_.isUndefined(Achievement)) {
+    return new Promise((resolve) => {
+        const Achievement = mongoose.model('Achievement');
+        if (existy(Achievement)) {
             resolve([]);
         } else {
             Achievement.published(count)
@@ -33,14 +33,14 @@ function last_achievement(count) {
 
 router
     // GET achievements page.
-    .get('/', function(req, res, next) {
-        last_achievement(3)
-            .then(function(achievements) {
-                debug(util.format('-- Found %s last achievement(s)', achievements.length));
-                res.locals.achievements = achievements;
-                res.render(page_template);
-            });
-    });
+    .get('/', (req, res, next) => last_achievement(3)
+        .then((achievements) => {
+            debug(`-- Found ${achievements.length} last achievement(s)`);
+            res.locals.achievements = achievements;
+            res.render(page_template);
+        })
+        .then(null, next)
+    );
 
 module.exports = {
     front: router
