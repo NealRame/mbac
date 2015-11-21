@@ -5,7 +5,6 @@
 /// - author: Neal.Rame. <contact@nealrame.com>
 /// -  date:  Tue May 12 20:57:49 CEST 2015
 
-const existy = require('common/functional').existy;
 const debug = require('debug')('mbac:routes:home');
 const express = require('express');
 const mongoose = require('mongoose');
@@ -17,7 +16,7 @@ const page_template = path.join(__dirname, 'views', 'front.jade');
 function last_achievement(count) {
     return new Promise((resolve) => {
         const Achievement = mongoose.model('Achievement');
-        if (existy(Achievement)) {
+        if (Achievement != null) {
             resolve([]);
         } else {
             Achievement.published(count)
