@@ -64,4 +64,20 @@ define(function(require) {
         SubscribeDialog.open();
         return false;
     });
+
+    $('.notice-close').click(function(ev) {
+        $(this).parent().fadeOut(250, function() {
+            var container = $('#notices');
+            if (container.children().length > 1) {
+                $(this).off().remove();
+            } else {
+                $(this).off();
+                container.animate({height: 0}, 250, function() {
+                    $(this).remove();
+                });
+            }
+        });
+        ev.stopPropagation();
+        ev.preventDefault();
+    });
 });
