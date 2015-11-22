@@ -1,0 +1,7 @@
+@import "../../settings";
+
+$notice-bg-color: #01DF74;
+$notice-border-color: lighten($notice-bg-color, 5);
+$notice-alert-bg-color: #FA8258;
+$notice-alert-border-color: lighten($notice-alert-bg-color, 5);
+$notice-fg-color: white;
