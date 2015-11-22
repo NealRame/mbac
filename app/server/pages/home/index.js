@@ -11,7 +11,6 @@ const log_error = require('logger').error;
 const mongoose = require('mongoose');
 const path = require('path');
 
-
 const router = express.Router();
 const page_template = path.join(__dirname, 'views', 'front.jade');
 
