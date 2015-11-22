@@ -1,4 +1,4 @@
-@import "../../settings";
+@import "settings";
 @import "foundation/components/block-grid";
 @import "foundation/components/button-groups";
 @import "foundation/components/forms";
@@ -8,6 +8,52 @@
 body > .splash {
     display: none;
 }
+
+#notices {
+    height: 2em;
+    position: relative;
+    .notice {
+        background-color: $notice-bg-color;
+        color: $notice-fg-color;
+        height: 2em;
+        line-height: 2em;
+        position: absolute;
+        text-align: center;
+        width: 100%;
+        .notice-close {
+            border-left: 1px solid $notice-border-color;
+            color: $notice-fg-color;
+            cursor: pointer;
+            font-size: 1em;
+            height: 2em;
+            opacity: 0;
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: 2em;
+            transition: opacity .25s ease-out;
+            &::after {
+                content: '\f00d';
+                font-family: FontAwesome;
+                line-height: 2em;
+            }
+        }
+        &:hover {
+            .notice-close {
+                opacity: 1;
+                transition: opacity .25s ease-out;
+            }
+        }
+        &.alert {
+            background-color: $notice-alert-bg-color;
+            border: solid 1px $notice-alert-border-color;
+            .notice-close {
+                border-left: 1px solid $notice-alert-border-color;
+            }
+        }
+    }
+}
+
 @media #{$medium-up} {
     body > .splash {
         background-color: $splash-background-color;
