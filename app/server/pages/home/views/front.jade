@@ -17,6 +17,15 @@ block content
             span B
             span à
             span C...
+
+    if notifications.length > 0
+        section.wrapper
+            div#notices
+                each notification in notifications
+                    div.notice
+                        span.notice-close
+                        | #{notification.description}
+    
     section.wrapper
         article
             header
