@@ -66,17 +66,14 @@ define(function(require) {
     });
 
     $('.notice-close').click(function(ev) {
-        $(this).parent().fadeOut(250, function() {
-            var container = $('#notices');
-            if (container.children().length > 1) {
-                $(this).off().remove();
-            } else {
-                $(this).off();
-                container.animate({height: 0}, 250, function() {
-                    $(this).remove();
-                });
-            }
-        });
+        $(this).parent().animate({opacity: 0}, 250)
+            .promise()
+            .then(function(notice) {
+                return $(notice).animate({height: 0}, 250).promise();
+            })
+            .then(function(notice) {
+                notice.off().remove();
+            });
         ev.stopPropagation();
         ev.preventDefault();
     });
