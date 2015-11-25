@@ -34,7 +34,7 @@ function read_all(req, res) {
             published: true
         });
     }
-    return (Notification.find(query).exec();
+    return Notification.find(query).exec();
 }
 
 function notification_create(req, res, next) {
@@ -69,13 +69,13 @@ router
 
 router
     .route('/notifications')
-    .post(achievement_create)
+    .post(notification_create)
     .all(api.forbidden());
 
 router
     .route('/notifications/:id')
-    .put(achievement_update)
-    .delete(achievement_delete)
+    .put(notification_update)
+    .delete(notification_delete)
     .all(api.forbidden());
 
 module.exports = router;
