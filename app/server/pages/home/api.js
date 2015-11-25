@@ -61,19 +61,19 @@ function notification_delete(req, res, next) {
 }
 
 router
-    .get('/', notification_read)
-    .get('/:id', notification_read);
+    .get('/notifications', notification_read)
+    .get('/notifications/:id', notification_read);
 
 router
     .use(api.authenticationChecker());
 
 router
-    .route('/')
+    .route('/notifications')
     .post(achievement_create)
     .all(api.forbidden());
 
 router
-    .route('/:id')
+    .route('/notifications/:id')
     .put(achievement_update)
     .delete(achievement_delete)
     .all(api.forbidden());
