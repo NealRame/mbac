@@ -132,6 +132,7 @@ module.exports = function(grunt) {
             compile: {
                 options: {
                     includePaths: [
+                        '<%= sass_libs_dir %>',
                         '<%= sass_libs_dir %>/foundation',
                         '<%= sass_libs_dir %>/font-awesome'
                     ],
@@ -147,6 +148,7 @@ module.exports = function(grunt) {
                         'pages/achievements/admin_style.scss',
                         'pages/achievements/style.scss',
                         'pages/contact/style.scss',
+                        'pages/home/admin_style.scss',
                         'pages/home/style.scss',
                         'pages/mbac/style.scss',
                         'pages/plan/style.scss',
