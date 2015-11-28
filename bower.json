@@ -27,7 +27,8 @@
     "requirejs-text": "~2.0.12",
     "bluebird": "~2.9.13",
     "marked": "~0.3.3",
-    "requirejs-plugins": "~1.0.3"
+    "requirejs-plugins": "~1.0.3",
+    "foundation-datepicker": "~1.5.0"
   },
   "exportsOverride": {
     "backbone": {
@@ -54,6 +55,13 @@
       "app/client/sass/libs/foundation/foundation": "scss/foundation/*.scss",
       "app/client/sass/libs/foundation/foundation/components": "scss/foundation/components/*.scss",
       "app/client/js/libs": "js/foundation.js"
+    },
+    "foundation-datepicker": {
+      "app/client/sass/libs/": "css/foundation-datepicker.scss",
+      "app/client/js/libs": [
+          "js/locales/foundation-datepicker.fr.js",
+          "js/foundation-datepicker.js"
+      ]
     },
     "jquery": {
       "app/client/js/libs": "dist/jquery.js"
