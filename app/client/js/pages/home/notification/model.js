@@ -6,6 +6,21 @@ define(function(require) {
     'use strict';
 
     var Backbone = require('backbone');
+    var functional = require('common/functional');
+
+    function format(date) {
+        var options = {
+            year: 'numeric',
+            month: 'numeric',
+            day: 'numeric',
+            hour: 'numeric',
+            minute: 'numeric',
+            second: 'numeric',
+            timeZone: 'UTC',
+            hour12: false
+        };
+        return functional.existy(date) ? date.toLocaleString('fr-FR', options) : '-';
+    }
 
     return Backbone.Model.extend({
         idAttribute: '_id',
@@ -23,6 +38,12 @@ define(function(require) {
         startDate: function() {
             return new Date(this.get('start'));
         },
+        startDateString: function() {
+            return format(this.startDate());
+        },
+        setStartDate: function(date) {
+            this.set('start', date.getTime());
+        },
         startTime: function() {
             return this.startDate().getTime();
         },
@@ -30,6 +51,12 @@ define(function(require) {
             if (this.has('end')) {
                 return new Date(this.get('end'));
             }
+        },
+        endDateString: function() {
+            return format(this.endDate());
+        },
+        setEndDate: function(date) {
+            this.set('end', date.getTime());
         },
         endTime: function() {
             var d = this.endDate();
