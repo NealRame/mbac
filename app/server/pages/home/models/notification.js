@@ -7,6 +7,7 @@
 /// - author: Neal.Rame. <contact@nealrame.com>
 /// -   date: Sun Nov 22 02:39:47 CET 2015
 
+const debug = require('debug')('mbac:models.Notification');
 const mongoose = require('mongoose');
 const nodify = require('common').async.nodify;
 const make_callback = require('common').async.make_callback;
@@ -48,7 +49,7 @@ const NotificationSchema = new Schema({
 /// **Return:**
 /// - `Promise`.
 NotificationSchema.static('active', function(cb) {
-    const now = Date.now();
+    const now = Date.now() - (new Date().getTimezoneOffset()*60000);
     const promise = new Promise((resolve, reject) => {
         Notification.find({
             start: {$lte: now},
@@ -56,6 +57,7 @@ NotificationSchema.static('active', function(cb) {
             published: true
         }).exec(make_callback(resolve, reject));
     });
+    debug(`-- Notification.active(): current date is ${now}`);
     return nodify(promise, cb);
 });
 
