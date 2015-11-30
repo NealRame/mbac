@@ -1,3 +1,82 @@
+@import "./settings";
 @import "foundation/components/button-groups";
+@import "foundation/components/forms";
+@import "foundation/components/switches";
 @import "foundation/components/reveal";
 @import "foundation-datepicker";
+
+.notification-editor {
+    border-bottom: 1px solid $light-gray;
+    margin-bottom: 1em;
+    .switch {
+        @include switch-base($switch-paddle-transition-speed, $switch-paddle-transition-ease);
+        @include switch-size(1.5rem);
+        @include switch-style(#fff, $green, true, true);
+        width: 3rem;
+        margin: 0 auto;
+        margin-top: 0.01rem;
+        label {
+            margin: 0;
+        }
+    }
+}
+
+#notifications {
+    margin: 0;
+    .notification {
+        background-color: $notice-bg-color;
+        list-style: none;
+        padding: 0.25rem;
+        position: relative;
+        text-align: center;
+        .active-mark {
+            color: lighten($gray, 15);
+            float: left;
+            font-size: 0.75rem;
+            margin-top: .50rem;
+        }
+        .active-mark[data-state='active'] {
+            color: $green;
+        }
+        .metadata {
+            .start-date-label, .end-date-label, .published-label {
+                color: lighten(black, 75);
+                float: left;
+                font-size: .9rem;
+                margin-top: .25rem;
+                width: 33.33%;
+            }
+        }
+        .action {
+            color: inherit;
+            float: right;
+            font-family: FontAwesome;
+            width: 1.5em;
+            opacity: 0;
+            margin-left: .25em;
+            text-decoration: none;
+            transition: background-color .25s ease-out;
+            transition: opacity .25s ease-out;
+            &[data-action='remove'] {
+                &::after {
+                    content: '\f00d';
+                }
+            }
+            &[data-action=edit] {
+                &::after {
+                    content: '\f040';
+                }
+            }
+        }
+        &:hover {
+            .action {
+                opacity: 1;
+                transition: opacity .25s ease-out;
+            }
+            .action:hover {
+                background-color: $notice-border-color;
+                transition: background-color .25s ease-out;
+            }
+        }
+    }
+}
