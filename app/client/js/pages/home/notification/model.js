@@ -29,11 +29,19 @@ define(function(require) {
             start: Date.now(),
             description: ''
         },
-        text: function() {
+        message: function() {
             return this.get('description');
+        },
+        setMessage: function(msg) {
+            this.set('description', msg);
+            return this;
         },
         published: function() {
             return this.get('published');
+        },
+        setPublished: function(published) {
+            this.set('published', published);
+            return this;
         },
         startDate: function() {
             return new Date(this.get('start'));
@@ -43,6 +51,7 @@ define(function(require) {
         },
         setStartDate: function(date) {
             this.set('start', date.getTime());
+            return this;
         },
         startTime: function() {
             return this.startDate().getTime();
@@ -57,6 +66,7 @@ define(function(require) {
         },
         setEndDate: function(date) {
             this.set('end', date.getTime());
+            return this;
         },
         endTime: function() {
             var d = this.endDate();
