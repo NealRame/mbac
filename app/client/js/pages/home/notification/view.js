@@ -21,7 +21,11 @@ define(function(require) {
         template: _.template(itemTemplate),
         serializeData: function() {
             return {
-                text: this.model.text()
+                message: this.model.message(),
+                published: this.model.published(),
+                state: this.model.active() ? 'active':'inactive',
+                startDate: this.model.startDateString(),
+                endDate: this.model.endDateString()
             };
         },
         onActionRequested: function(e) {

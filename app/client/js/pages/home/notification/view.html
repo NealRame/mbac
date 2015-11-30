@@ -1,3 +1,17 @@
-<span><%= text %></span>
-<a class="action" href='#' data-action='edit'><i class="fa fa-pencil"></i></a>
-<a class="action" href='#' data-action='remove'><i class="fa fa-trash"></i></a>
+<span class='active-mark' data-state='<% print(state)%>'>
+    <i class='fa fa-circle'></i>
+</span>
+<span><%= message %></span>
+<a class='action' href='#' data-action='remove'></a>
+<a class='action' href='#' data-action='edit'></a>
+<div class='metadata'>
+    <div class='start-date-label'>
+        Début: <%= startDate %>
+    </div>
+    <div class='end-date-label'>
+        Fin: <%= endDate %>
+    </div>
+    <div class='published-label'>
+        Publiée: <% print(published ? 'oui':'non') %>
+    </div>
+</div>
