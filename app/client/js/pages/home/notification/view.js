@@ -26,7 +26,7 @@ define(function(require) {
             return {
                 message: this.model.message(),
                 published: this.model.published(),
-                state: this.model.active() ? 'active':'inactive',
+                state: this.model.isActive() ? 'active':'inactive',
                 startDate: this.model.startDateString(),
                 endDate: this.model.endDateString()
             };

@@ -75,7 +75,7 @@ define(function(require) {
             }
             return Number.MAX_VALUE;
         },
-        active: function() {
+        isActive: function() {
             var now = Date.now();
             return this.published() && now >= this.startTime() && now < this.endTime();
         }
