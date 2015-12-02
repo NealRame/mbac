@@ -77,7 +77,7 @@ define(function(require) {
         },
         active: function() {
             var now = Date.now();
-            return now >= this.startTime() && now < this.endTime();
+            return this.published() && now >= this.startTime() && now < this.endTime();
         }
     });
 });
