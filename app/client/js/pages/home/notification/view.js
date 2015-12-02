@@ -19,6 +19,9 @@ define(function(require) {
             'click @ui.action': 'onActionRequested'
         },
         template: _.template(itemTemplate),
+        initialize: function() {
+            this.listenTo(this.model, 'change', this.render);
+        },
         serializeData: function() {
             return {
                 message: this.model.message(),
