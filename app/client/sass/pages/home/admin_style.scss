@@ -42,7 +42,7 @@
                 color: $notification-active-color;
             }
             .message {
-                background-color: $notice-bg-color;
+                background-color: $notification-bg-color;
             }
             .metadata {
                 .start-date-label, .end-date-label, .published-label {
@@ -80,7 +80,7 @@
                     transition: opacity .25s ease-out;
                 }
                 .action:hover {
-                    background-color: $notice-border-color;
+                    background-color: $notification-border-color;
                     transition: background-color .25s ease-out;
                 }
             }
