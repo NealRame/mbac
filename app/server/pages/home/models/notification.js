@@ -17,6 +17,15 @@ let Notification = null;
 
 /// ### Fields
 const NotificationSchema = new Schema({
+    /// #### Notification#description
+    /// Description of this Notification.
+    message: String,
+    /// #### Notification#published
+    /// Published flag.
+    published: {
+        default: false,
+        type: Boolean
+    },
     /// #### Notification#start
     /// The start date of this `Notification`. Default value is `Date.now`.
     start: {
@@ -28,16 +37,7 @@ const NotificationSchema = new Schema({
     /// notification never ends.
     end: {
         type: Number
-    },
-    /// #### Notification#published
-    /// Published flag.
-    published: {
-        default: false,
-        type: Boolean
-    },
-    /// #### Notification#description
-    /// Description of this Notification.
-    description: String
+    }
 });
 
 /// #### `Notification.active([cb])`

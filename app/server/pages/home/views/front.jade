@@ -9,6 +9,11 @@ mixin achievement-item(achievement)
         a(href='/achievements/#{achievement.id}')
             figure.crop(title='#{achievement.name}' data-uri='#{thumbnail}')
 
+mixin notification-item(notification)
+    li.notification
+        a.notification-close
+        | #{notification.message}
+
 extends /layout
 block content
     div.splash
@@ -20,11 +25,9 @@ block content
 
     if notifications.length > 0
         section.wrapper
-            div#notices
+            ul#notifications
                 each notification in notifications
-                    div.notice
-                        span.notice-close
-                        | #{notification.description}
+                    +notification-item(notification)
     
     section.wrapper
         article

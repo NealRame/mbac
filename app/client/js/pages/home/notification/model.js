@@ -27,13 +27,13 @@ define(function(require) {
         defaults: {
             published: false,
             start: Date.now(),
-            description: ''
+            message: ''
         },
         message: function() {
-            return this.get('description');
+            return this.get('message');
         },
         setMessage: function(msg) {
-            this.set('description', msg);
+            this.set('message', msg);
             return this;
         },
         published: function() {
