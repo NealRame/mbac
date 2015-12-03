@@ -44,7 +44,7 @@ define(function(require) {
             this.listenTo(this.listView, 'childview:edit', function(view, notification) {
                 NotificationEditor.open(notification);
             });
-            this.listenTo(this.listView, 'childView:remove', function(child_view, model) {
+            this.listenTo(this.listView, 'childview:remove', function(child_view, model) {
                 Dialog.prompt(
                     'Êtes vous sûr de supprimer cette notification ?',
                     {
