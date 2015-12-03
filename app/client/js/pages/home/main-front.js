@@ -65,14 +65,19 @@ define(function(require) {
         return false;
     });
 
-    $('.notice-close').click(function(ev) {
-        $(this).parent().animate({opacity: 0}, 250)
+    $('.notification-close').click(function(ev) {
+        var notifications = $('#notifications');
+        $(this).off().parent().animate({opacity: 0}, 250)
             .promise()
-            .then(function(notice) {
-                return $(notice).animate({height: 0}, 250).promise();
+            .then(function(notification) {
+                notification.remove();
             })
-            .then(function(notice) {
-                notice.off().remove();
+            .then(function() {
+                if (notifications.children().length === 0) {
+                    notifications.animate({height: 0}, 250, function() {
+                        notifications.remove();
+                    });
+                }
             });
         ev.stopPropagation();
         ev.preventDefault();
