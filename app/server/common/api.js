@@ -1,3 +1,5 @@
+'use strict';
+
 /// common/api.js
 /// =============
 /// - author: Neal.Rame. <contact@nealrame.com>
@@ -5,7 +7,8 @@
 ///
 /// Provides common helper for API controllers.
 
-var _ = require('underscore');
+const _ = require('underscore');
+const config = require('config');
 
 function error(err, status) {
     if (_.isString(err)) {
@@ -43,6 +46,9 @@ function error_500(err) {
 }
 
 function is_authenticated(res) {
+    if (config.env === 'development' && !!process.env.BYPASS_AUTH) {
+        return true;
+    }
     return res.locals.loggedIn;
 }
 
@@ -169,7 +175,7 @@ module.exports = {
     /// **Returns:**
     /// - `Promise`.
     valueChecker: function(fallback) {
-        var fallback_value = value(fallback);
+        const fallback_value = value(fallback);
         return function(v) {
             /*eslint-disable eqeqeq*/
             if (v == undefined) { // true if v is null or undefined

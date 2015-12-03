@@ -1,3 +1,5 @@
+'use strict';
+
 /*eslint-disable no-underscore-dangle*/
 
 /// models/Achievement
@@ -5,22 +7,22 @@
 /// - author: Neal.Rame. <contact@nealrame.com>
 /// -   date: Sat Apr  4 13:11:09 2015
 
-var _ = require('underscore');
-var common = require('common');
-var debug = require('debug')('mbac:models.Achievement');
-var mongoose = require('mongoose');
-var Picture = require('models/picture');
-var util = require('util');
+const _ = require('underscore');
+const common = require('common');
+const debug = require('debug')('mbac:models.Achievement');
+const mongoose = require('mongoose');
+const Picture = require('models/picture');
+const util = require('util');
 
-var make_promise = common.async.make_promise;
-var nodify = common.async.nodify;
-var ObjectId = mongoose.Schema.Types.ObjectId;
-var Schema = mongoose.Schema;
+const make_promise = common.async.make_promise;
+const nodify = common.async.nodify;
+const ObjectId = mongoose.Schema.Types.ObjectId;
+const Schema = mongoose.Schema;
 
-var Achievement = null;
+let Achievement = null;
 
 /// ### Fields
-var AchievementSchema = new Schema({
+const AchievementSchema = new Schema({
     /// #### Achievement#date
     /// Date of creation of this product. Default value is `Date.now`.
     date: {
@@ -60,11 +62,9 @@ var AchievementSchema = new Schema({
 
 AchievementSchema.pre('remove', function(next) {
     debug(util.format('removing %s', this._id.toString()));
-    _.chain(this.pictures)
-        .map(function(picture) {
-            return picture._id ? picture._id : picture;
-        })
-        .each(Picture.delete);
+    this.pictures
+        .map((picture) => picture._id ? picture._id : picture)
+        .forEach((picture) => Picture.delete(picture));
     next();
 });
 
@@ -80,23 +80,15 @@ AchievementSchema.pre('remove', function(next) {
 AchievementSchema.static('create', function(data, cb) {
     debug('creating Achievement', data);
     data = data || {};
-    var promise = Picture.create(data.files || [])
-        .then(function(pictures) {
-            return new Achievement(
-                _.extend(
-                    _.pick(data, 'date', 'name', 'description', 'tags', 'published'),
-                    {pictures: _.pluck(pictures, '_id')}
-                )
-            );
-        })
-        .then(function(achievement) {
-            return make_promise(
-                achievement.save.bind(achievement)
-            );
-        })
-        .then(function(achievements) {
-            return _.first(achievements).populate('pictures').execPopulate();
-        });
+    const promise = Picture.create(data.files || [])
+        .then((pictures) => new Achievement(
+            _.extend(
+                _.pick(data, 'date', 'name', 'description', 'tags', 'published'),
+                {pictures: _.pluck(pictures, '_id')}
+            )
+        ))
+        .then((achievement) => make_promise(achievement.save.bind(achievement)))
+        .then((achievements) => _.first(achievements).populate('pictures').execPopulate());
     return nodify(promise, cb);
 });
 
@@ -111,10 +103,8 @@ AchievementSchema.static('create', function(data, cb) {
 /// - `Promise`.
 AchievementSchema.static('read', function(id, cb) {
     debug('read');
-    var promise = Achievement.findById(id).exec()
-        .then(function(achievement) {
-            return achievement.populate('pictures').execPopulate();
-        });
+    const promise = Achievement.findById(id).exec()
+        .then((achievement) => achievement.populate('pictures').execPopulate());
     return nodify(promise, cb);
 });
 
@@ -128,15 +118,10 @@ AchievementSchema.static('read', function(id, cb) {
 /// - `Promise`.
 AchievementSchema.static('readAll', function(cb) {
     debug('readAll');
-    var promise = Achievement.find().sort('-date').exec()
-        .then(function(achievements) {
-            return Promise.all(
-                _.map(achievements)
-                    .each(function(achievement) {
-                        return achievement.populate('pictures').execPopulate();
-                    })
-            );
-        });
+    const promise = Achievement.find().sort('-date').exec()
+        .then((achievements) => Promise.all(
+            achievements.map((achievement) => achievement.populate('pictures').execPopulate())
+        ));
     return nodify(promise, cb);
 });
 
@@ -152,9 +137,8 @@ AchievementSchema.static('readAll', function(cb) {
 /// - `Promise`.
 AchievementSchema.static('patch', function(achievement, data, cb) {
     debug('patch');
-    var promise = achievement.patch(data).then(function() {
-        return achievement.populate('pictures').execPopulate();
-    });
+    const promise = achievement.patch(data)
+        .then(() => achievement.populate('pictures').execPopulate());
     return nodify(promise, cb);
 });
 
@@ -188,14 +172,12 @@ AchievementSchema.static('published', function(count, cb) {
         cb = count;
         count = null;
     }
-    var promise = new Promise(function(resolve, reject) {
+    const promise = new Promise((resolve, reject) => {
         Achievement.find({published: true, 'pictures': {$not: {$size: 0}}})
             .sort('-date')
             .limit(count || 0)
             .exec()
-            .then(function(collection) {
-                return Achievement.populate(collection, {path: 'pictures'});
-            })
+            .then((collection) => Achievement.populate(collection, {path: 'pictures'}))
             .then(resolve, reject);
     });
     return nodify(promise, cb);
@@ -212,35 +194,29 @@ AchievementSchema.static('published', function(count, cb) {
 /// - `Promise`.
 AchievementSchema.methods.patch = function(data, cb) {
     debug(util.format('patching %s with %s', this._id, util.inspect(data)));
-    var self = this;
     // Only keep pictures which are referenced both in achievement pictures and
     // in data.pictures. Others pictures are removed.
-    var pictures = _.chain(this.pictures)
-        .map(function(picture) {
-            return picture._id ? picture._id : picture;
-        })
-        .filter(function(id) {
+    const pictures = this.pictures
+        .map((picture) => picture._id ? picture._id : picture)
+        .filter((id) => {
             if (!_.any(data.pictures, id.equals.bind(id))) {
-                Picture.delete(id).catch(function(err) {
-                    debug(err); // TODO log error
-                });
+                Picture.delete(id).catch((err) => debug(err)); // TODO log error
                 return false;
             }
             return true;
-        })
-        .value();
+        });
     // Create pictures and patch the model.
-    var promise = Picture.create(data.files)
+    const promise = Picture.create(data.files)
         .then(_.partial(_.pluck, _, '_id'))
         .then(Array.prototype.concat.bind(pictures))
-        .then(function(achievement_pictures) {
-            self.set(
+        .then((achievement_pictures) => {
+            this.set(
                 _.chain(data)
                     .pick('date', 'description', 'name', 'published', 'tags')
                     .extend({pictures: achievement_pictures})
                     .value()
             );
-            return self.save();
+            return this.save();
         });
     // That's all folks see you later, bye bye !
     return nodify(promise, cb);

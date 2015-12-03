@@ -1,0 +1,41 @@
+<div class='row'>
+    <div class='small-2 columns'>
+        Message:
+    </div>
+    <div class='small-10 columns'>
+        <input id='description' type='text'>
+    </div>
+</div>
+<div class='row'>
+    <div class='small-2 columns'>
+        Début:
+    </div>
+    <div class='small-8 columns'>
+        <input id='start-date-input' type='text' readonly>
+    </div>
+    <div class='small-2 columns'>
+        <a id='start-date-button' href='#' class='button postfix'>Changer</a>
+    </div>
+</div>
+<div class='row'>
+    <div class='small-2 columns'>
+        Fin:
+    </div>
+    <div class='small-8 columns'>
+        <input id='end-date-input' type='text' readonly>
+    </div>
+    <div class='small-2 columns'>
+        <a id='end-date-button' href='#' class='button postfix'>Changer</a>
+    </div>
+</div>
+<div class='row'>
+    <div class='small-2 columns'>
+        Publiée:
+    </div>
+    <div class='small-2 small-offset-8 columns'>
+        <div class='switch'>
+            <input id='publish-switch' type='checkbox' <% print(published ? 'checked' : '') %>>
+            <label for='publish-switch'></label>
+        </div>
+    </div>
+</div>

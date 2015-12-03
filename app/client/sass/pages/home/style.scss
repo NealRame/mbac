@@ -1,4 +1,4 @@
-@import "../../settings";
+@import "settings";
 @import "foundation/components/block-grid";
 @import "foundation/components/button-groups";
 @import "foundation/components/forms";
@@ -8,6 +8,57 @@
 body > .splash {
     display: none;
 }
+
+#notices {
+    .notice {
+        overflow: auto;
+        background-color: $notice-bg-color;
+        border-bottom: 1px solid darken($notice-bg-color, 5);
+        color: $notice-fg-color;
+        height: 2em;
+        width: 100%;
+        line-height: 2em;
+        position: relative;
+        text-align: center;
+        .notice-close {
+            background-color: $notice-bg-color;
+            color: $notice-fg-color;
+            cursor: pointer;
+            line-height: 1.2em;
+            height: 1.2em;
+            width: 1.2em;
+            opacity: 0;
+            position: absolute;
+            right: 0.4em;
+            top: 0.4em;
+            transition: background-color .25s ease-out;
+            transition: opacity .25s ease-out;
+            &::after {
+                content: '\f00d';
+                font-family: FontAwesome;
+                font-size: 1em;
+            }
+        }
+        &:hover {
+            .notice-close {
+                opacity: 1;
+                transition: opacity .25s ease-out;
+                &:hover {
+                    background-color: $notice-border-color;
+                    transition: background-color .25s ease-out;
+                }
+            }
+        }
+        &.alert {
+            background-color: $notice-alert-bg-color;
+            border: solid 1px $notice-alert-border-color;
+            .notice-close {
+                border-left: 1px solid $notice-alert-border-color;
+            }
+        }
+    }
+}
+
 @media #{$medium-up} {
     body > .splash {
         background-color: $splash-background-color;
@@ -69,6 +120,7 @@ table.schedule {
     width: 100%;
     z-index: 2;
     tr {
+        background: none;
         margin: 0;
         td {
             border: none;
@@ -76,7 +128,7 @@ table.schedule {
             &.center {
                 & > hr {
                     border: none;
-                    border-bottom: 2px dotted #999;
+                    border-bottom: 2px dotted $light-gray;
                     height: 1ex;
                     margin: 0;
                     margin-bottom: 1ex;

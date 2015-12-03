@@ -1,3 +1,5 @@
+'use strict';
+
 /* eslint-disable no-underscore-dangle */
 
 /// config.js
@@ -15,15 +17,24 @@
 /// - database
 /// - server
 
-var _ = require('underscore');
-var debug = require('debug')('mbac:config');
-var error = require('error');
-var format = require('util').format;
-var fs = require('fs');
-var path = require('path');
+const _ = require('underscore');
+const debug = require('debug')('mbac:config');
+const fs = require('fs');
+const path = require('path');
 
-var config_dir = path.join(__dirname, '..', '..', 'config');
-var config = {
+const db_config_error_message = [
+    'Database configuration missing!',
+    'Please provide a "database.conf.json" in the "config" directory.',
+    'See "doc/config.md" for more information.'
+].join('\n');
+const app_config_error = [
+    'Database configuration missing!',
+    'Please provide a "database.conf.json" in the "config" directory.',
+    'See "doc/config.md" for more information.'
+].join('\n');
+
+const config_dir = path.join(__dirname, '..', '..', 'config');
+const config = {
     env: process.env.NODE_ENV || 'development'
 };
 
@@ -45,8 +56,8 @@ var config = {
 fs.readdirSync(config_dir).forEach(function (file) {
     file = path.join(config_dir, file);
     if (path.extname(file) === '.json') {
-        var module = path.basename(file, '.conf.json');
-        var o = JSON.parse(fs.readFileSync(file));
+        const module = path.basename(file, '.conf.json');
+        const o = JSON.parse(fs.readFileSync(file));
 
         debug('loading: ' + module);
         config[module] = _.defaults(o[config.env] || {}, o.common);
@@ -111,29 +122,27 @@ if (!(typeof config.database === 'object'
         && config.database.name
         && config.database.user
         && config.database.password)) {
-    throw new error.DBConfigError();
+    throw new Error(db_config_error_message);
 }
 
-if (!(typeof config.server ===  'object'
+if (!(typeof config.server === 'object'
         && config.server.address
         && config.server.port)) {
-    throw new error.AppConfigError();
+    throw new Error(app_config_error);
 }
 
-config.database.__defineGetter__('URI', function() {
-    return format(
-        'mongodb://%s:%d/%s',
-        this.host, this.port, this.name
-    );
+Object.defineProperty(config.database, 'URI', {
+    enumerable: true,
+    get: function() {
+        return `mongodb://${this.host}:${this.port}/${this.name}`;
+    }
 });
 
-config.database.__defineGetter__('fullURI', function() {
-    return format(
-        'mongodb://%s:%s@%s:%d/%s',
-        this.user, this.password,
-        this.host, this.port,
-        this.name
-    );
+Object.defineProperty(config.database, 'fullURI', {
+    enumerable: true,
+    get: function() {
+        return `mongodb://${this.user}:${this.password}@${this.host}:${this.port}/${this.name}`;
+    }
 });
 
 module.exports = config;

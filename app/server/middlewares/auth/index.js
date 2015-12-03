@@ -1,3 +1,5 @@
+'use strict';
+
 /// auth.js
 /// -------
 /// - author: Neal.Rame. <contact@nealrame.com>
@@ -7,28 +9,25 @@
 /// related local variables and provide route to handle google oauth2
 /// login and logout.
 
-var Oauth2 = require('oauth2-js');
-var User = require('models/user');
+const Oauth2 = require('oauth2-js');
+const User = require('models/user');
 
-var oauth2;
+let oauth2;
 
 exports.setup = function(app) {
-    var auth_config;
+    let auth_config;
     if (!oauth2 && (auth_config = app.get('config').auth)) {
-
         oauth2 = new Oauth2(auth_config, {
-            findUser: function(id, callback) {
+            findUser(id, callback) {
                 User.count({}).exec()
-                    .then(function(count) {
-                        return count === 0 ? User.create( {_id: id}) : User.findOne({_id: id}).exec();
-                    })
+                    .then((count) => count === 0 ? User.create( {_id: id}) : User.findOne({_id: id}).exec())
                     .then(callback.bind(null, null))
                     .then(null, callback);
             },
-            isInitialized: function(user, callback) {
+            isInitialized(user, callback) {
                 callback(null, user.isInitialized());
             },
-            mapUser: function(user, oauth2_user, callback) {
+            mapUser(user, oauth2_user, callback) {
                 user.email = oauth2_user.email;
                 user.name = {
                     first: oauth2_user.given_name,
@@ -38,7 +37,6 @@ exports.setup = function(app) {
                 user.save(callback);
             }
         });
-
         app.use(oauth2.middleware());
         app.use(oauth2.route());
     }

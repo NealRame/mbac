@@ -5,6 +5,8 @@ requirejs.config({
         'backbone': 'libs/backbone',
         'fastclick': 'libs/fastclick',
         'foundation': 'libs/foundation',
+        'foundation-datepicker': 'libs/foundation-datepicker',
+        'foundation-datepicker-fr': 'libs/foundation-datepicker.fr',
         'jquery': 'libs/jquery',
         'marked': 'libs/marked',
         'marionette': 'libs/backbone.marionette',
@@ -27,6 +29,9 @@ requirejs.config({
         'foundation': {
             deps: ['fastclick', 'jquery', 'modernizr'],
             exports: 'Foundation'
+        },
+        'foundation-datepicker-fr': {
+            deps: ['foundation', 'foundation-datepicker']
         }
     }
 });

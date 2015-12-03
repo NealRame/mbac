@@ -24,7 +24,7 @@ define(function(require) {
             rect: function() {
                 if (Foundation.utils.is_small_only()) {
                     return {
-                        width: 64, height: 64
+                        width: 96, height: 96
                     };
                 }
                 if (Foundation.utils.is_medium_only()) {

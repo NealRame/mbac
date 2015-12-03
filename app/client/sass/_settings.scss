@@ -13,23 +13,28 @@ $font-smoothing: antialiased;
 // ------
 // Colors
 $black: #232020;
+$white: #fff;
 $gray: #5f5a5a;
 $light-gray: #e4e5e6;
-$white: #fff;
-$red: #e74c3c;
-$yellow: #f1c40f;
+$red: #f52a48;
+$yellow: #f7da00;
 $green: #2ecc71;
-$blue: #3498db;
+$blue: #008bc8;
+$purple: #b4277c;
 
 $alert-color: $red;
+$info-color: #a0d3e8;      // cornflower
+$primary-color: $blue;
+$secondary-color: $white;
+$success-color: $green;
+$warning-color: #f08a24;   // carrot
 
-$page-background-color: $light-gray;
-$page-section-title-color: #aaa;
+$page-background-color: $white;
 
 $body-bg: $page-background-color;
 $body-font-color: $black;
 
-$footer-background-color: $red;
+$section-title-color: lighten($gray, 33);
 
 // Splash
 // ------
@@ -52,3 +57,12 @@ $topbar-link-bg-hover: $black;
 $topbar-link-bg-active: $black;
 $topbar-link-bg-active-hover: $black;
 $font-path: "/fonts";
+
+// Footer
+// ------
+$footer-background-color: $black;
+$footer-foreground-color: $white;
+
+// Buttons
+// -------
+$button-font-color: $white;

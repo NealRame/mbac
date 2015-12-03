@@ -17,6 +17,15 @@ block content
             span B
             span à
             span C...
+
+    if notifications.length > 0
+        section.wrapper
+            div#notices
+                each notification in notifications
+                    div.notice
+                        span.notice-close
+                        | #{notification.description}
+    
     section.wrapper
         article
             header
@@ -60,21 +69,24 @@ block content
                 h1: | Contact
             section
                 div.row
-                    div.small-centered.medium-uncentered.medium-6.columns.large-4
+                    div.small-centered.medium-uncentered.medium-6.large-4.columns
                         div.contact
-                            div.contact-icon.phone
-                            | 03.20.39.72.44
-                    div.small-centered.medium-uncentered.medium-6.columns.large-4
+                            a(href='/contact')
+                                div.contact-icon.phone
+                                | 03.20.39.72.44
+                    div.small-centered.medium-uncentered.medium-6.large-4.large-push-4.columns
                         div.contact
-                            div.contact-icon.address
-                            | mon Bar à Couture<br>
-                            | 32, rue Mourmant<br>
-                            | 59000 Lille
-                    div.small-centered.medium-uncentered.medium-12.columns.large-4
+                            a(href='/contact')
+                                div.contact-icon.e-mail
+                                | contact@monbaracouture.com
+                    div.small-centered.medium-uncentered.medium-12.large-4.large-pull-4.columns
                         div.contact
-                            div.contact-icon.e-mail
-                            a(href='mailto:contact@monbaracouture.com')
-                            | contact@monbaracouture.com
+                            a(href='/plan')
+                                div.contact-icon.address
+                                | mon Bar à Couture<br>
+                                | 32, rue Mourmant<br>
+                                | 59000 Lille
+    section.wrapper.yellow-filled
         article
             header
                 h1: | Newsletter
@@ -86,7 +98,7 @@ block content
                     a#subscribe.button.text-center(href="#")
                         | Je m'abonne !
     if achievements.length > 0
-        section.wrapper.filled
+        section.wrapper.blue-filled
             article
                 header
                     h1: | Dernières réalisations

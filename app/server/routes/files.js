@@ -1,31 +1,30 @@
-var express = require('express');
-var mongo = require('mongoose').mongo;
+'use strict';
 
-var router = express.Router();
+const api = require('common/api');
+const express = require('express');
+const GridFs = require('gridfs');
+const mongo = require('mongoose').mongo;
+
+const router = express.Router();
 
 /* GET home page. */
 router.get('/:id', function(req, res, next) {
-    var db = req.db;
-    var file_id = new mongo.ObjectID(req.params.id);
-    var GridStore = mongo.GridStore;
-
-    GridStore.exist(db, file_id, function(err, exist) {
-        if (err) {
-            next(err);
-        } else if (!exist) {
-            next(Object.create(
-                new Error('File not found'), {status: {value: 404}}
-            ));
-        } else {
-            var grid_store = new GridStore(db, file_id, 'r');
-            var stream = grid_store.stream();
-
-            res.on('pipe', function() {
-                res.type(grid_store.contentType);
-            });
-            stream.pipe(res);
-        }
-    });
+    try {
+        const gfs = new GridFs(mongo, req.db);
+        const file_id = new mongo.ObjectID(req.params.id);
+        gfs.existsAsync(file_id)
+            .then((exist) => exist ? gfs.statAsync(file_id) : api.error404())
+            .then((stats) => {
+                res.type(stats.contentType);
+                return gfs.createReadStream(file_id);
+            })
+            .then((stream) => {
+                stream.pipe(res);
+            })
+            .catch((err) => next(err));
+    } catch (err) {
+        api.throw404();
+    }
 });
 
 module.exports = router;

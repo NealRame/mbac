@@ -1,13 +1,15 @@
+'use strict';
+
 /// pages.js
 /// ========
 /// - author: Neal.Rame. <contact@nealrame.com>
 /// -   date: Tue Mar 31 19:50:23 CEST 2015
 
-var _ = require('underscore');
-var config = require('config');
-var debug = require('debug')('mbac:pages');
-var fs = require('fs');
-var path = require('path');
+const _ = require('underscore');
+const config = require('config');
+const debug = require('debug')('mbac:pages');
+const fs = require('fs');
+const path = require('path');
 
 function prefix(path_prefix, paths) {
     if (_.isString(paths)) {
@@ -20,7 +22,7 @@ function prefix(path_prefix, paths) {
 }
 
 function get_page_controllers(name) {
-    var controllers_path = path.join(__dirname, name);
+    const controllers_path = path.join(__dirname, name);
     if (fs.existsSync(path.join(controllers_path, 'index.js'))) {
         debug(['- custom controllers:', controllers_path].join(' '));
         return require(controllers_path);
@@ -30,11 +32,9 @@ function get_page_controllers(name) {
 }
 
 function setup_page(app, name, controller, page_config) {
-    var page = {
-        name: name
-    };
-    var route = (name === 'home' && page_config.prefix === '/') ? '/' : path.join(page_config.prefix, name);
-    var template = path.join(__dirname, name, 'views', page_config.template);
+    const page = {name: name};
+    const route = (name === 'home' && page_config.prefix === '/') ? '/' : path.join(page_config.prefix, name);
+    const template = path.join(__dirname, name, 'views', page_config.template);
 
     debug(['- initialize route', route].join(' '));
 
@@ -57,7 +57,7 @@ function setup_page(app, name, controller, page_config) {
         page.stylesheets = prefix('/css', page_config.stylesheets);
     }
 
-    var locals = {
+    const locals = {
         page: page,
         title: page_config.title
     };
@@ -80,7 +80,7 @@ function setup_page(app, name, controller, page_config) {
 }
 
 function setup_api(app, name, controller) {
-    var route = path.join('/api', name);
+    const route = path.join('/api', name);
     debug(['- initialize api', route].join(' '));
     app.use(route, controller);
 }
@@ -89,7 +89,7 @@ exports.setup = function(app) {
     _.each(config.pages, function(page_config, name) {
         debug(['Setup page', name].join(' '));
         try {
-            var page_controllers = get_page_controllers(name);
+            const page_controllers = get_page_controllers(name);
             if (page_config.back) {
                 setup_page(app, name, page_controllers.back, _.extend(page_config.back, {
                     menu: {

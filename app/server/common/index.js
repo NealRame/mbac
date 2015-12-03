@@ -1,3 +1,5 @@
+'use strict';
+
 /// server/common/index.js
 /// ----------------------
 /// - author: Neal.Rame. <contact@nealrame.com>

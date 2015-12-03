@@ -64,4 +64,17 @@ define(function(require) {
         SubscribeDialog.open();
         return false;
     });
+
+    $('.notice-close').click(function(ev) {
+        $(this).parent().animate({opacity: 0}, 250)
+            .promise()
+            .then(function(notice) {
+                return $(notice).animate({height: 0}, 250).promise();
+            })
+            .then(function(notice) {
+                notice.off().remove();
+            });
+        ev.stopPropagation();
+        ev.preventDefault();
+    });
 });

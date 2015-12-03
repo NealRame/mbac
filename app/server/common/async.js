@@ -1,3 +1,5 @@
+/* eslint-disable strict, no-var */
+
 /// server/common/async.js
 /// ----------------------
 /// - author: Neal.Rame. <contact@nealrame.com>

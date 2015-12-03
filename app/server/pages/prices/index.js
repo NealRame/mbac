@@ -1,15 +1,17 @@
-// pages/prices/front.js
-// ===================
-// - author: Neal.Rame. <contact@nealrame.com>
-// -  date:  Tue May 12 20:57:49 CEST 2015
+'use strict';
 
-var express = require('express');
-var path = require('path');
+/// pages/prices/front.js
+/// ===================
+/// - author: Neal.Rame. <contact@nealrame.com>
+/// -  date:  Tue May 12 20:57:49 CEST 2015
 
-var router = express.Router();
-var page_template = path.join(__dirname, 'views', 'front.jade');
+const express = require('express');
+const path = require('path');
 
-var prices = {
+const router = express.Router();
+const page_template = path.join(__dirname, 'views', 'front.jade');
+
+const prices = {
     list: [
         {
             link: 'self-service',
@@ -220,7 +222,7 @@ var prices = {
 
 router
     // GET achievements page.
-    .get('/', function(req, res) {
+    .get('/', (req, res) => {
         res.locals.prices = prices;
         res.render(page_template);
     });
