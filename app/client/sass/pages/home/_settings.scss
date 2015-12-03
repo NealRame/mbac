@@ -9,3 +9,4 @@ $notice-fg-color: white;
 $notification-active-color: $green;
 $notification-inactive-color: lighten($gray, 15);
 $notification-label-color: lighten(black, 75);
+$notification-action-color: darken($notice-bg-color, 20);
