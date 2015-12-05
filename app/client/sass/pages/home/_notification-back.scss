@@ -1,0 +1,91 @@
+@import "settings";
+@import "foundation/components/button-groups";
+@import "foundation/components/forms";
+@import "foundation/components/switches";
+@import "foundation/components/reveal";
+@import "foundation-datepicker";
+
+.notification-editor {
+    border-bottom: 1px solid $light-gray;
+    margin-bottom: 1em;
+    .switch {
+        @include switch-base($switch-paddle-transition-speed, $switch-paddle-transition-ease);
+        @include switch-size(1.5rem);
+        @include switch-style(#fff, $notification-active-color, true, true);
+        width: 3rem;
+        margin: 0 auto;
+        margin-top: 0.01rem;
+        label {
+            margin: 0;
+        }
+    }
+}
+
+#notifications {
+    ul {
+        margin: 0;
+        .notification {
+            border-bottom: 1px solid $notification-label-color;
+            list-style: none;
+            margin-bottom: 2rem;
+            overflow: auto;
+            position: relative;
+            text-align: center;
+            .active-mark {
+                color: $notification-inactive-color;
+                float: left;
+                font-size: .75rem;
+                margin-left: .5rem;
+                margin-top: .5rem;
+            }
+            .active-mark[data-state='active'] {
+                color: $notification-active-color;
+            }
+            .message {
+                background-color: $notification-bg-color;
+            }
+            .metadata {
+                .start-date-label, .end-date-label, .published-label {
+                    color: lighten(black, 75);
+                    float: left;
+                    font-size: .8rem;
+                    margin-top: .25rem;
+                    width: 33.33%;
+                }
+            }
+            .action {
+                color: $notification-action-color;
+                float: right;
+                font-family: FontAwesome;
+                width: 1.5em;
+                margin-left: .25em;
+
+                text-decoration: none;
+
+                -webkit-transform: scale(0);
+                -ms-transform: scale(0);
+                transform: scale(0);
+                transition: all .25s ease;
+
+                &[data-action='remove'] {
+                    &::after {
+                        content: '\f00d';
+                    }
+                }
+                &[data-action=edit] {
+                    &::after {
+                        content: '\f040';
+                    }
+                }
+            }
+            &:hover {
+                .action {
+                    -webkit-transform: scale(1);
+                    -ms-transform: scale(1);
+                    transform: scale(1);
+                    transition: all .25s ease;
+                }
+            }
+        }
+    }
+}
