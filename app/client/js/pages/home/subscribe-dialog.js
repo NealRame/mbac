@@ -1,5 +1,5 @@
-// home/editor.js
-// --------------
+// pages/home/subscribe-dialog/subscribe-dialog.js
+// -----------------------------------------------
 // - author: Neal.Rame. <contact@nealrame.com>
 // -   date: Wed May 27 23:07:32 CEST 2015
 define(function(require) {
