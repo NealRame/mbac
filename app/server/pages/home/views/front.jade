@@ -12,12 +12,6 @@ mixin achievement-item(achievement)
 mixin notification-item(notification, index, count)
     li.notification
         span= notification.message
-        a.notification-close
-        .notification-paging
-            a.prev: i.fa.fa-caret-left
-            | &nbsp;#{index + 1}/#{count}&nbsp;
-            a.next: i.fa.fa-caret-right
-
             
 extends /layout
 block content
@@ -35,7 +29,12 @@ block content
                     each notification, index in notifications
                         +notification-item(notification, index, notifications.length)
                 #notification-progress
-    
+                a.notification-close
+                //- .notification-paging
+                //-     a.prev: i.fa.fa-caret-left
+                //-     <span></span>
+                //-     a.next: i.fa.fa-caret-right
+
     section.wrapper
         article
             header
