@@ -1,3 +1,4 @@
+/* global Foundation: false */
 /// pages/home/notification-carousel.js
 /// -----------------------------------
 /// - author: Neal.Rame. <contact@nealrame.com>
@@ -5,12 +6,24 @@
 define(function(require) {
     'use strict';
 
+    require('foundation');
     var $ = require('jquery');
     var notifications = $('#notifications ul');
     var notification_progress_bar = $('#notifications #notification-progress');
 
     function left(elt) {
         return parseFloat($(elt).css('left'));
+    }
+
+    function reflow() {
+        var children = $(notifications).children();
+        children
+            .sort(function(elt1, elt2) {
+                return left(elt1) - left(elt2);
+            })
+            .each(function(index, notification) {
+                $(notification).css({left: index*notifications.width()});
+            });
     }
 
     function next() {
@@ -71,6 +84,7 @@ define(function(require) {
         ev.stopPropagation();
         ev.preventDefault();
     });
+    $(window).bind('resize', Foundation.utils.throttle(reflow, 150));
     notifications.children().each(function(index, notification) {
         $(notification).css({left: index*notifications.width()});
     });
