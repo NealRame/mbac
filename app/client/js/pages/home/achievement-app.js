@@ -1,3 +1,4 @@
+/* global Foundation: false */
 /// pages/home/achievement-app.js
 /// -----------------------------
 /// - author: Neal.Rame. <contact@nealrame.com>
