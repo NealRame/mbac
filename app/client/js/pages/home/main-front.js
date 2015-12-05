@@ -65,8 +65,10 @@ define(function(require) {
         return false;
     });
 
+    var notifications = $('#notifications ul');
+    var notification_progress_bar = $('#notifications #notification-progress');
+
     $('.notification-close').click(function(ev) {
-        var notifications = $('#notifications');
         $(this).off().parent().animate({opacity: 0}, 250)
             .promise()
             .then(function(notification) {
@@ -82,4 +84,57 @@ define(function(require) {
         ev.stopPropagation();
         ev.preventDefault();
     });
+
+    function left(elt) {
+        return parseFloat($(elt).css('left'));
+    }
+
+    function next() {
+        var width = notifications.width();
+        var children = notifications.children();
+        children.each(function(index, notification) {
+            notification = $(notification);
+            $(notification)
+                .animate({left: left(notification) - width})
+                .promise()
+                .then(function() {
+                    if (left(notification) < 0) {
+                        notification.css({left: (children.length - 1)*width});
+                    }
+                });
+        });
+    }
+
+    function prev() {
+        var width = notifications.width();
+        var children = notifications.children();
+        children.each(function(index, notification) {
+            notification = $(notification);
+            var offset = left(notification);
+            if (offset >= (children.length - 1)*width) {
+                offset = -width;
+                notification.css({left: offset});
+            }
+            notification
+                .animate({left: offset + width});
+        });
+    }
+
+    notifications.children().each(function(index, notification) {
+        $(notification).css({left: index*notifications.width()});
+    });
+
+    $('.next', notifications).click(next);
+    $('.prev', notifications).click(prev);
+
+    function progress() {
+        notification_progress_bar
+            .width(0)
+            .animate({width: '100%'}, 5000, 'linear', function() {
+                next();
+                progress();
+            });
+    }
+
+    progress();
 });

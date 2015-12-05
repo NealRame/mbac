@@ -9,11 +9,16 @@ mixin achievement-item(achievement)
         a(href='/achievements/#{achievement.id}')
             figure.crop(title='#{achievement.name}' data-uri='#{thumbnail}')
 
-mixin notification-item(notification)
+mixin notification-item(notification, index, count)
     li.notification
+        span= notification.message
         a.notification-close
-        | #{notification.message}
+        .notification-paging
+            a.prev: i.fa.fa-caret-left
+            | &nbsp;#{index + 1}/#{count}&nbsp;
+            a.next: i.fa.fa-caret-right
 
+            
 extends /layout
 block content
     div.splash
@@ -25,9 +30,11 @@ block content
 
     if notifications.length > 0
         section.wrapper
-            ul#notifications
-                each notification in notifications
-                    +notification-item(notification)
+            #notifications
+                ul
+                    each notification, index in notifications
+                        +notification-item(notification, index, notifications.length)
+                #notification-progress
     
     section.wrapper
         article
