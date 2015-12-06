@@ -9,7 +9,7 @@ define(function(require) {
     var $ = require('jquery');
     var Dialog = require('Dialog');
     var Marionette = require('marionette');
-    var subscribeTemplate = require('text!pages/home/subscribe-dialog.html');
+    var subscribeTemplate = require('text!pages/home/subscription/subscribe-dialog.html');
     var util = require('common/util');
 
     function field_value(field) {

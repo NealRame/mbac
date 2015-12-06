@@ -6,7 +6,7 @@ define(function(require) {
     'use strict';
 
     var $ = require('jquery');
-    var SubscribeDialog = require('pages/home/subscribe-dialog');
+    var SubscribeDialog = require('pages/home/subscription/subscribe-dialog');
 
     $('#subscribe').click(function(ev) {
         ev.preventDefault();
