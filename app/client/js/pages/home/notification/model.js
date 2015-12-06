@@ -76,7 +76,8 @@ define(function(require) {
             return Number.MAX_VALUE;
         },
         isActive: function() {
-            var now = Date.now();
+            var current = new Date();
+            var now =  current.getTime() - current.getTimezoneOffset()*60000;
             return this.published() && now >= this.startTime() && now < this.endTime();
         }
     });
