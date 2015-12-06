@@ -9,7 +9,7 @@ $dim: 1.2rem;
     #notification-progress {
         border-bottom: solid $progress-height $progress-color;
         height: 0;
-        width: 100%;
+        width: 0;
     }
     .notification-close {
         color: $notification-fg-color;

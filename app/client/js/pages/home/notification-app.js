@@ -68,13 +68,15 @@ define(function(require) {
     }
 
     function progress(duration) {
-        notification_progress_bar
-            .width(0)
-            .animate({width: '100%'}, duration, 'linear', function() {
-                next().then(function() {
-                    progress(duration);
+        if (notifications.children().length > 1) {
+            notification_progress_bar
+                .width(0)
+                .animate({width: '100%'}, duration, 'linear', function() {
+                    next().then(function() {
+                        progress(duration);
+                    });
                 });
-            });
+        }
     }
 
     $('.next', notifications).click(next);
