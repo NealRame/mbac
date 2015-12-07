@@ -63,6 +63,7 @@ $dim: 1.2rem;
         height: $line-height;
         margin: 0;
         position: relative;
+        overflow: hidden;
         .notification {
             width: 100%;
             background-color: $notification-bg-color;
