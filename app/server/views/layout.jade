@@ -18,7 +18,9 @@ html
         include footer
         script
             | require(['/js/common.js'], function(common) {
-            |     require(['stickyfooter/main']);
+            if page.name !== 'admin'
+                | require(['analytics/main']);
+            | require(['stickyfooter/main']);
             if page.application
                 | require(['#{page.application}']);
             | });

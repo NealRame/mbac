@@ -1,3 +1,9 @@
+/*global requirejs: false*/
+window.GoogleAnalyticsObject = '__ga__';
+window.__ga__ = {
+    q: [['create', 'UA-71079173-1', 'auto']],
+    l: Date.now()
+};
 requirejs.config({
     baseUrl: '/js',
     paths: {
@@ -7,6 +13,7 @@ requirejs.config({
         'foundation': 'libs/foundation',
         'foundation-datepicker': 'libs/foundation-datepicker',
         'foundation-datepicker-fr': 'libs/foundation-datepicker.fr',
+        'ga': '//www.google-analytics.com/analytics',
         'jquery': 'libs/jquery',
         'marked': 'libs/marked',
         'marionette': 'libs/backbone.marionette',
@@ -32,6 +39,9 @@ requirejs.config({
         },
         'foundation-datepicker-fr': {
             deps: ['foundation', 'foundation-datepicker']
+        },
+        'ga': {
+            exports: '__ga__'
         }
     }
 });
