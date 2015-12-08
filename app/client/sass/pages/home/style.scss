@@ -1,4 +1,5 @@
 @import "settings";
+@import "front/splash";
 @import "front/notifications";
 @import "foundation/components/block-grid";
 @import "foundation/components/button-groups";
@@ -6,45 +7,6 @@
 @import "foundation/components/reveal";
 @import "foundation/components/tables";
 
-body > .splash {
-    display: none;
-}
-
-@media #{$medium-up} {
-    body > .splash {
-        background-color: $splash-background-color;
-        display: block;
-        height: $splash-height;
-        font-size: 10em;
-        width: 100%;
-        position: fixed;
-        z-index: 1;
-        @media #{$large-up} {
-            font-size: 12em;
-        }
-        .logo {
-            color: white;
-            font-size: inherit;
-            font-family: 'Georgia', serif;
-            font-weight: bold;
-            letter-spacing: -8px;
-            text-align: center;
-            margin-top: 96px;
-            .italic {
-                font-style: italic;
-                font-weight: normal;
-                letter-spacing: -26px;
-            }
-            & > span {
-                font-size: inherit;
-                font-family: inherit;
-            }
-        }
-        & + section {
-            margin-top: $splash-height;
-        }
-    }
-}
 #achievements {
     li {
         figure {
