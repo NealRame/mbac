@@ -1,29 +1,14 @@
 @import "settings";
-@import "front/splash";
+
+@import "front/achievements";
 @import "front/notifications";
-@import "foundation/components/block-grid";
+@import "front/splash";
+
 @import "foundation/components/button-groups";
 @import "foundation/components/forms";
 @import "foundation/components/reveal";
 @import "foundation/components/tables";
 
-#achievements {
-    li {
-        figure {
-            display: none;
-            border: 4px solid white;
-            margin: 0;
-            padding: 0;
-            position: relative;
-            overflow: hidden;
-            img {
-                position: absolute;
-                max-width: none;
-                max-height: none;
-            }
-        }
-    }
-}
 table.schedule {
     background-color: inherit;
     border-collapse: collapse;
