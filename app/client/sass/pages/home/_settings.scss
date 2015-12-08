@@ -45,3 +45,6 @@ $notification-line-height: 1rem;
 $notification-font-size: .7rem;
 $notification-font-size-medium-up: 1rem;
 $notification-height: 2*$notification-line-height;
+
+$notification-transition-easing: ease-out;
+$notification-transition-duration: .1s;
