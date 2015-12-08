@@ -1,0 +1,38 @@
+@import "../settings";
+@import "foundation/components/tables";
+
+table.schedule {
+    background-color: inherit;
+    border-collapse: collapse;
+    border: none;
+    color: inherit;
+    margin: 0 auto;
+    width: 100%;
+    z-index: 2;
+    tr {
+        background: none;
+        margin: 0;
+        td {
+            border: none;
+            font-size: 1em;
+            &.center {
+                & > hr {
+                    border: none;
+                    border-bottom: 2px dotted $light-gray;
+                    height: 1ex;
+                    margin: 0;
+                    margin-bottom: 1ex;
+                }
+                width: 100%;
+            }
+            &.day {
+                text-align: right;
+            }
+            &.hour {
+                text-align: left;
+            }
+            vertical-align: bottom;
+            white-space: nowrap;
+        }
+    }
+}
