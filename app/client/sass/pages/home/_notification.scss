@@ -1,24 +1,19 @@
 @import "settings";
 
-$progress-height: 0.2rem;
-$progress-color: darken($notification-bg-color, 25);
-$line-height: 2rem;
-$dim: 1.2rem;
-
 #notifications {
     #notification-progress {
-        border-bottom: solid $progress-height $progress-color;
+        border-bottom: solid $notification-progress-height $notification-progress-color;
         height: 0;
         width: 0;
     }
     .notification-close {
         color: $notification-fg-color;
         cursor: pointer;
-        line-height: $dim;
-        width: $dim;
+        font-size: $notification-line-height;
+        line-height: $notification-line-height;
         position: absolute;
-        right: ($line-height - $dim)/2;
-        top: ($line-height - $dim)/2;
+        right: ($notification-height - $notification-line-height)/2;
+        top: ($notification-height - $notification-line-height)/2;
         -webkit-transform: scale(0);
         -ms-transform: scale(0);
         transform: scale(0);
@@ -26,23 +21,7 @@ $dim: 1.2rem;
         &::after {
             content: '\f00d';
             font-family: FontAwesome;
-            font-size: $dim;
-        }
-    }
-    .notification-paging {
-        color: $notification-fg-color;
-        line-height: 1rem;
-        font-size: 1rem;
-        position: absolute;
-        right: 2*$dim;
-        top: ($line-height - 1)/2;
-        -webkit-transform: scale(0);
-        -ms-transform: scale(0);
-        transform: scale(0);
-        transition: all .25s ease;
-        .next, .prev {
-            color: $notification-fg-color;
-            font-size: 1rem;
+            font-size: $notification-line-height;
         }
     }
     &:hover {
@@ -60,7 +39,7 @@ $dim: 1.2rem;
         }
     }
     ul {
-        height: $line-height;
+        height: $notification-height;
         margin: 0;
         position: relative;
         overflow: hidden;
@@ -68,13 +47,24 @@ $dim: 1.2rem;
             width: 100%;
             background-color: $notification-bg-color;
             color: $notification-fg-color;
-            line-height: $line-height;
+            font-size: $notification-font-size;
+            line-height: $notification-height;
             list-style: none;
             position: absolute;
             text-align: center;
             &.alert {
                 background-color: $notification-alert-bg-color;
                 border: solid 1px $notification-alert-border-color;
+            }
+        }
+    }
+}
+
+@media #{$medium-up} {
+    #notifications {
+        ul {
+            .notification {
+                font-size: $notification-font-size-medium-up;
             }
         }
     }

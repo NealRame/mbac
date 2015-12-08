@@ -10,3 +10,11 @@ $notification-active-color: $green;
 $notification-inactive-color: lighten($gray, 15);
 $notification-label-color: lighten(black, 75);
 $notification-action-color: darken($notification-bg-color, 20);
+
+$notification-progress-height: 2px;
+$notification-progress-color: darken($notification-bg-color, 25);
+
+$notification-line-height: 1rem;
+$notification-font-size: .7rem;
+$notification-font-size-medium-up: 1rem;
+$notification-height: 2*$notification-line-height;
