@@ -1,6 +1,7 @@
 @import "settings";
 
 @import "front/achievements";
+@import "front/contact";
 @import "front/notifications";
 @import "front/schedule";
 @import "front/splash";
@@ -8,36 +9,3 @@
 @import "foundation/components/button-groups";
 @import "foundation/components/forms";
 @import "foundation/components/reveal";
-
-
-.contact {
-    text-align: center;
-    .contact-icon {
-        background-color: #aaa;
-        border-radius: 90px;
-        color: $light-gray;
-        font-family: FontAwesome;
-        font-size: 2em;
-        line-height: 64px;
-        height: 64px;
-        width: 64px;
-        margin: 8px auto;
-        text-align: center;
-        @media #{$medium-up} {
-            font-size: 3em;
-            line-height: 96px;
-            height: 96px;
-            width: 96px;
-            margin: 16px auto;
-        }
-        &.phone:before {
-            content: "\f10b";
-        }
-        &.address:before {
-            content: "\f041";
-        }
-        &.e-mail:before {
-            content: "\f003";
-        }
-    }
-}
