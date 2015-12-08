@@ -48,3 +48,13 @@ $notification-height: 2*$notification-line-height;
 
 $notification-transition-easing: ease-out;
 $notification-transition-duration: .1s;
+
+///////////////////////////////////////////////////////////////////////////////
+// Schedule settings
+
+$schedule-font-size: 1rem;
+$schedule-hr-width: 2px;
+$schedule-hr-style: dotted;
+$schedule-hr-color: $light-gray;
+$schedule-hr-height: 1ex;
+$schedule-hr-margin-bottom: 1ex;

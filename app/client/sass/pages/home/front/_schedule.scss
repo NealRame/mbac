@@ -8,20 +8,21 @@ table.schedule {
     color: inherit;
     margin: 0 auto;
     width: 100%;
-    z-index: 2;
     tr {
         background: none;
         margin: 0;
         td {
             border: none;
-            font-size: 1em;
+            font-size: $schedule-font-size;
+            vertical-align: bottom;
+            white-space: nowrap;
             &.center {
                 & > hr {
                     border: none;
-                    border-bottom: 2px dotted $light-gray;
-                    height: 1ex;
+                    border-bottom: $schedule-hr-width $schedule-hr-style $schedule-hr-color;
+                    height: $schedule-hr-height;;
                     margin: 0;
-                    margin-bottom: 1ex;
+                    margin-bottom: $schedule-hr-margin-bottom;
                 }
                 width: 100%;
             }
@@ -31,8 +32,6 @@ table.schedule {
             &.hour {
                 text-align: left;
             }
-            vertical-align: bottom;
-            white-space: nowrap;
         }
     }
 }
