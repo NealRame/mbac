@@ -4,16 +4,16 @@
 #achievements {
     li {
         figure {
+            border: $achievement-border-width $achievement-border-style $achievement-border-color;
             display: none;
-            border: 4px solid white;
             margin: 0;
+            overflow: hidden;
             padding: 0;
             position: relative;
-            overflow: hidden;
             img {
-                position: absolute;
-                max-width: none;
                 max-height: none;
+                max-width: none;
+                position: absolute;
             }
         }
     }
