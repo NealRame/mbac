@@ -2,17 +2,18 @@
 
 .contact {
     text-align: center;
+    margin: $contact-margin;
     .contact-icon {
-        background-color: #aaa;
+        background-color: $contact-icon-bg-color;
         border-radius: 90px;
-        color: $light-gray;
+        color: $contact-icon-fg-color;
         font-family: FontAwesome;
-        font-size: 2em;
-        line-height: 64px;
-        height: 64px;
-        width: 64px;
-        margin: 8px auto;
-        text-align: center;
+        font-size: $contact-icon-font-size;
+        line-height: $contact-icon-size;
+        height: $contact-icon-size;
+        width: $contact-icon-size;
+        margin: 0 auto;
+        margin-bottom: $contact-icon-margin;
         &.phone:before {
             content: "\f10b";
         }
@@ -23,11 +24,14 @@
             content: "\f003";
         }
         @media #{$medium-up} {
-            font-size: 3em;
-            line-height: 96px;
-            height: 96px;
-            width: 96px;
-            margin: 16px auto;
+            font-size: $contact-icon-medium-up-font-size;
+            line-height: $contact-icon-medium-up-size;
+            height: $contact-icon-medium-up-size;
+            width: $contact-icon-medium-up-size;
+            margin-bottom: $contact-icon-medium-up-margin;
         }
+    }
+    @media #{$medium-up} {
+        margin: $contact-medium-up-margin;
     }
 }

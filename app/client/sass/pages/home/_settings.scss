@@ -1,5 +1,25 @@
 @import "../../settings";
 
+///////////////////////////////////////////////////////////////////////////////
+// Contact settings
+
+$contact-margin: 2rem;
+$contact-medium-up-margin: 1rem;
+
+$contact-icon-bg-color: #aaa;
+$contact-icon-fg-color: $white;
+
+$contact-icon-font-size: 2rem;
+$contact-icon-size: 2*$contact-icon-font-size;
+$contact-icon-margin: .5rem;
+
+$contact-icon-medium-up-font-size: 3.5rem;
+$contact-icon-medium-up-size: 2*$contact-icon-medium-up-font-size;
+$contact-icon-medium-up-margin: 1rem;
+
+///////////////////////////////////////////////////////////////////////////////
+// Notifications settings
+
 $notification-bg-color: $info-color;
 $notification-border-color: lighten($notification-bg-color, 5);
 $notification-alert-bg-color: $alert-color;
