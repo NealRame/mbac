@@ -54,7 +54,6 @@
             text-align: center;
             &.alert {
                 background-color: $notification-alert-bg-color;
-                border: solid 1px $notification-alert-border-color;
             }
         }
     }
