@@ -104,20 +104,7 @@ section.wrapper {
     }
     overflow: auto;
 }
-.smaller {
-    font-size: 0.9em;
-}
-.small {
-    font-size: x-small;
-}
-.super {
-    vertical-align: super;
-}
-.uncolapser {
-    &::before {
-        content: ' ';
-        display: table;
-    }
-}
-@import "menu";
+
 @import "footer";
+@import "menu";
+@import "utilities";
