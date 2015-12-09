@@ -6,11 +6,11 @@ article {
     font-family: $body-font-family;
 }
 
+@import "menu";
+
 @import "foundation/components/grid";
-@import "foundation/components/top-bar";
-@import "foundation/components/side-nav";
 @import "foundation/components/type";
-@import "foundation/components/visibility";
+
 
 body, div, p, ol, section, span, ul {
     font-size: 16px;
@@ -50,68 +50,7 @@ h3 {
         @extend .secondary;
     }
 }
-.menu {
-    .top-bar {
-        .top-bar-section {
-            #user-picture {
-                display: none;
-            }
-            #user-name {
-                display: inline-block;
-            }
-            #page-list {
-                text-align: center;
-            }
-            @media #{$medium-up} {
-                #user-menu {
-                    float: right;
-                    #user-picture {
-                        display: block;
-                        height: $topbar-height - 0.5rem;
-                        width: $topbar-height - 0.5rem;
-                        margin: 4px;
-                    }
-                    #user-name {
-                        display: none;
-                    }
-                }
-                .container {
-                    display: block;
-                    margin: 0 auto;
-                    max-width: 960px;
-                    clear: none;
-                    #page-list {
-                        display: block;
-                        height: $topbar-height;
-                        text-align: center;
-                        margin: 0;
-                        padding: 0;
-                        li {
-                            float: none;
-                            display: inline-block;
-                            margin: 0;
-                            padding: 0;
-                            a {
-                                font-size: 1em;
-                            }
-                        }
-                    }
-                }
-            }
-            @media #{$large-up} {
-                .container {
-                    #page-list {
-                        li {
-                            a {
-                                font-size: 1.25em;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
+
 .smaller {
     font-size: 0.9em;
 }
