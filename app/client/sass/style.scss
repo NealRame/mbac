@@ -1,52 +1,22 @@
 @import "settings";
 @import "icons";
 
-body {
-    font-size: 16px;
-}
-article, body, div, p, ol, section, span, ul {
+@import "foundation/components/grid";
+@import "foundation/components/type";
+
+body, article, div, ol, p, section, span, ul {
     font-family: $body-font-family;
-    @media #{$medium-up} {
-        font-size: 1.25rem;
+    @media #{$medium} {
+        font-size: $body-medium-up-font-size;
+    }
+    @media #{$large} {
+        font-size: $body-large-up-font-size;
     }
 }
 h1, h2, h3 {
     font-family: $header-font-family;
     font-style: $header-font-style;
     font-weight: $header-font-weight;
-}
-h1 {
-    font-size: 1.25rem;
-    @media #{$large-up} {
-        font-size: 2rem;
-    }
-}
-h2 {
-    font-size: 1rem;
-    @media #{$large-up} {
-        font-size: 1.75rem;
-    }
-}
-h3 {
-    font-size: 1rem;
-    @media #{$large-up} {
-        font-size: 1.5rem;
-    }
-}
-.toggle-button {
-    @extend .button;
-    &[data-state='disabled'] {
-        @extend .secondary;
-    }
-}
-.smaller {
-    font-size: 0.9em;
-}
-.small {
-    font-size: x-small;
-}
-.super {
-    vertical-align: super;
 }
 section.wrapper {
     background-color: $page-background-color;
@@ -55,13 +25,30 @@ section.wrapper {
     z-index: 2;
     article {
         font-size: 1rem;
+        h2 {
+            font-size: $h2-font-size;
+            @media #{$large-up} {
+                font-size: $h2-large-up-font-size;
+            }
+        }
+        h3 {
+            font-size: $h3-font-size;
+            @media #{$large-up} {
+                font-size: $h3-large-up-font-size;
+            }
+        }
         @media #{$large-up} {
             margin: 0 auto;
             width: lower-bound($large-range);
         }
-        & > header {
-            h1 {
-                color: $section-title-color;
+        & > header > h1 {
+            color: $section-title-color;
+            font-size: $h1-font-size;
+            @media #{$medium-up} {
+                font-size: $h1-medium-up-font-size;
+            }
+            @media #{$large-up} {
+                font-size: $h1-large-up-font-size;
             }
         }
         & > header, & > section {
@@ -117,14 +104,26 @@ section.wrapper {
     }
     overflow: auto;
 }
+.toggle-button {
+    @extend .button;
+    &[data-state='disabled'] {
+        @extend .secondary;
+    }
+}
+.smaller {
+    font-size: 0.9em;
+}
+.small {
+    font-size: x-small;
+}
+.super {
+    vertical-align: super;
+}
 .uncolapser {
     &::before {
         content: ' ';
         display: table;
     }
 }
-
 @import "menu";
 @import "footer";
-@import "foundation/components/grid";
-@import "foundation/components/type";
