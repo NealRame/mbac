@@ -1,22 +1,15 @@
 @import "settings";
 @import "icons";
 
-@import "menu";
-
-@import "foundation/components/grid";
-@import "foundation/components/type";
-
 body {
     font-size: 16px;
 }
-
 article, body, div, p, ol, section, span, ul {
     font-family: $body-font-family;
     @media #{$medium-up} {
         font-size: 1.25rem;
     }
 }
-
 h1, h2, h3 {
     font-family: $header-font-family;
     font-style: $header-font-style;
@@ -46,7 +39,6 @@ h3 {
         @extend .secondary;
     }
 }
-
 .smaller {
     font-size: 0.9em;
 }
@@ -131,51 +123,8 @@ section.wrapper {
         display: table;
     }
 }
-footer {
-    background-color: $footer-background-color;
-    color: $footer-foreground-color;
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    text-align: center;
-    a {
-        color: inherit;
-        &:hover {
-            color: $gray;
-        }
-    }
-    ul {
-        list-style-type: none;
-        padding: 0;
-        margin: 0;
-        li {
-            display: inline;
-        }
-    }
-    .links {
-        background-color: lighten($footer-background-color, 5);
-        a  {
-            font-size: small;
-        }
-        li {
-            margin: 0;
-        }
-        li:not(:last-child):after {
-            margin: 0 1ch;
-            content: "-"; // &#x2013;
-        }
-    }
-    .socials {
-        margin: 0 auto;
-        a  {
-            font-size: xx-large;
-        }
-        li {
-            margin: .25em;
-        }
-    }
-    .copyright {
-        font-size: x-small;
-        margin: 0 auto;
-    }
-}
+
+@import "menu";
+@import "footer";
+@import "foundation/components/grid";
+@import "foundation/components/type";
