@@ -104,12 +104,6 @@ section.wrapper {
     }
     overflow: auto;
 }
-.toggle-button {
-    @extend .button;
-    &[data-state='disabled'] {
-        @extend .secondary;
-    }
-}
 .smaller {
     font-size: 0.9em;
 }
