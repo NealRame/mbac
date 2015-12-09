@@ -2,32 +2,35 @@
 
 body > .splash {
     display: none;
-}
-
-@media #{$medium-up} {
-    body > .splash {
+    @media #{$medium-up} {
         background-color: $splash-background-color;
         display: block;
         height: $splash-height;
-        font-size: 10em;
+        font-size: $splash-logo-medium-up-font-size;
         width: 100%;
         position: fixed;
         z-index: 1;
         @media #{$large-up} {
-            font-size: 12em;
+            font-size: $splash-logo-large-up-font-size;
         }
         .logo {
             color: white;
             font-size: inherit;
             font-family: 'Georgia', serif;
             font-weight: bold;
-            letter-spacing: -8px;
+            letter-spacing: $splash-logo-medium-up-letter-spacing;
+            @media #{$large-up} {
+                letter-spacing: $splash-logo-large-up-letter-spacing;
+            }
             text-align: center;
-            margin-top: 96px;
+            margin-top: $splash-logo-margin;
             .italic {
                 font-style: italic;
                 font-weight: normal;
-                letter-spacing: -26px;
+                letter-spacing: $splash-logo-medium-up-italic-letter-spacing;
+                @media #{$large-up} {
+                    letter-spacing: $splash-logo-large-up-italic-letter-spacing;
+                }
             }
             & > span {
                 font-size: inherit;
