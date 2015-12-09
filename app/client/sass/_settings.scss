@@ -1,16 +1,25 @@
-// We use these to define default font weights
-$font-weight-normal: normal !default;
-$font-weight-bold: bold !default;
-$font-weight-normal: 300;
-$body-font-family: "Raleway", sans-serif;
-$body-font-weight: $font-weight-normal;
-$font-smoothing: antialiased;
-
-@import "foundation/settings";
 @import "foundation/components/global";
 
-// Global
-// ------
+
+///////////////////////////////////////////////////////////////////////////////
+// Font
+$icon-font-path: "/fonts";
+$font-weight-normal: normal;
+$font-weight-bold: bold;
+$font-weight-normal: 300;
+
+$header-font-family: 'Georgia', serif;
+$header-font-style: italic;
+$header-font-weight: bold;
+
+$body-font-family: 'Raleway', sans-serif;
+$body-font-weight: $font-weight-normal;
+
+
+
+$font-smoothing: antialiased;
+
+///////////////////////////////////////////////////////////////////////////////
 // Colors
 $black: #232020;
 $white: #fff;
@@ -31,6 +40,8 @@ $warning-color: #f08a24;   // carrot
 
 $page-background-color: $white;
 
+$header-color: $gray;
+
 $body-bg: $page-background-color;
 $body-font-color: $black;
 
@@ -40,8 +51,8 @@ $section-title-color: lighten($gray, 33);
 // ------
 $table-row-font-color: inherit;
 
+///////////////////////////////////////////////////////////////////////////////
 // Top Bar
-// -------
 $topbar-bg: $black;
 $topbar-dropdown-bg: $black;
 $topbar-link-color-hover: $yellow;
@@ -51,7 +62,6 @@ $topbar-link-weight: $font-weight-bold;
 $topbar-link-bg-hover: $black;
 $topbar-link-bg-active: $black;
 $topbar-link-bg-active-hover: $black;
-$font-path: "/fonts";
 
 // Footer
 // ------
@@ -61,3 +71,5 @@ $footer-foreground-color: $white;
 // Buttons
 // -------
 $button-font-color: $white;
+
+@import "foundation/settings";

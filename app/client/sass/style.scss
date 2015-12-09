@@ -21,10 +21,10 @@ body, div, p, ol, section, span, ul {
 }
 
 h1, h2, h3 {
-    font-family: 'Georgia', serif;
-    font-style: italic;
-    font-weight: bold;
-    color: $gray;
+    font-family: $header-font-family;
+    font-style: $header-font-style;
+    font-weight: $header-font-weight;
+    color: $header-color;
 }
 h1 {
     font-size: 1.25rem;
