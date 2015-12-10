@@ -2,56 +2,24 @@
 @import "foundation/components/icon-bar";
 @import "foundation/components/side-nav";
 
-// Tabbed panels widget ///////////////////////////////////////////////////////
-.tab-bar > .items {
-    @include icon-bar(
-        // Set the background color of the icon bar.
-        $bar-bg: $gray,
-        // Set the font color of the icon bar.
-        $bar-font-color: $white,
-        // Set the hover background color for the icon bar.
-        $bar-hover-color: #ccc,
-        // Set the padding for icon bar.
-        $padding: 0.25rem 0 0 0,
-        // Set the font-size of the icon bar.
-        $font-size: 1em,
-        // Set the size of the icons within the icon bar.
-        $icon-size: 1.25rem
-    );
-
-    .item {
-        border-bottom: 2px solid #aaa;
-		&:hover, &[data-state=active] {
-            * { color: $black; }
-        }
-        &[data-state=active] {
-            background-color: $light-gray;
-            border: 2px solid #aaa;
-            border-bottom: none;
-        }
-        &:first-child { border-left:  none; }
-        &:last-child  { border-right: none; }
-    }
-
-    &.label-right > .item {
-        i, img {
-            display: inline-block;
-            font-size: 1rem;
-            margin: 0 0.5rem 4px 0;
-        }
-        label { display: inline-block; }
-	}
-
-    &.one-up   > .item { width: 100%; }
-    &.two-up   > .item { width: 50%; }
-    &.three-up > .item { width: 33.3333%; }
-    &.four-up  > .item { width: 25%; }
-    &.five-up  > .item { width: 20%; }
-    &.six-up   > .item { width: 16.6666%; }
-}
+$admin-nav-width: 220px;
 
 // Admin menu /////////////////////////////////////////////////////////////////
-aside#admin-nav {
-    width: 256px;
-    float: left;
+#admin-nav {
+    background-color: lighten($topbar-bg-color, 5);
+    left: 0;
+    top: $topbar-height;
+    height: 100%;
+    position: fixed;
+    width: $admin-nav-width;
+    .side-nav {
+        a {
+            color: $white;
+        }
+    }
+}
+#admin-content-wrapper {
+    left: $admin-nav-width;
+    position: absolute;
+    right: 0;
 }
