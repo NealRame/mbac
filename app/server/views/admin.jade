@@ -3,7 +3,7 @@
 //- - author: Neal.Rame. <contact@nealrame.com>
 //- -   date: Thu Jul 10 00:00:00 CEST 2014
 
-extends layout
+extends admin-layout
 
 block content
     if ! loggedIn
@@ -16,7 +16,6 @@ block content
                         br
                         a(href="#{loginLink}").button.text-center: | Login
     else
-        
         aside#admin-nav
             ul.side-nav
                 each entry in menu['admin']
@@ -28,5 +27,5 @@ block content
                         li.active(id='#{entry.page}-menu')
                             a: | #{entry.title}
                             .menu-content-wrapper
-        
-        block admin_content
+        div#admin-content-wrapper
+            block admin_content
