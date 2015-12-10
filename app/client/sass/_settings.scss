@@ -65,15 +65,16 @@ $table-row-font-color: inherit;
 
 ///////////////////////////////////////////////////////////////////////////////
 // Top Bar
-$topbar-bg: $black;
+$topbar-bg-color: $black;
+$topbar-bg: $topbar-bg-color;
 $topbar-dropdown-bg: $black;
 $topbar-link-color-hover: $yellow;
 $topbar-link-color-active: $yellow;
 $topbar-link-color-active-hover: $yellow;
 $topbar-link-weight: $font-weight-bold;
-$topbar-link-bg-hover: $black;
-$topbar-link-bg-active: $black;
-$topbar-link-bg-active-hover: $black;
+$topbar-link-bg-hover: $topbar-bg-color;
+$topbar-link-bg-active: $topbar-bg-color;
+$topbar-link-bg-active-hover: $topbar-bg-color;
 
 // Footer
 // ------
