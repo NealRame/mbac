@@ -30,32 +30,32 @@
             margin-bottom: 2rem;
             overflow: auto;
             position: relative;
-            text-align: center;
             .active-mark {
                 color: $notification-inactive-color;
                 float: left;
                 font-size: .75rem;
                 margin-left: .5rem;
-                margin-top: .5rem;
+                margin-top: .25rem;
             }
             .active-mark[data-state='active'] {
                 color: $notification-active-color;
             }
             .message {
                 background-color: $notification-bg-color;
+                font-size: 1rem;
+                text-align: center;
             }
-            .metadata {
-                .start-date-label, .end-date-label, .published-label {
-                    color: lighten(black, 75);
-                    float: left;
-                    font-size: .8rem;
-                    margin-top: .25rem;
-                    width: 33.33%;
+            .start-date-label, .end-date-label, .published-label {
+                color: lighten(black, 75);
+                font-size: .8rem;
+                @media #{$medium-up} {
+                    text-align: center;
                 }
             }
             .action {
                 color: $notification-action-color;
                 float: right;
+                font-size: 1rem;
                 font-family: FontAwesome;
                 width: 1.5em;
                 margin-left: .25em;
