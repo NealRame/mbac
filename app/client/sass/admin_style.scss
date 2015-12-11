@@ -7,7 +7,6 @@ $admin-nav-width: 200px;
 // Admin menu /////////////////////////////////////////////////////////////////
 #admin-nav {
     background-color: lighten($topbar-bg-color, 5);
-    left: 0;
     top: $topbar-height;
     height: 100%;
     position: fixed;
