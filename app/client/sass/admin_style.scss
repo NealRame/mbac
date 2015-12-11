@@ -23,6 +23,7 @@ $admin-nav-width: 200px;
 // Admin content wrapper
 #admin-content-wrapper {
     left: $admin-nav-width;
+    padding: 1rem;
     position: absolute;
     right: 0;
 }
