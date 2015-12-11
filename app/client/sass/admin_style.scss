@@ -4,7 +4,8 @@
 
 $admin-nav-width: 200px;
 
-// Admin menu /////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+// Admin menu
 #admin-nav {
     background-color: lighten($topbar-bg-color, 5);
     top: $topbar-height;
@@ -17,6 +18,9 @@ $admin-nav-width: 200px;
         }
     }
 }
+
+///////////////////////////////////////////////////////////////////////////////
+// Admin content wrapper
 #admin-content-wrapper {
     left: $admin-nav-width;
     position: absolute;
