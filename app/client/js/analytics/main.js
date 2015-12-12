@@ -5,5 +5,4 @@
 define(['ga'], function(ga) {
     'use strict';
     ga('send', 'pageview');
-    console.log('hit!');
 });
