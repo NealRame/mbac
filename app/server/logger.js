@@ -45,7 +45,7 @@ module.exports = {
         });
         next();
     },
-    error(req, res, err) {
+    logRequestError(req, res, err) {
         logger.error.apply(logger, format(req, res, err));
     }
 };

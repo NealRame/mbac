@@ -101,7 +101,7 @@ exports.instance = function() {
                     });
                 }
             }
-            logger.error(req, res, err);
+            logger.logRequestError(req, res, err);
         });
 
         return app;
