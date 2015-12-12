@@ -33,10 +33,13 @@ $notification-alert-bg-color: $alert-color;
 $notification-alert-border-color: lighten($notification-alert-bg-color, 5);
 $notification-fg-color: white;
 
+
 $notification-active-color: $green;
 $notification-inactive-color: lighten($gray, 15);
-$notification-label-color: lighten(black, 75);
-$notification-action-color: darken($notification-bg-color, 20);
+
+$notification-message-color: $body-font-color;
+$notification-action-color: lighten($body-font-color, 15);
+$notification-label-color: lighten($body-font-color, 55);
 
 $notification-progress-height: 2px;
 $notification-progress-color: darken($notification-bg-color, 25);

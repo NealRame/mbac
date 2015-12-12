@@ -25,6 +25,7 @@
     ul {
         margin: 0;
         .notification {
+            color: $notification-message-color;
             border-bottom: 1px solid $notification-label-color;
             list-style: none;
             margin-bottom: 2rem;
@@ -46,7 +47,7 @@
                 text-align: center;
             }
             .start-date-label, .end-date-label, .published-label {
-                color: lighten(black, 75);
+                color: $notification-label-color;
                 font-size: .8rem;
                 @media #{$medium-up} {
                     text-align: center;
