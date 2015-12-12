@@ -1,0 +1,70 @@
+@import "../settings";
+
+#notifications {
+    #notification-progress {
+        border-bottom: solid $notification-progress-height $notification-progress-color;
+        height: 0;
+        width: 0;
+    }
+    .notification-close {
+        color: $notification-fg-color;
+        cursor: pointer;
+        font-size: $notification-line-height;
+        line-height: $notification-line-height;
+        position: absolute;
+        right: ($notification-height - $notification-line-height)/2;
+        top: ($notification-height - $notification-line-height)/2;
+        -webkit-transform: scale(0);
+        -ms-transform: scale(0);
+        transform: scale(0);
+        transition: all $notification-transition-duration $notification-transition-easing;
+        &::after {
+            content: '\f00d';
+            font-family: FontAwesome;
+            font-size: $notification-line-height;
+        }
+    }
+    &:hover {
+        .notification-close {
+            -webkit-transform: scale(1);
+            -ms-transform: scale(1);
+            transform: scale(1);
+            transition: all $notification-transition-duration $notification-transition-easing;
+        }
+        .notification-paging {
+            -webkit-transform: scale(1);
+            -ms-transform: scale(1);
+            transform: scale(1);
+            transition: all $notification-transition-duration $notification-transition-easing;
+        }
+    }
+    ul {
+        height: $notification-height;
+        margin: 0;
+        position: relative;
+        overflow: hidden;
+        .notification {
+            width: 100%;
+            background-color: $notification-bg-color;
+            color: $notification-fg-color;
+            font-size: $notification-font-size;
+            line-height: $notification-height;
+            list-style: none;
+            position: absolute;
+            text-align: center;
+            &.alert {
+                background-color: $notification-alert-bg-color;
+            }
+        }
+    }
+}
+
+@media #{$medium-up} {
+    #notifications {
+        ul {
+            .notification {
+                font-size: $notification-font-size-medium-up;
+            }
+        }
+    }
+}

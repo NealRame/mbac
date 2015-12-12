@@ -1,0 +1,50 @@
+@import "settings";
+
+footer {
+    background-color: $footer-background-color;
+    color: $footer-foreground-color;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    text-align: center;
+    a {
+        color: inherit;
+        &:hover {
+            color: $gray;
+        }
+    }
+    ul {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+        li {
+            display: inline;
+        }
+    }
+    .links {
+        background-color: lighten($footer-background-color, 5);
+        a {
+            font-size: small;
+        }
+        li {
+            margin: 0;
+        }
+        li:not(:last-child):after {
+            margin: 0 1ch;
+            content: "-"; // &#x2013;
+        }
+    }
+    .socials {
+        margin: 0 auto;
+        a {
+            font-size: xx-large;
+        }
+        li {
+            margin: .25em;
+        }
+    }
+    .copyright {
+        font-size: x-small;
+        margin: 0 auto;
+    }
+}

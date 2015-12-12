@@ -4,14 +4,14 @@
 <a class='action' href='#' data-action='remove'></a>
 <a class='action' href='#' data-action='edit'></a>
 <div class='message'><%= message %></div>
-<div class='metadata'>
-    <div class='start-date-label'>
-        Début: <%= startDate %>
+<div class='row'>
+    <div class="small-12 medium-4 columns">
+        <div class='start-date-label'>Début: <%= startDate %></div>
     </div>
-    <div class='end-date-label'>
-        Fin: <%= endDate %>
+    <div class="small-12 medium-4 columns">
+        <div class='end-date-label'>Fin: <%= endDate %></div>
     </div>
-    <div class='published-label'>
-        Publiée: <% print(published ? 'oui':'non') %>
+    <div class="small-12 medium-4 columns">
+        <div class='published-label'>Publiée: <% print(published ? 'oui':'non') %></div>
     </div>
 </div>

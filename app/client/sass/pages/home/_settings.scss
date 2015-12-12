@@ -1,12 +1,75 @@
 @import "../../settings";
 
-$notice-bg-color: $info-color;
-$notice-border-color: lighten($notice-bg-color, 5);
-$notice-alert-bg-color: $alert-color;
-$notice-alert-border-color: lighten($notice-alert-bg-color, 5);
-$notice-fg-color: white;
+///////////////////////////////////////////////////////////////////////////////
+// Achievements settings
+
+$achievement-border-color: $white;
+$achievement-border-style: solid;
+$achievement-border-width: 4px;
+
+///////////////////////////////////////////////////////////////////////////////
+// Contact settings
+
+$contact-margin: 2rem;
+$contact-medium-up-margin: 1rem;
+
+$contact-icon-bg-color: #aaa;
+$contact-icon-fg-color: $white;
+
+$contact-icon-font-size: 2rem;
+$contact-icon-size: 2*$contact-icon-font-size;
+$contact-icon-margin: .5rem;
+
+$contact-icon-medium-up-font-size: 3.5rem;
+$contact-icon-medium-up-size: 2*$contact-icon-medium-up-font-size;
+$contact-icon-medium-up-margin: 1rem;
+
+///////////////////////////////////////////////////////////////////////////////
+// Notifications settings
+
+$notification-bg-color: $info-color;
+$notification-border-color: lighten($notification-bg-color, 5);
+$notification-alert-bg-color: $alert-color;
+$notification-alert-border-color: lighten($notification-alert-bg-color, 5);
+$notification-fg-color: white;
+
 
 $notification-active-color: $green;
 $notification-inactive-color: lighten($gray, 15);
-$notification-label-color: lighten(black, 75);
-$notification-action-color: darken($notice-bg-color, 20);
+
+$notification-message-color: $body-font-color;
+$notification-action-color: lighten($body-font-color, 15);
+$notification-label-color: lighten($body-font-color, 55);
+
+$notification-progress-height: 2px;
+$notification-progress-color: darken($notification-bg-color, 25);
+
+$notification-line-height: 1rem;
+$notification-font-size: .7rem;
+$notification-font-size-medium-up: 1rem;
+$notification-height: 2*$notification-line-height;
+
+$notification-transition-easing: ease-out;
+$notification-transition-duration: .1s;
+
+///////////////////////////////////////////////////////////////////////////////
+// Schedule settings
+
+$schedule-font-size: 1rem;
+$schedule-hr-width: 2px;
+$schedule-hr-style: dotted;
+$schedule-hr-color: $light-gray;
+$schedule-hr-height: 1ex;
+$schedule-hr-margin-bottom: 1ex;
+
+///////////////////////////////////////////////////////////////////////////////
+// Splash
+$splash-height: 384px;
+$splash-background-color: $topbar-bg-color;
+$splash-logo-medium-up-font-size: 10rem;
+$splash-logo-large-up-font-size: 12rem;
+$splash-logo-margin: 6rem;
+$splash-logo-medium-up-letter-spacing: -0.5rem;
+$splash-logo-medium-up-italic-letter-spacing: -1.5rem;
+$splash-logo-large-up-letter-spacing: -.5rem;
+$splash-logo-large-up-italic-letter-spacing: -2rem;

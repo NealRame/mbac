@@ -27,13 +27,13 @@ define(function(require) {
         defaults: {
             published: false,
             start: Date.now(),
-            description: ''
+            message: ''
         },
         message: function() {
-            return this.get('description');
+            return this.get('message');
         },
         setMessage: function(msg) {
-            this.set('description', msg);
+            this.set('message', msg);
             return this;
         },
         published: function() {
@@ -76,7 +76,8 @@ define(function(require) {
             return Number.MAX_VALUE;
         },
         isActive: function() {
-            var now = Date.now();
+            var current = new Date();
+            var now =  current.getTime() - current.getTimezoneOffset()*60000;
             return this.published() && now >= this.startTime() && now < this.endTime();
         }
     });

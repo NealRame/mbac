@@ -14,12 +14,11 @@ html
     body
         include navbar
         block content
-        .uncolapser
-        include footer
         script
             | require(['/js/common.js'], function(common) {
-            | require(['analytics/main']);
-            | require(['stickyfooter/main']);
+            | require(['jquery', 'foundation'], function($) {
+            |     $(document).foundation();
+            | });
             if page.application
                 | require(['#{page.application}']);
             | });

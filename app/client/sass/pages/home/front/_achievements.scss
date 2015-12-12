@@ -1,0 +1,20 @@
+@import "../settings";
+@import "foundation/components/block-grid";
+
+#achievements {
+    li {
+        figure {
+            border: $achievement-border-width $achievement-border-style $achievement-border-color;
+            display: none;
+            margin: 0;
+            overflow: hidden;
+            padding: 0;
+            position: relative;
+            img {
+                max-height: none;
+                max-width: none;
+                position: absolute;
+            }
+        }
+    }
+}

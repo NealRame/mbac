@@ -87,6 +87,10 @@ module.exports = function(grunt) {
                             ]
                         },
                         {
+                            name: 'analytics/main',
+                            exclude: ['common']
+                        },
+                        {
                             name: 'stickyfooter/main',
                             exclude: ['common']
                         },

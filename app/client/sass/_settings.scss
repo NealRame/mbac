@@ -1,16 +1,37 @@
-// We use these to define default font weights
-$font-weight-normal: normal !default;
-$font-weight-bold: bold !default;
-$font-weight-normal: 300;
-$body-font-family: "Raleway", sans-serif;
-$body-font-weight: $font-weight-normal;
-$font-smoothing: antialiased;
-
-@import "foundation/settings";
 @import "foundation/components/global";
 
-// Global
-// ------
+
+///////////////////////////////////////////////////////////////////////////////
+// Font
+$icon-font-path: "/fonts";
+$font-weight-normal: normal;
+$font-weight-bold: bold;
+$font-weight-normal: 300;
+
+$header-font-family: 'Georgia', serif;
+$header-font-style: italic;
+$header-font-weight: bold;
+
+$h1-font-size: 1.25rem;
+$h1-medium-up-font-size: 1.5rem;
+$h1-large-up-font-size: 2rem;
+
+$h2-font-size: 1rem;
+$h2-medium-up-font-size: 1.25rem;
+$h2-large-up-font-size: 1.75rem;
+
+$h3-font-size: 1rem;
+$h3-medium-up-font-size: 1rem;
+$h3-large-up-font-size: 1.5rem;
+
+$body-font-family: 'Raleway', sans-serif;
+$body-font-weight: $font-weight-normal;
+$body-medium-up-font-size: 1.25rem;
+$body-large-up-font-size: 1.5rem;
+
+$font-smoothing: antialiased;
+
+///////////////////////////////////////////////////////////////////////////////
 // Colors
 $black: #232020;
 $white: #fff;
@@ -31,32 +52,29 @@ $warning-color: #f08a24;   // carrot
 
 $page-background-color: $white;
 
+$header-color: $gray;
+
 $body-bg: $page-background-color;
 $body-font-color: $black;
 
 $section-title-color: lighten($gray, 33);
 
-// Splash
-// ------
-$splash-height: 384px;
-$splash-background-color: $black;
-
 // Tables
 // ------
 $table-row-font-color: inherit;
 
+///////////////////////////////////////////////////////////////////////////////
 // Top Bar
-// -------
-$topbar-bg: $black;
+$topbar-bg-color: $black;
+$topbar-bg: $topbar-bg-color;
 $topbar-dropdown-bg: $black;
 $topbar-link-color-hover: $yellow;
 $topbar-link-color-active: $yellow;
 $topbar-link-color-active-hover: $yellow;
 $topbar-link-weight: $font-weight-bold;
-$topbar-link-bg-hover: $black;
-$topbar-link-bg-active: $black;
-$topbar-link-bg-active-hover: $black;
-$font-path: "/fonts";
+$topbar-link-bg-hover: $topbar-bg-color;
+$topbar-link-bg-active: $topbar-bg-color;
+$topbar-link-bg-active-hover: $topbar-bg-color;
 
 // Footer
 // ------
@@ -66,3 +84,5 @@ $footer-foreground-color: $white;
 // Buttons
 // -------
 $button-font-color: $white;
+
+@import "foundation/settings";

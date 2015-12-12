@@ -1,5 +1,5 @@
-// home/editor.js
-// --------------
+// pages/home/subscribe-dialog/subscribe-dialog.js
+// -----------------------------------------------
 // - author: Neal.Rame. <contact@nealrame.com>
 // -   date: Wed May 27 23:07:32 CEST 2015
 define(function(require) {
@@ -9,7 +9,7 @@ define(function(require) {
     var $ = require('jquery');
     var Dialog = require('Dialog');
     var Marionette = require('marionette');
-    var subscribeTemplate = require('text!pages/home/subscribe-dialog.html');
+    var subscribeTemplate = require('text!pages/home/subscription/subscribe-dialog.html');
     var util = require('common/util');
 
     function field_value(field) {
