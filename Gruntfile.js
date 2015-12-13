@@ -125,6 +125,10 @@ module.exports = function(grunt) {
                         {
                             name: 'pages/plan/main',
                             exclude: ['common']
+                        },
+                        {
+                            name: 'pages/logs/main',
+                            exclude: ['common']
                         }
                     ],
                     logLevel: 4
@@ -154,6 +158,7 @@ module.exports = function(grunt) {
                         'pages/contact/style.scss',
                         'pages/home/admin_style.scss',
                         'pages/home/style.scss',
+                        'pages/logs/admin_style.scss',
                         'pages/mbac/style.scss',
                         'pages/plan/style.scss',
                         'pages/prices/style.scss',
