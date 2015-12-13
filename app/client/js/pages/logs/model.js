@@ -34,9 +34,6 @@ define(function(require) {
         },
         url: function() {
             return functional.property(this.attributes, 'meta.url');
-        },
-        date: function() {
-            return new Date(this.get('timestamp'))
         }
     });
 });
