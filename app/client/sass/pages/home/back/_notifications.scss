@@ -67,7 +67,7 @@
                 transition: all .25s ease;
                 &[data-action='remove'] {
                     &::after {
-                        content: '\f00d';
+                        content: '\f1f8';
                     }
                 }
                 &[data-action=edit] {
