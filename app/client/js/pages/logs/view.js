@@ -26,6 +26,8 @@ define(function(require) {
             return {
                 hasUrl: this.model.hasUrl.bind(this.model),
                 url: this.model.url.bind(this.model),
+                hasStatus: this.model.hasStatus.bind(this.model),
+                status: this.model.status.bind(this.model),
                 date: function() {
                     return (new Date(this.timestamp)).toLocaleDateString('FR-fr');
                 },
