@@ -1,0 +1,6 @@
+@import "../../settings";
+
+$log-bg-color: $red;
+$log-action-color: lighten($body-font-color, 15);;
+$log-label-color: lighten($body-font-color, 55);
+$log-message-color: $body-font-color;
