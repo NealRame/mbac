@@ -156,6 +156,26 @@ define(function(require) {
 		return _.isFunction(v) ? v.call(context) : v;
 	}
 
+	/// #### functional.property(obj, path)
+	/// Return the value stored at the given path in the given object.
+	///
+	/// __Parameters:__
+	/// - `obj`, an `Object`.
+	/// - `path`, a `String` .
+	///
+	/// __Examples:__
+	/// ```js
+	/// var o = {foo: [{bar: }, {}]}
+	/// functional.property(obj, '')
+	function property(obj, path) {
+        if (_.isString(path)) {
+            return property(obj, _.compact(path.replace(/\[(\w+)\]/g, '.$1').split('.')));
+        }
+        if (!existy(obj) || path.length === 0) {
+            return obj;
+        }
+		return property(obj[_.first(path)], _.rest(path));
+    }
 
     return {
 		applyIf: apply_if,
@@ -166,6 +186,7 @@ define(function(require) {
 		hasAllOfKeys: has_all_of_keys,
 		hasAllOfAttributes: has_all_of_attributes,
 		mapObject: map_object,
-		valueOf: value_of
+		valueOf: value_of,
+		property: property
     };
 });

@@ -1,0 +1,19 @@
+<a class='action' href='#' data-action='remove'></a>
+<div class='message' data-level='<%= level %>'><%= message %></div>
+<div class='row'>
+    <div class="small-12 medium-6 columns">
+        <div class='date-label'>Date: <%= date() %> - <%= time() %></div>
+    </div>
+    <% if (hasStatus()) { %>
+        <div class="small-12 medium-6 columns">
+            <div class='status-label'>Status: <%= status() %></div>
+        </div>
+    <% } %>
+</div>
+<% if (hasUrl()) { %>
+    <div class='row'>
+        <div class="small-12 columns">
+            <div class='url-label'>URL: <%= url() %></div>
+        </div>
+    </div>
+<% } %>
