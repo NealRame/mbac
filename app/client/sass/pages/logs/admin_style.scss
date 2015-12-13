@@ -1,13 +1,6 @@
 @import "./settings";
 
-$log-message-action-font-size: 1.25rem;
-$log-details-font-size: .8rem;
 
-$log-bottom-margin: 2rem;
-$log-message-font-size: 1rem;
-$log-message-padding: 1rem;
-
-$log-message-action-color: lighten($log-message-color, 25);
 
 #logs {
     ul {
