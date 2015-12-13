@@ -33,10 +33,12 @@ define(function(require) {
                 hasUrl: this.model.hasUrl.bind(this.model),
                 url: this.model.url.bind(this.model),
                 date: function() {
-                    return (new Date(this.timestamp)).toLocaleDateString('FR-fr');
+                    var date = new Date(this.timestamp);
+                    return date.getDate() + '/' + (date.getMonth() + 1)  + '/' + date.getFullYear();
                 },
                 time: function() {
-                    return (new Date(this.timestamp)).toLocaleTimeString('FR-fr');
+                    var date = new Date(this.timestamp);
+                    return date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds();
                 }
             };
         },
