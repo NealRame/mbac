@@ -30,7 +30,6 @@
             }
 
             .message {
-                background-color: $log-bg-color;
                 font-size: $log-message-font-size;
                 padding-left: $log-message-padding;
                 position: relative;
@@ -51,6 +50,12 @@
                         transform: scale(1);
                         transition: all .25s ease;
                     }
+                }
+                &[data-level='info'] {
+                    background-color: $log-bg-color-info;
+                }
+                &[data-level='error'] {
+                    background-color: $log-bg-color-error;
                 }
             }
 
