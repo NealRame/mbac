@@ -34,6 +34,7 @@ exports.instance = function() {
         // Configuration setup
         app.set('config', config);
         app.set('debug', debug);
+        app.set('logger', logger);
 
         // View engine setup
         app.set('view engine', 'jade');
