@@ -9,7 +9,6 @@ require('winston-mongodb').MongoDB; // expose winston.transports.MongoDB
 
 const _ = require('underscore');
 const config = require('config');
-const onFinished = require('on-finished');
 const winston = require('winston');
 
 const logger = new (winston.Logger)({
@@ -50,14 +49,6 @@ function info(message, data) {
 }
 
 module.exports = {
-    middleware(req, res, next) {
-        onFinished(res, (err, res) => {
-            if (err) {
-                logRequestError(req, res, err);
-            }
-        });
-        next();
-    },
     logRequestError,
     error,
     info
