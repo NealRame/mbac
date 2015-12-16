@@ -36,12 +36,12 @@ function format(req, data) {
     ];
 }
 
-function logRequestError(req, err) {
-    logger.error.apply(logger, format(req, err));
-}
-
-function error(err) {
-    logger.info.apply(logger, format(null, err));
+function error(req, err) {
+    if (err == null) {
+        err = req;
+        req = null;
+    }
+    logger.info.apply(logger, format(req, err));
 }
 
 function info(message, data) {
@@ -49,7 +49,6 @@ function info(message, data) {
 }
 
 module.exports = {
-    logRequestError,
     error,
     info
 };

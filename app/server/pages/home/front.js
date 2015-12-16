@@ -7,7 +7,7 @@
 
 const debug = require('debug')('mbac:routes:home');
 const express = require('express');
-const log_request_error = require('logger').logRequestError;
+const log_request_error = require('logger').error;
 const mongoose = require('mongoose');
 const Notification = require('pages/home/models/notification');
 const path = require('path');
