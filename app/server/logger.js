@@ -17,15 +17,16 @@ const logger = new (winston.Logger)({
         new (winston.transports.MongoDB)({
             capped: true,
             collection: 'logs',
-            level: 'error',
             db: config.database.URI,
-            username: config.database.user,
-            password: config.database.password
+            exitOnError: false,
+            level: 'info',
+            password: config.database.password,
+            username: config.database.user
         })
     ]
 });
 
-function format(req, res, data) {
+function format(req, data) {
     return [
         data.message,
         Object.assign(
@@ -36,16 +37,28 @@ function format(req, res, data) {
     ];
 }
 
+function logRequestError(req, err) {
+    logger.error.apply(logger, format(req, err));
+}
+
+function error(err) {
+    logger.info.apply(logger, format(null, err));
+}
+
+function info(message, data) {
+    logger.info(message, data);
+}
+
 module.exports = {
     middleware(req, res, next) {
         onFinished(res, (err, res) => {
             if (err) {
-                logger.error.apply(logger, format(req, res, err));
+                logRequestError(req, res, err);
             }
         });
         next();
     },
-    logRequestError(req, res, err) {
-        logger.error.apply(logger, format(req, res, err));
-    }
+    logRequestError,
+    error,
+    info
 };
