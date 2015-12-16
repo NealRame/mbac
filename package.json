@@ -22,7 +22,7 @@
     "morgan": "^1.6.1",
     "nodemailer": "^1.10.0",
     "nodemailer-sendmail-transport": "^1.0.0",
-    "oauth2-js": "NealRame/oauth2-js#v0.4",
+    "oauth2-js": "github:nealrame/oauth2-js#v0.6",
     "on-finished": "^2.3.0",
     "serve-favicon": "^2.3.0",
     "serve-static": "^1.10.0",
