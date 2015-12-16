@@ -26,7 +26,7 @@ router
             .then((log) => res.send(log), next);
     })
     .delete('/:id', (req, res) => {
-        Log.findByIdAndRemove(req.params.id);
+        Log.findByIdAndRemove(req.params.id).exec();
         res.status(200).send('OK');
     })
     .all(api.forbidden());

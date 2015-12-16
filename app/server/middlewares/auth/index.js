@@ -18,26 +18,46 @@ exports.setup = function(app) {
     let auth_config;
     if (!oauth2 && (auth_config = app.get('config').auth)) {
         oauth2 = new Oauth2(auth_config, {
-            findUser(id, callback) {
+            find(id, callback) {
                 User.count({}).exec()
                     .then((count) => count === 0 ? User.create( {_id: id}) : User.findOne({_id: id}).exec())
-                    .then(callback.bind(null, null))
-                    .then(null, callback);
+                    .then((user) => {
+                        callback(null, user);
+                    }, callback);
             },
-            isInitialized(user, callback) {
-                callback(null, user.isInitialized());
-            },
-            mapUser(user, oauth2_user, callback) {
+            initialize(user, oauth2_user, callback) {
                 user.email = oauth2_user.email;
                 user.name = {
                     first: oauth2_user.given_name,
                     last: oauth2_user.family_name
                 };
                 user.picture = oauth2_user.picture;
-                user.save(callback);
+                user.save((err, user) => callback(err, user));
+            },
+            isInitialized(user, callback) {
+                callback(null, user.isInitialized());
+            },
+            id(user) {
+                return user._id;
             }
         });
-        app.use(oauth2.middleware());
-        app.use(oauth2.route());
+        app.use(oauth2.middleware);
+        app.use(oauth2.route);
+        oauth2.events
+            .on('login-success', (user) => {
+                app.get('logger')
+                    .info(`${user.name.full} successfully logged in.`, {
+                        user_id: user._id,
+                        first_name: user.name.first,
+                        last_name: user.name.last
+                    });
+            })
+            .on('login-failure', (token) => {
+                app.get('logger')
+                    .error(new Error(`${token.id_token.email} failed to log in.`), {
+                        email: token.id_token.email,
+                        sub: token.id_token.sub
+                    });
+            });
     }
 };

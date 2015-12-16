@@ -1,6 +1,5 @@
 'use strict';
 
-const _ = require('underscore');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const debug = require('debug')('mbac:app');
@@ -34,6 +33,7 @@ exports.instance = function() {
         // Configuration setup
         app.set('config', config);
         app.set('debug', debug);
+        app.set('logger', logger);
 
         // View engine setup
         app.set('view engine', 'jade');
@@ -51,7 +51,6 @@ exports.instance = function() {
         if (app.get('env') === 'development') {
             app.use(require('morgan')('dev'));
         }
-        app.use(logger.middleware);
         app.use(bodyParser.json());
         app.use(bodyParser.urlencoded({extended: true}));
         app.use(cookieParser());
@@ -101,7 +100,7 @@ exports.instance = function() {
                     });
                 }
             }
-            logger.logRequestError(req, res, err);
+            logger.error(req, err);
         });
 
         return app;

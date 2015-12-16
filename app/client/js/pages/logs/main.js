@@ -4,7 +4,7 @@ define(function(require) {
     var $ = require('jquery');
     var Backbone = require('backbone');
     var Marionette = require('marionette');
-    // var Dialog = require('Dialog');
+    var Dialog = require('Dialog');
     // var Menu = require('pages/home/menu/menu');
     var Log = require('pages/logs/model');
     var LogView = require('pages/logs/view');
@@ -36,18 +36,18 @@ define(function(require) {
             });
             // this.menuView = new Menu();
 
-            // this.listenTo(this.listView, 'childview:remove', function(child_view, model) {
-            //     Dialog.prompt(
-            //         'Êtes vous sûr de supprimer cette notification ?',
-            //         {
-            //             accept: function() {
-            //                 model.destroy();
-            //             },
-            //             acceptLabel: 'Oui',
-            //             refuseLabel: 'Non'
-            //         }
-            //     );
-            // });
+            this.listenTo(this.listView, 'childview:remove', function(child_view, model) {
+                Dialog.prompt(
+                    'Êtes vous sûr de supprimer cette entrée ?',
+                    {
+                        accept: function() {
+                            model.destroy();
+                        },
+                        acceptLabel: 'Oui',
+                        refuseLabel: 'Non'
+                    }
+                );
+            });
 
             this.collection.fetch({reset: true});
         },

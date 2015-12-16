@@ -1,0 +1,99 @@
+@import "./settings";
+
+@import "foundation/components/button-groups";
+@import "foundation/components/forms";
+@import "foundation/components/reveal";
+
+#logs {
+    ul {
+        margin: 0;
+        .log {
+            color: $log-message-color;
+            list-style: none;
+            margin-bottom: $log-bottom-margin;
+            .action {
+                font-family: FontAwesome;
+                text-decoration: none;
+                &[data-action='remove'] {
+                    &::after {
+                        content: '\f1f8';
+                    }
+                }
+                &[data-action='unfold'] {
+                    &::after {
+                        content: '\f067';
+                    }
+                }
+                &[data-action='fold-up'] {
+                    &::after {
+                        content: '\f068';
+                    }
+                }
+            }
+
+            .message {
+                font-size: $log-message-font-size;
+                padding-left: $log-message-padding;
+                position: relative;
+                .action {
+                    color: $log-message-action-color;
+                    -ms-transform: scale(0);
+                    -webkit-transform: scale(0);
+                    font-size: $log-message-font-size;
+                    position: absolute;
+                    right: $log-message-padding;
+                    transform: scale(0);
+                    transition: all .25s ease;
+                }
+                &:hover {
+                    .action {
+                        -webkit-transform: scale(1);
+                        -ms-transform: scale(1);
+                        transform: scale(1);
+                        transition: all .25s ease;
+                    }
+                }
+                &[data-level='info'] {
+                    background-color: $log-bg-color-info;
+                }
+                &[data-level='error'] {
+                    background-color: $log-bg-color-error;
+                }
+            }
+
+            .details {
+                position: relative;
+                .action {
+                    color: $log-label-color;
+                    font-size: $log-details-font-size;
+                    position: absolute;
+                    right: $log-message-padding;
+                    top: 0;
+                }
+                .info {
+                    border-bottom: 1px solid $log-label-color;
+                    .date-label, .status-label, .url-label {
+                        color: $log-label-color;
+                        font-size: $log-details-font-size;
+                    }
+                }
+                .stack {
+                    pre {
+                        font-size: $log-details-font-size;
+                        max-height: 0;
+                        overflow: hidden;
+                        transition: all .25s ease-out;
+                    }
+                    &[data-fold='no'] {
+                        border-bottom: 1px solid $log-label-color;
+                        pre {
+                            max-height: 32rem;
+                            overflow: scroll;
+                            transition: all .25s ease-in;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

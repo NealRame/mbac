@@ -1,19 +1,29 @@
-<a class='action' href='#' data-action='remove'></a>
-<div class='message' data-level='<%= level %>'><%= message %></div>
-<div class='row'>
-    <div class="small-12 medium-6 columns">
-        <div class='date-label'>Date: <%= date() %> - <%= time() %></div>
+<div class='message' data-level='<%= level %>'>
+    <a class='action' href='#' data-action='remove'></a>
+    <%= message %>
+</div>
+<div class='details'>
+    <div class='row info'>
+        <div class='small-12 medium-6 large-3 columns'>
+            <div class='date-label'>Date: <%= date() %> - <%= time() %></div>
+        </div>
+        <% if (hasStatus()) { %>
+            <div class='small-12 medium-6 large-2 columns'>
+                <div class='status-label'>Status: <%= status() %></div>
+            </div>
+        <% } %>
+        <% if (hasRequestURL()) { %>
+            <div class='small-12 large-7 columns'>
+                <div class='url-label'>URL: <%= requestURL() %></div>
+            </div>
+        <% } %>
     </div>
-    <% if (hasStatus()) { %>
-        <div class="small-12 medium-6 columns">
-            <div class='status-label'>Status: <%= status() %></div>
+    <% if (hasStack()) { %>
+        <div class='row stack'>
+            <div class='small-12 columns'>
+                <pre><% print(stack().join('\n'))%></pre>
+            </div>
         </div>
     <% } %>
+    <a class='action' href='#' data-action='unfold'></a>
 </div>
-<% if (hasUrl()) { %>
-    <div class='row'>
-        <div class="small-12 columns">
-            <div class='url-label'>URL: <%= url() %></div>
-        </div>
-    </div>
-<% } %>

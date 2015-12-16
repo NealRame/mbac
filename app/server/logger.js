@@ -9,23 +9,22 @@ require('winston-mongodb').MongoDB; // expose winston.transports.MongoDB
 
 const _ = require('underscore');
 const config = require('config');
-const onFinished = require('on-finished');
 const winston = require('winston');
 
 const logger = new (winston.Logger)({
     transports: [
         new (winston.transports.MongoDB)({
-            capped: true,
             collection: 'logs',
-            level: 'error',
             db: config.database.URI,
-            username: config.database.user,
-            password: config.database.password
+            exitOnError: false,
+            level: 'info',
+            password: config.database.password,
+            username: config.database.user
         })
     ]
 });
 
-function format(req, res, data) {
+function format(req, data) {
     return [
         data.message,
         Object.assign(
@@ -36,16 +35,19 @@ function format(req, res, data) {
     ];
 }
 
-module.exports = {
-    middleware(req, res, next) {
-        onFinished(res, (err, res) => {
-            if (err) {
-                logger.error.apply(logger, format(req, res, err));
-            }
-        });
-        next();
-    },
-    logRequestError(req, res, err) {
-        logger.error.apply(logger, format(req, res, err));
+function error(req, err) {
+    if (err == null) {
+        err = req;
+        req = null;
     }
+    logger.error.apply(logger, format(req, err));
+}
+
+function info(message, data) {
+    logger.info(message, data);
+}
+
+module.exports = {
+    error,
+    info
 };
