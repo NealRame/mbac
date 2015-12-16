@@ -41,7 +41,7 @@ function error(req, err) {
         err = req;
         req = null;
     }
-    logger.info.apply(logger, format(req, err));
+    logger.error.apply(logger, format(req, err));
 }
 
 function info(message, data) {
