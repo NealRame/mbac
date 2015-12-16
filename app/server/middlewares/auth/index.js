@@ -43,5 +43,21 @@ exports.setup = function(app) {
         });
         app.use(oauth2.middleware);
         app.use(oauth2.route);
+        oauth2.events
+            .on('login-success', (user) => {
+                app.get('logger')
+                    .info(`${user.name.full} successfully logged in.`, {
+                        user_id: user._id,
+                        first_name: user.name.first,
+                        last_name: user.name.last
+                    });
+            })
+            .on('login-failure', (token) => {
+                app.get('logger')
+                    .error(new Error(`${token.id_token.email} failed to log in.`), {
+                        email: token.id_token.email,
+                        sub: token.id_token.sub
+                    });
+            });
     }
 };
