@@ -18,8 +18,8 @@ define(function(require) {
         hasStatus: function() {
             return functional.existy(this.status());
         },
-        hasUrl: function() {
-            return functional.existy(this.url());
+        hasRequestURL: function() {
+            return functional.existy(this.requestURL());
         },
         stack: function() {
             if (this.hasStack()) {
@@ -32,7 +32,7 @@ define(function(require) {
         status: function() {
             return functional.property(this.attributes, 'meta.status');
         },
-        url: function() {
+        requestURL: function() {
             return functional.property(this.attributes, 'meta.url');
         }
     });

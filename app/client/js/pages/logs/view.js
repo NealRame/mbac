@@ -9,7 +9,6 @@ define(function(require) {
     var $ = require('jquery');
     var itemTemplate = require('text!pages/logs/view.html');
     var Marionette = require('marionette');
-    var functional = require('common/functional');
 
     return Marionette.ItemView.extend({
         className: 'log',
@@ -30,8 +29,8 @@ define(function(require) {
                 stack: this.model.stack.bind(this.model),
                 hasStatus: this.model.hasStatus.bind(this.model),
                 status: this.model.status.bind(this.model),
-                hasUrl: this.model.hasUrl.bind(this.model),
-                url: this.model.url.bind(this.model),
+                hasRequestURL: this.model.hasRequestURL.bind(this.model),
+                requestURL: this.model.requestURL.bind(this.model),
                 date: function() {
                     var date = new Date(this.timestamp);
                     return date.getDate() + '/' + (date.getMonth() + 1)  + '/' + date.getFullYear();
