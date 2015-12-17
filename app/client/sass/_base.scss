@@ -15,30 +15,6 @@ h1, h2, h3 {
     font-weight: $header-font-weight;
 }
 
-@mixin wrapper-color($bg-color, $fg-color, $h1-color, $link-color) {
-    background-color: $bg-color;
-    color: $fg-color;
-    article {
-        & > header > h1 {
-            color: $h1-color;
-        }
-        a:not(.button) {
-            color: $link-color;
-        }
-        a.button {
-            color: $bg-color
-        }
-    }
-}
-
-@mixin wrapper-image($bg-image, $bg-color, $fg-color, $h1-color, $link-color) {
-    @include wrapper-color($bg-color, $fg-color, $h1-color, $link-color);
-    background-image: $bg-image;
-    background-repeat: no-repeat;
-    background-position: 50% 0;
-    background-size: cover;
-}
-
 section.wrapper {
     -webkit-transform: translate3d(0,0,0);
     overflow: auto;
