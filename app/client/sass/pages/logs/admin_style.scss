@@ -30,7 +30,6 @@
                     }
                 }
             }
-
             .message {
                 font-size: $log-message-font-size;
                 padding-left: $log-message-padding;
@@ -60,7 +59,6 @@
                     background-color: $log-bg-color-error;
                 }
             }
-
             .details {
                 position: relative;
                 .action {
