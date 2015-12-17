@@ -126,10 +126,9 @@ block content
             section
                 p.text-center
                     | Abonnez-vous à la newsletter et recevez toute l'actualité
-                    | et les bon plans mon Bar à Couture.
-                    br
-                    a#subscribe.button.text-center(href="#")
-                        | Je m'abonne !
+                    | et les bon plans mon Bar à Couture :
+                    a#subscribe.circle-button.text-center(href="#")
+                        | ici!
     if achievements.length > 0
         section.wrapper.blue-filled
             article
@@ -142,4 +141,4 @@ block content
                 p.text-center
                     | Voir toutes les réalisations des client(e)s de mon Bar à 
                     | couture :
-                    a(href="/achievements"): | &nbsp;ici !
+                    a.circle-button.text-center(href="/achievements"): | ici!

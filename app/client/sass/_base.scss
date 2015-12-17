@@ -58,6 +58,9 @@ section.wrapper {
             width: lower-bound($large-range);
         }
     }
+    .circle-button {
+        @include circle-button($radius: 2rem);
+    }
     & {
         @include wrapper-color(
             $bg-color: $page-background-color,
@@ -81,6 +84,9 @@ section.wrapper {
             $h1-color: $light-gray,
             $link-color: $yellow
         );
+        .circle-button {
+            @include circle-button($bg-color: $yellow, $fg-color: $blue, $radius: 2rem);
+        }
     }
     &.yellow-filled {
         @include wrapper-color(
