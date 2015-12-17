@@ -14,10 +14,35 @@ h1, h2, h3 {
     font-style: $header-font-style;
     font-weight: $header-font-weight;
 }
+
+@mixin wrapper-color($bg-color, $fg-color, $h1-color, $link-color) {
+    background-color: $bg-color;
+    color: $fg-color;
+    article {
+        & > header > h1 {
+            color: $h1-color;
+        }
+        a:not(.button) {
+            color: $link-color;
+        }
+        a.button {
+            color: $bg-color
+        }
+    }
+}
+
+@mixin wrapper-image($bg-image, $bg-color, $fg-color, $h1-color, $link-color) {
+    @include wrapper-color($bg-color, $fg-color, $h1-color, $link-color);
+    background-image: $bg-image;
+    background-repeat: no-repeat;
+    background-position: 50% 0;
+    background-size: cover;
+}
+
 section.wrapper {
-    background-color: $page-background-color;
-    position: relative;
     -webkit-transform: translate3d(0,0,0);
+    overflow: auto;
+    position: relative;
     z-index: 2;
     article {
         font-size: 1rem;
@@ -32,10 +57,6 @@ section.wrapper {
             @media #{$large-up} {
                 font-size: $h3-large-up-font-size;
             }
-        }
-        @media #{$large-up} {
-            margin: 0 auto;
-            width: lower-bound($large-range);
         }
         & > header > h1 {
             color: $section-title-color;
@@ -56,47 +77,58 @@ section.wrapper {
                 margin: 16px 32px 8px;
             }
         }
+        @media #{$large-up} {
+            margin: 0 auto;
+            width: lower-bound($large-range);
+        }
+    }
+    & {
+        @include wrapper-color(
+            $bg-color: $page-background-color,
+            $fg-color: $body-font-color,
+            $h1-color: $section-title-color,
+            $link-color: $blue
+        );
     }
     &.green-filled {
-        background-color: $green;
-        color: $white;
-        z-index: 2;
-        article > header > h1{
-            color: $light-gray;
-        }
+        @include wrapper-color(
+            $bg-color: $green,
+            $fg-color: $white,
+            $h1-color: $light-gray,
+            $link-color: $blue
+        );
     }
     &.blue-filled {
-        background-color: $blue;
-        color: $white;
-        z-index: 2;
-        article > header > h1{
-            color: $light-gray;
-        }
-        a {
-            color: $yellow;
-        }
+        @include wrapper-color(
+            $bg-color: $blue,
+            $fg-color: $white,
+            $h1-color: $light-gray,
+            $link-color: $yellow
+        );
     }
     &.yellow-filled {
-        background-color: $yellow;
-        color: $black;
-        z-index: 2;
-        article > header > h1{
-            color: $gray;
-        }
-        a:not(.button) {
-            color: $blue;
-        }
+        @include wrapper-color(
+            $bg-color: $yellow,
+            $fg-color: $black,
+            $h1-color: $gray,
+            $link-color: $white
+        );
     }
     &.purple-filled {
-        background-color: $purple;
-        color: $white;
-        z-index: 2;
-        article > header > h1{
-            color: $gray;
-        }
-        a {
-            color: $white;
-        }
+        @include wrapper-color(
+            $bg-color: $purple,
+            $fg-color: $white,
+            $h1-color: $gray,
+            $link-color: $white
+        );
     }
-    overflow: auto;
+    &.image-filled1 {
+        @include wrapper-image(
+            $bg-image: url(../images/surjeteuses.jpg),
+            $bg-color: $black,
+            $fg-color: $white,
+            $h1-color: $section-title-color,
+            $link-color: lighten($blue, 55)
+        )
+    }
 }
