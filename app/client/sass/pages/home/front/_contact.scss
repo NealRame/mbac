@@ -7,13 +7,21 @@
     .contact-icon {
         @media #{$small} {
             &:before {
-                @include circle-button($bg-color: $black, $fg-color: $white, $radius: $contact-icon-size);
+                @include circle-button(
+                    $bg-color: $contact-icon-bg-color,
+                    $fg-color: $contact-icon-fg-color,
+                    $radius: $contact-icon-size
+                );
                 font-size: $contact-icon-font-size;
             }
         }
         @media #{$medium-up} {
             &:before {
-                @include circle-button($bg-color: $black, $fg-color: $white, $radius: $contact-icon-medium-up-size);
+                @include circle-button(
+                    $bg-color: $contact-icon-bg-color,
+                    $fg-color: $contact-icon-fg-color,
+                    $radius: $contact-icon-medium-up-size
+                );
                 font-size: $contact-icon-medium-up-font-size;
             }
             &:before {
