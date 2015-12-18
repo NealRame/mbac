@@ -4,16 +4,25 @@
     text-align: center;
     font-size: smaller;
     margin: $contact-margin;
-
     .contact-icon {
-        &:before {
-            @include circle-button($bg-color: $black, $fg-color: $white, $radius: $contact-icon-size);
-            font-family: FontAwesome;
-            font-size: $contact-icon-font-size;
-            @media #{$medium-up} {
+        @media #{$small} {
+            &:before {
+                @include circle-button($bg-color: $black, $fg-color: $white, $radius: $contact-icon-size);
+                font-size: $contact-icon-font-size;
+            }
+        }
+        @media #{$medium-up} {
+            &:before {
+                @include circle-button($bg-color: $black, $fg-color: $white, $radius: $contact-icon-medium-up-size);
+                font-size: $contact-icon-medium-up-font-size;
+            }
+            &:before {
                 display: block;
                 margin: 0 auto;
             }
+        }
+        &:before {
+            font-family: FontAwesome;
         }
         &.phone:before {
             content: "\f10b";
@@ -24,8 +33,6 @@
         &.e-mail:before {
             content: "\f003";
         }
-
-
     }
     @media #{$medium-up} {
         margin: $contact-medium-up-margin;
