@@ -6,9 +6,15 @@
     margin: $contact-margin;
 
     .contact-icon {
-        @include circle-button($bg-color: $black, $fg-color: $white, $radius: $contact-icon-size);
-        font-size: $contact-icon-font-size*2;
-        font-family: FontAwesome;
+        &:before {
+            @include circle-button($bg-color: $black, $fg-color: $white, $radius: $contact-icon-size);
+            font-family: FontAwesome;
+            font-size: $contact-icon-font-size;
+            @media #{$medium-up} {
+                display: block;
+                margin: 0 auto;
+            }
+        }
         &.phone:before {
             content: "\f10b";
         }
@@ -18,10 +24,8 @@
         &.e-mail:before {
             content: "\f003";
         }
-        @media #{$small-up} {
-            display: block;
-            margin: 0 auto;
-        }
+
+
     }
     @media #{$medium-up} {
         margin: $contact-medium-up-margin;
