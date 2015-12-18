@@ -2,18 +2,13 @@
 
 .contact {
     text-align: center;
+    font-size: smaller;
     margin: $contact-margin;
+
     .contact-icon {
-        background-color: $contact-icon-bg-color;
-        border-radius: 90px;
-        color: $contact-icon-fg-color;
+        @include circle-button($bg-color: $black, $fg-color: $white, $radius: $contact-icon-size);
+        font-size: $contact-icon-font-size*2;
         font-family: FontAwesome;
-        font-size: $contact-icon-font-size;
-        line-height: $contact-icon-size;
-        height: $contact-icon-size;
-        width: $contact-icon-size;
-        margin: 0 auto;
-        margin-bottom: $contact-icon-margin;
         &.phone:before {
             content: "\f10b";
         }
@@ -23,12 +18,9 @@
         &.e-mail:before {
             content: "\f003";
         }
-        @media #{$medium-up} {
-            font-size: $contact-icon-medium-up-font-size;
-            line-height: $contact-icon-medium-up-size;
-            height: $contact-icon-medium-up-size;
-            width: $contact-icon-medium-up-size;
-            margin-bottom: $contact-icon-medium-up-margin;
+        @media #{$small-up} {
+            display: block;
+            margin: 0 auto;
         }
     }
     @media #{$medium-up} {
