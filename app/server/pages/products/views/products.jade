@@ -1,0 +1,22 @@
+//- Products view
+//- =============
+//- - author: Neal.Rame. <contact@nealrame.com>
+//- -   date: Sat Dec 19 01:19:20 CET 2015
+extends /layout
+
+mixin product-item(product)
+    li.products
+        a(href='/products/#{product.id}')
+            figure(title='#{product.name}')
+                - var thumbnail = product.pictures[0].thumbnailPath()
+                img(src='#{thumbnail}')
+
+block content
+    section.wrapper
+        article
+            header
+                h1: | Catalogue des produits vendu dans mon Bar à Couture
+            #products-wrapper
+                ul
+                    each product in products
+                        +product-item(product)

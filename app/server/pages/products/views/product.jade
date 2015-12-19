@@ -1,0 +1,25 @@
+//- Product view
+//- =================
+//- - author: Neal.Rame. <contact@nealrame.com>
+//- -   date: Sat Dec 19 02:11:46 CET 2015
+extends /layout
+
+mixin picture-item(picture)
+    li.thumb: a(href=picture.originalPath())
+        img(src=picture.thumbnailPath())
+
+block content
+    section.wrapper.blue-filled
+        article
+            header
+                h1: | #{product.name}
+            section
+                #pictures-wrapper
+                    ul(style='display: none;')
+                        each picture in product.pictures
+                            +picture-item(picture)
+    section.wrapper
+        article
+            section
+                #description-wrapper
+                    | #{product.description}

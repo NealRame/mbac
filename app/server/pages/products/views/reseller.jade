@@ -1,0 +1,25 @@
+//- Reseller view
+//- =============
+//- - author: Neal.Rame. <contact@nealrame.com>
+//- -   date: Sat Dec 19 01:38:16 CET 2015
+extends /layout
+
+mixin picture-item(picture)
+    li.thumb: a(href=picture.originalPath())
+        img(src=picture.thumbnailPath())
+
+block content
+    section.wrapper.blue-filled
+        article
+            header
+                h1: | #{reseller.name}
+            section
+                #pictures-wrapper
+                    ul(style='display: none;')
+                        each picture in reseller.pictures
+                            +picture-item(picture)
+    section.wrapper
+        article
+            section
+                #description-wrapper
+                    | #{reseller.description}
