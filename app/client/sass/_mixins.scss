@@ -1,0 +1,43 @@
+@import "foundation/components/buttons";
+
+@mixin circle-button($bg-color: $blue, $fg-color: $white, $radius: 2rem) {
+    @include button(
+        $padding: 0,
+        $bg: $bg-color,
+        $radius: $radius
+    )
+    color: $fg-color;
+    display: block;
+    height: 2*$radius;
+    line-height: 2*$radius;
+    margin: 0 auto;
+    width: 2*$radius;
+    &:hover {
+        color: $fg-color;
+    }
+    @media #{$medium-up} {
+        display: inline-block;
+        margin: 0 $radius/4;
+    }
+}
+
+@mixin wrapper-color($bg-color, $fg-color, $h1-color, $link-color) {
+    background-color: $bg-color;
+    color: $fg-color;
+    article {
+        & > header > h1 {
+            color: $h1-color;
+        }
+        a {
+            color: $link-color;
+        }
+    }
+}
+
+@mixin wrapper-image($bg-image, $bg-color, $fg-color, $h1-color, $link-color) {
+    @include wrapper-color($bg-color, $fg-color, $h1-color, $link-color);
+    background-image: $bg-image;
+    background-repeat: no-repeat;
+    background-position: 50% 0;
+    background-size: cover;
+}

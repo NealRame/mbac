@@ -119,6 +119,10 @@ module.exports = function(grunt) {
                             exclude: ['common']
                         },
                         {
+                            name: 'pages/logs/main',
+                            exclude: ['common']
+                        },
+                        {
                             name: 'pages/mbac/main',
                             exclude: ['common']
                         },
@@ -127,7 +131,19 @@ module.exports = function(grunt) {
                             exclude: ['common']
                         },
                         {
-                            name: 'pages/logs/main',
+                            name: 'pages/products/front/product',
+                            exclude: ['common']
+                        },
+                        {
+                            name: 'pages/products/front/products',
+                            exclude: ['common']
+                        },
+                        {
+                            name: 'pages/products/front/reseller',
+                            exclude: ['common']
+                        },
+                        {
+                            name: 'pages/products/back/main',
                             exclude: ['common']
                         }
                     ],
@@ -162,6 +178,8 @@ module.exports = function(grunt) {
                         'pages/mbac/style.scss',
                         'pages/plan/style.scss',
                         'pages/prices/style.scss',
+                        'pages/products/admin_style.scss',
+                        'pages/products/style.scss',
                         'pages/services/style.scss'
                     ],
                     dest: '<%= sass_build_dir %>',

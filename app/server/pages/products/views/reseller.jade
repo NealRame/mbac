@@ -1,7 +1,7 @@
-//- achievement.jade
-//- =================
+//- Reseller view
+//- =============
 //- - author: Neal.Rame. <contact@nealrame.com>
-//- -   date: Mon Apr  6 11:14:20 2015
+//- -   date: Sat Dec 19 01:38:16 CET 2015
 extends /layout
 
 mixin picture-item(picture)
@@ -12,14 +12,14 @@ block content
     section.wrapper.blue-filled
         article
             header
-                h1: | #{achievement.name}
+                h1: | #{reseller.name}
             section
                 #pictures-wrapper
                     ul(style='display: none;')
-                        each picture in achievement.pictures
+                        each picture in reseller.pictures
                             +picture-item(picture)
     section.wrapper
         article
             section
                 #description-wrapper
-                    | #{achievement.description}
+                    | #{reseller.description}

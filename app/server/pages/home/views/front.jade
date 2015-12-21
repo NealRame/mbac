@@ -70,7 +70,7 @@ block content
                 p
                     | Venez développer votre créativité autour d'un thé ou d’un
                     | café !
-    section.wrapper
+    section.wrapper.image-filled1
         article
             header
                 h1: | Horaires d'ouverture
@@ -97,26 +97,22 @@ block content
                             td.day: | Samedi
                             td.center: hr
                             td.hour: | 10H - 21H
-    section.wrapper
-        article
+
             header
                 h1: | Contact
             section
                 div.row
                     div.small-centered.medium-uncentered.medium-6.large-4.columns
                         div.contact
-                            a(href='/contact')
-                                div.contact-icon.phone
+                            a.contact-icon.phone(href='/contact')
                                 | 03.20.39.72.44
                     div.small-centered.medium-uncentered.medium-6.large-4.large-push-4.columns
                         div.contact
-                            a(href='/contact')
-                                div.contact-icon.e-mail
+                            a.contact-icon.e-mail(href='/contact')
                                 | contact@monbaracouture.com
                     div.small-centered.medium-uncentered.medium-12.large-4.large-pull-4.columns
                         div.contact
-                            a(href='/plan')
-                                div.contact-icon.address
+                            a.contact-icon.address(href='/plan')
                                 | mon Bar à Couture<br>
                                 | 32, rue Mourmant<br>
                                 | 59000 Lille
@@ -127,10 +123,9 @@ block content
             section
                 p.text-center
                     | Abonnez-vous à la newsletter et recevez toute l'actualité
-                    | et les bon plans mon Bar à Couture.
-                    br
-                    a#subscribe.button.text-center(href="#")
-                        | Je m'abonne !
+                    | et les bon plans mon Bar à Couture :
+                    a#subscribe.circle-button.text-center(href="#")
+                        | ici!
     if achievements.length > 0
         section.wrapper.blue-filled
             article
@@ -143,4 +138,4 @@ block content
                 p.text-center
                     | Voir toutes les réalisations des client(e)s de mon Bar à 
                     | couture :
-                    a(href="/achievements"): | &nbsp;ici !
+                    a.circle-button.text-center(href="/achievements"): | ici!
