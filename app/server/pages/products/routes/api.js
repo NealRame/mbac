@@ -118,6 +118,7 @@ function product_read_all(req, res) {
 }
 
 const Product_CRUD_helpers = create_CRUD_helpers({
+    model: Product,
     read_one: product_read_one,
     read_all: product_read_all,
     parse_data: create_data_parser({
@@ -174,6 +175,7 @@ function reseller_read_all() {
 }
 
 const Reseller_CRUD_helpers = create_CRUD_helpers({
+    model: Reseller,
     read_one: reseller_read_one,
     read_all: reseller_read_all,
     parse_data: create_data_parser({
