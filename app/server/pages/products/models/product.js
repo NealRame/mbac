@@ -72,7 +72,7 @@ const ProductSchema = new Schema({
 });
 
 ProductSchema.pre('remove', function(next) {
-    debug(util.format('removing %s', this._id.toString()));
+    debug('removing Product ${this._id.toString()}')
     this.pictures
         .map((picture) => picture._id ? picture._id : picture)
         .forEach((picture) => Picture.delete(picture));
@@ -227,19 +227,19 @@ ProductSchema.static('published', function(count, cb) {
 /// **Return:**
 /// - `Promise`.
 ProductSchema.methods.patch = function(data, cb) {
-    debug(`will patch ${this._id} with ${util.inspect(data)}`);
+    debug(`patch Product ${this._id} with ${util.inspect(data)}`);
     // Only keep pictures which are referenced both in product pictures and
     // in data.pictures. Others pictures are removed.
     const pictures =
         _.chain(this.pictures)
             .map((picture) => picture._id ? picture._id : picture)
-            .partition((id) => !_.any(data.pictures, id.equals.bind(id)))
+            .partition((id) => _.some(data.pictures, id.equals.bind(id)))
             .tap((partition) => {
-                partition[1].for_each((id) => {
+                partition[1].forEach((id) =>
                     Picture
                         .delete(id)
                         .catch((err) => debug(err));
-                });
+                );
             })
             .first()
             .value();
