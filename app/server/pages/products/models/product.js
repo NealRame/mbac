@@ -102,7 +102,7 @@ ProductSchema.static('create', function(data, cb) {
         )
         .then((product) => product.save())
         .then((product) =>
-            _.first(product)
+            product
                 .populate('pictures')
                 .populate('resellers')
                 .execPopulate()
