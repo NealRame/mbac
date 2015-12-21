@@ -213,7 +213,7 @@ ResellerSchema.methods.patch = function(data, cb) {
     const pictures =
         _.chain(this.pictures)
             .map((picture) => picture._id ? picture._id : picture)
-            .partition((id) => !_.any(data.pictures, id.equals.bind(id)))
+            .partition((id) => _.some(data.pictures, id.equals.bind(id)))
             .tap((partition) => {
                 partition[1].for_each((id) => {
                     Picture
