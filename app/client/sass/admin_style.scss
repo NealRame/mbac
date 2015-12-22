@@ -18,23 +18,49 @@
             $link-color-hover: $menu-link-color-hover,
             $font-size: $admin-nav-font-size
         );
+    }
+    .side-nav {
         margin: 0;
         padding: 0;
         li {
             margin: 0;
-            .menu-content-wrapper {
-                display: none;
-                padding: 0;
+            & > a > .menu-caret {
+                display: inline;
+                font-family: FontAwesome;
+                font-size: inherit;
+                font-style: normal;
+                margin-right: .5em;
+                &::before {
+                    content: '\f105';
+                    display: inline-block;
+                    transform: rotate(0deg);
+                    transition: transform .25s ease;
+                }
+            }
+            & > .menu-content-wrapper {
+                max-height: 0;
+                overflow: hidden;
                 padding-left: $admin-nav-sub-menu-padding;
+                padding: 0;
+                transition: max-height .25s ease;
+                & > .side-nav {
+                    li {
+                        font-size: .5em;
+                    }
+                }
             }
             &.active {
                 background-color: $admin-nav-bg-color-active;
-                & > .menu-content-wrapper {
-                    display: block;
-                    font-size: 1.5em;
-                    .side-nav {
-                        font-size: 1em;
+                & > a > .menu-caret {
+                    &::before {
+                        transform: rotate(90deg);
+                        transition: transform .25s ease;
                     }
+                }
+                & > .menu-content-wrapper {
+                    height: auto;
+                    max-height: 128px;
+                    transition: max-height .25s ease-out;
                 }
                 & > a:first-child:not(.button) {
                     color: $menu-link-color-active;
@@ -52,5 +78,6 @@
 #admin-content-wrapper {
     left: $admin-nav-width;
     position: absolute;
+    padding: .5rem;
     right: 0;
 }
