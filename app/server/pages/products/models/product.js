@@ -238,7 +238,7 @@ ProductSchema.methods.patch = function(data, cb) {
                 partition[1].forEach((id) =>
                     Picture
                         .delete(id)
-                        .catch((err) => debug(err));
+                        .catch((err) => debug(err))
                 );
             })
             .first()
