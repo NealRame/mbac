@@ -59,22 +59,40 @@ $body-font-color: $black;
 
 $section-title-color: lighten($gray, 33);
 
+$menu-bg-color: $black;
+$menu-link-color: $white;
+$menu-link-color-active: $yellow;
+$menu-link-color-hover: $yellow;
+
+///////////////////////////////////////////////////////////////////////////////
 // Tables
-// ------
 $table-row-font-color: inherit;
 
 ///////////////////////////////////////////////////////////////////////////////
 // Top Bar
-$topbar-bg-color: $black;
+$topbar-bg-color: $menu-bg-color;
 $topbar-bg: $topbar-bg-color;
-$topbar-dropdown-bg: $black;
-$topbar-link-color-hover: $yellow;
-$topbar-link-color-active: $yellow;
-$topbar-link-color-active-hover: $yellow;
+$topbar-dropdown-bg: $menu-bg-color;
+$topbar-link-color-hover: $menu-link-color-active;
+$topbar-link-color-active: $menu-link-color-active;
+$topbar-link-color-active-hover: $menu-link-color-active;
 $topbar-link-weight: $font-weight-bold;
 $topbar-link-bg-hover: $topbar-bg-color;
 $topbar-link-bg-active: $topbar-bg-color;
 $topbar-link-bg-active-hover: $topbar-bg-color;
+
+///////////////////////////////////////////////////////////////////////////////
+// Admin side menu
+$admin-nav-width: 200px;
+$admin-nav-font-size: .6em;
+$admin-nav-sub-menu-padding: .25em;
+$admin-nav-link-color: $menu-link-color;
+$admin-nav-link-color-active: $menu-link-color-active;
+$admin-nav-link-color-hover: $menu-link-color-hover;
+$admin-nav-bg-color: lighten($topbar-bg-color, 5);
+$admin-nav-bg-color-active: lighten($admin-nav-bg-color, 5);
+$admin-nav-bg-color-hover: lighten($admin-nav-bg-color, 10);
+$admin-nav-divider-color: $admin-nav-bg-color;
 
 // Footer
 // ------

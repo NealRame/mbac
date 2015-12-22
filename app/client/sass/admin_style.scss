@@ -2,19 +2,47 @@
 @import "foundation/components/icon-bar";
 @import "foundation/components/side-nav";
 
-$admin-nav-width: 200px;
-
 ///////////////////////////////////////////////////////////////////////////////
 // Admin menu
 #admin-nav {
-    background-color: lighten($topbar-bg-color, 5);
+    background-color: $admin-nav-bg-color;
     top: $topbar-height;
     height: 100%;
     position: fixed;
     width: $admin-nav-width;
     .side-nav {
-        a {
-            color: $white;
+        @include side-nav(
+            $divider-color: $admin-nav-divider-color,
+            $link-color: $admin-nav-link-color,
+            $link-color-active: $menu-link-color-active,
+            $link-color-hover: $menu-link-color-hover,
+            $font-size: $admin-nav-font-size
+        );
+        margin: 0;
+        padding: 0;
+        li {
+            margin: 0;
+            .menu-content-wrapper {
+                display: none;
+                padding: 0;
+                padding-left: $admin-nav-sub-menu-padding;
+            }
+            &.active {
+                background-color: $admin-nav-bg-color-active;
+                & > .menu-content-wrapper {
+                    display: block;
+                    font-size: 1.5em;
+                    .side-nav {
+                        font-size: 1em;
+                    }
+                }
+                & > a:first-child:not(.button) {
+                    color: $menu-link-color-active;
+                }
+            }
+            &:hover:not(.active) {
+                background-color: $admin-nav-bg-color-hover;
+            }
         }
     }
 }
@@ -23,7 +51,6 @@ $admin-nav-width: 200px;
 // Admin content wrapper
 #admin-content-wrapper {
     left: $admin-nav-width;
-    padding: 1rem;
     position: absolute;
     right: 0;
 }
