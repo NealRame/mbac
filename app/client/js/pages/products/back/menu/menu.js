@@ -10,6 +10,7 @@ define(function(require) {
     var Marionette = require('marionette');
     var template = require('text!pages/products/back/menu/menu.html');
 
+    var functional = require('common/functional');
     var app_channel = Backbone.Wreqr.radio.channel('app');
 
     return Marionette.ItemView.extend({
@@ -29,11 +30,23 @@ define(function(require) {
         },
         initialize: function() {
             _.bindAll(this, 'activeProducts', 'activeResellers');
-            app_channel.commands.setHandler('route', (function(name, args) {
-                console.log(name, args);
-                // this.activeProducts();
-                // this.activeResellers();
-            }).bind(this));
+            var active_products = this.activeProducts.bind(this);
+            var active_resellers = this.activeResellers.bind(this);
+            var route_dispatch = functional.dispatch(
+                function(route) {
+                    if (route === 'products') {
+                        active_products();
+                        return true;
+                    }
+                },
+                function(route) {
+                    if (route === 'resellers') {
+                        active_resellers();
+                        return true;
+                    }
+                }
+            );
+            app_channel.commands.setHandler('route', route_dispatch);
         },
         activeProducts: function() {
             this.ui.products.parent().addClass('active');
