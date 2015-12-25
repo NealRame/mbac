@@ -5,40 +5,53 @@
 define(function(require) {
     'use strict';
 
-    // var _ = require('underscore');
+    var _ = require('underscore');
     var Backbone = require('backbone');
+    var FormDataModelSynchronizer = require('FormDataModelSynchronizer');
+    var PicturesContainer = require('PicturesContainer');
+    var PublishState = require('PublishState');
+    var TagsContainer = require('TagsContainer');
 
-    return Backbone.Model.extend({
+    function create_form_data(product) {
+        var data = product.attributes;
+        var form_data = new FormData();
+        _.each(_.pick(data, 'name', 'description', 'published'), function(value, attr) {
+            form_data.append(attr, value);
+        });
+        _.each(data.tags, function(tag) {
+            form_data.append('tags', tag);
+        });
+        _.each(data.resellers, function(reseller) {
+            form_data.append('resellers', reseller._id);
+        });
+        _.each(data.pictures, function(picture) {
+            if (picture.file instanceof File) {
+                form_data.append('files', picture.file);
+            } else {
+                form_data.append('pictures', picture._id);
+            }
+        });
+        return form_data;
+    }
+
+    var ProductProto = _.assign({
         idAttribute: '_id',
         defaults: {
             published: false,
             pictures: [],
+            resellers: [],
             tags: []
         },
-        published: function() {
-            return this.get('published');
-        },
-        publish: function() {
-            return this.set({published: true});
-        },
-        unpublish: function() {
-            return this.set({published: false});
-        },
-        togglePublish: function() {
-            return this.set({published: !this.published()});
-        },
         pageURL: function() {
-            return '/achievements/' + this.attributes._id;
+            return '/products/' + this.attributes._id;
         },
         description: function() {
             return this.get('description') || '';
         },
-        picture: function(index) {
-            return this.get('pictures')[index || 0];
-        },
-        pictures: function() {
-            this.get('pictures');
+        price: function() {
+            return this.get('price');
         }
-    });
+    }, PicturesContainer, PublishState, TagsContainer, FormDataModelSynchronizer(create_form_data));
 
+    return Backbone.Model.extend(ProductProto);
 });
