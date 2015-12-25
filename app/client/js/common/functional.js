@@ -17,8 +17,8 @@ define(function(require) {
 	/// - `pred`, a predicat function.
 	/// - `fun`, the function to be applied.
 	///
-	/// __Returns:__
-	/// - `Function`
+	/// __Return:__
+	/// - `Function`.
 	function apply_if(pred, fun) {
         return function(target) {
             if (pred(target)) {
@@ -32,10 +32,10 @@ define(function(require) {
 	/// undefined.
 	///
 	/// __Parameters:__
-	/// - `value`, whatever you want
+	/// - `value`, whatever you want.
 	///
-	/// __Returns:__
-	/// - `Boolean`
+	/// __Return:__
+	/// - `Boolean`.
 	function existy(value) {
 		return value != null;
 	}
@@ -45,10 +45,10 @@ define(function(require) {
 	/// zero arguments are provided, it returns an empty array.
 	///
 	/// __Parameters:__
-	/// - `arrays`, arrays
+	/// - `arrays`, arrays.
 	///
-	/// __Returns:__
-	/// - `Array`
+	/// __Return:__
+	/// - `Array`.
 	function cat() {
 		var head = _.first(arguments);
 		if (!_.isUndefined(head)) {
@@ -62,11 +62,11 @@ define(function(require) {
 	/// tail array.
 	///
 	/// __Parameters:__
-	/// - `head`, whatever you want
-	/// - `tail`, an array
+	/// - `head`, whatever you want.
+	/// - `tail`, an array.
 	///
-	/// __Returns:__
-	/// - `Array`
+	/// __Return:__
+	/// - `Array`.
 	function construct(head, tail) {
 		return cat([head], _.toArray(tail));
 	}
@@ -78,7 +78,7 @@ define(function(require) {
 	/// - `object`, an object.
 	/// - `keys`, strings.
 	///
-	/// __Returns:__
+	/// __Return:__
 	/// - `Boolean`.
 	function has_all_of_keys(object) {
 		var keys = _.rest(arguments);
@@ -95,7 +95,7 @@ define(function(require) {
 	/// - `model`, a backbone model.
 	/// - `attributes`, strings.
 	///
-	/// __Returns:__
+	/// __Return:__
 	/// - `Boolean`.
 	function has_all_of_attributes(model) {
 		return _.isObject(model) && has_all_of_keys.apply(null, construct(model.attributes, _.rest(arguments)));
@@ -108,7 +108,7 @@ define(function(require) {
 	/// __Parameters:__
 	/// - `functions`, functions.
 	///
-	/// __Returns:__
+	/// __Return:__
 	/// - `Function`.
 	function dispatch() {
 		var funs = _.toArray(arguments);
@@ -149,7 +149,7 @@ define(function(require) {
 	/// simply returns `v`.
 	///
 	/// __Parameters:__
-	/// - `v`, what ever you want
+	/// - `v`, what ever you want.
 	/// - `context`, an `Object` to which the possibly given function will be
 	/// bind to.
 	function value_of(v, context) {
@@ -165,8 +165,10 @@ define(function(require) {
 	///
 	/// __Examples:__
 	/// ```js
-	/// var o = {foo: [{bar: }, {}]}
-	/// functional.property(obj, '')
+	/// var o = {foo: [{bar: {baz: 42}}, {}]}
+	/// functional.property(obj, '[0].bar.baz')
+	/// // return 42
+	/// ```
 	function property(obj, path) {
         if (_.isString(path)) {
             return property(obj, _.compact(path.replace(/\[(\w+)\]/g, '.$1').split('.')));
@@ -185,6 +187,7 @@ define(function(require) {
 		existy: existy,
 		hasAllOfKeys: has_all_of_keys,
 		hasAllOfAttributes: has_all_of_attributes,
+		isa: isa,
 		mapObject: map_object,
 		valueOf: value_of,
 		property: property
