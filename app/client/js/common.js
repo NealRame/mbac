@@ -27,6 +27,7 @@ requirejs.config({
         'LightBox': 'common/LightBox/lightbox',
         'Picture': 'common/Picture/picture',
         'PicturesContainer': 'common/ModelMixins/pictures-container',
+        'PublishState': 'common/ModelMixins/publish-state',
         'TabbedPanels': 'common/TabbedPanels/tabbedpanels',
         'TagsContainer': 'common/ModelMixins/tags-container',
         'Thumbnail': 'common/Thumbnail/thumbnail',
