@@ -1,7 +1,7 @@
-// Thumbnail/picture-thumbnail.js
-// ------------------------------
-// - author: Neal.Rame. <contact@nealrame.com>
-// -   date: Tue Mar 10 21:57:55 2015
+/// Picture renderer
+/// ================
+/// - author: Neal.Rame. <contact@nealrame.com>
+/// -   date: Tue Mar 10 21:57:55 2015
 define(function(require) {
 	'use strict';
 
@@ -28,11 +28,10 @@ define(function(require) {
 					this.$image = $(image);
 					this.$image.removeAttr('style');
 					this.$image.css(ui.center(ui.cropFit(ui.naturalRect(this.$image), rect), rect));
-						var res = {
+					return {
 						el: this.$image,
 						target: model.originalURL()
 					};
-					return res;
 				})
 				.catch(function() {
 					throw new Error('Failed to load image: ' + image_source);
