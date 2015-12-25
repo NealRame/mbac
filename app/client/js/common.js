@@ -26,6 +26,7 @@ requirejs.config({
         'Dialog': 'common/Dialog/dialog',
         'LightBox': 'common/LightBox/lightbox',
         'Picture': 'common/Picture/picture',
+        'PictureContainer': 'common/Picture/picture-container',
         'TabbedPanels': 'common/TabbedPanels/tabbedpanels',
         'Thumbnail': 'common/Thumbnail/thumbnail',
         'ThumbnailList': 'common/ThumbnailList/thumbnail-list'
