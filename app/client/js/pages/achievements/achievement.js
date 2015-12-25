@@ -1,5 +1,6 @@
 /*global File: false*/
 /*eslint-disable no-underscore-dangle*/
+
 // common/Achievement/achievement.js
 // ---------------------------------
 // - author: Neal.Rame. <contact@nealrame.com>
