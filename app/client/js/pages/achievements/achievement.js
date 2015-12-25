@@ -9,17 +9,7 @@ define(function(require) {
 
     var _ = require('underscore');
     var Backbone = require('backbone');
-    var functional = require('common/functional');
-    var Picture = require('Picture');
-
-    var create_model = functional.dispatch(
-        functional.isa(Picture, 'original', 'thumbnail'),
-        function(data) {
-            if (!_.isUndefined(data)) {
-                return new Backbone.Model(data);
-            }
-        }
-    );
+    var PictureContainerProto = require('PictureContainer');
 
     function create_form_data(achievement) {
         var data = achievement.attributes;
@@ -40,7 +30,7 @@ define(function(require) {
         return form_data;
     }
 
-    return Backbone.Model.extend({
+    var AchievementProto =  _.assign({
         idAttribute: '_id',
         defaults: {
             published: false,
@@ -64,33 +54,6 @@ define(function(require) {
         },
         description: function() {
             return this.get('description') || '';
-        },
-        picture: function(index) {
-            return create_model(this.get('pictures')[index || 0]);
-        },
-        pictures: function() {
-            return _.map(this.get('pictures'), function(data) {
-                return create_model(data);
-            });
-        },
-        addPicture: function(picture) {
-            var list = this.get('pictures').slice(0);
-            if (!_.contains(list, picture)) {
-                var index = list.length;
-                list.push(picture);
-                this.set({pictures: list});
-                this.trigger('new-picture', picture, index);
-                return list[index];
-            }
-        },
-        removePicture: function(index) {
-            var list = this.get('pictures').slice(0);
-            if (index < list.length) {
-                list.splice(index, 1);
-                this.set({pictures: list});
-                return true;
-            }
-            return false;
         },
         tags: function() {
             return this.get('tags');
@@ -157,10 +120,11 @@ define(function(require) {
                     model.trigger('request', model, xhr, options);
                     return xhr;
                 })();
-
             default:
                 return Backbone.sync.call(this, method, model, options);
             }
         }
-    });
+    }, PictureContainerProto);
+
+    return Backbone.Model.extend(AchievementProto)
 });
