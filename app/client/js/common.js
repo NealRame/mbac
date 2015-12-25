@@ -23,10 +23,10 @@ requirejs.config({
         'underscore': 'libs/underscore',
         'Configuration': 'common/Configuration/configuration',
         'Dialog': 'common/Dialog/dialog',
+        'FormDataModelSynchronizer': 'common/ModelMixins/form-data-model-synchronizer',
         'LightBox': 'common/LightBox/lightbox',
-        'FormDataModelSynchronizer': 'common/FormDataModelSynchronizer/form-data-model-synchronizer',
         'Picture': 'common/Picture/picture',
-        'PictureContainer': 'common/Picture/picture-container',
+        'PicturesContainer': 'common/ModelMixins/pictures-container',
         'TabbedPanels': 'common/TabbedPanels/tabbedpanels',
         'Thumbnail': 'common/Thumbnail/thumbnail',
         'ThumbnailList': 'common/ThumbnailList/thumbnail-list'

@@ -10,7 +10,7 @@ define(function(require) {
     var _ = require('underscore');
     var Backbone = require('backbone');
     var FormDataModelSynchronizer = require('FormDataModelSynchronizer');
-    var PictureContainerProto = require('PictureContainer');
+    var PicturesContainer = require('PicturesContainer');
 
     function create_form_data(achievement) {
         var data = achievement.attributes;
@@ -104,7 +104,7 @@ define(function(require) {
                 return new Error('tags must be an Array of String');
             }
         }
-    }, PictureContainerProto, FormDataModelSynchronizer(create_form_data));
+    }, PicturesContainer, FormDataModelSynchronizer(create_form_data));
 
     return Backbone.Model.extend(AchievementProto)
 });
