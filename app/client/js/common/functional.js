@@ -128,6 +128,26 @@ define(function(require) {
 		};
 	}
 
+	/// #### functional.isa(Model, ...keys)
+	/// Returns a function taking some data and returning an instance of the
+	/// given model if and only if  the data has all of the given keys.
+	///
+	/// __Parameters:__
+	/// - `Model`, the Model.
+	/// - `keys`, `String`.
+	///
+	/// __Return:__
+	/// - `Function`.
+	function isa(Model) {
+		var keys = _.rest(arguments);
+		return function(data) {
+			if (!_.isUndefined(data)
+					&& has_all_of_keys.apply(null, construct(data, keys))) {
+				return new Model(data);
+			}
+		};
+	}
+
 	/// #### functional.mapObject(object, fun)
 	/// Return an object wich each fields is the result of the call of the
 	/// given function to the corresponding field of the given object.
