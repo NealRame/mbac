@@ -21,10 +21,10 @@ requirejs.config({
         'promise': 'libs/bluebird',
         'text': 'libs/text',
         'underscore': 'libs/underscore',
-
         'Configuration': 'common/Configuration/configuration',
         'Dialog': 'common/Dialog/dialog',
         'LightBox': 'common/LightBox/lightbox',
+        'FormDataModelSynchronizer': 'common/FormDataModelSynchronizer/form-data-model-synchronizer',
         'Picture': 'common/Picture/picture',
         'PictureContainer': 'common/Picture/picture-container',
         'TabbedPanels': 'common/TabbedPanels/tabbedpanels',
