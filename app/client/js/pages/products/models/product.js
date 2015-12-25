@@ -15,7 +15,7 @@ define(function(require) {
     function create_form_data(product) {
         var data = product.attributes;
         var form_data = new FormData();
-        _.each(_.pick(data, 'name', 'description', 'published'), function(value, attr) {
+        _.each(_.pick(data, 'date', 'name', 'description', 'price', 'published'), function(value, attr) {
             form_data.append(attr, value);
         });
         _.each(data.tags, function(tag) {
