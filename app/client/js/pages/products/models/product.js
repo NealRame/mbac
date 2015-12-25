@@ -47,9 +47,6 @@ define(function(require) {
         },
         description: function() {
             return this.get('description') || '';
-        },
-        price: function() {
-            return this.get('price');
         }
     }, PicturesContainer, PublishState, TagsContainer, FormDataModelSynchronizer(create_form_data));
 
