@@ -11,6 +11,7 @@ define(function(require) {
     var Backbone = require('backbone');
     var FormDataModelSynchronizer = require('FormDataModelSynchronizer');
     var PicturesContainer = require('PicturesContainer');
+    var TagsContainer = require('TagsContainer');
 
     function create_form_data(achievement) {
         var data = achievement.attributes;
@@ -56,34 +57,6 @@ define(function(require) {
         description: function() {
             return this.get('description') || '';
         },
-        tags: function() {
-            return this.get('tags');
-        },
-        hasTags: function(tags) {
-            if (_.isString(tags)) {
-                return this.hasTags(
-                    tags.split(',')
-                        .map(function(tag){ return tag.trim().toLowerCase(); })
-                );
-            } else if (_.isArray(tags)) {
-                return _.intersection(tags, this.tags()).length > 0;
-            }
-            throw new TypeError('Required a String or an array of Strings');
-        },
-        addTag: function(tag) {
-            var tags = this.get('tags').slice(0);
-            tags.push(tag);
-            return this.setTags(tags);
-        },
-        setTags: function(tags) {
-            tags =
-                _.chain(tags || [])
-                    .compact()
-                    .map(function(tag) { return tag.trim().toLowerCase(); })
-                    .uniq()
-                    .value();
-            return this.set('tags', tags);
-        },
         validate: function(attributes) {
             var isValidPicture = function(picture) {
                 return picture.file instanceof File || (picture.original && picture.thumbnail);
@@ -104,7 +77,7 @@ define(function(require) {
                 return new Error('tags must be an Array of String');
             }
         }
-    }, PicturesContainer, FormDataModelSynchronizer(create_form_data));
+    }, PicturesContainer, TagsContainer, FormDataModelSynchronizer(create_form_data));
 
     return Backbone.Model.extend(AchievementProto)
 });
