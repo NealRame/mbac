@@ -12,18 +12,8 @@ define(function(require) {
     var functional = require('common/functional');
     var Picture = require('Picture');
 
-    function isa(Model) {
-        var keys = _.rest(arguments);
-        return function(data) {
-            if (!_.isUndefined(data)
-                    && functional.hasAllOfKeys.apply(null, functional.construct(data, keys))) {
-                return new Model(data);
-            }
-        };
-    }
-
     var create_model = functional.dispatch(
-        isa(Picture, 'original', 'thumbnail'),
+        functional.isa(Picture, 'original', 'thumbnail'),
         function(data) {
             if (!_.isUndefined(data)) {
                 return new Backbone.Model(data);
