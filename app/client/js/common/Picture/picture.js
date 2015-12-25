@@ -20,15 +20,6 @@ define(function(require) {
         },
         thumbnailURL: function() {
             return this.prefix() + '/' + this.get('thumbnail');
-        },
-        height: function() {
-            return this.get('height');
-        },
-        width: function() {
-            return this.get('width');
-        },
-        size: function() {
-            return {height: this.height(), width: this.width()};
         }
     });
 });
