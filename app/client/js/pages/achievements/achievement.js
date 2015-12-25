@@ -11,6 +11,7 @@ define(function(require) {
     var Backbone = require('backbone');
     var FormDataModelSynchronizer = require('FormDataModelSynchronizer');
     var PicturesContainer = require('PicturesContainer');
+    var PublishState = require('PublishState');
     var TagsContainer = require('TagsContainer');
 
     function create_form_data(achievement) {
@@ -39,18 +40,6 @@ define(function(require) {
             pictures: [],
             tags: []
         },
-        published: function() {
-            return this.get('published');
-        },
-        publish: function() {
-            return this.set({published: true});
-        },
-        unpublish: function() {
-            return this.set({published: false});
-        },
-        togglePublish: function() {
-            return this.set({published: !this.published()});
-        },
         pageURL: function() {
             return '/achievements/' + this.attributes._id;
         },
@@ -77,7 +66,7 @@ define(function(require) {
                 return new Error('tags must be an Array of String');
             }
         }
-    }, PicturesContainer, TagsContainer, FormDataModelSynchronizer(create_form_data));
+    }, PicturesContainer, PublishState, TagsContainer, FormDataModelSynchronizer(create_form_data));
 
     return Backbone.Model.extend(AchievementProto)
 });
