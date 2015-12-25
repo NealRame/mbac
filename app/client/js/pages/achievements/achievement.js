@@ -86,7 +86,7 @@ define(function(require) {
         removePicture: function(index) {
             var list = this.get('pictures').slice(0);
             if (index < list.length) {
-                var picture = (list.splice(index, 1))[0];
+                list.splice(index, 1);
                 this.set({pictures: list});
                 return true;
             }
