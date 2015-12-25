@@ -28,6 +28,7 @@ requirejs.config({
         'Picture': 'common/Picture/picture',
         'PicturesContainer': 'common/ModelMixins/pictures-container',
         'TabbedPanels': 'common/TabbedPanels/tabbedpanels',
+        'TagsContainer': 'common/ModelMixins/tags-container',
         'Thumbnail': 'common/Thumbnail/thumbnail',
         'ThumbnailList': 'common/ThumbnailList/thumbnail-list'
     },
