@@ -9,6 +9,7 @@ define(function(require) {
 
     var _ = require('underscore');
     var Backbone = require('backbone');
+    var FormDataModelSynchronizer = require('FormDataModelSynchronizer');
     var PictureContainerProto = require('PictureContainer');
 
     function create_form_data(achievement) {
@@ -102,29 +103,8 @@ define(function(require) {
                     && _.every(attributes.tags, _.isString))) {
                 return new Error('tags must be an Array of String');
             }
-        },
-        sync: function(method, model, options) {
-            switch (method.toLowerCase()) {
-            case 'create':
-            case 'update':
-            case 'patch':
-                return (function() {
-                    var form_data = create_form_data(model);
-                    var xhr = Backbone.ajax(_.extend({
-                        data: form_data,
-                        contentType: false,
-                        processData: false,
-                        type: method === 'create' ? 'POST' : 'PUT',
-                        url: options.url || model.url()
-                    }, options));
-                    model.trigger('request', model, xhr, options);
-                    return xhr;
-                })();
-            default:
-                return Backbone.sync.call(this, method, model, options);
-            }
         }
-    }, PictureContainerProto);
+    }, PictureContainerProto, FormDataModelSynchronizer(create_form_data));
 
     return Backbone.Model.extend(AchievementProto)
 });
