@@ -5,13 +5,15 @@ define(function(require) {
     var Marionette = require('marionette');
     var ApplicationLayout = require('pages/products/back/layout');
     var ApplicationMenu = require('pages/products/back/menu/menu');
+    var ProductListView = require('pages/products/back/products/product-list-view');
 
     var app_channel = Backbone.Wreqr.radio.channel('app');
 
     var ApplicationRouter = Marionette.AppRouter.extend({
         appRoutes: {
             '': 'products',
-            'products': 'products',
+            'create': 'createProduct',
+            ':id': 'editProduct',
             'resellers': 'resellers'
         }
     });
@@ -21,6 +23,7 @@ define(function(require) {
             this.layout = new ApplicationLayout({
                 el: 'body'
             });
+            this.productList = new ProductListView();
         },
         onStart: function() {
             this.layout.showChildView('menu', new ApplicationMenu());
@@ -29,8 +32,15 @@ define(function(require) {
             });
             Backbone.history.start();
         },
+        createProduct: function() {
+            console.log('create product');
+        },
+        editProduct: function(args) {
+            console.log(args);
+        },
         products: function(args) {
             app_channel.commands.execute('route', 'products', args);
+            this.layout.showChildView('products', this.productList);
         },
         resellers: function(args) {
             app_channel.commands.execute('route', 'resellers', args);
