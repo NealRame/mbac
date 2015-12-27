@@ -45,6 +45,9 @@ define(function(require) {
         pageURL: function() {
             return '/products/' + this.attributes._id;
         },
+        editURL: function() {
+            return '#' + this.attributes._id;
+        },
         description: function() {
             return this.get('description') || '';
         }
