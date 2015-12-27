@@ -6,10 +6,8 @@ define(function(require) {
 	'use strict';
 
     var _ = require('underscore');
-    var Backbone = require('backbone');
     var Marionette = require('marionette');
     var Dialog = require('Dialog');
-    var Product = require('pages/products/models/product');
     var ThumbnailList = require('ThumbnailList');
     var product_render = require('pages/products/back/products/product-thumbnail-render');
     var template = require('text!pages/products/back/products/product-list-view.html');
@@ -50,16 +48,11 @@ define(function(require) {
 
     return Marionette.LayoutView.extend({
         initialize: function() {
-            this.collection = new (Backbone.Collection.extend({
-                model: Product,
-                url: '/api/products'
-            }));
             this.listView = new ProductList({
                 collection: this.collection,
                 editable: true,
                 clickBehavior: 'default'
             });
-            this.collection.fetch({reset: true});
         },
         template: _.template(template),
         regions: {

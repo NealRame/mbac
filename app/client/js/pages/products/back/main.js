@@ -3,9 +3,12 @@ define(function(require) {
 
     var Backbone = require('backbone');
     var Marionette = require('marionette');
+    var Product = require('pages/products/models/product');
+    var Promise = require('promise');
     var ApplicationLayout = require('pages/products/back/layout');
     var ApplicationMenu = require('pages/products/back/menu/menu');
     var ProductListView = require('pages/products/back/products/product-list-view');
+    var ProductEditView = require('pages/products/back/products/product-edit-view');
 
     var app_channel = Backbone.Wreqr.radio.channel('app');
 
@@ -18,14 +21,19 @@ define(function(require) {
         }
     });
 
+    var products = new (Backbone.Collection.extend({
+        model: Product,
+        url: '/api/products'
+    }));
+
     var Application = Marionette.Application.extend({
         initialize: function() {
             this.layout = new ApplicationLayout({
                 el: 'body'
             });
-            this.productList = new ProductListView();
         },
-        onStart: function() {
+        onStart: function(config) {
+            this.config = config;
             this.layout.showChildView('menu', new ApplicationMenu());
             this.router = new ApplicationRouter({
                 controller: this
@@ -35,12 +43,17 @@ define(function(require) {
         createProduct: function() {
             console.log('create product');
         },
-        editProduct: function(args) {
-            console.log(args);
+        editProduct: function(id) {
+            app_channel.commands.execute('route', 'editProducts', id);
+            this.layout.showChildView('app', new ProductEditView({
+                model: this.config.products.get(id)
+            }));
         },
         products: function(args) {
             app_channel.commands.execute('route', 'products', args);
-            this.layout.showChildView('products', this.productList);
+            this.layout.showChildView('app', new ProductListView({
+                collection: this.config.products
+            }));
         },
         resellers: function(args) {
             app_channel.commands.execute('route', 'resellers', args);
@@ -48,5 +61,24 @@ define(function(require) {
     });
 
     var app = new Application();
-    app.start();
+
+    (new Promise(function(resolve, reject) {
+        products.fetch({
+            reset: true,
+            success: resolve,
+            error: function(collection, res) {
+                reject(res);
+            }
+        });
+    }))
+    .then(function(collection) {
+        app.start({
+            products: collection
+        });
+    })
+    .catch(function(err) {
+        console.error(err);
+    });
+
+    // app.start();
 });

@@ -7,8 +7,7 @@ define(function(require) {
     return Marionette.LayoutView.extend({
         regions: {
             menu: '#products-menu .menu-content-wrapper',
-            products: '#products-wrapper',
-            resellers: '#resellers-wrapper'
+            app: '#admin-content-wrapper'
         },
         serializeData: _.constant({}),
         template: false

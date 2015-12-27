@@ -48,6 +48,9 @@ define(function(require) {
         editURL: function() {
             return '#' + this.attributes._id;
         },
+        name: function() {
+            return this.get('name') || '';
+        },
         description: function() {
             return this.get('description') || '';
         }
