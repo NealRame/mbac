@@ -3,28 +3,6 @@
 @import "foundation/components/button-groups";
 @import "foundation/components/reveal";
 
-// Gallery widget /////////////////////////////////////////////////////////////
-.action-bar {
-    background-color: rgba(0, 0, 0, 0.5);
-    position: absolute;
-    display: none;
-    top: 0;
-    width: 100%;
-    overflow: auto;
-}
-
-.action-bar a {
-    color: lightgray;
-    float: right;
-    text-decoration: none;
-    margin: 2px;
-    display: block;
-}
-
-.action-bar a:hover {
-    color: red;
-}
-
 .achievement-editor {
     border-bottom: solid 1px lightgray;
     margin-bottom: 8px;

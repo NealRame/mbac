@@ -1,4 +1,26 @@
 @import "settings";
+
+.action-bar {
+    background-color: rgba(0, 0, 0, 0.5);
+    position: absolute;
+    display: none;
+    top: 0;
+    width: 100%;
+    overflow: auto;
+}
+
+.action-bar a {
+    color: lightgray;
+    float: right;
+    text-decoration: none;
+    margin: 2px;
+    display: block;
+}
+
+.action-bar a:hover {
+    color: red;
+}
+
 .thumbnails {
     list-style-type: none;
     margin: 0 auto;
