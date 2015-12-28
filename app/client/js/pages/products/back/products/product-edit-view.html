@@ -1,26 +1,47 @@
-<form>
-    <div class="row">
-        <div class="large-12 columns">
-            <label>
-                Name
-                <input id="name" name="name" type="text" placeholder="Nom du produit ...">
-            </label>
+<div class="row">
+    <div class="text-right small-2 columns">Nom</div>
+    <div class="small-10 columns">
+        <input id="name" type="text" placeholder="Nom du produit...">
+    </div>
+</div>
+
+<div class="row">
+    <div class="text-right small-2 columns">Description</div>
+    <div class="small-10 columns">
+        <textarea id="description" rows="8"></textarea>
+    </div>
+</div>
+
+<div class="row">
+    <div class="text-right small-2 columns">Prix</div>
+    <div class="small-10 columns">
+        <input id="price" type="number" placeholder="Prix du produit...">
+    </div>
+</div>
+
+<div class="row">
+    <div class="text-right small-2 columns">Tags</div>
+    <div class="small-10 columns">
+        <input id="tags" type="text" value="Liste de tags séparés par une virgule...">
+    </div>
+</div>
+
+<div class="row">
+    <div class="text-right small-2 columns">Publié</div>
+    <div class="small-10 columns">
+        <div class="switch round">
+            <input id="published" type="checkbox">
+            <label for="published"></label>
         </div>
     </div>
-    <div class="row">
-        <div class="large-12 columns">
-            <label>
-                Description
-                <textarea id="description" name="description" rows="8"></textarea>
-            </label>
-        </div>
+</div>
+
+<div class="row">
+    <div class="text-right small-2 columns">Images</div>
+    <div class="small-10 columns">
+        <a id="add-image" class="button expand" href="#" >Ajouter des images</a>
     </div>
-    <div class="row">
-        <div class="large-12 columns">
-            <label>
-                Tags
-                <input id="tags" name="tags" type="text" value="Liste de tags séparés par une virgule ...">
-            </label>
-        </div>
-    </div>
-</form>
+</div>
+<div class="row">
+    <div id="pictures" class="small-offset-2 small-10 columns"></div>
+</div>
