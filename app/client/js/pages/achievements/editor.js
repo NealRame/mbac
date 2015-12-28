@@ -11,83 +11,9 @@ define(function(require) {
     var Backbone = require('backbone');
     var Marionette = require('marionette');
     var Dialog = require('Dialog');
-    var ThumbnailList = require('ThumbnailList');
+    var PictureList = require('PictureList');
+
     var editorTemplate = require('text!pages/achievements/editor.html');
-
-    if (_.indexOf($.event.props, 'dataTransfer') < 0) {
-        $.event.props.push('dataTransfer');
-    }
-
-    var AchievementPictureList = ThumbnailList.extend({
-        thumbnailOptions: {
-            removable: true,
-            clickBehavior: 'none',
-            rect: {
-                height: 128,
-                width: 192
-            }
-        },
-        childEvents: {
-            'remove': 'onPictureRemoved'
-        },
-        events: {
-            'dragenter': 'onDragEnter',
-            'dragleave': 'onDragLeave',
-            'dragover':  'onDragOver',
-            'drop':      'onDrop'
-        },
-        initialize: function() {
-            ThumbnailList.prototype.initialize.call(this);
-            this.listenTo(this.collection, 'remove', function(model, col, opt) {
-                this.trigger('remove-picture', model.attributes, opt.index);
-            });
-        },
-        addFile: function(file) {
-            if (file instanceof File) {
-                var picture = {file: file};
-                var index = this.collection.length;
-                this.collection.add(picture);
-                this.trigger('add-picture', picture, index);
-            }
-        },
-        addFiles: function(files) {
-            _.each(files, this.addFile, this);
-        },
-        center: function() {
-            this.$el.removeAttr('style');
-            if (this.children.length > 0) {
-                var th_width = this.children.first().outerRect().width;
-                this.$el.css('width', th_width*Math.floor(this.$el.width()/th_width));
-            }
-        },
-        onDragEnter: function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            this.$el.attr('data-state', 'over');
-            return false;
-        },
-        onDragLeave: function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            this.$el.removeAttr('data-state');
-            return false;
-        },
-        onDragOver: function(e) {
-            e.dataTransfer.dropEffect = 'copy';
-            e.preventDefault();
-            e.stopPropagation();
-            return false;
-        },
-        onDrop: function(e) {
-            this.onDragLeave.call(this, e);
-            this.addFiles(e.dataTransfer.files);
-            return false;
-        },
-        onPictureRemoved: function(view, model) {
-            // view.remove();
-            this.collection.remove(model);
-        }
-    });
 
     var AchievementEditor = Marionette.LayoutView.extend({
         className: 'achievement-editor',
@@ -110,7 +36,7 @@ define(function(require) {
         },
         template: _.template(editorTemplate),
         initialize: function() {
-            this.achievementPictureList = new AchievementPictureList({
+            this.achievementPictureList = new PictureList({
                 collection: new Backbone.Collection(this.model.pictures())
             });
             this.listenTo(
