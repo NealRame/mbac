@@ -26,6 +26,7 @@ requirejs.config({
         'FormDataModelSynchronizer': 'common/ModelMixins/form-data-model-synchronizer',
         'LightBox': 'common/LightBox/lightbox',
         'Picture': 'common/Picture/picture',
+        'PictureList': 'common/PictureList/picture-list',
         'PicturesContainer': 'common/ModelMixins/pictures-container',
         'PublishState': 'common/ModelMixins/publish-state',
         'TabbedPanels': 'common/TabbedPanels/tabbedpanels',
