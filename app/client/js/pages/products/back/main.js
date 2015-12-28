@@ -16,8 +16,8 @@ define(function(require) {
         appRoutes: {
             '': 'products',
             'create': 'createProduct',
-            ':id': 'editProduct',
-            'resellers': 'resellers'
+            'resellers': 'resellers',
+            ':id': 'editProduct'
         }
     });
 
