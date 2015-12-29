@@ -1,33 +1,41 @@
 <div class="row">
-    <div class="text-right small-2 columns">Nom</div>
+    <div class="text-right small-2 columns"><label for="name">Nom</label></div>
     <div class="small-10 columns">
-        <input id="name" type="text" placeholder="Nom du produit...">
+        <div class="input">
+            <input id="name" type="text" placeholder="Nom du produit...">
+        </div>
     </div>
 </div>
 
 <div class="row">
-    <div class="text-right small-2 columns">Description</div>
+    <div class="text-right small-2 columns"><label for="description">Description</label></div>
     <div class="small-10 columns">
-        <textarea id="description" rows="8"></textarea>
+        <div class="input">
+            <textarea id="description" rows="6" placeholder="Description du produit..."></textarea>
+        </div>
     </div>
 </div>
 
 <div class="row">
-    <div class="text-right small-2 columns">Prix</div>
+    <div class="text-right small-2 columns"><label for="price">Prix</label></div>
     <div class="small-10 columns">
-        <input id="price" type="number" placeholder="Prix du produit...">
+        <div class="input">
+            <input id="price" type="number" placeholder="Prix du produit...">
+        </div>
     </div>
 </div>
 
 <div class="row">
-    <div class="text-right small-2 columns">Tags</div>
+    <div class="text-right small-2 columns"><label for="tags">Tags</label></div>
     <div class="small-10 columns">
-        <input id="tags" type="text" value="Liste de tags séparés par une virgule...">
+        <div class="input">
+            <input id="tags" type="text" placeholder="Liste de tags séparés par une virgule...">
+        </div>
     </div>
 </div>
 
 <div class="row">
-    <div class="text-right small-2 columns">Publié</div>
+    <div class="text-right small-2 columns"><label for="published">Publié</label></div>
     <div class="small-10 columns">
         <div class="switch round">
             <input id="published" type="checkbox">
@@ -37,7 +45,7 @@
 </div>
 
 <div class="row">
-    <div class="text-right small-2 columns">Images</div>
+    <div class="text-right small-2 columns"><label for="add-image">Images</label></div>
     <div class="small-10 columns">
         <a id="add-image" class="button expand" href="#" >Ajouter des images</a>
     </div>
