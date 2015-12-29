@@ -13,10 +13,10 @@ define(function(require) {
 
     return Marionette.LayoutView.extend({
         ui: {
-            name: '#name',
-            description: '#description',
 			price: '#price',
 			published: '#published',
+            description: '#description',
+            name: '#name',
             tags: '#tags'
         },
 		regions: {
