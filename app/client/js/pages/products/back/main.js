@@ -44,7 +44,7 @@ define(function(require) {
             console.log('create product');
         },
         editProduct: function(id) {
-            app_channel.commands.execute('route', 'editProducts', id);
+            app_channel.commands.execute('route', 'editProduct', id);
             this.layout.showChildView('app', new ProductEditView({
                 model: this.config.products.get(id)
             }));
