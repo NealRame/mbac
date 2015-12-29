@@ -8,65 +8,126 @@ define(function(require) {
     var _ = require('underscore');
     var Backbone = require('backbone');
     var Marionette = require('marionette');
-    var template = require('text!pages/products/back/menu/menu.html');
-
     var functional = require('common/functional');
+
+    var app_menu_template = require('text!pages/products/back/menu/menu.html');
+    var product_list_menu_template = require('text!pages/products/back/menu/product-list-menu.html');
+    var product_edit_menu_template = require('text!pages/products/back/menu/product-edit-menu.html');
+    var reseller_list_menu_template = require('text!pages/products/back/menu/reseller-list-menu.html');
+
     var app_channel = Backbone.Wreqr.radio.channel('app');
 
-    return Marionette.ItemView.extend({
+    var menu_proto = {
         tagName: 'ul',
         className: 'side-nav',
-        serializeData: _.constant({}),
-        template: _.template(template),
+        serializeData: _.constant({})
+    }
+
+    var ProductListMenu = Marionette.ItemView.extend(_.assign({
+        template: _.template(product_list_menu_template),
         ui: {
-            products: '#products',
-            createProduct: '#create-product',
-            resellers: '#resellers',
-            createReseller: '#create-reseller'
+            create: '#create-product'
         },
         events: {
-            'click @ui.createProduct': 'onCreateProduct',
+            'click @ui.create': 'onCreate'
+        },
+        onCreate: function(ev) {
+            ev.preventDefault();
+            ev.stopPropagation();
+            return false;
+        }
+    }, menu_proto));
+
+    var ProductEditMenu = Marionette.ItemView.extend(_.assign({
+        template: _.template(product_edit_menu_template),
+        ui: {
+            save: '#save-product',
+            remove: '#remove-product'
+        },
+        events: {
+            'click @ui.save': 'onSave',
+            'click @ui.remove': 'onRemove'
+        },
+        onSave: function(ev) {
+            ev.preventDefault();
+            ev.stopPropagation();
+            return false;
+        },
+        onRemove: function(ev) {
+            ev.preventDefault();
+            ev.stopPropagation();
+            return false;
+        }
+    }, menu_proto));
+
+    var ResellerListMenu = Marionette.ItemView.extend(_.assign({
+        template: _.template(reseller_list_menu_template),
+        ui: {
+            create: '#create-reseller'
+        },
+        events: {
+            'click @ui.create': 'onCreate'
+        },
+        onCreate: function(ev) {
+            ev.preventDefault();
+            ev.stopPropagation();
+            return false;
+        }
+    }, menu_proto));
+
+    return Marionette.LayoutView.extend(_.assign({
+        template: _.template(app_menu_template),
+        ui: {
+            products: '#products',
+            resellers: '#resellers'
+        },
+        regions: {
+            'products-submenu-wrapper': '#products-submenu-wrapper',
+            'resellers-submenu-wrapper': '#resellers-submenu-wrapper'
+        },
+        events: {
             'click @ui.createReseller': 'onCreateReseller'
         },
         initialize: function() {
-            _.bindAll(this, 'activeProducts', 'activeResellers');
-            var active_products = this.activeProducts.bind(this);
-            var active_resellers = this.activeResellers.bind(this);
+            var products = this.onProducts.bind(this);
+            var resellers = this.onResellers.bind(this);
+            var edit_product = this.onEditProduct.bind(this);
             var route_dispatch = functional.dispatch(
                 function(route) {
                     if (route === 'products') {
-                        active_products();
+                        products();
+                        return true;
+                    }
+                },
+                function(route) {
+                    if (route === 'editProduct') {
+                        edit_product();
                         return true;
                     }
                 },
                 function(route) {
                     if (route === 'resellers') {
-                        active_resellers();
+                        resellers();
                         return true;
                     }
                 }
             );
             app_channel.commands.setHandler('route', route_dispatch);
         },
-        activeProducts: function() {
+        onProducts: function() {
+            this.showChildView('products-submenu-wrapper', new ProductListMenu);
             this.ui.products.parent().addClass('active');
             this.ui.resellers.parent().removeClass('active');
         },
-        activeResellers: function() {
+        onEditProduct: function() {
+            this.showChildView('products-submenu-wrapper', new ProductEditMenu);
+            this.ui.products.parent().addClass('active');
+            this.ui.resellers.parent().removeClass('active');
+        },
+        onResellers: function() {
+            this.showChildView('resellers-submenu-wrapper', new ResellerListMenu);
             this.ui.resellers.parent().addClass('active');
             this.ui.products.parent().removeClass('active');
-        },
-        onCreateProduct: function(ev) {
-            ev.preventDefault();
-            ev.stopPropagation();
-            console.log('onCreateProduct');
-            return false;
-        },
-        onCreateReseller: function(ev) {
-            ev.preventDefault();
-            ev.stopPropagation();
-            console.log('onCreateReseller');
-            return false;
         }
-    });
+    }, menu_proto));
 });
