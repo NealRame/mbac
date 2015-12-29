@@ -1,3 +1,81 @@
 @import "../../thumbnails";
 @import "foundation/components/buttons";
 @import "foundation/components/switches";
+@import "settings";
+
+@mixin input-place-holder-color($color) {
+    &::-webkit-input-placeholder {
+        // WebKit, Blink, Edge
+        color: $color;
+        font-style: italic;
+    }
+    &:-moz-placeholder {
+        // Mozilla Firefox 4 to 18
+        color: $color;
+        font-style: italic;
+    }
+    &::-moz-placeholder {
+        // Mozilla Firefox 19+
+        color: $color;
+        font-style: italic;
+    }
+    &:-ms-input-placeholder {
+        // Internet Explorer 10-11
+        color: $color;
+        font-style: italic;
+    }
+}
+
+#editor-wrapper {
+    .input {
+        font-size: $input-font-size;
+        margin: 0 1em;
+        margin-bottom: 1em;
+        position: relative;
+        input, textarea {
+            all: initial;
+            background-color: $input-bg-color;
+            border: none;
+            border-bottom: solid 1px $input-bg-color-focus;
+            box-shadow: none;
+            box-sizing:border-box;
+            color: $input-fg-color;
+            display: block;
+            font-family: $body-font-family;
+            font-size: inherit;
+            margin: 0;
+            outline: none;
+            padding: .25em;
+            transition: background-color $input-focus-transition-speed ease-out;
+            width: 100%;
+            @include input-place-holder-color($input-place-holder-color);
+            &:focus {
+                background-color: $input-bg-color-focus;
+                color: $input-fg-color-focus;
+                transition: background-color $input-focus-transition-speed ease-out;
+            }
+        }
+        textarea {
+            resize: vertical;
+        }
+        &::after {
+            content: '';
+            display: block;
+            position: relative;
+            border-bottom: solid $input-border-thickness $input-border-color;
+            transform: scaleX(0);
+            transition: transform $input-focus-transition-speed ease-out;
+        }
+        &.filled {
+            &::after {
+                transform: scaleX(1);
+                transition: transform $input-focus-transition-speed ease-out;
+            }
+        }
+    }
+    label {
+        font-size: $input-label-font-size;
+        font-weight: bold;
+        font-family: $body-font-family;
+    }
+}

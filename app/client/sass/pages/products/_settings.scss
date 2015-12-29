@@ -1,0 +1,12 @@
+@import "../settings";
+
+$input-fg-color: $body-font-color;
+$input-bg-color: $white;
+$input-bg-color-focus: lighten($light-gray, 5);
+$input-fg-color-focus: $body-font-color;
+$input-focus-transition-speed: .2s;
+$input-border-thickness: 4px;
+$input-border-color: $red;
+$input-place-holder-color: lighten($input-fg-color, 64);
+$input-font-size: 1em;
+$input-label-font-size: $input-font-size;
