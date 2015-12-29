@@ -14,14 +14,13 @@ define(function(require) {
     var product_list_menu_template = require('text!pages/products/back/menu/product-list-menu.html');
     var product_edit_menu_template = require('text!pages/products/back/menu/product-edit-menu.html');
     var reseller_list_menu_template = require('text!pages/products/back/menu/reseller-list-menu.html');
-
     var app_channel = Backbone.Wreqr.radio.channel('app');
 
     var menu_proto = {
         tagName: 'ul',
         className: 'side-nav',
         serializeData: _.constant({})
-    }
+    };
 
     var ProductListMenu = Marionette.ItemView.extend(_.assign({
         template: _.template(product_list_menu_template),
