@@ -14,6 +14,7 @@ define(function(require) {
     var product_list_menu_template = require('text!pages/products/back/menu/product-list-menu.html');
     var product_edit_menu_template = require('text!pages/products/back/menu/product-edit-menu.html');
     var reseller_list_menu_template = require('text!pages/products/back/menu/reseller-list-menu.html');
+    var reseller_edit_menu_template = require('text!pages/products/back/menu/reseller-edit-menu.html');
     var app_channel = Backbone.Wreqr.radio.channel('app');
 
     var menu_proto = {
@@ -74,6 +75,28 @@ define(function(require) {
         }
     }, menu_proto));
 
+    var ResellerEditMenu = Marionette.ItemView.extend(_.assign({
+        template: _.template(reseller_edit_menu_template),
+        ui: {
+            save: '#save-reseller',
+            remove: '#remove-reseller'
+        },
+        events: {
+            'click @ui.save': 'onSave',
+            'click @ui.remove': 'onRemove'
+        },
+        onSave: function(ev) {
+            ev.preventDefault();
+            ev.stopPropagation();
+            return false;
+        },
+        onRemove: function(ev) {
+            ev.preventDefault();
+            ev.stopPropagation();
+            return false;
+        }
+    }, menu_proto));
+
     return Marionette.LayoutView.extend(_.assign({
         template: _.template(app_menu_template),
         ui: {
@@ -84,13 +107,11 @@ define(function(require) {
             'products-submenu-wrapper': '#products-submenu-wrapper',
             'resellers-submenu-wrapper': '#resellers-submenu-wrapper'
         },
-        events: {
-            'click @ui.createReseller': 'onCreateReseller'
-        },
         initialize: function() {
             var products = this.onProducts.bind(this);
-            var resellers = this.onResellers.bind(this);
             var edit_product = this.onEditProduct.bind(this);
+            var resellers = this.onResellers.bind(this);
+            var edit_reseller = this.onEditReseller.bind(this);
             var route_dispatch = functional.dispatch(
                 function(route) {
                     if (route === 'products') {
@@ -109,6 +130,12 @@ define(function(require) {
                         resellers();
                         return true;
                     }
+                },
+                function(route) {
+                    if (route === 'editReseller') {
+                        edit_reseller();
+                        return true;
+                    }
                 }
             );
             app_channel.commands.setHandler('route', route_dispatch);
@@ -125,6 +152,11 @@ define(function(require) {
         },
         onResellers: function() {
             this.showChildView('resellers-submenu-wrapper', new ResellerListMenu);
+            this.ui.resellers.parent().addClass('active');
+            this.ui.products.parent().removeClass('active');
+        },
+        onEditReseller: function() {
+            this.showChildView('resellers-submenu-wrapper', new ResellerEditMenu);
             this.ui.resellers.parent().addClass('active');
             this.ui.products.parent().removeClass('active');
         }
