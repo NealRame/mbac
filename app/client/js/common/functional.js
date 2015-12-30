@@ -199,6 +199,29 @@ define(function(require) {
 		return property(obj[_.first(path)], _.rest(path));
     }
 
+	/// #### functional.merge(destination, sources...)
+	/// Deep merge all of the properties in the sources objects into the
+	/// destination object.
+	///
+	/// __Parameters:__
+	/// - `destination`, an object.
+	/// - `sources`, some objects.
+	///
+	/// __Return:__
+	/// - `Object`.
+	function merge() {
+		return _.reduce(_.rest(arguments), function(memo, obj) {
+			_.each(obj, function(value, key) {
+				if (_.isObject(memo[key]) && _.isObject(value)) {
+					memo[key] = merge(memo[key], value);
+				} else {
+					memo[key] = value;
+				}
+			});
+			return memo;
+		}, _.first(arguments));
+	}
+
     return {
 		applyIf: apply_if,
         cat: cat,
@@ -210,6 +233,7 @@ define(function(require) {
 		isa: isa,
 		mapObject: map_object,
 		valueOf: value_of,
-		property: property
+		property: property,
+		merge: merge
     };
 });
