@@ -17,6 +17,7 @@ define(function(require) {
 		id: 'editor-wrapper',
         ui: {
 			price: '#price',
+			available: '#available',
 			published: '#published',
             description: '#description',
             name: '#name',
@@ -54,6 +55,7 @@ define(function(require) {
             this.ui.name.val(this.model.name());
             this.ui.tags.val(this.model.tags().join(', '));
             this.ui.description.val(this.model.description());
+			this.ui.available.prop('checked', this.model.available());
 			this.ui.published.prop('checked', this.model.published());
 			this.ui.price.val(this.model.get('price'));
 			this.showChildView('pictures', this.productPictureList);
