@@ -28,6 +28,9 @@ define(function(require) {
                 return create_model(data);
             });
         },
+        setPictures: function(pictures) {
+            return this.set('pictures', pictures);
+        },
         addPicture: function(picture) {
             var list = this.get('pictures').slice(0);
             if (!_.contains(list, picture)) {
