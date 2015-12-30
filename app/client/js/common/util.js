@@ -58,8 +58,24 @@ define(function(require) {
         };
     }
 
+    /// #### common.util.upperFirst(string)
+    /// Transform the string so the first character will be capitalized.
+    ///
+    /// **Parameters:**
+    /// - `string`, a `String`.
+    ///
+    /// **Return:**
+    /// - `String`.
+    function upper_first(string) {
+        if (string.length > 0) {
+            return string[0].toUpperCase() + string.substr(1);
+        }
+        return string;
+    }
+
     return {
         checkMailAddress: check_mail_address,
-        makeFormValidator: make_form_validator
+        makeFormValidator: make_form_validator,
+        upperFirst: upper_first
     };
 });
