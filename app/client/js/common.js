@@ -23,6 +23,7 @@ requirejs.config({
         'underscore': 'libs/underscore',
         'Configuration': 'common/Configuration/configuration',
         'Dialog': 'common/Dialog/dialog',
+        'FlagModelMixin': 'common/ModelMixins/flag',
         'FormDataModelSynchronizer': 'common/ModelMixins/form-data-model-synchronizer',
         'LightBox': 'common/LightBox/lightbox',
         'Picture': 'common/Picture/picture',
