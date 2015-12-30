@@ -15,6 +15,7 @@ define(function(require) {
     var product_edit_menu_template = require('text!pages/products/back/menu/product-edit-menu.html');
     var reseller_list_menu_template = require('text!pages/products/back/menu/reseller-list-menu.html');
     var reseller_edit_menu_template = require('text!pages/products/back/menu/reseller-edit-menu.html');
+
     var app_channel = Backbone.Wreqr.radio.channel('app');
 
     var menu_proto = {
@@ -49,11 +50,13 @@ define(function(require) {
             'click @ui.remove': 'onRemove'
         },
         onSave: function(ev) {
+            app_channel.commands.execute('product', 'save');
             ev.preventDefault();
             ev.stopPropagation();
             return false;
         },
         onRemove: function(ev) {
+            app_channel.commands.execute('product', 'remove');
             ev.preventDefault();
             ev.stopPropagation();
             return false;
