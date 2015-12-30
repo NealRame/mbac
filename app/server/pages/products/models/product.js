@@ -50,6 +50,12 @@ const ProductSchema = new Schema({
         ref: 'Reseller',
         type: ObjectId
     }],
+    /// #### Product#available
+    /// Published flag.
+    available: {
+        default: false,
+        type: Boolean
+    },
     /// #### Product#published
     /// Published flag.
     published: {
@@ -95,7 +101,7 @@ ProductSchema.static('create', function(data, cb) {
         .then((pictures) => _.pluck(pictures, '_id'))
         .then((pictures) => new Product(
             _.chain(data)
-                .pick('date', 'description', 'name', 'price', 'published', 'resellers', 'tags')
+                .pick('available', 'date', 'description', 'name', 'price', 'published', 'resellers', 'tags')
                 .extend({pictures})
                 .value()
             )
@@ -251,7 +257,7 @@ ProductSchema.methods.patch = function(data, cb) {
             .then((pictures) => {
                 this.set(
                     _.chain(data)
-                        .pick('date', 'description', 'name', 'price', 'published', 'resellers', 'tags')
+                        .pick('available', 'date', 'description', 'name', 'price', 'published', 'resellers', 'tags')
                         .extend({pictures})
                         .value()
                 );
