@@ -25,7 +25,7 @@ function get_field(data, key, transform) {
     transform = transform || _.identity;
     return transform(
         _.chain(data)
-            .filter((part) => part.field === key)
+            .filter((part) => !!part && part.field === key)
             .map(_.property('value'))
             .value()
     );
@@ -54,7 +54,10 @@ function create_data_parser(options) {
             req.db, mongo,
             {accepted_mime_types, accepted_field_names}
         );
-        return form.parse(req).then((form_data) => make_object(form_data, field_transformers));
+        return form.parse(req).then((form_data) => {
+            // FIXME: see why parse return null data.
+            return make_object(form_data, field_transformers)
+        });
     };
 }
 
