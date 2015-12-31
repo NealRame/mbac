@@ -46,6 +46,7 @@ define(function(require) {
             if (index < list.length) {
                 list.splice(index, 1);
                 this.set({pictures: list});
+                this.trigger('remove-picture');
                 return true;
             }
             return false;
