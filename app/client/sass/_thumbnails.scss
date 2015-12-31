@@ -56,4 +56,7 @@
             background-color: #eee;
         }
     }
+    &.framed {
+        border: 1px solid $light-gray;
+    }
 }
