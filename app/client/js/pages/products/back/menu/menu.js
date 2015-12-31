@@ -25,18 +25,7 @@ define(function(require) {
     };
 
     var ProductListMenu = Marionette.ItemView.extend(_.assign({
-        template: _.template(product_list_menu_template),
-        ui: {
-            create: '#create-product'
-        },
-        events: {
-            'click @ui.create': 'onCreate'
-        },
-        onCreate: function(ev) {
-            ev.preventDefault();
-            ev.stopPropagation();
-            return false;
-        }
+        template: _.template(product_list_menu_template)
     }, menu_proto));
 
     var ProductEditMenu = Marionette.ItemView.extend(_.assign({
@@ -64,18 +53,7 @@ define(function(require) {
     }, menu_proto));
 
     var ResellerListMenu = Marionette.ItemView.extend(_.assign({
-        template: _.template(reseller_list_menu_template),
-        ui: {
-            create: '#create-reseller'
-        },
-        events: {
-            'click @ui.create': 'onCreate'
-        },
-        onCreate: function(ev) {
-            ev.preventDefault();
-            ev.stopPropagation();
-            return false;
-        }
+        template: _.template(reseller_list_menu_template)
     }, menu_proto));
 
     var ResellerEditMenu = Marionette.ItemView.extend(_.assign({
