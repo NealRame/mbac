@@ -41,12 +41,19 @@ define(function(require) {
             Backbone.history.start();
         },
         createProduct: function() {
-            console.log('create product');
+            app_channel.commands.execute('route', 'editProduct');
+            this.layout.showChildView('app', new ProductEditView({
+                collection: products,
+                model: new Product({}),
+                router: this.router
+            }));
         },
         editProduct: function(id) {
             app_channel.commands.execute('route', 'editProduct', id);
             this.layout.showChildView('app', new ProductEditView({
-                model: this.config.products.get(id)
+                collection: products,
+                model: this.config.products.get(id),
+                router: this.router
             }));
         },
         products: function(args) {

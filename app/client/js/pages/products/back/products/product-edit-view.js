@@ -9,6 +9,7 @@ define(function(require) {
     var _ = require('underscore');
 	var Backbone = require('backbone');
     var Marionette = require('marionette');
+    var Dialog = require('Dialog');
 	var PictureList = require('PictureList');
 	var functional = require('common/functional');
     var template = require('text!pages/products/back/products/product-edit-view.html');
@@ -28,13 +29,15 @@ define(function(require) {
         },
 		events: {
 			'focus @ui.inputs': 'onInputFocus',
-			'blur @ui.inputs': 'onInputFocus'
+			'blur @ui.inputs': 'onInputFocus',
+			'change @ui.inputs': 'onInputChanged'
 		},
 		regions: {
 			pictures: '#pictures'
 		},
         template: _.template(template),
-		initialize: function() {
+		initialize: function(options) {
+			this.router = options.router;
 			this.productPictureList = new PictureList({
 				collection: new Backbone.Collection(this.model.pictures())
 			});
@@ -51,7 +54,77 @@ define(function(require) {
 					}
 				}).bind(this)
 			);
+			this.listenTo(this.productPictureList, 'remove-picture', this.onInputChanged);
+			this.listenTo(this.productPictureList, 'add-picture', this.onInputChanged);
 			app_channel.commands.setHandler('product', on_action_triggered);
+		},
+		values: function() {
+			return {
+				available: this.ui.available.prop('checked'),
+				description: this.ui.description.val(),
+				name: this.ui.name.val(),
+				pictures: this.productPictureList.collection.map(function(picture) {
+					return picture.attributes
+				}),
+				price: Number(this.ui.price.val()),
+				published: this.ui.published.prop('checked'),
+				resellers: [],
+				tags: this.ui.tags.val().split(',').map(function(tag) {
+					return tag.trim().toLowerCase();
+				})
+			};
+		},
+		reset: function() {
+			this.ui.name.val(this.model.name());
+			this.ui.tags.val(this.model.tags().join(', '));
+			this.ui.description.val(this.model.description());
+			this.ui.available.prop('checked', this.model.available());
+			this.ui.published.prop('checked', this.model.published());
+			this.ui.price.val(this.model.get('price'));
+			this.showChildView('pictures', this.productPictureList);
+		},
+		save: function() {
+			if (this.edited) {
+				Dialog.prompt(
+					'Êtes vous sûr de vouloir sauvegarder les modificiations?',
+					{
+						accept: this.commit.bind(this),
+						acceptLabel: 'Oui',
+						refuseLabel: 'Non'
+					}
+				);
+			}
+		},
+		commit: function() {
+			var is_new = this.model.isNew();
+			var router = this.router;
+			this.collection
+				.add(this.model)
+				.set(this.values())
+				.save()
+				.then(
+					function(data) {
+						if (is_new) {
+							console.log(router);
+							console.log(data);
+							router.navigate('#' + data._id, {
+								replace: true
+							});
+						}
+					},
+					function(jqxhr, text_status, err) {
+						console.error(err);
+					}
+				);
+		},
+		remove: function() {
+
+		},
+		onInputChanged: function() {
+			this.edited = !_.isEqual(
+				this.values(),
+				_.omit(this.model.attributes, '_id', '__v', 'date')
+			);
 		},
 		onInputFocus: functional.dispatch(
 			function(ev) {
@@ -67,30 +140,12 @@ define(function(require) {
 				}
 			}
 		),
-		save: function() {
-			this.model
-				.setAvailable(this.ui.available.prop('checked'))
-				.setPublished(this.ui.published.prop('checked'))
-				.setName(this.ui.name.val())
-				.setDescription(this.ui.description.val())
-				.setPrice(this.ui.price.val())
-				.setTags(this.ui.tags.val().split(','))
-				.setPictures(this.productPictureList.collection.map(function(model) {
-					return model.attributes
-				}))
-				.save();
-		},
-		remove: function() {
-
-		},
         onRender: function() {
-            this.ui.name.val(this.model.name());
-            this.ui.tags.val(this.model.tags().join(', '));
-            this.ui.description.val(this.model.description());
-			this.ui.available.prop('checked', this.model.available());
-			this.ui.published.prop('checked', this.model.published());
-			this.ui.price.val(this.model.get('price'));
-			this.showChildView('pictures', this.productPictureList);
+			this.reset();
+			this.onInputChanged();
+			this.productPictureList.$el
+				.addClass('framed')
+				.css({minHeight: 128});
         }
     });
 });
