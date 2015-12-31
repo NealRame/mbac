@@ -19,6 +19,7 @@ define(function(require) {
     return Marionette.LayoutView.extend({
 		id: 'editor-wrapper',
         ui: {
+			addPictures: '#add-pictures',
 			price: '#price',
 			available: '#available',
 			published: '#published',
@@ -28,6 +29,7 @@ define(function(require) {
 			inputs: 'input, textarea'
         },
 		events: {
+			'click @ui.addPictures': 'onAddPicturesClick',
 			'focus @ui.inputs': 'onInputFocus',
 			'blur @ui.inputs': 'onInputFocus',
 			'change @ui.inputs': 'onInputChanged'
@@ -41,6 +43,18 @@ define(function(require) {
 			this.productPictureList = new PictureList({
 				collection: new Backbone.Collection(this.model.pictures())
 			});
+			this.filesInput = $(document.createElement('input')).attr({
+				accept: '.gif,.jpeg,.jpg,.png',
+				multiple: '',
+				type: 'file'
+			});
+
+			this.listenTo(this.productPictureList, 'remove-picture', this.onInputChanged);
+			this.listenTo(this.productPictureList, 'add-picture', this.onInputChanged);
+			this.filesInput.on('change', (function(e) {
+				this.productPictureList.addFiles(e.target.files);
+			}).bind(this));
+
 			var on_action_triggered = functional.dispatch(
 				(function(cmd) {
 					if (cmd === 'save') {
@@ -54,8 +68,6 @@ define(function(require) {
 					}
 				}).bind(this)
 			);
-			this.listenTo(this.productPictureList, 'remove-picture', this.onInputChanged);
-			this.listenTo(this.productPictureList, 'add-picture', this.onInputChanged);
 			app_channel.commands.setHandler('product', on_action_triggered);
 		},
 		values: function() {
@@ -105,20 +117,25 @@ define(function(require) {
 				.then(
 					function(data) {
 						if (is_new) {
-							console.log(router);
-							console.log(data);
 							router.navigate('#' + data._id, {
 								replace: true
 							});
 						}
 					},
 					function(jqxhr, text_status, err) {
+						// FIXME: do something
 						console.error(err);
 					}
 				);
 		},
 		remove: function() {
 
+		},
+		onAddPicturesClick: function(ev) {
+			ev.preventDefault();
+			ev.stopPropagation();
+			this.filesInput.click();
+			return false;
 		},
 		onInputChanged: function() {
 			this.edited = !_.isEqual(
