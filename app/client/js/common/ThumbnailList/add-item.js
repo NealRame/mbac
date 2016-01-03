@@ -34,6 +34,13 @@ define(function(require) {
         template: _.template(template),
         ui: {
             thumbLink: '.thumb-link'
+        },
+        refresh: function() {
+            this.render();
+            this.trigger('ready');
+        },
+        onShow: function() {
+            this.trigger('ready');
         }
     });
 });
