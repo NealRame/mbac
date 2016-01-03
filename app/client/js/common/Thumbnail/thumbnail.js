@@ -9,11 +9,10 @@ define(function(require) {
     var $ = require('jquery');
     var Marionette = require('marionette');
     var Promise = require('promise');
-
     var functional = require('common/functional');
     var ui = require('common/ui');
+    var thumbnailBehaviors = require('common/Thumbnail/behaviors');
     var thumbnailTemplate = require('text!common/Thumbnail/thumbnail.html');
-
     var file_render = require('common/Thumbnail/file-render');
     var picture_render = require('common/Thumbnail/picture-render');
 
@@ -34,38 +33,25 @@ define(function(require) {
         );
     }
 
-    var ThumbnailLinkBehavior = Marionette.Behavior.extend({
-        events: {
-            'click @ui.thumbLink': 'onThumbLinkClicked'
-        },
-        onThumbLinkClicked: function(ev) {
-            if (Marionette.getOption(this.view, 'clickBehavior') === 'trigger') {
-                ev.preventDefault();
-                ev.stopPropagation();
-                this.view.trigger('click');
-                return false;
-            }
-        }
-    });
-
     return Marionette.ItemView.extend({
         className: 'thumb',
         ui: {
-            actions: '.action-bar > a',
             crop: '.crop',
+            removeLink: '.action-bar > a[data-action="remove"]',
             thumbLink: '.thumb-link'
         },
         events: {
-            'click @ui.actions': 'onActionRequested',
             'mouseenter': 'onMouseEnter',
             'mouseleave': 'onMouseLeave'
         },
         behaviors: {
             thumbLink: {
-                behaviorClass: ThumbnailLinkBehavior
+                behaviorClass: thumbnailBehaviors.click
+            },
+            removeLink: {
+                behaviorClass: thumbnailBehaviors.remove
             }
         },
-        clickBehavior: 'trigger',
         editable: false,
         removable: false,
         rect: {
@@ -84,12 +70,6 @@ define(function(require) {
                 data.actions.push({
                     name: 'remove',
                     icon: 'fa fa-trash'
-                });
-            }
-            if (this.isEditable()) {
-                data.actions.push({
-                    name: 'edit',
-                    icon: 'fa fa-pencil'
                 });
             }
             return _.extend(data, this.innerRect());
@@ -146,10 +126,8 @@ define(function(require) {
                 .then(function(thumbnail) {
                     this.ui.thumbLink
                         .empty()
-                        .append(thumbnail.el || this.placeholder('empty'));
-                    if (Marionette.getOption(this, 'clickBehavior') !== 'none') {
-                        this.ui.thumbLink.attr('href', thumbnail.target);
-                    }
+                        .append(thumbnail.el || this.placeholder('empty'))
+                        .attr('href', thumbnail.target);
                     this.trigger('ready');
                 })
                 .catch(function() {
@@ -158,12 +136,6 @@ define(function(require) {
         },
         target: function() {
             return this.ui.thumbLink.attr('href');
-        },
-        onActionRequested: function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            this.trigger($(e.currentTarget).attr('data-action'), this.model);
-            return false;
         },
         onMouseEnter: function() {
             this.$('.action-bar').fadeIn(100);

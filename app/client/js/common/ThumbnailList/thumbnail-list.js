@@ -43,9 +43,6 @@ define(function(require) {
     return Marionette.CollectionView.extend({
         className: 'thumbnails',
         tagName: 'ul',
-        childEvents: {
-            ready: 'onChildReady'
-        },
         defaultThumbnailOptions: {
             tagName: 'li',
             rect: function() {
@@ -90,7 +87,9 @@ define(function(require) {
                     Marionette.triggerMethod.call(this, 'ready');
                 }
             });
-            this.listenTo(this, 'childview:click', Marionette.triggerMethod.bind(this, 'click'));
+            this.listenTo(this, 'childview:click', function() {
+                Marionette.triggerMethod.call(this, 'click')
+            });
         },
         getChildView: function (item) {
             if (item instanceof AddItemModel) {
