@@ -10,7 +10,6 @@ define(function(require) {
     var $ = require('jquery');
     var Backbone = require('backbone');
     var Marionette = require('marionette');
-    var functional = require('common/functional');
     var ui = require('common/ui');
     var Thumbnail = require('Thumbnail');
     var AddItemView = require('common/ThumbnailList/add-item');
@@ -43,25 +42,27 @@ define(function(require) {
     return Marionette.CollectionView.extend({
         className: 'thumbnails',
         tagName: 'ul',
-        defaultThumbnailOptions: {
-            tagName: 'li',
-            rect: function() {
-                if (Foundation.utils.is_small_only()) {
-                    return {
-                        width: 96, height: 96
-                    };
-                }
-                if (Foundation.utils.is_medium_only()) {
-                    return {
-                        width: 192, height: 128
-                    };
-                }
+        createItemTarget: '#',
+        thumbnailsClickBehavior: 'default',
+        thumbnailsTagName: 'li',
+        thumbnailsRect: function() {
+            if (Foundation.utils.is_small_only()) {
                 return {
-                    width: 256, height: 171
+                    width: 96, height: 96
                 };
             }
+            if (Foundation.utils.is_medium_only()) {
+                return {
+                    width: 192, height: 128
+                };
+            }
+            return {
+                width: 256, height: 171
+            };
         },
-        initialize: function() {
+        thumbnailsRenderers: [],
+        editable: false,
+        initialize: function(options) {
             clone_and_bind_collection.call(this, this.collection);
             set_add_item_model.call(this);
             var ready = 0;
@@ -74,6 +75,7 @@ define(function(require) {
                 }
                 this.center();
             }, this), 150);
+            this.mergeOptions(options, ['editable', 'rect']);
             this.currentMediaQuery = ui.mediaQuery();
             this.listenTo(this, 'show', function() {
                 $(window).on('resize', reflow);
@@ -95,12 +97,15 @@ define(function(require) {
             return Thumbnail;
         },
         childViewOptions: function() {
-            return functional.merge(
-                functional.valueOf(
-                    Marionette.getOption(this, 'thumbnailOptions') || {}
-                ),
-                this.defaultThumbnailOptions
-            );
+            return {
+                clickBehavior: Marionette.getOption(this, 'thumbnailsClickBehavior'),
+                createItemTarget: Marionette.getOption(this, 'createItemTarget'),
+                editable: Marionette.getOption(this, 'editable'),
+                rect: Marionette.getOption(this, 'thumbnailsRect'),
+                removable: Marionette.getOption(this, 'editable'),
+                renderers: Marionette.getOption(this, 'thumbnailsRenderers'),
+                tagName: Marionette.getOption(this, 'thumbnailsTagName')
+            };
         },
         needRefresh: function() {
             var mq = ui.mediaQuery();
@@ -125,7 +130,6 @@ define(function(require) {
                 });
             }
         },
-        onReady: _.noop,
-        onClick: _.noop
+        onReady: _.noop
     });
 });

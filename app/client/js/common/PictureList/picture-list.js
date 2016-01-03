@@ -12,6 +12,7 @@ define(function(require) {
 
     var _ = require('underscore');
     var $ = require('jquery');
+    var LightBox = require('LightBox');
     var ThumbnailList = require('ThumbnailList');
 
     if (_.indexOf($.event.props, 'dataTransfer') < 0) {
@@ -19,16 +20,9 @@ define(function(require) {
     }
 
     return ThumbnailList.extend({
-        thumbnailOptions: {
-            removable: true,
-            clickBehavior: 'none',
-            rect: {
-                height: 128,
-                width: 192
-            }
-        },
         childEvents: {
-            'remove': 'onPictureRemoved'
+            'add-item-click': 'onAddItemClicked',
+            'item-click': 'onItemClicked'
         },
         events: {
             'dragenter': 'onDragEnter',
@@ -36,11 +30,17 @@ define(function(require) {
             'dragover':  'onDragOver',
             'drop':      'onDrop'
         },
-        initialize: function() {
-            ThumbnailList.prototype.initialize.call(this);
-            this.listenTo(this.collection, 'remove', function(model, col, opt) {
-                this.trigger('remove-picture', model.attributes, opt.index);
+        thumbnailsClickBehavior: 'trigger',
+        initialize: function(options) {
+            ThumbnailList.prototype.initialize.call(this, options);
+            this.filesInput = $(document.createElement('input')).attr({
+                accept: '.gif,.jpeg,.jpg,.png',
+                multiple: '',
+                type: 'file'
             });
+            this.filesInput.on('change', (function(e) {
+                this.addFiles(e.target.files);
+            }).bind(this));
         },
         addFile: function(file) {
             if (file instanceof File) {
@@ -59,6 +59,12 @@ define(function(require) {
                 var th_width = this.children.first().outerRect().width;
                 this.$el.css('width', th_width*Math.floor(this.$el.width()/th_width));
             }
+        },
+        onAddItemClicked: function() {
+			this.filesInput.click();
+		},
+        onItemClicked: function(child) {
+            LightBox.open(child.model);
         },
         onDragEnter: function(e) {
             e.preventDefault();
@@ -82,9 +88,6 @@ define(function(require) {
             this.onDragLeave.call(this, e);
             this.addFiles(e.dataTransfer.files);
             return false;
-        },
-        onPictureRemoved: function(view, model) {
-            this.collection.remove(model);
         }
     });
 });

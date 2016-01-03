@@ -39,36 +39,15 @@ define(function(require) {
 		},
         template: _.template(template),
 		initialize: function(options) {
+			_.bindAll(this, 'onCommand');
 			this.router = options.router;
 			this.productPictureList = new PictureList({
-				collection: new Backbone.Collection(this.model.pictures())
+				collection: new Backbone.Collection(this.model.pictures()),
+				editable: true
 			});
-			this.filesInput = $(document.createElement('input')).attr({
-				accept: '.gif,.jpeg,.jpg,.png',
-				multiple: '',
-				type: 'file'
-			});
-
 			this.listenTo(this.productPictureList, 'remove-picture', this.onInputChanged);
 			this.listenTo(this.productPictureList, 'add-picture', this.onInputChanged);
-			this.filesInput.on('change', (function(e) {
-				this.productPictureList.addFiles(e.target.files);
-			}).bind(this));
-
-			var on_action_triggered = functional.dispatch(
-				(function(cmd) {
-					if (cmd === 'save') {
-						this.save();
-						return true;
-					}
-				}).bind(this),
-				(function(cmd) {
-					if (cmd === 'remove') {
-						return true;
-					}
-				}).bind(this)
-			);
-			app_channel.commands.setHandler('product', on_action_triggered);
+			app_channel.commands.setHandler('product', this.onCommand);
 		},
 		values: function() {
 			return {
@@ -95,7 +74,7 @@ define(function(require) {
 			this.ui.price.val(this.model.get('price'));
 			this.showChildView('pictures', this.productPictureList);
 		},
-		save: function() {
+		saveProduct: function() {
 			if (this.edited) {
 				Dialog.prompt(
 					'Êtes vous sûr de vouloir sauvegarder les modificiations?',
@@ -128,15 +107,24 @@ define(function(require) {
 					}
 				);
 		},
-		remove: function() {
-
+		removeProduct: function() {
+			// FIXME: implement that
+			console.error('Not implemented!');
 		},
-		onAddPicturesClick: function(ev) {
-			ev.preventDefault();
-			ev.stopPropagation();
-			this.filesInput.click();
-			return false;
-		},
+		onCommand: functional.dispatch(
+			function(cmd) {
+				if (cmd === 'save') {
+					this.saveProduct();
+					return true;
+				}
+			},
+			function(cmd) {
+				if (cmd === 'remove') {
+					this.removeProduct();
+					return true;
+				}
+			}
+		),
 		onInputChanged: function() {
 			this.edited = !_.isEqual(
 				this.values(),
@@ -160,9 +148,6 @@ define(function(require) {
         onRender: function() {
 			this.reset();
 			this.onInputChanged();
-			this.productPictureList.$el
-				.addClass('framed')
-				.css({minHeight: 128});
         }
     });
 });

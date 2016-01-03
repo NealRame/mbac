@@ -12,19 +12,11 @@ define(function(require) {
     var template = require('text!pages/products/back/products/product-list-view.html');
 
     var ProductList = ThumbnailList.extend({
+		createItemTarget: '#create',
         editable: false,
-        thumbnailOptions: function() {
-            return {
-				clickBehavior: 'default',
-				createItemTarget: '#create',
-				editable: Marionette.getOption(this, 'editable'),
-                removable: Marionette.getOption(this, 'editable'),
-                renderers: [product_render]
-            };
-        },
-        initialize: function() {
-            _.bindAll(this, 'thumbnailOptions');
-            ThumbnailList.prototype.initialize.call(this);
+        thumbnailsRenderers: [product_render],
+        initialize: function(options) {
+            ThumbnailList.prototype.initialize.call(this, options);
         }
     });
 
