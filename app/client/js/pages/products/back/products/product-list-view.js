@@ -32,8 +32,7 @@ define(function(require) {
         initialize: function() {
             this.listView = new ProductList({
                 collection: this.collection,
-                editable: true,
-                clickBehavior: 'default'
+                editable: true
             });
         },
         template: _.template(template),
