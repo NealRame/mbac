@@ -8,10 +8,37 @@ define(function(require) {
 
     var _ = require('underscore');
     var $ = require('jquery');
+    var Backbone = require('backbone');
     var Marionette = require('marionette');
     var functional = require('common/functional');
     var ui = require('common/ui');
     var Thumbnail = require('Thumbnail');
+    var AddItemView = require('common/ThumbnailList/add-item');
+
+    var AddItemModel = Backbone.Model.extend({});
+
+    function clone_and_bind_collection(collection) {
+        this.collection = collection.clone();
+        this.listenTo(collection, 'add', function(models) {
+            this.collection.add(models);
+        });
+        this.listenTo(collection, 'remove', function(models) {
+            this.collection.remove(models);
+        });
+    }
+
+    function has_add_item_model(collection) {
+        return collection.some(function(model) {
+            return model instanceof AddItemModel;
+        });
+    }
+
+    function set_add_item_model() {
+        if (Marionette.getOption(this, 'editable')
+                && !has_add_item_model(this.collection)) {
+            this.collection.add(new AddItemModel());
+        }
+    }
 
     return Marionette.CollectionView.extend({
         className: 'thumbnails',
@@ -38,6 +65,8 @@ define(function(require) {
             }
         },
         initialize: function() {
+            clone_and_bind_collection.call(this, this.collection);
+            set_add_item_model.call(this);
             var ready = 0;
             var reflow = _.debounce(_.bind(function() {
                 if (this.needRefresh()) {
@@ -63,9 +92,14 @@ define(function(require) {
             });
             this.listenTo(this, 'childview:click', Marionette.triggerMethod.bind(this, 'click'));
         },
-        childView: Thumbnail,
+        getChildView: function (item) {
+            if (item instanceof AddItemModel) {
+                return AddItemView
+            }
+            return Thumbnail;
+        },
         childViewOptions: function() {
-            return _.defaults(
+            return functional.merge(
                 functional.valueOf(
                     Marionette.getOption(this, 'thumbnailOptions') || {}
                 ),
