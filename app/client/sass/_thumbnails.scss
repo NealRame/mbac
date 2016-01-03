@@ -1,26 +1,4 @@
 @import "settings";
-
-.action-bar {
-    background-color: rgba(0, 0, 0, 0.5);
-    position: absolute;
-    display: none;
-    top: 0;
-    width: 100%;
-    overflow: auto;
-}
-
-.action-bar a {
-    color: lightgray;
-    float: right;
-    text-decoration: none;
-    margin: 2px;
-    display: block;
-}
-
-.action-bar a:hover {
-    color: red;
-}
-
 .thumbnails {
     list-style-type: none;
     margin: 0 auto;
@@ -75,10 +53,36 @@
                     }
                 }
             }
+            .action-bar {
+                background-color: rgba(0, 0, 0, 0.5);
+                opacity: 0;
+                overflow: auto;
+                position: absolute;
+                top: 0;
+                transition: opacity .2s ease-out;
+                width: 100%;
+            }
+            .action-bar a {
+                color: lightgray;
+                display: block;
+                float: right;
+                margin: 0 .5em;
+                text-decoration: none;
+            }
+            .action-bar a:hover {
+                color: red;
+            }
+            &:hover {
+                .action-bar {
+                    opacity: 1;
+                    transition: opacity .2s ease-out;
+                }
+            }
         }
         .crop[data-empty] {
             background-color: #eee;
         }
+
     }
     &.framed {
         border: 1px solid $light-gray;

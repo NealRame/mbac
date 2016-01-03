@@ -137,14 +137,6 @@ define(function(require) {
         target: function() {
             return this.ui.thumbLink.attr('href');
         },
-        onMouseEnter: function() {
-            this.$('.action-bar').fadeIn(100);
-            return false;
-        },
-        onMouseLeave: function() {
-            this.$('.action-bar').fadeOut(100);
-            return false;
-        },
         onShow: function() {
             this.refresh();
             if (!_.isUndefined(this.model)) {
