@@ -8,36 +8,32 @@ define(function(require) {
     var _ = require('underscore');
     var Marionette = require('marionette');
     var functional = require('common/functional');
+    var thumbnailBehaviors = require('common/Thumbnail/behaviors');
     var template = require('text!common/ThumbnailList/add-item.html');
 
     return Marionette.ItemView.extend({
+        behaviors: {
+            thumbLink: {
+                behaviorClass: thumbnailBehaviors.click,
+                event: 'add-item-click'
+            }
+        },
         className: 'thumb',
         initialize: function(options) {
             this.mergeOptions(
                 options,
-                ['preventDefault', 'rect', 'stopPropagation', 'target']
+                ['preventDefault', 'rect', 'stopPropagation', 'createItemTarget']
             );
         },
         serializeData: function() {
             return _.assign({
-                target: this.target
+                target: this.createItemTarget
             }, functional.valueOf(this.rect));
         },
-        preventDefault: true,
-        stopPropagation: true,
-        target: '#',
+        createItemTarget: '#',
         template: _.template(template),
-        triggers: function() {
-            return {
-                'click @ui.addItem': {
-                    event: 'add-item-request',
-                    preventDefault: this.preventDefault,
-                    stopPropagation: this.stopPropagation
-                }
-            };
-        },
         ui: {
-            addItem: '.add-item'
+            thumbLink: '.thumb-link'
         }
     });
 });
