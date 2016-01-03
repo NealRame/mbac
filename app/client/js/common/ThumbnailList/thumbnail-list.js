@@ -87,9 +87,6 @@ define(function(require) {
                     Marionette.triggerMethod.call(this, 'ready');
                 }
             });
-            this.listenTo(this, 'childview:click', function() {
-                Marionette.triggerMethod.call(this, 'click')
-            });
         },
         getChildView: function (item) {
             if (item instanceof AddItemModel) {
