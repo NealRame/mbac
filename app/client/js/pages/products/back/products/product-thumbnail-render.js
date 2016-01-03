@@ -6,6 +6,7 @@ define(function(require) {
     'use strict';
 
     var Promise = require('promise');
+    var Marionette = require('marionette');
     var functional = require('common/functional');
     var render_file = require('common/Thumbnail/file-render');
     var render_picture = require('common/Thumbnail/picture-render');
@@ -22,9 +23,10 @@ define(function(require) {
 
     return function(model) {
         if (functional.hasAllOfAttributes(model, 'pictures')) {
+            var editable = Marionette.getOption(this, 'editable');
             return render.call(this, model.picture())
                 .then(function(thumb) {
-                    thumb.target = model.editURL();
+                    thumb.target = editable ? model.editURL() : model.pageURL();
                     return thumb;
                 });
         }
