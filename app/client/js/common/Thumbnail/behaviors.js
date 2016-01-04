@@ -7,6 +7,7 @@ define(function(require) {
 
     var Marionette = require('marionette');
     var Dialog = require('Dialog');
+    var functional = require('common/functional');
 
     return {
         click: Marionette.Behavior.extend({
@@ -38,7 +39,13 @@ define(function(require) {
                 var model = this.view.model;
                 Dialog.prompt(
                     this.options.message, {
-                        accept: model.destroy.bind(model),
+                        accept: function() {
+                            if (functional.existy(model.collection.url)) {
+                                model.destroy();
+                            } else {
+                                model.collection.remove(model);
+                            }
+                        },
                         acceptLabel: 'Oui',
                         refuseLabel: 'Non'
                     }
