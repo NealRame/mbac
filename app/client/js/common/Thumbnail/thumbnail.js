@@ -20,10 +20,7 @@ define(function(require) {
         file_render,
         picture_render,
         function() {
-            return Promise.resolve({
-                el: this.placeholder('unknown'),
-                target: ''
-            });
+            return this.placeholder('unknown-item');
         }
     ];
 
@@ -95,27 +92,11 @@ define(function(require) {
         outerRect: function() {
             return ui.outerRect(this.el);
         },
-        placeholder: function(type, ratio) {
-            ratio = ratio || 1;
-
-            var classes = {
-                spinner: 'fa fa-circle-o-notch fa-spin',
-                empty: 'fa fa-ban fa-fw',
-                error: 'fa fa-exclamation-circle fa-fw',
-                unknown: 'fa fa-question-circle'
-            };
-            var rect = this.innerRect();
-            var font_size = (Math.min(rect.width, rect.height) - 32)*ratio;
-
-            return $(document.createElement('i'))
-                .addClass([classes[type] || 'fa fa-question-circle', type].join(' '))
-                .css({
-                    fontSize: font_size,
-                    height: font_size,
-                    left: (rect.width - font_size)/2,
-                    top: (rect.height - font_size)/2,
-                    width: font_size
-                });
+        placeholder: function(role, target) {
+            return Promise.resolve({
+                role: role,
+                target: target || ''
+            });
         },
         refresh: function() {
             this.$el.find('.crop').css(this.innerRect());
@@ -126,12 +107,14 @@ define(function(require) {
                 .then(function(thumbnail) {
                     this.ui.thumbLink
                         .empty()
-                        .append(thumbnail.el || this.placeholder('empty'))
+                        .append(thumbnail.el)
+                        .attr('data-role', thumbnail.role)
                         .attr('href', thumbnail.target);
                     this.trigger('ready');
                 })
-                .catch(function() {
-                    this.ui.thumbLink.empty().append(this.placeholder('error'));
+                .catch(function(err) {
+                    console.error(err);
+                    this.ui.thumbLink.empty().attr('data-role', 'error');
                 });
         },
         target: function() {

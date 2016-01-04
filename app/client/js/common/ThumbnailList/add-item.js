@@ -5,42 +5,23 @@
 define(function(require) {
     'use strict';
 
-    var _ = require('underscore');
-    var Marionette = require('marionette');
-    var functional = require('common/functional');
+    var Thumbnail = require('Thumbnail');
     var thumbnailBehaviors = require('common/Thumbnail/behaviors');
-    var template = require('text!common/ThumbnailList/add-item.html');
 
-    return Marionette.ItemView.extend({
+    return Thumbnail.extend({
         behaviors: {
             thumbLink: {
                 behaviorClass: thumbnailBehaviors.click,
                 event: 'add-item-click'
             }
         },
-        className: 'thumb',
         initialize: function(options) {
-            this.mergeOptions(
-                options,
-                ['preventDefault', 'rect', 'stopPropagation', 'createItemTarget']
-            );
-        },
-        serializeData: function() {
-            return _.assign({
-                target: this.createItemTarget
-            }, functional.valueOf(this.rect));
-        },
-        createItemTarget: '#',
-        template: _.template(template),
-        ui: {
-            thumbLink: '.thumb-link'
-        },
-        refresh: function() {
-            this.render();
-            this.trigger('ready');
-        },
-        onShow: function() {
-            this.trigger('ready');
+            this.mergeOptions(options, ['createItemTarget']);
+            this.options.editable = false;
+            this.options.removable = false;
+            this.options.renderers = [function() {
+                return this.placeholder('add-item', this.createItemTarget);
+            }];
         }
     });
 });
