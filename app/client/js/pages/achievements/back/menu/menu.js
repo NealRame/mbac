@@ -30,6 +30,9 @@ define(function(require) {
             'click @ui.remove': 'onRemove',
             'click @ui.save': 'onSave'
         },
+        regions: {
+            'achievements-submenu-wrapper': '#achievements-submenu-wrapper'
+        },
         getTemplate: function() {
             if (this.mode === 'list') {
                 return _.template(list_menu_template);
@@ -68,9 +71,6 @@ define(function(require) {
                     return true;
                 }
             }
-        ),
-        regions: {
-            'achievements-submenu-wrapper': '#achievements-submenu-wrapper'
-        }
+        )
     }, menu_proto));
 });
