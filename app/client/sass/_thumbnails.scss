@@ -41,6 +41,11 @@
                         font-size: 4rem;
                         margin: 0 auto;
                         text-align: center;
+                    }
+                }
+                &[data-role="add-item"] {
+                    &:before {
+                        content: '\f067';
                         transform: scale(1);
                         transition: transform .2s ease-out;
                     }
@@ -51,14 +56,19 @@
                         }
                     }
                 }
-                &[data-role="add-item"] {
-                    &:before {
-                        content: '\f067';
-                    }
-                }
                 &[data-role="unknown-item"] {
                     &:before {
                         content: '\f059';
+                    }
+                }
+                &[data-role="empty-item"] {
+                    &:before {
+                        content: '\f05e';
+                    }
+                }
+                &[data-role="error"] {
+                    &:before {
+                        content: '\f06a';
                     }
                 }
             }
