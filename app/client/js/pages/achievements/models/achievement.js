@@ -14,6 +14,7 @@ define(function(require) {
     var PicturesContainer = require('PicturesContainer');
     var PublishState = require('PublishState');
     var TagsContainer = require('TagsContainer');
+    var functional = require('common/functional');
 
     function create_form_data(achievement) {
         var data = achievement.attributes;
@@ -34,40 +35,49 @@ define(function(require) {
         return form_data;
     }
 
-    var AchievementProto =  _.assign({
-        idAttribute: '_id',
-        defaults: {
-            published: false,
-            pictures: [],
-            tags: []
-        },
-        pageURL: function() {
-            return '/achievements/' + this.attributes._id;
-        },
-        description: function() {
-            return this.get('description') || '';
-        },
-        validate: function(attributes) {
-            var isValidPicture = function(picture) {
-                return picture.file instanceof File || (picture.original && picture.thumbnail);
-            };
+    var AchievementProto = functional.merge(
+        {
+            idAttribute: '_id',
+            defaults: {
+                published: false,
+                pictures: [],
+                tags: []
+            },
+            pageURL: function() {
+                return '/achievements/' + this.attributes._id;
+            },
+            editURL: function() {
+                return '#' + this.attributes._id;
+            },
+            description: function() {
+                return this.get('description') || '';
+            },
+            validate: function(attributes) {
+                var isValidPicture = function(picture) {
+                    return picture.file instanceof File || (picture.original && picture.thumbnail);
+                };
 
-            if (!_.isString(attributes.name)) {
-                return new Error('name must be a String');
+                if (!_.isString(attributes.name)) {
+                    return new Error('name must be a String');
+                }
+                if (!_.isString(attributes.description)) {
+                    return new Error('description mus be a String');
+                }
+                if (!(_.isArray(attributes.pictures)
+                        && _.every(attributes.pictures, isValidPicture))) {
+                    return new Error('pictures must be a non empty Array of valid pictures');
+                }
+                if (!(_.isArray(attributes.tags)
+                        && _.every(attributes.tags, _.isString))) {
+                    return new Error('tags must be an Array of String');
+                }
             }
-            if (!_.isString(attributes.description)) {
-                return new Error('description mus be a String');
-            }
-            if (!(_.isArray(attributes.pictures)
-                    && _.every(attributes.pictures, isValidPicture))) {
-                return new Error('pictures must be a non empty Array of valid pictures');
-            }
-            if (!(_.isArray(attributes.tags)
-                    && _.every(attributes.tags, _.isString))) {
-                return new Error('tags must be an Array of String');
-            }
-        }
-    }, PicturesContainer, PublishState, TagsContainer, FormDataModelSynchronizer(create_form_data));
+        },
+        PicturesContainer,
+        PublishState,
+        TagsContainer,
+        FormDataModelSynchronizer(create_form_data)
+    );
 
     return Backbone.Model.extend(AchievementProto)
 });
