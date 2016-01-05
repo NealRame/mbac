@@ -6,7 +6,6 @@ define(function(require) {
     'use strict';
 
     var _ = require('underscore');
-    var $ = require('jquery');
     var Marionette = require('marionette');
     var Promise = require('promise');
     var functional = require('common/functional');
@@ -105,6 +104,13 @@ define(function(require) {
                 .call(this, this.model)
                 .bind(this)
                 .then(function(thumbnail) {
+                    if (!(functional.existy(thumbnail.el)
+                            || functional.existy(thumbnail.role))) {
+                        thumbnail.role = 'empty-item';
+                    }
+                    return thumbnail;
+                })
+                .then(function(thumbnail) {
                     this.ui.thumbLink
                         .empty()
                         .append(thumbnail.el)
@@ -112,8 +118,7 @@ define(function(require) {
                         .attr('href', thumbnail.target);
                     this.trigger('ready');
                 })
-                .catch(function(err) {
-                    console.error(err);
+                .catch(function() {
                     this.ui.thumbLink.empty().attr('data-role', 'error');
                 });
         },
