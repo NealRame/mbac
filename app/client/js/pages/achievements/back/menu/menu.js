@@ -44,20 +44,17 @@ define(function(require) {
             app_channel.commands.setHandler('route', this.onRoute.bind(this));
         },
         onRemove: function(ev) {
-            console.log('-- remove clicked');
             ev.preventDefault();
             ev.stopPropagation();
             return false;
         },
         onSave: function(ev) {
-            console.log('-- save clicked');
             ev.preventDefault();
             ev.stopPropagation();
             return false;
         },
         onRoute: functional.dispatch(
             function(route) {
-                console.log('-- onRoute', route);
                 if (route === 'achievements') {
                     this.mode = 'list';
                     this.render();
@@ -65,7 +62,6 @@ define(function(require) {
                 }
             },
             function(route) {
-                console.log('-- onRoute', route);
                 if (route === 'editAchievement') {
                     this.mode = 'edit';
                     this.render();
