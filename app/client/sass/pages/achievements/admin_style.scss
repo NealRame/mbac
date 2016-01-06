@@ -1,40 +1,9 @@
-@import "../../thumbnails";
+@import "../../forms";
 @import "../../lightbox";
+@import "../../thumbnails";
+@import "foundation/components/buttons";
 @import "foundation/components/button-groups";
 @import "foundation/components/reveal";
-
-.achievement-editor {
-    border-bottom: solid 1px lightgray;
-    margin-bottom: 8px;
-    .thumbnails {
-        min-height: 128px;
-        width: 100%;
-    }
-    #add-pictures {
-        @extend .button;
-        @extend .expand;
-        &:after {
-            content: 'Ajouter des images';
-        }
-    }
-    .unpublish-button {
-        @extend .button;
-        @extend .alert;
-        &:after {
-            content: 'Ne plus publier la réalisation';
-        }
-    }
-    .publish-button {
-        @extend .button;
-        @extend .success;
-        &:after {
-            content: 'Publier la réalisation';
-        }
-    }
-    .unpublish-button, .publish-button {
-        @extend .expand;
-    }
-}
 
 #filters {
     padding-left: 8px;
