@@ -94,13 +94,26 @@ $admin-nav-bg-color-active: lighten($admin-nav-bg-color, 5);
 $admin-nav-bg-color-hover: lighten($admin-nav-bg-color, 10);
 $admin-nav-divider-color: $admin-nav-bg-color;
 
+///////////////////////////////////////////////////////////////////////////////
+// Forms
+$form-input-fg-color: $body-font-color;
+$form-input-bg-color: $white;
+$form-input-bg-color-focus: $light-gray;
+$form-input-fg-color-focus: $body-font-color;
+$form-input-focus-transition-speed: .2s;
+$form-input-border-thickness: 4px;
+$form-input-border-color: $red;
+$form-input-place-holder-color: lighten($form-input-fg-color, 64);
+$form-input-font-size: .7em;
+$form-input-label-font-size: $form-input-font-size;
+
+///////////////////////////////////////////////////////////////////////////////
 // Footer
-// ------
 $footer-background-color: $black;
 $footer-foreground-color: $white;
 
+///////////////////////////////////////////////////////////////////////////////
 // Buttons
-// -------
 $button-font-color: $white;
 
 @import "foundation/settings";

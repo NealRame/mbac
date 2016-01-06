@@ -1,0 +1,56 @@
+@import "settings";
+@import "foundation/components/switches";
+
+.form-wrapper {
+    .input {
+        font-size: $form-input-font-size;
+        margin: 0 1em;
+        margin-bottom: 1em;
+        position: relative;
+        input, textarea {
+            all: initial;
+            background-color: $form-input-bg-color;
+            border: none;
+            border-bottom: solid 1px $form-input-bg-color-focus;
+            box-shadow: none;
+            box-sizing:border-box;
+            color: $form-input-fg-color;
+            display: block;
+            font-family: $body-font-family;
+            font-size: inherit;
+            margin: 0;
+            outline: none;
+            padding: .25em;
+            transition: background-color $form-input-focus-transition-speed ease-out;
+            width: 100%;
+            @include input-placeholder-color($form-input-place-holder-color);
+            &:focus {
+                background-color: $form-input-bg-color-focus;
+                color: $form-input-fg-color-focus;
+                transition: background-color $form-input-focus-transition-speed ease-out;
+            }
+        }
+        textarea {
+            resize: vertical;
+        }
+        &::after {
+            content: '';
+            display: block;
+            position: relative;
+            border-bottom: solid $form-input-border-thickness $form-input-border-color;
+            transform: scaleX(0);
+            transition: transform $form-input-focus-transition-speed ease-out;
+        }
+        &.filled {
+            &::after {
+                transform: scaleX(1);
+                transition: transform $form-input-focus-transition-speed ease-out;
+            }
+        }
+    }
+    label {
+        font-size: $form-input-label-font-size;
+        font-weight: bold;
+        font-family: $body-font-family;
+    }
+}

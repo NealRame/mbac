@@ -41,3 +41,26 @@
     background-position: 50% 0;
     background-size: cover;
 }
+
+@mixin input-placeholder-color($color) {
+    &::-webkit-input-placeholder {
+        // WebKit, Blink, Edge
+        color: $color;
+        font-style: italic;
+    }
+    &:-moz-placeholder {
+        // Mozilla Firefox 4 to 18
+        color: $color;
+        font-style: italic;
+    }
+    &::-moz-placeholder {
+        // Mozilla Firefox 19+
+        color: $color;
+        font-style: italic;
+    }
+    &:-ms-input-placeholder {
+        // Internet Explorer 10-11
+        color: $color;
+        font-style: italic;
+    }
+}
