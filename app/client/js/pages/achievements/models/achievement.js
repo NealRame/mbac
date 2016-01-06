@@ -49,8 +49,17 @@ define(function(require) {
             editURL: function() {
                 return '#' + this.attributes._id;
             },
+            name: function() {
+                return this.get('name') || '';
+            },
+            setName: function(name) {
+                return this.set('name', name);
+            },
             description: function() {
                 return this.get('description') || '';
+            },
+            setDescription: function(description) {
+                return this.set('description', description);
             },
             validate: function(attributes) {
                 var isValidPicture = function(picture) {
