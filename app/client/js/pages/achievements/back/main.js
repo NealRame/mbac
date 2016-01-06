@@ -4,6 +4,7 @@ define(function(require) {
     var Backbone = require('backbone');
     var Marionette = require('marionette');
     var Achievement = require('pages/achievements/models/achievement');
+    var AchievementEditView = require('pages/achievements/back/achievement-edit-view/achievement-edit-view');
     var AchievementListView = require('pages/achievements/back/achievement-list-view/achievement-list-view');
     var ApplicationLayout = require('pages/achievements/back/layout');
     var ApplicationMenu = require('pages/achievements/back/menu/menu');
@@ -39,9 +40,19 @@ define(function(require) {
         },
         createAchievement: function() {
             app_channel.commands.execute('route', 'editAchievement');
+            this.layout.showChildView('app', new AchievementEditView({
+                collection: achievements,
+                model: new Achievement({}),
+                router: this.router
+            }));
         },
         editAchievement: function(id) {
             app_channel.commands.execute('route', 'editAchievement', id);
+            this.layout.showChildView('app', new AchievementEditView({
+                collection: achievements,
+                model: achievements.get(id),
+                router: this.router
+            }));
         },
         onStart: function(config) {
             this.config = config;
