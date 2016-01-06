@@ -17,7 +17,7 @@ define(function(require) {
 	var app_channel = Backbone.Wreqr.radio.channel('app');
 
     return Marionette.LayoutView.extend({
-		id: 'editor-wrapper',
+		className: 'form-wrapper',
         ui: {
 			addPictures: '#add-pictures',
 			price: '#price',
