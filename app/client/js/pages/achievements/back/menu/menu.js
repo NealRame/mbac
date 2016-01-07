@@ -47,13 +47,13 @@ define(function(require) {
             app_channel.commands.setHandler('route', this.onRoute.bind(this));
         },
         onRemove: function(ev) {
-            app_channel.commands.execute('product', 'remove');
+            app_channel.commands.execute('achievement', 'remove');
             ev.preventDefault();
             ev.stopPropagation();
             return false;
         },
         onSave: function(ev) {
-            app_channel.commands.execute('product', 'save');
+            app_channel.commands.execute('achievement', 'save');
             ev.preventDefault();
             ev.stopPropagation();
             return false;
