@@ -6,7 +6,7 @@
     "start": "NODE_PATH=\"$PWD/app/server\" ./bin/www"
   },
   "dependencies": {
-    "async": "^1.5.1",
+    "async": "^1.5.2",
     "body-parser": "^1.14.2",
     "cookie-parser": "^1.4.0",
     "debug": "^2.2.0",
