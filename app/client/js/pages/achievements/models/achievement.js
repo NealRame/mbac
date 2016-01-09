@@ -70,7 +70,7 @@ define(function(require) {
                     return new Error('name must be a String');
                 }
                 if (!_.isString(attributes.description)) {
-                    return new Error('description mus be a String');
+                    return new Error('description must be a String');
                 }
                 if (!(_.isArray(attributes.pictures)
                         && _.every(attributes.pictures, isValidPicture))) {
