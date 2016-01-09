@@ -62,24 +62,37 @@ define(function(require) {
                 return this.set('description', description);
             },
             validate: function(attributes) {
-                var isValidPicture = function(picture) {
+                var error;
+                var is_valid_picture = function(picture) {
                     return picture.file instanceof File || (picture.original && picture.thumbnail);
                 };
+                var is_valid_tag = function(tag) {
+                    return _.isString(tag) && tag.trim() != '';
+                };
 
-                if (!_.isString(attributes.name)) {
-                    return new Error('name must be a String');
+                if (!_.isString(attributes.name) || attributes.name.trim() === '') {
+                    error = _.assign(error || {}, {
+                        name: new Error('name must be a String')
+                    });
                 }
                 if (!_.isString(attributes.description)) {
-                    return new Error('description must be a String');
+                    error = _.assign(error || {}, {
+                        description: new Error('description must be a String')
+                    });
                 }
                 if (!(_.isArray(attributes.pictures)
-                        && _.every(attributes.pictures, isValidPicture))) {
-                    return new Error('pictures must be a non empty Array of valid pictures');
+                        && _.every(attributes.pictures, is_valid_picture))) {
+                    error = _.assign(error || {}, {
+                        pictures: new Error('pictures must be a non empty Array of valid pictures')
+                    });
                 }
                 if (!(_.isArray(attributes.tags)
-                        && _.every(attributes.tags, _.isString))) {
-                    return new Error('tags must be an Array of String');
+                        && _.every(attributes.tags, is_valid_tag))) {
+                    error = _.assign(error || {}, {
+                        tags: new Error('tags must be an Array of String')
+                    });
                 }
+                return error;
             }
         },
         PicturesContainer,
