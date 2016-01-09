@@ -11,6 +11,7 @@ define(function(require) {
     var Marionette = require('marionette');
     var Dialog = require('Dialog');
 	var PictureList = require('PictureList');
+	var async = require('common/async');
 	var functional = require('common/functional');
     var template = require('text!pages/achievements/back/achievement-edit-view/achievement-edit-view.html');
 
@@ -52,9 +53,11 @@ define(function(require) {
 			return {
 				description: this.ui.description.val(),
 				name: this.ui.name.val(),
-				pictures: this.achievementPictureList.collection.map(function(picture) {
-					return picture.attributes
-				}),
+				pictures: this.achievementPictureList
+					.items()
+					.map(function(picture) {
+						return picture.attributes
+					}),
 				published: this.ui.published.prop('checked'),
 				tags: this.ui.tags.val().split(',').map(function(tag) {
 					return tag.trim().toLowerCase();
@@ -69,41 +72,55 @@ define(function(require) {
 			this.showChildView('pictures', this.achievementPictureList);
 		},
 		saveAchievement: function() {
+			var commit = function() {
+				var router = this.router;
+				var model = this.model;
+				var values = this.values();
+				async.synchroniseModel(this.collection.add(model).set(values))
+					.catch(function(err) {
+						// FIXME: do something
+						console.error(err);
+					})
+					.then(function() {
+						router.navigate('#' + model.id, {
+							replace: true
+						});
+					})
+			};
 			if (this.edited) {
 				Dialog.prompt(
 					'Êtes vous sûr de vouloir sauvegarder les modificiations?',
 					{
-						accept: this.commit.bind(this),
+						accept: commit.bind(this),
 						acceptLabel: 'Oui',
 						refuseLabel: 'Non'
 					}
 				);
 			}
 		},
-		commit: function() {
-			var is_new = this.model.isNew();
-			var router = this.router;
-			this.collection
-				.add(this.model)
-				.set(this.values())
-				.save()
-				.then(
-					function(data) {
-						if (is_new) {
-							router.navigate('#' + data._id, {
-								replace: true
-							});
-						}
-					},
-					function(jqxhr, text_status, err) {
+		removeAchievement: function() {
+			var commit = function() {
+				var router = this.router;
+				async.destroyModel(this.model)
+					.catch(function(err) {
 						// FIXME: do something
 						console.error(err);
-					}
-				);
-		},
-		removeAchievement: function() {
-			// FIXME: implement that
-			console.error('Not implemented!');
+					})
+					.then(function() {
+						router.navigate('#', {
+							replace: true,
+							trigger: true
+						});
+					});
+			}
+			Dialog.prompt(
+				'Êtes vous sûr de vouloir supprimer cette réalisation?',
+				{
+					accept: commit.bind(this),
+					acceptLabel: 'Oui',
+					refuseLabel: 'Non'
+				}
+			);
 		},
 		onCommand: functional.dispatch(
 			function(cmd) {
