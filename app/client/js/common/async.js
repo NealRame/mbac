@@ -7,6 +7,7 @@ define(function(require) {
     'use strict';
 
     var $ = require('jquery');
+    var functional = require('common/functional');
     var Promise = require('promise');
 
     /// #### async.loadFileAsDataURL(file)
@@ -52,8 +53,48 @@ define(function(require) {
         }
     }
 
+    function synchronise_model(model) {
+        var jq_xhr = model.save();
+        if (jq_xhr) {
+            return new Promise(function(resolve, reject) {
+                jq_xhr
+                    .done(function(data) {
+                        resolve(data);
+                    })
+                    .fail(function(req, text, err) {
+                        reject(err);
+                    });
+            });
+        }
+        return Promise.reject(model.validationError);
+    }
+
+    function destroy_model(model) {
+        if (functional.existy(model.collection)) {
+            if (functional.existy(model.collection.url)) {
+                var jq_xhr = model.destroy();
+                if (jq_xhr) {
+                    return new Promise(function(resolve, reject) {
+                        jq_xhr
+                            .done(function(data) {
+                                resolve(data);
+                            })
+                            .fail(function(req, text, err) {
+                                reject(err);
+                            });
+                    });
+                }
+            } else {
+                model.collection.remove(model);
+            }
+        }
+        return Promise.resolve(model.attributes);
+    }
+
     return {
         loadFileAsDataURL: load_file_as_data_url,
-        loadImage: load_image
+        loadImage: load_image,
+        synchroniseModel: synchronise_model,
+        destroyModel: destroy_model
     };
 });
