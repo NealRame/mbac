@@ -130,6 +130,11 @@ define(function(require) {
                 });
             }
         },
+        items: function() {
+            return this.collection.reject(function(model) {
+                return model instanceof AddItemModel;
+            });
+        },
         onReady: _.noop
     });
 });
