@@ -12,6 +12,7 @@ define(function(require) {
     var Dialog = require('Dialog');
 	var PictureList = require('PictureList');
 	var async = require('common/async');
+	var errors = require('common/errors');
 	var functional = require('common/functional');
     var template = require('text!pages/achievements/back/achievement-edit-view/achievement-edit-view.html');
 
@@ -21,12 +22,12 @@ define(function(require) {
 		className: 'form-wrapper',
         ui: {
 			addPictures: '#add-pictures',
-			price: '#price',
+			error: '.error',
+			inputs: 'input, textarea',
 			published: '#published',
             description: '#description',
             name: '#name',
-            tags: '#tags',
-			inputs: 'input, textarea'
+            tags: '#tags'
         },
 		events: {
 			'click @ui.addPictures': 'onAddPicturesClick',
@@ -34,26 +35,52 @@ define(function(require) {
 			'blur @ui.inputs': 'onInputFocus',
 			'change @ui.inputs': 'onInputChanged'
 		},
+		childEvents: {
+			'remove-picture': 'onInputChanged',
+			'add-picture': 'onInputChanged'
+		},
 		regions: {
 			pictures: '#pictures'
 		},
         template: _.template(template),
+		templateHelpers: function() {
+			return {
+				hasError: functional.existy(this.errorMessage),
+				errorMessage: this.errorMessage,
+				fieldError: function(field) {
+					return functional.property(
+						this.model,
+						'validationError.reason.' + field
+					);
+				},
+				fieldIsValid: function(field) {
+					return functional.existy(functional.property(
+						this.model,
+						'validationError.reason.' + field
+					));
+				}
+			};
+		},
 		initialize: function(options) {
 			_.bindAll(this, 'onCommand');
 			this.router = options.router;
-			this.achievementPictureList = new PictureList({
+			app_channel.commands.setHandler('achievement', this.onCommand);
+		},
+		reset: function() {
+			this.ui.name.val(this.model.name());
+			this.ui.tags.val(this.model.tags().join(', '));
+			this.ui.description.val(this.model.description());
+			this.ui.published.prop('checked', this.model.published());
+			this.showChildView('pictures', new PictureList({
 				collection: new Backbone.Collection(this.model.pictures()),
 				editable: true
-			});
-			this.listenTo(this.achievementPictureList, 'remove-picture', this.onInputChanged);
-			this.listenTo(this.achievementPictureList, 'add-picture', this.onInputChanged);
-			app_channel.commands.setHandler('achievement', this.onCommand);
+			}));
 		},
 		values: function() {
 			return {
 				description: this.ui.description.val(),
 				name: this.ui.name.val(),
-				pictures: this.achievementPictureList
+				pictures: this.getChildView('pictures')
 					.items()
 					.map(function(picture) {
 						return picture.attributes
@@ -64,82 +91,73 @@ define(function(require) {
 				})
 			};
 		},
-		reset: function() {
-			this.ui.name.val(this.model.name());
-			this.ui.tags.val(this.model.tags().join(', '));
-			this.ui.description.val(this.model.description());
-			this.ui.published.prop('checked', this.model.published());
-			this.showChildView('pictures', this.achievementPictureList);
-		},
-		saveAchievement: function() {
-			var commit = function() {
-				var router = this.router;
-				var model = this.model;
-				var values = this.values();
-				async.synchroniseModel(this.collection.add(model).set(values))
-					.catch(function(err) {
-						// FIXME: do something
-						console.error(err);
-					})
-					.then(function() {
-						router.navigate('#' + model.id, {
-							replace: true
-						});
-					})
-			};
-			if (this.edited) {
-				Dialog.prompt(
-					'Êtes vous sûr de vouloir sauvegarder les modificiations?',
-					{
-						accept: commit.bind(this),
-						acceptLabel: 'Oui',
-						refuseLabel: 'Non'
-					}
-				);
-			}
-		},
-		removeAchievement: function() {
-			var commit = function() {
-				var router = this.router;
-				async.destroyModel(this.model)
-					.catch(function(err) {
-						// FIXME: do something
-						console.error(err);
-					})
-					.then(function() {
-						router.navigate('#', {
-							replace: true,
-							trigger: true
-						});
+		onSave: function() {
+			var router = this.router;
+			var model = this.model;
+			var view = this;
+			async.synchroniseModel(this.collection.add(model).set(this.values()))
+				.then(function() {
+					delete view.errorMessage;
+					router.navigate('#' + model.id, {
+						replace: true
 					});
-			}
-			Dialog.prompt(
-				'Êtes vous sûr de vouloir supprimer cette réalisation?',
-				{
-					accept: commit.bind(this),
-					acceptLabel: 'Oui',
-					refuseLabel: 'Non'
-				}
-			);
+				})
+				.catch(function(err) {
+					view.errorMessage =
+						err instanceof errors.ModelValidationError
+							? 'Le formulaire a des entrées non valides.'
+							: err.message;
+				})
+				.then(function() {
+					view.render();
+				});
+		},
+		onRemove: function() {
+			var router = this.router;
+			async.destroyModel(this.model)
+				.catch(function(err) {
+					// FIXME: do something
+					console.error(err);
+				})
+				.then(function() {
+					router.navigate('#', {
+						replace: true,
+						trigger: true
+					});
+				});
 		},
 		onCommand: functional.dispatch(
 			function(cmd) {
-				if (cmd === 'save') {
-					this.saveAchievement();
+				if (cmd !== 'save') return;
+				if (this.edited) {
+					Dialog.prompt(
+						'Êtes vous sûr de vouloir sauvegarder les modificiations?',
+						{
+							accept: this.triggerMethod.bind(this, 'save'),
+							acceptLabel: 'Oui',
+							refuseLabel: 'Non'
+						}
+					);
 					return true;
 				}
 			},
 			function(cmd) {
-				if (cmd === 'remove') {
-					this.removeAchievement();
-					return true;
-				}
+				if (cmd !== 'remove') return;
+				Dialog.prompt(
+					'Êtes vous sûr de vouloir supprimer cette réalisation?',
+					{
+						accept: this.triggerMethod.bind(this, 'remove'),
+						acceptLabel: 'Oui',
+						refuseLabel: 'Non'
+					}
+				);
+				return true;
 			}
 		),
 		onInputChanged: function() {
 			this.edited = !_.isEqual(
 				this.values(),
-				_.omit(this.model.attributes, '_id', '__v', 'date')
+				this.model.omit('_id', '__v', 'date')
 			);
 		},
 		onInputFocus: functional.dispatch(
