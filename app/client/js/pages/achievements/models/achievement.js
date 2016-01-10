@@ -14,6 +14,7 @@ define(function(require) {
     var PicturesContainer = require('PicturesContainer');
     var PublishState = require('PublishState');
     var TagsContainer = require('TagsContainer');
+    var errors = require('common/errors');
     var functional = require('common/functional');
 
     function create_form_data(achievement) {
@@ -72,27 +73,29 @@ define(function(require) {
 
                 if (!_.isString(attributes.name) || attributes.name.trim() === '') {
                     error = _.assign(error || {}, {
-                        name: new Error('name must be a String')
+                        name: 'name must be a String'
                     });
                 }
                 if (!_.isString(attributes.description)) {
                     error = _.assign(error || {}, {
-                        description: new Error('description must be a String')
+                        description: 'description must be a String'
                     });
                 }
                 if (!(_.isArray(attributes.pictures)
                         && _.every(attributes.pictures, is_valid_picture))) {
                     error = _.assign(error || {}, {
-                        pictures: new Error('pictures must be a non empty Array of valid pictures')
+                        pictures: 'pictures must be a non empty Array of valid pictures'
                     });
                 }
                 if (!(_.isArray(attributes.tags)
                         && _.every(attributes.tags, is_valid_tag))) {
                     error = _.assign(error || {}, {
-                        tags: new Error('tags must be an Array of String')
+                        tags: 'tags must be an Array of String'
                     });
                 }
-                return error;
+                if (functional.existy(error)) {
+                    return new errors.ModelValidationError(error);
+                }
             }
         },
         PicturesContainer,
