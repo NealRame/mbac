@@ -105,7 +105,7 @@ define(function(require) {
 				.catch(function(err) {
 					view.errorMessage =
 						err instanceof errors.ModelValidationError
-							? 'Le formulaire a des entrées non valides.'
+							? 'Le formulaire contient des entrées non valides.'
 							: err.message;
 				})
 				.then(function() {
