@@ -68,5 +68,8 @@
         font-size: $form-input-label-font-size;
         font-weight: bold;
         font-family: $body-font-family;
+        &[data-valid="false"] {
+            color: $form-input-invalid-color;
+        }
     }
 }

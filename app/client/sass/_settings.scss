@@ -102,13 +102,14 @@ $form-input-bg-color-focus: $light-gray;
 $form-input-fg-color-focus: $body-font-color;
 $form-input-focus-transition-speed: .2s;
 $form-input-border-thickness: 4px;
-$form-input-border-color: $red;
+$form-input-border-color: darken($light-gray, 25);
 $form-input-place-holder-color: lighten($form-input-fg-color, 64);
 $form-input-font-size: .7em;
 $form-input-label-font-size: $form-input-font-size;
 $form-input-error-bg-color: lighten($red, 15);
 $form-input-error-border-color: $red;
 $form-input-error-border-thickness: 4px;
+$form-input-invalid-color: $red;
 
 ///////////////////////////////////////////////////////////////////////////////
 // Footer
