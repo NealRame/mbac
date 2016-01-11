@@ -2,6 +2,22 @@
 @import "foundation/components/switches";
 
 .form-wrapper {
+    .error {
+        background-color: $form-input-error-bg-color;
+        border-bottom: solid $form-input-error-border-thickness $form-input-error-border-color;
+        font-size: $form-input-font-size;
+        margin-bottom: 1em;
+        padding: .5em;
+        padding-left: 2em;
+        position: relative;
+        &::before {
+            content: '\f071';
+            font-family: 'FontAwesome';
+            left: 0;
+            margin-left: .5em;
+            position: absolute;
+        }
+    }
     .input {
         font-size: $form-input-font-size;
         margin: 0 1em;
