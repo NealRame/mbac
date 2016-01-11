@@ -5,7 +5,11 @@
 <% } %>
 
 <div class="row">
-    <div class="text-right small-2 columns"><label for="name">Nom</label></div>
+    <div class="text-right small-2 columns">
+        <label for="name" data-valid="<% print(fieldIsValid('name')) %>">
+            Nom
+        </label>
+    </div>
     <div class="small-10 columns">
         <div class="input">
             <input id="name" type="text" placeholder="Nom de la réalisation...">
@@ -14,7 +18,11 @@
 </div>
 
 <div class="row">
-    <div class="text-right small-2 columns"><label for="description">Description</label></div>
+    <div class="text-right small-2 columns">
+        <label for="description" data-valid="<% print(fieldIsValid('description')) %>">
+            Description
+        </label>
+    </div>
     <div class="small-10 columns">
         <div class="input">
             <textarea id="description" rows="8" placeholder="Description de la réalisation..."></textarea>
@@ -23,7 +31,11 @@
 </div>
 
 <div class="row">
-    <div class="text-right small-2 columns"><label for="tags">Tags</label></div>
+    <div class="text-right small-2 columns">
+        <label for="tags" data-valid="<% print(fieldIsValid('tags')) %>">
+            Tags
+        </label>
+    </div>
     <div class="small-10 columns">
         <div class="input">
             <input id="tags" type="text" placeholder="Liste de tags séparés par une virgule...">
@@ -32,7 +44,11 @@
 </div>
 
 <div class="row">
-    <div class="text-right small-2 columns"><label for="published">Publiée</label></div>
+    <div class="text-right small-2 columns">
+        <label for="published" data-valid="<% print(fieldIsValid('description')) %>">
+            Publiée
+        </label>
+    </div>
     <div class="small-10 columns">
         <div class="switch round">
             <input id="published" type="checkbox">
@@ -42,7 +58,11 @@
 </div>
 
 <div class="row">
-    <div class="text-right small-2 columns"><label for="add-image">Images</label></div>
+    <div class="text-right small-2 columns">
+        <label for="add-image" data-valid="<% print(fieldIsValid('pictures')) %>">
+            Images
+        </label>
+    </div>
     <div class="small-10 columns">
         <div id="pictures"></div>
     </div>

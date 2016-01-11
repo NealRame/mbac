@@ -44,18 +44,24 @@ define(function(require) {
 		},
         template: _.template(template),
 		templateHelpers: function() {
+			var model = this.model;
 			return {
 				hasError: functional.existy(this.errorMessage),
 				errorMessage: this.errorMessage,
 				fieldError: function(field) {
 					return functional.property(
-						this.model,
+						model,
 						'validationError.reason.' + field
 					);
 				},
 				fieldIsValid: function(field) {
-					return functional.existy(functional.property(
-						this.model,
+					console.log(model.validationError);
+					console.log(functional.property(
+						model,
+						'validationError.reason.' + field
+					));
+					return !functional.existy(functional.property(
+						model,
 						'validationError.reason.' + field
 					));
 				}
