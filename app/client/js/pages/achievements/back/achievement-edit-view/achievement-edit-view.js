@@ -74,7 +74,11 @@ define(function(require) {
 			this.ui.published.prop('checked', this.model.published());
 			this.showChildView('pictures', new PictureList({
 				collection: new Backbone.Collection(this.model.pictures()),
-				editable: true
+				editable: true,
+				thumbnailsRect: {
+					width: 192,
+					height: 128
+				}
 			}));
 		},
 		values: function() {
