@@ -55,11 +55,6 @@ define(function(require) {
 					);
 				},
 				fieldIsValid: function(field) {
-					console.log(model.validationError);
-					console.log(functional.property(
-						model,
-						'validationError.reason.' + field
-					));
 					return !functional.existy(functional.property(
 						model,
 						'validationError.reason.' + field
