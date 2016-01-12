@@ -68,8 +68,46 @@
         font-size: $form-input-label-font-size;
         font-weight: bold;
         font-family: $body-font-family;
-        &[data-valid="false"] {
+        position: relative;
+        &[data-field-valid="false"] {
             color: $form-input-invalid-color;
+            .tooltip {
+                background-color: $form-input-tooltip-bg-color;
+                border: solid 1px $form-input-tooltip-border-color;
+                border-radius: 4px;
+                display: inline;
+                color: $form-input-tooltip-fg-color;
+                font-size: .7em;
+                margin-left: 1.5em;
+                margin-top: -.5em;
+                opacity: 0;
+                padding: .7em;
+                position: absolute;
+                text-align: center;
+                transition: opacity .25s ease-out;
+                width: $form-input-tooltip-width;
+                z-index: 10;
+                &::before {
+                    background-color: $form-input-tooltip-bg-color;
+                    border: solid 1px $form-input-tooltip-border-color;
+                    border-bottom: none;
+                    border-right: none;
+                    content: '';
+                    position: absolute;
+                    left: -.5em;
+                    top: 1em;
+                    transform: rotate(-45deg);
+                    height: 1em;
+                    width: 1em;
+                    z-index: 1;
+                }
+            }
+            &:hover {
+                .tooltip {
+                    opacity: 1;
+                    transition: opacity .25s ease-out;
+                }
+            }
         }
     }
 }

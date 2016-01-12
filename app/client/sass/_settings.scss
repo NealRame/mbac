@@ -110,6 +110,10 @@ $form-input-error-bg-color: lighten($red, 15);
 $form-input-error-border-color: $red;
 $form-input-error-border-thickness: 4px;
 $form-input-invalid-color: $red;
+$form-input-tooltip-bg-color: lighten($red, 15);
+$form-input-tooltip-border-color: $red;
+$form-input-tooltip-fg-color: $white;
+$form-input-tooltip-width: 256px;
 
 ///////////////////////////////////////////////////////////////////////////////
 // Footer
