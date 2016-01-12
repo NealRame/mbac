@@ -52,7 +52,7 @@ define(function(require) {
 					return functional.property(
 						model,
 						'validationError.reason.' + field
-					);
+					) || '';
 				},
 				fieldIsValid: function(field) {
 					return !functional.existy(functional.property(
