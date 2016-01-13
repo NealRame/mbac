@@ -14,7 +14,7 @@ define(function(require) {
 	var async = require('common/async');
 	var errors = require('common/errors');
 	var functional = require('common/functional');
-    var template = require('text!pages/products/back/products/product-edit-view.html');
+    var template = require('text!pages/products/back/product-edit-view/product-edit-view.html');
 
 	var app_channel = Backbone.Wreqr.radio.channel('app');
 

@@ -8,8 +8,8 @@ define(function(require) {
     var _ = require('underscore');
     var Marionette = require('marionette');
     var ThumbnailList = require('ThumbnailList');
-    var product_render = require('pages/products/back/products/product-thumbnail-render');
-    var template = require('text!pages/products/back/products/product-list-view.html');
+    var product_render = require('pages/products/back/product-list-view/product-thumbnail-render');
+    var template = require('text!pages/products/back/product-list-view/product-list-view.html');
 
     var ProductList = ThumbnailList.extend({
 		createItemTarget: '#create',

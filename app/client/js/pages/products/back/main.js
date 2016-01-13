@@ -7,8 +7,8 @@ define(function(require) {
     var Promise = require('promise');
     var ApplicationLayout = require('pages/products/back/layout');
     var ApplicationMenu = require('pages/products/back/menu/menu');
-    var ProductListView = require('pages/products/back/products/product-list-view');
-    var ProductEditView = require('pages/products/back/products/product-edit-view');
+    var ProductListView = require('pages/products/back/product-list-view/product-list-view');
+    var ProductEditView = require('pages/products/back/product-edit-view/product-edit-view');
 
     var app_channel = Backbone.Wreqr.radio.channel('app');
 
