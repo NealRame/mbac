@@ -39,13 +39,19 @@ define(function(require) {
     var ProductProto = functional.merge(
         {
             idAttribute: '_id',
-            defaults: {
-                available: false,
-                published: false,
-                price: 0,
-                pictures: [],
-                resellers: [],
-                tags: []
+            defaults: function() {
+                return {
+                    available: false,
+                    date: new Date(),
+                    pictures: [],
+                    price: 0,
+                    published: false,
+                    resellers: [],
+                    tags: []
+                };
+            },
+            date: function() {
+                return new Date(this.attributes.date);
             },
             pageURL: function() {
                 return '/products/' + this.attributes._id;
