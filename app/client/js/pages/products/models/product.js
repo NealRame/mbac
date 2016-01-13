@@ -11,6 +11,7 @@ define(function(require) {
     var FormDataModelSynchronizer = require('FormDataModelSynchronizer');
     var PicturesContainer = require('PicturesContainer');
     var TagsContainer = require('TagsContainer');
+    var errors = require('common/errors');
     var functional = require('common/functional');
 
     function create_form_data(product) {
@@ -41,6 +42,7 @@ define(function(require) {
             defaults: {
                 available: false,
                 published: false,
+                price: 0,
                 pictures: [],
                 resellers: [],
                 tags: []
@@ -68,6 +70,46 @@ define(function(require) {
             },
             setPrice: function(price) {
                 return this.set('price', price);
+            },
+            validate: function(attributes) {
+                var error;
+                var is_valid_picture = function(picture) {
+                    return picture.file instanceof File || (picture.original && picture.thumbnail);
+                };
+                var is_valid_tag = function(tag) {
+                    return _.isString(tag) && tag.trim() != '';
+                };
+
+                if (!_.isString(attributes.name) || attributes.name.trim() === '') {
+                    error = _.assign(error || {}, {
+                        name: 'name must be a String'
+                    });
+                }
+                if (!_.isString(attributes.description)) {
+                    error = _.assign(error || {}, {
+                        description: 'description must be a String'
+                    });
+                }
+                if (!_.isNumber(attributes.price)) {
+                    error = _.assign(error || {}, {
+                        price: 'price must be a Number'
+                    })
+                }
+                if (!(_.isArray(attributes.pictures)
+                        && _.every(attributes.pictures, is_valid_picture))) {
+                    error = _.assign(error || {}, {
+                        pictures: 'pictures must be a non empty Array of valid pictures'
+                    });
+                }
+                if (!(_.isArray(attributes.tags)
+                        && _.every(attributes.tags, is_valid_tag))) {
+                    error = _.assign(error || {}, {
+                        tags: 'tags must be an Array of String'
+                    });
+                }
+                if (functional.existy(error)) {
+                    return new errors.ModelValidationError(error);
+                }
             }
         },
         PicturesContainer,
