@@ -86,6 +86,4 @@ define(function(require) {
     .catch(function(err) {
         console.error(err);
     });
-
-    // app.start();
 });
