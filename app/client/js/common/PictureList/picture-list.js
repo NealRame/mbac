@@ -22,7 +22,8 @@ define(function(require) {
     return ThumbnailList.extend({
         childEvents: {
             'add-item-click': 'onAddItemClicked',
-            'item-click': 'onItemClicked'
+            'item-click': 'onItemClicked',
+            'destroy': 'onItemDestroyed'
         },
         events: {
             'dragenter': 'onDragEnter',
@@ -42,21 +43,12 @@ define(function(require) {
         },
         initialize: function(options) {
             ThumbnailList.prototype.initialize.call(this, options);
-            this.filesInput = $(document.createElement('input')).attr({
-                accept: '.gif,.jpeg,.jpg,.png',
-                multiple: '',
-                type: 'file'
-            });
-            this.filesInput.on('change', (function(e) {
-                this.addFiles(e.target.files);
-            }).bind(this));
         },
         addFile: function(file) {
             if (file instanceof File) {
                 var picture = {file: file};
-                var index = this.collection.length;
                 this.collection.add(picture);
-                this.trigger('add-picture', picture, index);
+                this.triggerMethod('picture:added', picture);
             }
         },
         addFiles: function(files) {
@@ -70,7 +62,15 @@ define(function(require) {
             }
         },
         onAddItemClicked: function() {
-			this.filesInput.click();
+            var filesInput = $(document.createElement('input')).attr({
+                accept: '.gif,.jpeg,.jpg,.png',
+                multiple: '',
+                type: 'file'
+            });
+            filesInput.one('change', (function(e) {
+                this.addFiles(e.target.files);
+            }).bind(this));
+			filesInput.click();
 		},
         onItemClicked: function(child) {
             LightBox.open(child.model);
@@ -96,6 +96,10 @@ define(function(require) {
         onDrop: function(e) {
             this.onDragLeave.call(this, e);
             this.addFiles(e.dataTransfer.files);
+            return false;
+        },
+        onItemDestroyed: function(item) {
+            this.triggerMethod('picture:removed', item.model);
             return false;
         }
     });
