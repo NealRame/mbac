@@ -1,5 +1,16 @@
+<% if (hasError) { %>
+<div class="error">
+    <%= errorMessage %>
+</div>
+<% } %>
+
 <div class="row">
-    <div class="text-right small-2 columns"><label for="name">Nom</label></div>
+    <div class="text-right small-2 columns">
+            <label for="name" data-field-valid="<%= fieldIsValid('name') %>">
+            Nom
+            <span class="tooltip"><%= fieldError('name') %></span>
+        </label>
+    </div>
     <div class="small-10 columns">
         <div class="input">
             <input id="name" type="text" placeholder="Nom du produit...">
@@ -8,7 +19,12 @@
 </div>
 
 <div class="row">
-    <div class="text-right small-2 columns"><label for="description">Description</label></div>
+    <div class="text-right small-2 columns">
+        <label for="description" data-field-valid="<%= fieldIsValid('description') %>">
+            Description
+            <span class="tooltip"><%= fieldError('description') %></span>
+        </label>
+    </div>
     <div class="small-10 columns">
         <div class="input">
             <textarea id="description" rows="8" placeholder="Description du produit..."></textarea>
@@ -17,7 +33,12 @@
 </div>
 
 <div class="row">
-    <div class="text-right small-2 columns"><label for="price">Prix</label></div>
+    <div class="text-right small-2 columns">
+        <label for="price" data-field-valid="<%= fieldIsValid('price') %>">
+            Prix
+            <span class="tooltip"><%= fieldError('price') %></span>
+        </label>
+    </div>
     <div class="small-10 columns">
         <div class="input">
             <input id="price" type="number" placeholder="Prix du produit...">
@@ -26,7 +47,12 @@
 </div>
 
 <div class="row">
-    <div class="text-right small-2 columns"><label for="tags">Tags</label></div>
+    <div class="text-right small-2 columns">
+        <label for="tags" data-field-valid="<%= fieldIsValid('tags') %>">
+            Tags
+            <span class="tooltip"><%= fieldError('tags') %></span>
+        </label>
+    </div>
     <div class="small-10 columns">
         <div class="input">
             <input id="tags" type="text" placeholder="Liste de tags séparés par une virgule...">
@@ -35,7 +61,12 @@
 </div>
 
 <div class="row">
-    <div class="text-right small-2 columns"><label for="available">Disponible</label></div>
+    <div class="text-right small-2 columns">
+        <label for="available" data-field-valid="<%= fieldIsValid('available') %>">
+            Disponible
+            <span class="tooltip"><%= fieldError('available') %></span>
+        </label>
+    </div>
     <div class="small-10 columns">
         <div class="switch round">
             <input id="available" type="checkbox">
@@ -45,7 +76,12 @@
 </div>
 
 <div class="row">
-    <div class="text-right small-2 columns"><label for="published">Publié</label></div>
+    <div class="text-right small-2 columns">
+        <label for="published" data-field-valid="<%= fieldIsValid('published') %>">
+            Publié
+            <span class="tooltip"><%= fieldError('published') %></span>
+        </label>
+    </div>
     <div class="small-10 columns">
         <div class="switch round">
             <input id="published" type="checkbox">
@@ -55,7 +91,12 @@
 </div>
 
 <div class="row">
-    <div class="text-right small-2 columns"><label for="add-image">Images</label></div>
+    <div class="text-right small-2 columns">
+        <label for="published" data-field-valid="<%= fieldIsValid('pictures') %>">
+            Images
+            <span class="tooltip"><%= fieldError('pictures') %></span>
+        </label>
+    </div>
     <div class="small-10 columns">
         <div id="pictures"></div>
     </div>
