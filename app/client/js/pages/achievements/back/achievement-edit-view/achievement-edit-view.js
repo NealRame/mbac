@@ -119,10 +119,11 @@ define(function(require) {
 		},
 		onRemove: function() {
 			var router = this.router;
+			var view = this;
 			async.destroyModel(this.model)
 				.catch(function(err) {
-					// FIXME: do something
-					console.error(err);
+					view.errorMessage = err.message;
+					view.render();
 				})
 				.then(function() {
 					router.navigate('#', {
