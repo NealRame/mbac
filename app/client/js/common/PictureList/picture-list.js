@@ -31,6 +31,15 @@ define(function(require) {
             'drop':      'onDrop'
         },
         thumbnailsClickBehavior: 'trigger',
+        viewComparator: function (model1, model2) {
+            if (_.isEqual(model1.attributes, {})) {
+                return 1;
+            }
+            if (_.isEqual(model2.attributes, {})) {
+                return -1;
+            }
+            return 0;
+        },
         initialize: function(options) {
             ThumbnailList.prototype.initialize.call(this, options);
             this.filesInput = $(document.createElement('input')).attr({
