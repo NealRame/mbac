@@ -19,10 +19,6 @@ define(function(require) {
     });
 
     var app_channel = Backbone.Wreqr.radio.channel('app');
-    var achievements = new (Backbone.Collection.extend({
-        model: Achievement,
-        url: '/api/achievements'
-    }));
 
     var Application = Marionette.Application.extend({
         initialize: function() {
@@ -33,7 +29,7 @@ define(function(require) {
         achievements: function(args) {
             app_channel.commands.execute('route', 'achievements', args);
             this.layout.showChildView('app', new AchievementListView({
-                collection: achievements,
+                collection: this.config.collection,
                 model: new Achievement({}),
                 router: this.router
             }));
@@ -41,7 +37,7 @@ define(function(require) {
         createAchievement: function() {
             app_channel.commands.execute('route', 'editAchievement');
             this.layout.showChildView('app', new AchievementEditView({
-                collection: achievements,
+                collection: this.config.collection,
                 model: new Achievement({}),
                 router: this.router
             }));
@@ -49,8 +45,8 @@ define(function(require) {
         editAchievement: function(id) {
             app_channel.commands.execute('route', 'editAchievement', id);
             this.layout.showChildView('app', new AchievementEditView({
-                collection: achievements,
-                model: achievements.get(id),
+                collection: this.config.collection,
+                model: this.config.collection.get(id),
                 router: this.router
             }));
         },
@@ -64,11 +60,14 @@ define(function(require) {
         }
     });
 
-    async.fetchCollection(achievements, {reset: true})
+    async.fetchCollection({
+        model: Achievement,
+        url: '/api/achievements'
+    }, {reset: true})
         .then(function(collection) {
             var app = new Application();
             app.start({
-                achievements: collection
+                collection: collection
             });
         })
         .catch(function(err) {
