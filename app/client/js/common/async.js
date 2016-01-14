@@ -7,6 +7,7 @@ define(function(require) {
     'use strict';
 
     var $ = require('jquery');
+    var _ = require('underscore');
     var functional = require('common/functional');
     var Promise = require('promise');
 
@@ -91,10 +92,22 @@ define(function(require) {
         return Promise.resolve(model.attributes);
     }
 
+    function fetch_collection(collection, options) {
+        return new Promise(function(resolve, reject) {
+            collection.fetch(_.assign(options, {
+                success: resolve,
+                error: function(collection, res) {
+                    reject(res);
+                }
+            }));
+        });
+    }
+
     return {
         loadFileAsDataURL: load_file_as_data_url,
         loadImage: load_image,
         synchroniseModel: synchronise_model,
-        destroyModel: destroy_model
+        destroyModel: destroy_model,
+        fetchCollection: fetch_collection
     };
 });
