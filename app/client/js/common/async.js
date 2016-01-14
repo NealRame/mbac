@@ -55,6 +55,14 @@ define(function(require) {
         }
     }
 
+    /// #### async.synchroniseModel(model)
+    /// Synchronise a given model.
+    ///
+    /// __Parameters:__
+    /// - `model`, a `Backbone.Model` instance.
+    ///
+    /// __Return:__
+    /// - `Promise`.
     function synchronise_model(model) {
         var jq_xhr = model.save();
         if (jq_xhr) {
@@ -71,6 +79,14 @@ define(function(require) {
         return Promise.reject(model.validationError);
     }
 
+    /// #### async.destroyModel(model)
+    /// Destroy a given model.
+    ///
+    /// __Parameters:__
+    /// - `model`, a `Backbone.Model` instance.
+    ///
+    /// __Return:__
+    /// - `Promise`.
     function destroy_model(model) {
         if (functional.existy(model.collection)) {
             if (functional.existy(model.collection.url)) {
@@ -93,6 +109,18 @@ define(function(require) {
         return Promise.resolve(model.attributes);
     }
 
+    /// #### async.fetch_collection(collection, options)
+    /// Destroy a given model.
+    ///
+    /// __Parameters:__
+    /// - `collection`, a `Backbone.Collection` instance or an object used
+    /// to create a `Backbone.Collection`. In the last case the object should
+    /// have at least a `url` field.
+    /// - `options`, an object that will be passed to
+    /// `Backbone.Collection#fetch`.
+    ///
+    /// __Return:__
+    /// - `Promise`.
     function fetch_collection(collection, options) {
         if (!(collection instanceof Backbone.Collection)) {
             collection = new (Backbone.Collection.extend(collection));
