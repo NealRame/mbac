@@ -8,7 +8,7 @@ define(function(require) {
     var AchievementListView = require('pages/achievements/back/achievement-list-view/achievement-list-view');
     var ApplicationLayout = require('pages/achievements/back/layout');
     var ApplicationMenu = require('pages/achievements/back/menu/menu');
-    var Promise = require('promise');
+    var async = require('common/async');
 
     var ApplicationRouter = Marionette.AppRouter.extend({
         appRoutes: {
@@ -64,24 +64,14 @@ define(function(require) {
         }
     });
 
-    var app = new Application();
-
-    (new Promise(function(resolve, reject) {
-        achievements.fetch({
-            reset: true,
-            success: resolve,
-            error: function(collection, res) {
-                reject(res);
-            }
+    async.fetchCollection(achievements, {reset: true})
+        .then(function(collection) {
+            var app = new Application();
+            app.start({
+                achievements: collection
+            });
+        })
+        .catch(function(err) {
+            alert(err.message);
         });
-    }))
-    .then(function(collection) {
-        app.start({
-            achievements: collection
-        });
-    })
-    .catch(function(err) {
-        console.error(err);
-    });
-
 });

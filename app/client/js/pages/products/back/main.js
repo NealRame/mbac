@@ -4,11 +4,11 @@ define(function(require) {
     var Backbone = require('backbone');
     var Marionette = require('marionette');
     var Product = require('pages/products/models/product');
-    var Promise = require('promise');
     var ApplicationLayout = require('pages/products/back/layout');
     var ApplicationMenu = require('pages/products/back/menu/menu');
     var ProductListView = require('pages/products/back/product-list-view/product-list-view');
     var ProductEditView = require('pages/products/back/product-edit-view/product-edit-view');
+    var async = require('common/async');
 
     var app_channel = Backbone.Wreqr.radio.channel('app');
 
@@ -67,23 +67,14 @@ define(function(require) {
         }
     });
 
-    var app = new Application();
-
-    (new Promise(function(resolve, reject) {
-        products.fetch({
-            reset: true,
-            success: resolve,
-            error: function(collection, res) {
-                reject(res);
-            }
+    async.fetchCollection(products, {reset: true})
+        .then(function(collection) {
+            var app = new Application();
+            app.start({
+                products: collection
+            });
+        })
+        .catch(function(err) {
+            alert(err.message);
         });
-    }))
-    .then(function(collection) {
-        app.start({
-            products: collection
-        });
-    })
-    .catch(function(err) {
-        console.error(err);
-    });
 });
