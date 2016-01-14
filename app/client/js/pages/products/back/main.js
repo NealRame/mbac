@@ -21,11 +21,6 @@ define(function(require) {
         }
     });
 
-    var products = new (Backbone.Collection.extend({
-        model: Product,
-        url: '/api/products'
-    }));
-
     var Application = Marionette.Application.extend({
         initialize: function() {
             this.layout = new ApplicationLayout({
@@ -43,7 +38,7 @@ define(function(require) {
         createProduct: function() {
             app_channel.commands.execute('route', 'editProduct');
             this.layout.showChildView('app', new ProductEditView({
-                collection: products,
+                collection: this.config.products,
                 model: new Product({}),
                 router: this.router
             }));
@@ -51,7 +46,7 @@ define(function(require) {
         editProduct: function(id) {
             app_channel.commands.execute('route', 'editProduct', id);
             this.layout.showChildView('app', new ProductEditView({
-                collection: products,
+                collection: this.config.products,
                 model: this.config.products.get(id),
                 router: this.router
             }));
@@ -67,7 +62,12 @@ define(function(require) {
         }
     });
 
-    async.fetchCollection(products, {reset: true})
+    var ProductCollectionProto = {
+        model: Product,
+        url: '/api/products'
+    };
+
+    async.fetchCollection(ProductCollectionProto, {reset: true})
         .then(function(collection) {
             var app = new Application();
             app.start({
