@@ -8,6 +8,7 @@ define(function(require) {
 
     var $ = require('jquery');
     var _ = require('underscore');
+    var Backbone = require('backbone');
     var functional = require('common/functional');
     var Promise = require('promise');
 
@@ -93,6 +94,9 @@ define(function(require) {
     }
 
     function fetch_collection(collection, options) {
+        if (!(collection instanceof Backbone.Collection)) {
+            collection = new (Backbone.Collection.extend(collection));
+        }
         return new Promise(function(resolve, reject) {
             collection.fetch(_.assign(options, {
                 success: resolve,
