@@ -86,7 +86,7 @@ define(function(require) {
             this.listenTo(this, 'childview:show', reflow);
             this.listenTo(this, 'childview:ready', function() {
                 if (++ready >= this.collection.length) {
-                    Marionette.triggerMethod.call(this, 'ready');
+                    this.triggerMethod('thumbnail-list:ready');
                 }
             });
         },
