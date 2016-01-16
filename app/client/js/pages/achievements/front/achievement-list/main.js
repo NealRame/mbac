@@ -18,8 +18,6 @@ define(function(require) {
             }
         },
         template: false,
-        initialize: function() {
-        },
         onRender: function() {
             var region = this.getRegion('list');
             region.$el.empty().show();
