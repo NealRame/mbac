@@ -19,7 +19,7 @@ const page_template = path.join(__dirname, 'views', 'achievement.jade');
 router
     // GET achievements page.
     .get('/', (req, res, next) => {
-        res.locals.page.application = path.join('pages/achievements/front-main-list');
+        res.locals.page.application = path.join('pages/achievements/front/achievement-list/main');
         Achievement.published()
             .then((achievements) => {
                 debug(util.format('rendering %d achievements', achievements.length));
