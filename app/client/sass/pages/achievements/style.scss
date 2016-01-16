@@ -1,11 +1,11 @@
 @import "../../thumbnails";
 @import "../../lightbox";
-#description-wrapper, #pictures-wrapper {
+#description-wrapper, #achievements-wrapper {
     display: none;
 }
 #description-wrapper {
 }
-#pictures-wrapper {
+#achievements-wrapper {
     .thumbnails {
         margin: 0 auto;
     }
