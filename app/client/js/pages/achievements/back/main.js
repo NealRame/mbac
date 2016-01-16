@@ -7,7 +7,7 @@ define(function(require) {
     var ApplicationLayout = require('pages/achievements/back/layout');
     var ApplicationMenu = require('pages/achievements/back/menu/menu');
     var Achievement = require('pages/achievements/models/achievement');
-    var AchievementListView = require('pages/achievements/common/achievement-list-view/achievement-list-view');
+    var AchievementListView = require('pages/achievements/back/achievement-list-view/achievement-list-view');
     var async = require('common/async');
 
     var ApplicationRouter = Marionette.AppRouter.extend({
