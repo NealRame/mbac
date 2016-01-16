@@ -28,7 +28,7 @@ router
             .then(null, next);
     })
     .get('/:id', (req, res, next) => {
-        res.locals.page.application = path.join('pages/achievements/front-main-view');
+        res.locals.page.application = path.join('pages/achievements/front/achievement/main');
         Achievement.findById(req.params.id)
             .populate('pictures')
             .where('published', true)

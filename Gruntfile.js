@@ -103,7 +103,7 @@ module.exports = function(grunt) {
                             exclude: ['common']
                         },
                         {
-                            name: 'pages/achievements/front-main-view',
+                            name: 'pages/achievements/front/achievement/main',
                             exclude: ['common']
                         },
                         {
