@@ -55,15 +55,15 @@ define(function(require) {
         }
     }
 
-    /// #### async.synchroniseModel(model)
-    /// Synchronise a given model.
+    /// #### async.saveModel(model)
+    /// Save a given model.
     ///
     /// __Parameters:__
     /// - `model`, a `Backbone.Model` instance.
     ///
     /// __Return:__
     /// - `Promise`.
-    function synchronise_model(model) {
+    function save_model(model) {
         var jq_xhr = model.save();
         if (jq_xhr) {
             return new Promise(function(resolve, reject) {
@@ -138,7 +138,8 @@ define(function(require) {
     return {
         loadFileAsDataURL: load_file_as_data_url,
         loadImage: load_image,
-        synchroniseModel: synchronise_model,
+        fetchModel: fetch_model,
+        saveModel: save_model,
         destroyModel: destroy_model,
         fetchCollection: fetch_collection
     };

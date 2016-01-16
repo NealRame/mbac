@@ -100,7 +100,7 @@ define(function(require) {
 			var router = this.router;
 			var model = this.model;
 			var view = this;
-			async.synchroniseModel(this.collection.add(model).set(this.values()))
+			async.saveModel(this.collection.add(model).set(this.values()))
 				.then(function() {
 					delete view.errorMessage;
 					router.navigate('#' + model.id, {
