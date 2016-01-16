@@ -30,7 +30,6 @@ define(function(require) {
             app_channel.commands.execute('route', 'achievements', args);
             this.layout.showChildView('app', new AchievementListView({
                 collection: this.config.collection,
-                model: new Achievement({}),
                 router: this.router
             }));
         },
