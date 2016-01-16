@@ -55,6 +55,25 @@ define(function(require) {
         }
     }
 
+    /// #### async.fetchModel(model)
+    /// Fetch the given model data.
+    ///
+    /// __Parameters:__
+    /// - `model`, a `Backbone.Model` instance.
+    ///
+    /// __Return:__
+    /// - `Promise`.
+    function fetch_model(model) {
+        return new Promise(function(resolve, reject) {
+            model.fetch({
+                success: resolve,
+                error: function(model, err) {
+                    reject(err);
+                }
+            })
+        });
+    }
+
     /// #### async.saveModel(model)
     /// Save a given model.
     ///
