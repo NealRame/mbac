@@ -3,11 +3,11 @@ define(function(require) {
 
     var Backbone = require('backbone');
     var Marionette = require('marionette');
-    var Achievement = require('pages/achievements/models/achievement');
     var AchievementEditView = require('pages/achievements/back/achievement-edit-view/achievement-edit-view');
-    var AchievementListView = require('pages/achievements/back/achievement-list-view/achievement-list-view');
     var ApplicationLayout = require('pages/achievements/back/layout');
     var ApplicationMenu = require('pages/achievements/back/menu/menu');
+    var Achievement = require('pages/achievements/models/achievement');
+    var AchievementListView = require('pages/achievements/common/achievement-list-view/achievement-list-view');
     var async = require('common/async');
 
     var ApplicationRouter = Marionette.AppRouter.extend({

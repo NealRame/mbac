@@ -8,8 +8,8 @@ define(function(require) {
     var _ = require('underscore');
     var Marionette = require('marionette');
     var ThumbnailList = require('ThumbnailList');
-    var achievement_render = require('pages/achievements/back/achievement-list-view/achievement-thumbnail-render');
-    var template = require('text!pages/achievements/back/achievement-list-view/achievement-list-view.html');
+    var achievement_render = require('pages/achievements/common/achievement-list-view/achievement-thumbnail-render');
+    var template = require('text!pages/achievements/common/achievement-list-view/achievement-list-view.html');
 
     var AchievementList = ThumbnailList.extend({
 		createItemTarget: '#create',

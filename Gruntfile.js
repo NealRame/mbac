@@ -95,11 +95,11 @@ module.exports = function(grunt) {
                             exclude: ['common']
                         },
                         {
-                            name: 'pages/achievements/back',
+                            name: 'pages/achievements/back/main',
                             exclude: ['common']
                         },
                         {
-                            name: 'pages/achievements/front-main-list',
+                            name: 'pages/achievements/front/achievement-list/main',
                             exclude: ['common']
                         },
                         {
