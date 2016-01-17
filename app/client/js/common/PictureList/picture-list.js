@@ -73,7 +73,7 @@ define(function(require) {
 			filesInput.click();
 		},
         onItemClicked: function(child) {
-            LightBox.open(child.model);
+            LightBox.open(this.items(), child._index);
         },
         onDragEnter: function(e) {
             e.preventDefault();
