@@ -3,7 +3,7 @@ define(function(require) {
 
     var $ = require('jquery');
     var Marionette = require('marionette');
-    var Achievement = require('pages/achievements/models/achievement');
+    var Achievement = require('pages/achievements/common/models/achievement');
     var AchievementListView = require('pages/achievements/common/achievement-list-view/achievement-list-view');
     var async = require('common/async');
     var ui = require('common/ui');

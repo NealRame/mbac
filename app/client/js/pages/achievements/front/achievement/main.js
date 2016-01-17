@@ -8,7 +8,7 @@ define(function(require) {
 
     var LightBox = require('LightBox');
     var ThumbnailList = require('ThumbnailList');
-    var AchievementBase = require('pages/achievements/achievement');
+    var AchievementBase = require('pages/achievements/common/models/achievement');
 
     var async = require('common/async');
     var marked = require('marked');
