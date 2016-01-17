@@ -131,15 +131,15 @@ module.exports = function(grunt) {
                             exclude: ['common']
                         },
                         {
-                            name: 'pages/products/front/product',
+                            name: 'pages/products/front/product/main',
                             exclude: ['common']
                         },
                         {
-                            name: 'pages/products/front/products',
+                            name: 'pages/products/front/product-list/main',
                             exclude: ['common']
                         },
                         {
-                            name: 'pages/products/front/reseller',
+                            name: 'pages/products/front/reseller/main',
                             exclude: ['common']
                         },
                         {

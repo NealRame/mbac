@@ -25,7 +25,7 @@ const router = express.Router();
 router
     // GET achievements page.
     .get('/', (req, res, next) => {
-        res.locals.page.application = path.join('pages/products/products-main');
+        res.locals.page.application = path.join('pages/products/front/product-list/main');
         Product
             .published()
             .then((products) => {
@@ -34,7 +34,7 @@ router
             }, next);
     })
     .get('/:id', (req, res, next) => {
-        res.locals.page.application = path.join('pages/products/product-main');
+        res.locals.page.application = path.join('pages/products/front/product/main');
         Product
             .findById(req.params.id)
             .populate('pictures')
@@ -51,7 +51,7 @@ router
             }, next);
     })
     .get('/resellers/:id', (req, res, next) => {
-        res.locals.page.application = path.join('pages/products/reseller-view');
+        res.locals.page.application = path.join('pages/products/front/reseller/main');
         Reseller
             .findById(req.params.id)
             .exec()
