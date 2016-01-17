@@ -1,0 +1,12 @@
+@import "../../thumbnails";
+@import "../../lightbox";
+#description-wrapper, #products-wrapper {
+    display: none;
+}
+#description-wrapper {
+}
+#products-wrapper {
+    .thumbnails {
+        margin: 0 auto;
+    }
+}
