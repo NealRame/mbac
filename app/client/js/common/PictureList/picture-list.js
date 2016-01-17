@@ -76,27 +76,35 @@ define(function(require) {
             LightBox.open(this.items(), child._index);
         },
         onDragEnter: function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            this.$el.attr('data-state', 'over');
-            return false;
+            if (this.editable) {
+                e.preventDefault();
+                e.stopPropagation();
+                this.$el.attr('data-state', 'over');
+                return false;
+            }
         },
         onDragLeave: function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            this.$el.removeAttr('data-state');
-            return false;
+            if (this.editable) {
+                e.preventDefault();
+                e.stopPropagation();
+                this.$el.removeAttr('data-state');
+                return false;
+            }
         },
         onDragOver: function(e) {
-            e.dataTransfer.dropEffect = 'copy';
-            e.preventDefault();
-            e.stopPropagation();
-            return false;
+            if (this.editable) {
+                e.dataTransfer.dropEffect = 'copy';
+                e.preventDefault();
+                e.stopPropagation();
+                return false;
+            }
         },
         onDrop: function(e) {
-            this.onDragLeave.call(this, e);
-            this.addFiles(e.dataTransfer.files);
-            return false;
+            if (this.editable) {
+                this.onDragLeave.call(this, e);
+                this.addFiles(e.dataTransfer.files);
+                return false;
+            }
         },
         onItemDestroyed: function(item) {
             this.triggerMethod('picture:removed', item.model);
