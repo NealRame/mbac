@@ -36,8 +36,8 @@ define(function(require) {
 			'change @ui.inputs': 'onInputChanged'
 		},
 		childEvents: {
-			'remove-picture': 'onInputChanged',
-			'add-picture': 'onInputChanged'
+			'picture:added': 'onInputChanged',
+			'picture:removed': 'onInputChanged'
 		},
 		regions: {
 			pictures: '#pictures'
