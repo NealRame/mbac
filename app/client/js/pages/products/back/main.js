@@ -3,7 +3,7 @@ define(function(require) {
 
     var Backbone = require('backbone');
     var Marionette = require('marionette');
-    var Product = require('pages/products/models/product');
+    var Product = require('pages/products/common/models/product');
     var ApplicationLayout = require('pages/products/back/layout');
     var ApplicationMenu = require('pages/products/back/menu/menu');
     var ProductListView = require('pages/products/back/product-list-view/product-list-view');

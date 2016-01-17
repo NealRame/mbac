@@ -8,7 +8,7 @@ define(function(require) {
     var _ = require('underscore');
     var Marionette = require('marionette');
     var ThumbnailList = require('ThumbnailList');
-	var Product = require('pages/products/models/product');
+	var Product = require('pages/products/common/models/product');
     var product_render = require('pages/products/back/product-list-view/product-thumbnail-render');
     var template = require('text!pages/products/back/product-list-view/product-list-view.html');
 
