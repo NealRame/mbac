@@ -93,6 +93,61 @@ function create_CRUD_helpers(options) {
     }
 }
 
+// Reseller CRUD operations
+function reseller_read_one(req, res) {
+    return Reseller
+        .findOne(Object.assign(
+            {_id: req.params.id},
+            !api.isAuthenticated(res) ? {published: true} : {}
+        ))
+        .populate('pictures')
+        .exec();
+}
+
+function reseller_read_all() {
+    return Reseller
+        .find({})
+        .select('-description')
+        .populate('pictures')
+        .exec();
+}
+
+const Reseller_CRUD_helpers = create_CRUD_helpers({
+    model: Reseller,
+    read_one: reseller_read_one,
+    read_all: reseller_read_all,
+    parse_data: create_data_parser({
+        accepted_mime_types: [/image\/.*/],
+        field_transformers: {
+            address: _.first,
+            description: _.first,
+            files: _.identity,
+            mail: _.first,
+            name: _.first,
+            phone: _.first,
+            pictures: _.identity,
+            published: _.first,
+            www: _.first
+        }
+    })
+});
+
+router.get('/resellers/:id', Reseller_CRUD_helpers.read);
+
+router.use(api.authenticationChecker());
+
+router
+    .route('/resellers')
+    .get(Reseller_CRUD_helpers.read)
+    .post(Reseller_CRUD_helpers.create)
+    .all(api.forbidden());
+
+router
+    .route('/resellers/:id')
+    .delete(Reseller_CRUD_helpers.delete)
+    .put(Reseller_CRUD_helpers.update)
+    .all(api.forbidden());
+
 // Product CRUD operations
 function product_read_one(req, res) {
     const id = req.params.id;
@@ -156,61 +211,6 @@ router
     .route('/:id')
     .delete(Product_CRUD_helpers.delete)
     .put(Product_CRUD_helpers.update)
-    .all(api.forbidden());
-
-// Reseller CRUD operations
-function reseller_read_one(req, res) {
-    Reseller
-        .findOne(Object.assign(
-            {_id: req.params.id},
-            !api.isAuthenticated(res) ? {published: true} : {}
-        ))
-        .populate('pictures')
-        .exec();
-}
-
-function reseller_read_all() {
-    Reseller
-        .find({})
-        .select('-description')
-        .populate('pictures')
-        .exec();
-}
-
-const Reseller_CRUD_helpers = create_CRUD_helpers({
-    model: Reseller,
-    read_one: reseller_read_one,
-    read_all: reseller_read_all,
-    parse_data: create_data_parser({
-        accepted_mime_types: [/image\/.*/],
-        field_transformers: {
-            address: _.first,
-            description: _.first,
-            files: _.identity,
-            mail: _.first,
-            name: _.first,
-            phone: _.first,
-            pictures: _.identity,
-            published: _.first,
-            www: _.first
-        }
-    })
-});
-
-router.get('/resellers/:id', Reseller_CRUD_helpers.read);
-
-router.use(api.authenticationChecker());
-
-router
-    .route('/resellers')
-    .get(Reseller_CRUD_helpers.read)
-    .post(Reseller_CRUD_helpers.create)
-    .all(api.forbidden());
-
-router
-    .route('/resellers/:id')
-    .delete(Reseller_CRUD_helpers.delete)
-    .put(Reseller_CRUD_helpers.update)
     .all(api.forbidden());
 
 module.exports = router;
