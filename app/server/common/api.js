@@ -293,7 +293,24 @@ module.exports = {
             });
         };
     },
-    // CRUD operations helper
+    /// #### common.api.createCRUDHelpers(options)
+    /// Create and return four functions to create/read/update/delete model
+    /// based data.
+    ///
+    /// **Parameters:**
+    /// - `options`, acceptable options are:
+    ///   - `Model`, _required_.
+    ///   - `read_one`, delegate to read one model.
+    ///   - `read_all`, delegate to read all models.
+    ///   - `transform_data`, delegate to receive and transform data from the
+    ///     request and in order to create or update a model.
+    ///
+    /// **Returns:**
+    /// - an `Object` with four methods:
+    ///   - `create(req, res, next)`,
+    ///   - `read(req, res, next)`,
+    ///   - `update(req, res, next)`
+    ///   - `delete(req, res, next)`.
     createCRUDHelpers(options) {
         const Model = options.model;
         const transform_data = options.transform_data;
