@@ -9,6 +9,8 @@
 
 const _ = require('underscore');
 const config = require('config');
+const FormidableGrid = require('formidable-grid');
+const mongo = require('mongodb');
 
 function error(err, status) {
     if (_.isString(err)) {
@@ -54,6 +56,30 @@ function is_authenticated(res) {
 
 function value(v) {
     return _.result({value: v}, 'value');
+}
+
+function get_field(data, key, transform) {
+    transform = transform || _.identity;
+    return transform(
+        _.chain(data)
+            .filter((part) => !!part && part.field === key)
+            .map(_.property('value'))
+            .value()
+    );
+}
+
+function make_object(data, attr_map) {
+    return _.object(
+        _.chain(attr_map)
+            .map((transform, key) => {
+                const value = get_field(data, key, transform);
+                if (value) {
+                    return [key, value];
+                }
+            })
+            .compact()
+            .value()
+    );
 }
 
 module.exports = {
@@ -238,5 +264,34 @@ module.exports = {
         return function(req, res, next) {
             next(error_404(message));
         };
+    },
+    /// #### common.api.createFormDataParser(options)
+    /// Create and return a function accepting a multipart formdata request
+    /// object and returning a promise of some parsed data.
+    ///
+    /// **Parameters:**
+    /// - `options`, acceptable options are:
+    ///   - `accepted_mime_types`, a list of MIME types accepted. It may be
+    ///     regular expressions or string.
+    ///   - `fields`, an object containing the names of accepted fields
+    ///     associated with transformation functions.
+    ///
+    /// **Returns:**
+    /// - `Function(req)`
+    createFormDataParser(options) {
+        return function parser(req) {
+            const field_transformers = options.field || {};
+            const accepted_field_names = _.keys(options.fields);
+            const accepted_mime_types = options.accepted_mime_types;
+            const form = new FormidableGrid(
+                req.db, mongo,
+                {accepted_mime_types, accepted_field_names}
+            );
+            return form.parse(req).then((form_data) => {
+                // FIXME: see why parse return null data.
+                return make_object(form_data, field_transformers)
+            });
+        };
+    },
     }
 };
