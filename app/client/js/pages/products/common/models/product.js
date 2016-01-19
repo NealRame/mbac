@@ -11,6 +11,7 @@ define(function(require) {
     var ModelFormDataSyncMixin = require('ModelFormDataSyncMixin');
     var ModelPicturesContainerMixin = require('ModelPicturesContainerMixin');
     var ModelTagsContainerMixin = require('ModelTagsContainerMixin');
+    var ModelURLsMixin = require('ModelURLsMixin');
     var errors = require('common/errors');
     var functional = require('common/functional');
 
@@ -39,25 +40,18 @@ define(function(require) {
     var ProductProto = functional.merge(
         {
             idAttribute: '_id',
-            defaults: function() {
-                return {
-                    available: false,
-                    date: new Date(),
-                    pictures: [],
-                    price: 0,
-                    published: false,
-                    resellers: [],
-                    tags: []
-                };
+            constructor: function(attributes, options) {
+                Backbone.Model.call(this, _.assign(
+                    {
+                        date: new Date(),
+                        price: 81,
+                        resellers: []
+                    },
+                    attributes
+                ), options);
             },
             date: function() {
                 return new Date(this.attributes.date);
-            },
-            pageURL: function() {
-                return '/products/' + this.attributes._id;
-            },
-            editURL: function() {
-                return '#' + this.attributes._id;
             },
             name: function() {
                 return this.get('name') || '';
@@ -118,11 +112,12 @@ define(function(require) {
                 }
             }
         },
-        ModelFlagMixin('available', false),
-        ModelFlagMixin('published', false),
+        ModelFlagMixin('available'),
+        ModelFlagMixin('published'),
         ModelFormDataSyncMixin(create_form_data),
         ModelPicturesContainerMixin,
-        ModelTagsContainerMixin
+        ModelTagsContainerMixin,
+        ModelURLsMixin('/products')
     );
 
     return Backbone.Model.extend(ProductProto);
