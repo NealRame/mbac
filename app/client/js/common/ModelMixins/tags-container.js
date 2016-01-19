@@ -8,6 +8,9 @@ define(function(require) {
     var _ = require('underscore');
 
     return {
+        defaults: {
+            tags: []
+        },
         tags: function() {
             return this.get('tags');
         },

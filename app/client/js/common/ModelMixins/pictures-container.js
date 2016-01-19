@@ -20,6 +20,9 @@ define(function(require) {
     );
 
     return {
+        defaults: {
+            pictures: []
+        },
         picture: function(index) {
             return create_model(this.get('pictures')[index || 0]);
         },

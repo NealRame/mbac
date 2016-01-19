@@ -6,14 +6,11 @@ define(function() {
     'use strict';
 
     var _ = require('underscore');
-    var functional = require('common/functional');
     var util = require('common/util');
 
     return function(flag, default_value) {
         return _.assign(
-            functional.existy(default_value)
-                ? {defaults: _.object([[flag, default_value]])}
-                : {},
+            {defaults: _.object([[flag, !!default_value]])},
             _.object([
                 [
                     flag,
