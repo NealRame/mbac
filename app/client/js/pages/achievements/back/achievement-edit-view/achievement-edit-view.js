@@ -91,9 +91,9 @@ define(function(require) {
 						return picture.attributes
 					}),
 				published: this.ui.published.prop('checked'),
-				tags: this.ui.tags.val().split(',').map(function(tag) {
+				tags: _.compact(this.ui.tags.val().split(',').map(function(tag) {
 					return tag.trim().toLowerCase();
-				})
+				}))
 			};
 		},
 		onSave: function() {
