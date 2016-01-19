@@ -66,7 +66,7 @@ module.exports = {
     ///
     /// **Returns:**
     /// - `Promise`.
-    error401: function(message) {
+    error401(message) {
         return Promise.reject(error_401(message));
     },
     /// #### common.api.throw401([message])
@@ -74,7 +74,7 @@ module.exports = {
     ///
     /// **Parameters:**
     /// - `message`, the error message. _optional_.
-    throw401: function(message) {
+    throw401(message) {
         throw error_401(message);
     },
     /// #### common.api.error403([message])
@@ -86,7 +86,7 @@ module.exports = {
     ///
     /// **Returns:**
     /// - `Promise`.
-    error403: function(message) {
+    error403(message) {
         return Promise.reject(error_403(message));
     },
     /// #### common.api.throw403([message])
@@ -94,7 +94,7 @@ module.exports = {
     ///
     /// **Parameters:**
     /// - `message`, the error message. _optional_.
-    throw403: function(message) {
+    throw403(message) {
         throw error_403(message);
     },
     /// #### common.api.error404([message])
@@ -106,7 +106,7 @@ module.exports = {
     ///
     /// **Returns:**
     /// - `Promise`.
-    error404: function(message) {
+    error404(message) {
         return Promise.reject(error_404(message));
     },
     /// #### common.api.throw404([message])
@@ -114,7 +114,7 @@ module.exports = {
     ///
     /// **Parameters:**
     /// - `message`, the error message. _optional_.
-    throw404: function(message) {
+    throw404(message) {
         throw error_404(message);
     },
     /// #### common.api.error500([message])
@@ -126,7 +126,7 @@ module.exports = {
     ///
     /// **Returns:**
     /// - `Promise`.
-    error500: function(err) {
+    error500(err) {
         return Promise.reject(error_500(err));
     },
     /// #### common.api.throw500([message])
@@ -134,7 +134,7 @@ module.exports = {
     ///
     /// **Parameters:**
     /// - `message`, the error message. _optional_.
-    throw500: function(err) {
+    throw500(err) {
         throw error_500(err);
     },
     /// #### common.api.value(v)
@@ -156,7 +156,7 @@ module.exports = {
     ///
     /// **Returns:**
     /// - `Promise`.
-    exist: function(v) {
+    exist(v) {
         /*eslint-disable eqeqeq*/
         if (v == undefined) { // true if v is null or undefined
             return Promise.reject(error_404());
@@ -174,7 +174,7 @@ module.exports = {
     ///
     /// **Returns:**
     /// - `Promise`.
-    valueChecker: function(fallback) {
+    valueChecker(fallback) {
         const fallback_value = value(fallback);
         return function(v) {
             /*eslint-disable eqeqeq*/
@@ -206,7 +206,7 @@ module.exports = {
     ///
     /// **Returns:**
     /// - `Function(req, res, next)`
-    authenticationChecker: function(message) {
+    authenticationChecker(message) {
         return function(req, res, next) {
             next(is_authenticated(res) ? null : error_401(message));
         };
@@ -220,7 +220,7 @@ module.exports = {
     ///
     /// **Returns:**
     /// - `Function(req, res, next)`
-    forbidden: function(message) {
+    forbidden(message) {
         return function(req, res, next) {
             next(error_403(message));
         };
@@ -234,7 +234,7 @@ module.exports = {
     ///
     /// **Returns:**
     /// - `Function(req, res, next)`
-    notFound: function(message) {
+    notFound(message) {
         return function(req, res, next) {
             next(error_404(message));
         };
