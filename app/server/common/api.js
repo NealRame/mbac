@@ -293,5 +293,35 @@ module.exports = {
             });
         };
     },
+    // CRUD operations helper
+    createCRUDHelpers(options) {
+        const Model = options.model;
+        const transform_data = options.transform_data;
+        const read_one = options.read_one;
+        const read_all = options.read_all;
+        return {
+            create(req, res, next) {
+                transform_data(req)
+                    .then(Model.create)
+                    .then((doc) => res.send(doc), next);
+            },
+            read(req, res, next) {
+                (_.isUndefined(req.params.id)
+                    ? read_all(req, res)
+                    : read_one(req, res)
+                ).then((docs) => res.send(docs), next);
+            },
+            update(req, res, next) {
+                Promise
+                    .all([read_one(req, res), transform_data(req, res)])
+                    .then((args) => Model.patch.apply(null, args))
+                    .then((doc) => res.send(doc), next);
+            },
+            delete(req, res, next) {
+                read_one(req, res)
+                    .then((doc) => Model.delete(doc))
+                    .then(() => res.send({}), next)
+            }
+        }
     }
 };
