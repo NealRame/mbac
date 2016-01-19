@@ -14,6 +14,7 @@ define(function(require) {
     var ModelFormDataSyncMixin = require('ModelFormDataSyncMixin');
     var ModelPicturesContainerMixin = require('ModelPicturesContainerMixin');
     var ModelTagsContainerMixin = require('ModelTagsContainerMixin');
+    var ModelURLsMixin = require('ModelURLsMixin');
     var errors = require('common/errors');
     var functional = require('common/functional');
 
@@ -39,16 +40,14 @@ define(function(require) {
     var AchievementProto = functional.merge(
         {
             idAttribute: '_id',
-            defaults: {
-                published: false,
-                pictures: [],
-                tags: []
+            constructor: function(attributes, options) {
+                Backbone.Model.call(this, _.assign(
+                    {date: new Date()},
+                    attributes
+                ), options);
             },
-            pageURL: function() {
-                return '/achievements/' + this.attributes._id;
-            },
-            editURL: function() {
-                return '#' + this.attributes._id;
+            date: function() {
+                return new Date(this.attributes.date);
             },
             name: function() {
                 return this.get('name') || '';
@@ -98,10 +97,11 @@ define(function(require) {
                 }
             }
         },
-        ModelFlagMixin('published', false),
+        ModelFlagMixin('published'),
         ModelFormDataSyncMixin(create_form_data),
         ModelPicturesContainerMixin,
-        ModelTagsContainerMixin
+        ModelTagsContainerMixin,
+        ModelURLsMixin('/achievements')
     );
 
     return Backbone.Model.extend(AchievementProto)
