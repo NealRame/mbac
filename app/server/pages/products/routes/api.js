@@ -52,15 +52,12 @@ const Reseller_CRUD_helpers = api.createCRUDHelpers({
 });
 
 router.get('/resellers/:id', Reseller_CRUD_helpers.read);
-
 router.use(api.authenticationChecker());
-
 router
     .route('/resellers')
     .get(Reseller_CRUD_helpers.read)
     .post(Reseller_CRUD_helpers.create)
     .all(api.forbidden());
-
 router
     .route('/resellers/:id')
     .delete(Reseller_CRUD_helpers.delete)
@@ -113,15 +110,11 @@ const Product_CRUD_helpers = api.createCRUDHelpers({
 router
     .get('/', Product_CRUD_helpers.read)
     .get('/:id', Product_CRUD_helpers.read);
-
-router
-    .use(api.authenticationChecker());
-
+router.use(api.authenticationChecker());
 router
     .route('/')
     .post(Product_CRUD_helpers.create)
     .all(api.forbidden());
-
 router
     .route('/:id')
     .delete(Product_CRUD_helpers.delete)
