@@ -28,6 +28,7 @@ requirejs.config({
         'ModelFormDataSyncMixin': 'common/ModelMixins/form-data-sync',
         'ModelPicturesContainerMixin': 'common/ModelMixins/pictures-container',
         'ModelTagsContainerMixin': 'common/ModelMixins/tags-container',
+        'ModelURLsMixin': 'common/ModelMixins/urls',
         'Picture': 'common/Picture/picture',
         'PictureList': 'common/PictureList/picture-list',
         'TabbedPanels': 'common/TabbedPanels/tabbedpanels',
