@@ -9,6 +9,7 @@ const _ = require('underscore');
 const debug = require('debug')('mbac:routes.achievements');
 const express = require('express');
 const api = require('common/api');
+const convert_eol = require('common/string').convertEOL;
 const path = require('path');
 const Achievement = require(path.join(__dirname, 'models', 'achievement'));
 
@@ -43,7 +44,7 @@ const Achievement_CRUD_helpers = api.createCRUDHelpers({
         accepted_mime_types: [/image\/.*/],
         fields: {
             date: _.first,
-            description: (value) => _.first(value).replace(/\r\n/g, '\n'),
+            description: (value) => convert_eol(_.first(value), '\r\n', '\n'),
             files: _.identity,
             name: _.first,
             pictures: _.identity,

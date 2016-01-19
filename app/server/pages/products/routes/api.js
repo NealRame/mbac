@@ -9,6 +9,7 @@ const _ = require('underscore');
 const debug = require('debug')('mbac:api:products');
 const express = require('express');
 const api = require('common/api');
+const convert_eol = require('common/string').convertEOL;
 const path = require('path');
 const models_path = path.join(__dirname, '..', 'models');
 const Product = require(path.join(models_path, 'product'));
@@ -39,7 +40,7 @@ const Reseller_CRUD_helpers = api.createCRUDHelpers({
         accepted_mime_types: [/image\/.*/],
         fields: {
             address: _.first,
-            description: _.first,
+            description: (value) => convert_eol(_.first(value), '\r\n', '\n'),
             files: _.identity,
             mail: _.first,
             name: _.first,
@@ -95,7 +96,7 @@ const Product_CRUD_helpers = api.createCRUDHelpers({
         accepted_mime_types: [/image\/.*/],
         fields: {
             available: _.first,
-            description: _.first,
+            description: (value) => convert_eol(_.first(value), '\r\n', '\n'),
             files: _.identity,
             name: _.first,
             pictures: _.identity,
