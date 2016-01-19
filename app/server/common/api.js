@@ -217,6 +217,9 @@ module.exports = {
     ///
     /// **Parameters:**
     /// - `message`, an optional message for the 403 error.
+    ///
+    /// **Returns:**
+    /// - `Function(req, res, next)`
     forbidden: function(message) {
         return function(req, res, next) {
             next(error_403(message));
@@ -228,6 +231,9 @@ module.exports = {
     ///
     /// **Parameters:**
     /// - `message`, an optional message for the 403 error.
+    ///
+    /// **Returns:**
+    /// - `Function(req, res, next)`
     notFound: function(message) {
         return function(req, res, next) {
             next(error_404(message));
