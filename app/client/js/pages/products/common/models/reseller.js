@@ -7,12 +7,14 @@ define(function(require) {
 
     var _ = require('underscore');
     var Backbone = require('backbone');
-    var FormDataModelSynchronizer = require('FormDataModelSynchronizer');
-    var PicturesContainer = require('PicturesContainer');
-    var PublishState = require('PublishState');
+    var ModelFlagMixin = require('ModelFlagMixin');
+    var ModelFormDataSyncMixin = require('ModelFormDataSyncMixin');
+    var ModelPicturesContainerMixin = require('ModelPicturesContainerMixin');
+    var errors = require('common/errors');
+    var functional = require('common/functional');
 
-    function create_form_data(product) {
-        var data = product.attributes;
+    function create_form_data(reseller) {
+        var data = reseller.attributes;
         var form_data = new FormData();
         _.each(_.pick(data, 'address', 'description', 'mail', 'name', 'phone', 'published', 'www'), function(value, attr) {
             form_data.append(attr, value);
@@ -27,21 +29,24 @@ define(function(require) {
         return form_data;
     }
 
-    var ProductProto = _.assign({
-        idAttribute: '_id',
-        defaults: {
-            published: false,
-            pictures: [],
-            resellers: [],
-            tags: []
+    var ResellerProto = functional.merge(
+        {
+            idAttribute: '_id',
+            defaults: {
+                published: false,
+                pictures: []
+            },
+            pageURL: function() {
+                return '/products/resellers' + this.attributes._id;
+            },
+            description: function() {
+                return this.get('description') || '';
+            }
         },
-        pageURL: function() {
-            return '/products/' + this.attributes._id;
-        },
-        description: function() {
-            return this.get('description') || '';
-        }
-    }, PicturesContainer, PublishState, FormDataModelSynchronizer(create_form_data));
+        ModelFlagMixin('published', false),
+        ModelFormDataSyncMixin(create_form_data),
+        ModelPicturesContainerMixin
+    );
 
-    return Backbone.Model.extend(ProductProto);
+    return Backbone.Model.extend(ResellerProto);
 });

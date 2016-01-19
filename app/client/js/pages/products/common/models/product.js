@@ -7,10 +7,10 @@ define(function(require) {
 
     var _ = require('underscore');
     var Backbone = require('backbone');
-    var FlagModelMixin = require('FlagModelMixin');
-    var FormDataModelSynchronizer = require('FormDataModelSynchronizer');
-    var PicturesContainer = require('PicturesContainer');
-    var TagsContainer = require('TagsContainer');
+    var ModelFlagMixin = require('ModelFlagMixin');
+    var ModelFormDataSyncMixin = require('ModelFormDataSyncMixin');
+    var ModelPicturesContainerMixin = require('ModelPicturesContainerMixin');
+    var ModelTagsContainerMixin = require('ModelTagsContainerMixin');
     var errors = require('common/errors');
     var functional = require('common/functional');
 
@@ -118,11 +118,11 @@ define(function(require) {
                 }
             }
         },
-        PicturesContainer,
-        FlagModelMixin('available', false),
-        FlagModelMixin('published', false),
-        TagsContainer,
-        FormDataModelSynchronizer(create_form_data)
+        ModelFlagMixin('available', false),
+        ModelFlagMixin('published', false),
+        ModelFormDataSyncMixin(create_form_data),
+        ModelPicturesContainerMixin,
+        ModelTagsContainerMixin
     );
 
     return Backbone.Model.extend(ProductProto);

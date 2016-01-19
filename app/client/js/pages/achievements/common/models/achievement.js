@@ -10,10 +10,10 @@ define(function(require) {
 
     var _ = require('underscore');
     var Backbone = require('backbone');
-    var FormDataModelSynchronizer = require('FormDataModelSynchronizer');
-    var PicturesContainer = require('PicturesContainer');
-    var PublishState = require('PublishState');
-    var TagsContainer = require('TagsContainer');
+    var ModelFlagMixin = require('ModelFlagMixin');
+    var ModelFormDataSyncMixin = require('ModelFormDataSyncMixin');
+    var ModelPicturesContainerMixin = require('ModelPicturesContainerMixin');
+    var ModelTagsContainerMixin = require('ModelTagsContainerMixin');
     var errors = require('common/errors');
     var functional = require('common/functional');
 
@@ -98,10 +98,10 @@ define(function(require) {
                 }
             }
         },
-        PicturesContainer,
-        PublishState,
-        TagsContainer,
-        FormDataModelSynchronizer(create_form_data)
+        ModelFlagMixin('published', false),
+        ModelFormDataSyncMixin(create_form_data),
+        ModelPicturesContainerMixin,
+        ModelTagsContainerMixin
     );
 
     return Backbone.Model.extend(AchievementProto)
