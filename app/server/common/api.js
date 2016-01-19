@@ -280,7 +280,7 @@ module.exports = {
     /// - `Function(req)`
     createFormDataParser(options) {
         return function parser(req) {
-            const field_transformers = options.field || {};
+            const field_transformers = options.fields || {};
             const accepted_field_names = _.keys(options.fields);
             const accepted_mime_types = options.accepted_mime_types;
             const form = new FormidableGrid(
