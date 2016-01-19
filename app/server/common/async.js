@@ -1,12 +1,12 @@
 /* eslint-disable strict, no-var */
 
-/// server/common/async.js
-/// ----------------------
+/// Async helpers
+/// -------------
 /// - author: Neal.Rame. <contact@nealrame.com>
 /// -   date: Sun May  3 11:08:51 CEST 2015
 ///
 /// Provides common function to deal with asynchronous operations.
-///
+
 var _ = require('underscore');
 
 /// #### common.async.make_callback(resolve, reject)

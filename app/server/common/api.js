@@ -1,11 +1,11 @@
 'use strict';
 
-/// common/api.js
-/// =============
+/// API helpers
+/// -----------
 /// - author: Neal.Rame. <contact@nealrame.com>
 /// -   date: Fri Apr  3 01:40:23 2015
 ///
-/// Provides common helper for API controllers.
+/// Provides common helpers for API controllers.
 
 const _ = require('underscore');
 const config = require('config');
