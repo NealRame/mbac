@@ -9,5 +9,6 @@
 ///
 module.exports = {
     api: require('./api'),
-    async: require('./async')
+    async: require('./async'),
+    string: require('./string')
 };
