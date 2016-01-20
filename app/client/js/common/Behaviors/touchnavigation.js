@@ -4,7 +4,10 @@
 // -   date: Wed Jun 24 23:09:11 CEST 2015
 define(function(require) {
     'use strict';
+
     var Marionette = require('marionette');
+    var existy = require('common/functional').existy;
+
     return Marionette.Behavior.extend({
         events: {
             'touchstart @ui.touchZone': 'onTouchStart',
@@ -15,7 +18,7 @@ define(function(require) {
             var touch = ev.originalEvent.changedTouches[0];
             ev.preventDefault();
             ev.stopPropagation();
-            if (!this.touchOrigin) {
+            if (!existy(this.touchOrigin)) {
                 this.touchOrigin = {
                     id: touch.identifier,
                     x: touch.screenX
@@ -26,7 +29,7 @@ define(function(require) {
         onTouchEnd: function(ev) {
             ev.preventDefault();
             ev.stopPropagation();
-            if (this.touchOrigin) {
+            if (existy(this.touchOrigin)) {
                 Marionette.triggerMethod.call(
                     this.view,
                     'closeRequest'
@@ -39,13 +42,16 @@ define(function(require) {
             var touch = ev.originalEvent.changedTouches[0];
             ev.preventDefault();
             ev.stopPropagation();
-            if (this.touchOrigin.id === touch.identifier) {
-                Marionette.triggerMethod.call(
-                    this.view,
-                    this.touchOrigin.x < touch.screenX
-                        ? 'nextItem'
-                        : 'previousItem'
-                );
+            if (existy(this.touchOrigin)
+                    && this.touchOrigin.id === touch.identifier) {
+                if (this.view.count > 1) {
+                    Marionette.triggerMethod.call(
+                        this.view,
+                        this.touchOrigin.x < touch.screenX
+                            ? 'nextItem'
+                            : 'previousItem'
+                    );
+                }
                 delete this.touchOrigin;
             }
             return false;
