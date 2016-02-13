@@ -1,6 +1,7 @@
 define(function(require) {
     'use strict';
 
+    var _ = require('underscore');
     var Backbone = require('backbone');
     var Marionette = require('marionette');
     var Product = require('pages/products/common/models/product');
@@ -64,15 +65,15 @@ define(function(require) {
 
     var ProductCollectionProto = {
         model: Product,
-        url: '/api/products'
+        url: '/api/products',
+        tags: function() {
+            return _.union.apply(null, _.compact(this.pluck('tags')));
+        }
     };
 
     async.fetchCollection(ProductCollectionProto, {reset: true})
         .then(function(collection) {
-            var app = new Application();
-            app.start({
-                products: collection
-            });
+            (new Application()).start({products: collection});
         })
         .catch(function(err) {
             alert(err.message);
