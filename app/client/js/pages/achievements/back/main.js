@@ -1,6 +1,7 @@
 define(function(require) {
     'use strict';
 
+    var _ = require('underscore');
     var Backbone = require('backbone');
     var Marionette = require('marionette');
     var AchievementEditView = require('pages/achievements/back/achievement-edit-view/achievement-edit-view');
@@ -59,15 +60,17 @@ define(function(require) {
         }
     });
 
-    async.fetchCollection({
+    var AchievementCollectionProto = {
         model: Achievement,
-        url: '/api/achievements'
-    }, {reset: true})
+        url: '/api/achievements',
+        tags: function() {
+            return _.union.apply(null, _.compact(this.pluck('tags')));
+        }
+    };
+
+    async.fetchCollection(AchievementCollectionProto, {reset: true})
         .then(function(collection) {
-            var app = new Application();
-            app.start({
-                collection: collection
-            });
+            (new Application()).start({collection: collection});
         })
         .catch(function(err) {
             alert(err.message);
