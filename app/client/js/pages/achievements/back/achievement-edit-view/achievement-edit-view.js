@@ -33,6 +33,7 @@ define(function(require) {
 			'click @ui.addPictures': 'onAddPicturesClick',
 			'focus @ui.inputs': 'onInputFocus',
 			'blur @ui.inputs': 'onInputFocus',
+			'keyup @ui.tags': 'onTagsInput',
 			'change @ui.inputs': 'onInputChanged'
 		},
 		childEvents: {
@@ -160,6 +161,8 @@ define(function(require) {
 				return true;
 			}
 		),
+		onTagsInput: function() {
+		},
 		onInputChanged: function() {
 			this.edited = !_.isEqual(
 				this.values(),
