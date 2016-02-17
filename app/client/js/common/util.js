@@ -73,9 +73,36 @@ define(function(require) {
         return string;
     }
 
+    /// #### common.util.randomString(options)
+    /// Generation random string and return it.
+    ///
+    /// **Parameters:**
+    /// - `options`, an `Object` to configure the string generation. Possible
+    ///   attributes are:
+    ///   - `length`, default value is `6`,
+    ///   - `prefix`, default value is `''`,
+    ///   - `alphabet`, default value is `'0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'`
+    ///
+    /// **Return:**
+    /// - `String`.
+    function random_string(options) {
+        options = _.defaults(options || {}, {
+            length: 6,
+            prefix: '',
+            alphabet: '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
+        });
+        return (
+            (options.prefix ? options.prefix + '-' : '')
+            + _.chain(_.times(options.length, _.random.bind(null, options.alphabet.length - 1)))
+            .map(function(index) { return options.alphabet[index]; })
+            .value()
+            .join(''));
+    }
+
     return {
         checkMailAddress: check_mail_address,
         makeFormValidator: make_form_validator,
-        upperFirst: upper_first
+        upperFirst: upper_first,
+        randomString: random_string
     };
 });
