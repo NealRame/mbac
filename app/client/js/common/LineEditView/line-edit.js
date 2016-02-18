@@ -37,7 +37,7 @@ define(function(require) {
             };
         },
         onInputChanged: function() {
-            this.triggerMethod('change', this.inputAttribute, this.ui.input.val());
+            this.triggerMethod('changed');
         },
         onInputGainFocus: function() {
             this.ui.inputWrapper.addClass('focus');
