@@ -24,7 +24,9 @@ define(function(require) {
         initialize: function(options) {
             this.mergeOptions(options, ['inputAttribute', 'inputId', 'inputLabel', 'inputRows']);
             if (!this.inputId) {
-                this.inputId = util.randomString({prefix: 'input'});
+                this.inputId = util.randomString({
+                    prefix: 'input'
+                });
             }
             if (!this.inputRows) {
                 this.inputRows = 8;
