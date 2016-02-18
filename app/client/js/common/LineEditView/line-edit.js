@@ -1,5 +1,5 @@
-// LineEdit view.
-// ==============
+// LineEditView.
+// =============
 // - author: Neal.Rame. <contact@nealrame.com>
 // -   date: Wed Feb 17 14:57:15 CET 2016
 define(function(require) {
@@ -13,16 +13,21 @@ define(function(require) {
     return Marionette.ItemView.extend({
         className: 'row',
         ui: {
-            input: '.input > input'
+            input: '.input > input',
+            inputWrapper: '.input'
         },
         events: {
-            'change @ui.input': 'onInputChanged'
+            'change @ui.input': 'onInputChanged',
+            'blur @ui.input': 'onInputLostFocus',
+            'focus @ui.input': 'onInputGainFocus'
         },
         template: _.template(template),
         initialize: function(options) {
             this.mergeOptions(options, ['inputAttribute', 'inputId', 'inputLabel']);
             if (!this.inputId) {
-                this.inputId = util.randomString({prefix: 'input'});
+                this.inputId = util.randomString({
+                    prefix: 'input'
+                });
             }
         },
         serializeData: function() {
@@ -32,7 +37,21 @@ define(function(require) {
             };
         },
         onInputChanged: function() {
-            this.triggerMethod('input:change', this.inputAttribute, this.ui.input.val());
+            this.triggerMethod('change', this.inputAttribute, this.ui.input.val());
+        },
+        onInputGainFocus: function() {
+            this.ui.inputWrapper.addClass('focus');
+        },
+        onInputLostFocus: function() {
+            this.ui.inputWrapper.removeClass('focus');
+        },
+        value: function() {
+            return _.object([
+                [this.inputAttribute, this.ui.input.val()]
+            ]);
+        },
+        setValue: function(value) {
+            this.ui.input.val(value);
         }
     });
 });
