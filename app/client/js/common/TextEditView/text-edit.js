@@ -14,7 +14,8 @@ define(function(require) {
         template: _.template(template),
         className: 'row',
         ui: {
-            input: '.input > textarea'
+            input: '.input > textarea',
+            inputWrapper: '.input'
         },
         events: {
             'change @ui.input': 'onInputChanged',
@@ -43,10 +44,10 @@ define(function(require) {
             this.triggerMethod('changed');
         },
         onInputGainFocus: function() {
-            this.ui.input.parent().addClass('focus');
+            this.ui.inputWrapper.addClass('focus');
         },
         onInputLostFocus: function() {
-            this.ui.input.parent().removeClass('focus');
+            this.ui.inputWrapper.removeClass('focus');
         },
         value: function() {
             return _.object([
