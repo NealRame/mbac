@@ -94,9 +94,10 @@ define(function(require) {
         return (
             (options.prefix ? options.prefix + '-' : '')
             + _.chain(_.times(options.length, _.random.bind(null, options.alphabet.length - 1)))
-            .map(function(index) { return options.alphabet[index]; })
-            .value()
-            .join(''));
+                .map(function(index) { return options.alphabet[index]; })
+                .value()
+                .join('')
+        );
     }
 
     return {
