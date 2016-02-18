@@ -24,7 +24,9 @@ define(function(require) {
         initialize: function(options) {
             this.mergeOptions(options, ['inputAttribute', 'inputId', 'inputLabel']);
             if (!this.inputId) {
-                this.inputId = util.randomString({prefix: 'input'});
+                this.inputId = util.randomString({
+                    prefix: 'input'
+                });
             }
         },
         serializeData: function() {
