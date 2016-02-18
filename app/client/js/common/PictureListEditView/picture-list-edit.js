@@ -13,6 +13,7 @@ define(function(require) {
     var template = require('text!common/PictureListEditView/picture-list-edit.html');
 
     return Marionette.LayoutView.extend({
+        className: 'row',
         childEvents: {
             'picture:added': 'onPicturesChanged',
             'picture:removed': 'onPicturesChanged'
