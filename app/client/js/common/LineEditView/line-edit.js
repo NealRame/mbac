@@ -47,7 +47,10 @@ define(function(require) {
         },
         value: function() {
             return _.object([
-                [this.inputAttribute, this.ui.input.val()]
+                [
+                    this.inputAttribute,
+                    this.ui.input.val()
+                ]
             ]);
         },
         setValue: function(value) {
