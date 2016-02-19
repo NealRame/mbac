@@ -11,6 +11,7 @@ define(function(require) {
     var template = require('text!common/TagsEditView/tags-edit.html');
 
     return Marionette.LayoutView.extend({
+        className: 'row',
         ui: {
             input: '.input > input',
             inputWrapper: '.input'
