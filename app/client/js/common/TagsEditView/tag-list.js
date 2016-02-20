@@ -9,6 +9,11 @@ define(function(require) {
     var Marionette = require('marionette');
 
     var TagView = Marionette.ItemView.extend({
+        attributes: function() {
+            return {
+                'data-tag': this.model.get('tag')
+            }
+        },
         ui: {
             removeButton: 'a'
         },
