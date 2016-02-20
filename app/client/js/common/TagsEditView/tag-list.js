@@ -16,7 +16,7 @@ define(function(require) {
             'click @ui.removeButton': 'onRemoveButtonClicked'
         },
         tagName: 'li',
-        template: _.template('<li data-tag="<%= tag %>"><a href="#"></a></li>'),
+        template: _.template('<a class="remove" href="#"></a>'),
         onRemoveButtonClicked: function(ev) {
             this.model.destroy();
             ev.preventDefault();
