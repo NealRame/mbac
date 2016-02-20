@@ -104,7 +104,7 @@ $form-input-focus-transition-speed: .2s;
 $form-input-border-thickness: 4px;
 $form-input-border-color: darken($light-gray, 25);
 $form-input-place-holder-color: lighten($form-input-fg-color, 64);
-$form-input-font-size: .7em;
+$form-input-font-size: 1.2rem;
 $form-input-label-font-size: $form-input-font-size;
 $form-input-error-bg-color: lighten($red, 15);
 $form-input-error-border-color: $red;
@@ -114,6 +114,21 @@ $form-input-tooltip-bg-color: lighten($red, 15);
 $form-input-tooltip-border-color: $red;
 $form-input-tooltip-fg-color: $white;
 $form-input-tooltip-width: 256px;
+$form-input-line-height: 1.8rem;
+
+$tag-font-size: .75*$form-input-font-size;
+$tag-bg-color: $green;
+$tag-fg-color: $white;
+$tag-border-color: darken($tag-bg-color, 15);
+$tag-remove-color: darken($tag-bg-color, 15);
+$tag-line-height: $form-input-line-height;
+$tag-height: $form-input-line-height;
+
+$autocomplete-list-bg-color: #cacaca;
+$autocomplete-list-border-color: darken($autocomplete-list-bg-color, 25);
+$autocomplete-list-font-color: darken($autocomplete-list-bg-color, 33);
+$autocomplete-list-active-font-color: #cacaca;
+$autocomplete-list-active-bg-color: darken($autocomplete-list-bg-color, 25);
 
 ///////////////////////////////////////////////////////////////////////////////
 // Footer

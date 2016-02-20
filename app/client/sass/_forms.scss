@@ -6,22 +6,22 @@
         background-color: $form-input-error-bg-color;
         border-bottom: solid $form-input-error-border-thickness $form-input-error-border-color;
         font-size: $form-input-font-size;
-        margin-bottom: 1em;
-        padding: .5em;
-        padding-left: 2em;
+        margin-bottom: 1rem;
+        padding: .5rem;
+        padding-left: 2rem;
         position: relative;
         &::before {
             content: '\f071';
             font-family: 'FontAwesome';
             left: 0;
-            margin-left: .5em;
+            margin-left: .5rem;
             position: absolute;
         }
     }
     .input {
         font-size: $form-input-font-size;
-        margin: 0 1em;
-        margin-bottom: 2em;
+        margin: 0 1rem;
+        margin-bottom: 2rem;
         position: relative;
         input, textarea {
             all: initial;
@@ -36,7 +36,7 @@
             font-size: inherit;
             margin: 0;
             outline: none;
-            padding: .25em;
+            padding: .25rem;
             transition: background-color $form-input-focus-transition-speed ease-out;
             width: 100%;
             @include input-placeholder-color($form-input-place-holder-color);
@@ -57,7 +57,7 @@
             transform: scaleX(0);
             transition: transform $form-input-focus-transition-speed ease-out;
         }
-        &.filled {
+        &.focus {
             &::after {
                 transform: scaleX(1);
                 transition: transform $form-input-focus-transition-speed ease-out;
@@ -69,6 +69,7 @@
         font-weight: bold;
         font-family: $body-font-family;
         position: relative;
+        line-height: $form-input-line-height;
         &[data-field-valid="false"] {
             color: $form-input-invalid-color;
             .tooltip {
@@ -77,11 +78,11 @@
                 border-radius: 4px;
                 display: inline;
                 color: $form-input-tooltip-fg-color;
-                font-size: .7em;
-                margin-left: 1.5em;
-                margin-top: -.5em;
+                font-size: .7rem;
+                margin-left: 1.5rem;
+                margin-top: -.5rem;
                 opacity: 0;
-                padding: .7em;
+                padding: .7rem;
                 pointer-events: none;
                 position: absolute;
                 text-align: center;
@@ -95,11 +96,11 @@
                     border-right: none;
                     content: '';
                     position: absolute;
-                    left: -.5em;
-                    top: 1em;
+                    left: -.5rem;
+                    top: 1rem;
                     transform: rotate(-45deg);
-                    height: 1em;
-                    width: 1em;
+                    height: 1rem;
+                    width: 1rem;
                     z-index: 1;
                 }
             }
@@ -107,6 +108,93 @@
                 .tooltip {
                     opacity: 1;
                     transition: opacity .25s ease-out;
+                }
+            }
+        }
+    }
+    .switch {
+        margin: 0 1rem;
+        margin-bottom: 2rem;
+    }
+    .tag-list {
+        list-style-type: none;
+        margin: 0;
+        margin-bottom: .5rem;
+        li {
+            background-color: $tag-bg-color;
+            border: 1px solid $tag-border-color;
+            border-radius: 2px;
+            display: inline-block;
+            padding: 0 .5em;
+            margin-right: .5em;
+            height: $tag-height;
+            vertical-align: top;
+            a.remove {
+                float: right;
+                &:before {
+                    color: $tag-remove-color;
+                    content: '\f00d';
+                    font-family: FontAwesome;
+                    font-size: $tag-font-size;
+                    vertical-align: top;
+                    height: $tag-height;
+                    line-height: $tag-line-height;
+                }
+            }
+            &:before {
+                color: $tag-fg-color;
+                content: attr(data-tag);
+                font-size: $tag-font-size;
+                margin-right: .75rem;
+                vertical-align: top;
+                height: $tag-height;
+                line-height: $tag-line-height;
+            }
+        }
+        &:empty {
+            margin: 0;
+        }
+    }
+    ul.autocomplete-list {
+        background-color: $autocomplete-list-bg-color;
+        border: 1px solid $autocomplete-list-border-color;
+        list-style-type: none;
+        margin: 0;
+        margin-top: .25em;
+        padding: 0;
+        position: absolute;
+        width: 8em;
+        z-index: 10;
+        &:empty {
+            display: none;
+        }
+        &:before {
+            background-color: $autocomplete-list-bg-color;
+            border: 1px solid $autocomplete-list-border-color;
+            border-bottom: none;
+            border-left: none;
+            content: '';
+            position: absolute;
+            left: 3.5em;
+            top: -.3em;
+            height: .5em;
+            min-width: .5em;
+            transform: rotate(-45deg);
+            z-index: -1;
+        }
+        li {
+            font-size: .75em;
+            text-align: center;
+            a {
+                color: $autocomplete-list-font-color;
+            }
+            &:not(:last-child) {
+                border-bottom: 1px solid $autocomplete-list-border-color;
+            }
+            &.current {
+                background-color: $autocomplete-list-active-bg-color;
+                a {
+                    color: $autocomplete-list-active-font-color;
                 }
             }
         }
