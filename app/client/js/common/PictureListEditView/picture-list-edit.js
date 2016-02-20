@@ -20,8 +20,8 @@ define(function(require) {
         },
         template: _.template(template),
         initialize: function(options) {
+            this.pictures = new Backbone.Collection([]);
             this.mergeOptions(options, ['inputAttribute', 'inputId', 'inputLabel']);
-            this.pictures = new Backbone.Collection();
             if (!this.inputId) {
                 this.inputId = util.randomString({
                     prefix: 'input'
@@ -35,10 +35,10 @@ define(function(require) {
             };
         },
         onRender: function() {
-            this.addRegion('pictures', {
+            this.addRegion('pictures-wrapper', {
                 el: this.$('#' + this.inputId)
             });
-            this.showChildView('pictures', new PictureList({
+            this.showChildView('pictures-wrapper', new PictureList({
                 collection: this.pictures,
                 editable: true,
                 thumbnailsRect: {
