@@ -9,6 +9,9 @@ define(function(require) {
     var Marionette = require('marionette');
     var functional = require('common/functional');
 
+    var KEY_UP = 38;
+    var KEY_DOWN = 40;
+
     var AutocompleteItem = Marionette.ItemView.extend({
         attributes: function() {
             return {
@@ -26,7 +29,8 @@ define(function(require) {
         childView: AutocompleteItem,
         className: 'autocomplete-list',
         tagName: 'ul',
-        _next: function(incr) {
+        next: function(key) {
+            var incr = key === KEY_UP ? -1 : 1;
             if (functional.existy(this.index)) {
                 var len = this.children.length;
                 this.index = (this.index + incr + len)%len;
@@ -36,16 +40,12 @@ define(function(require) {
                     } else {
                         item.$el.removeClass('current');
                     }
-                });
+                }, this);
             } else {
+                this.index = 0;
                 this.children.findByIndex(0).$el.addClass('current');
             }
-        },
-        up: function() {
-            this._next(-1);
-        },
-        down: function() {
-            this._next( 1);
+            return this.$('.current').get(0).dataset.item;
         }
     });
 });
