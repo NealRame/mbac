@@ -21,7 +21,6 @@ define(function(require) {
 
     return ThumbnailList.extend({
         childEvents: {
-            'add-item-click': 'onAddItemClicked',
             'item-click': 'onItemClicked',
             'destroy': 'onItemDestroyed'
         },

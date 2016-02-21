@@ -8,36 +8,10 @@ define(function(require) {
 
     var _ = require('underscore');
     var $ = require('jquery');
-    var Backbone = require('backbone');
     var Marionette = require('marionette');
     var ui = require('common/ui');
     var Thumbnail = require('Thumbnail');
     var AddItemView = require('common/ThumbnailList/add-item');
-
-    var AddItemModel = Backbone.Model.extend({});
-
-    function clone_and_bind_collection(collection) {
-        this.collection = collection.clone();
-        this.listenTo(collection, 'add', function(models) {
-            this.collection.add(models);
-        });
-        this.listenTo(collection, 'remove', function(models) {
-            this.collection.remove(models);
-        });
-    }
-
-    function has_add_item_model(collection) {
-        return collection.some(function(model) {
-            return model instanceof AddItemModel;
-        });
-    }
-
-    function set_add_item_model() {
-        if (Marionette.getOption(this, 'editable')
-                && !has_add_item_model(this.collection)) {
-            this.collection.add(new AddItemModel());
-        }
-    }
 
     return Marionette.CollectionView.extend({
         className: 'thumbnails',
@@ -63,8 +37,6 @@ define(function(require) {
         thumbnailsRenderers: [],
         editable: false,
         initialize: function(options) {
-            clone_and_bind_collection.call(this, this.collection);
-            set_add_item_model.call(this);
             var ready = 0;
             var reflow = _.debounce(_.bind(function() {
                 if (this.needRefresh()) {
@@ -89,13 +61,14 @@ define(function(require) {
                     this.triggerMethod('thumbnail-list:ready');
                 }
             });
-        },
-        getChildView: function (item) {
-            if (item instanceof AddItemModel) {
-                return AddItemView
+            if (Marionette.getOption(this, 'editable')) {
+                this.addItemView = new AddItemView(this.childViewOptions());
+                this.listenTo(this.addItemView, 'add-item-click', function() {
+                    this.triggerMethod('addItemClicked');
+                });
             }
-            return Thumbnail;
         },
+        childView: Thumbnail,
         childViewOptions: function() {
             return {
                 clickBehavior: Marionette.getOption(this, 'thumbnailsClickBehavior'),
@@ -131,10 +104,14 @@ define(function(require) {
             }
         },
         items: function() {
-            return this.collection.reject(function(model) {
-                return model instanceof AddItemModel;
-            });
+            return this.collection.models;
         },
-        onReady: _.noop
+        onReady: _.noop,
+        onRender: function() {
+            if (this.addItemView) {
+                this.$el.append(this.addItemView.render().el);
+                this.addItemView.onShow();
+            }
+        }
     });
 });
