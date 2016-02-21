@@ -23,7 +23,7 @@ define(function(require) {
         tagName: 'li',
         template: _.template('<a class="remove" href="#"></a>'),
         onRemoveButtonClicked: function(ev) {
-            this.model.destroy();
+            this.model.collection.remove(this.model);
             ev.preventDefault();
             ev.stopPropagation();
             return false;
