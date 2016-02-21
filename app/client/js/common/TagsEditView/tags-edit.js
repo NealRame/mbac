@@ -14,9 +14,18 @@ define(function(require) {
     var TagListView = require('common/TagsEditView/tag-list');
     var AutocompleteItem = require('common/TagsEditView/autocomplete-list');
 
+    var KEY_ENTER = 13;
     var KEY_UP = 38;
     var KEY_DOWN = 40;
     var KEY_ESC = 27;
+
+    var Tag = Backbone.Model.extend({
+        idAttribute: 'tag'
+    });
+
+    var TagList = Backbone.Collection.extend({
+        model: Tag
+    });
 
     function autocomplete(prefix, available_tags, collection) {
         if (prefix.length > 0) {
@@ -44,15 +53,13 @@ define(function(require) {
             autocompleteList: '.autocomplete-list-wrapper'
         },
         events: {
-            'change @ui.input': 'onInputCommited',
-            'input @ui.input': 'onInputChanged',
             'keyup @ui.input': 'onInputKeypress',
             'blur @ui.input': 'onInputLostFocus',
             'focus @ui.input': 'onInputGainFocus'
         },
         template: _.template(template),
         initialize: function(options) {
-            this.tags = new Backbone.Collection([]);
+            this.tags = new TagList([]);
             this.mergeOptions(options, ['inputAttribute', 'inputAvailableTags', 'inputId', 'inputLabel']);
             if (!functional.existy(this.inputId)) {
                 this.inputId = util.randomString({
@@ -64,6 +71,9 @@ define(function(require) {
             } else {
                 this.inputAvailableTags = this.inputAvailableTags.split(',');
             }
+            this.listenTo(this.tags, 'add remove', function() {
+                this.triggerMethod('changed');
+            });
         },
         serializeData: function() {
             return {
@@ -71,39 +81,30 @@ define(function(require) {
                 inputLabel: this.inputLabel
             };
         },
-        onInputCommited: function() {
-            var tag = this.ui.input.val().trim().toLowerCase();
-            if (tag.length > 0) {
-                this.tags.add({tag: tag});
-                this.ui.input.removeData();
-                this.ui.input.val('');
-                this.getRegion('autocompleteList').empty();
-            }
-        },
-        onInputChanged: function() {
-            var prefix = this.ui.input.val().trim().toLowerCase();
-            if (prefix.length > 0) {
-                this.ui.input.data('value', this.ui.input.val());
-                this.showChildView('autocompleteList', new AutocompleteItem({
-                    collection: new Backbone.Collection(autocomplete(prefix, this.inputAvailableTags, this.tags))
-                }));
-            } else {
-                this.getRegion('autocompleteList').empty();
-            }
-        },
         onInputKeypress: function(ev) {
             var key_code = ev.keyCode;
+            var prefix = this.ui.input.val().trim().toLowerCase();
             if (key_code === KEY_UP || key_code === KEY_DOWN) {
                 this.ui.input.val(this.getRegion('autocompleteList').currentView.next(key_code));
-                ev.stopPropagation();
-                ev.preventDefault();
             } else if (key_code === KEY_ESC) {
                 this.getRegion('autocompleteList').empty();
                 this.ui.input.val(this.ui.input.data('value'));
                 this.ui.input.removeData('value');
-                ev.stopPropagation();
-                ev.preventDefault();
+            } else if (prefix && key_code === KEY_ENTER) {
+                this.getRegion('autocompleteList').empty();
+                this.tags.add({tag: prefix});
+                this.ui.input.removeData();
+                this.ui.input.val('');
+            } else if (prefix) {
+                this.showChildView('autocompleteList', new AutocompleteItem({
+                    collection: new Backbone.Collection(autocomplete(prefix, this.inputAvailableTags, this.tags))
+                }));
+                this.ui.input.data('value', this.ui.input.val());
+            } else {
+                this.getRegion('autocompleteList').empty();
             }
+            ev.stopPropagation();
+            ev.preventDefault();
         },
         onInputGainFocus: function() {
             this.ui.inputWrapper.addClass('focus');
@@ -125,7 +126,7 @@ define(function(require) {
             ]);
         },
         setValue: function(value) {
-            this.tags.add(_.map(value, function(tag) {
+            this.tags.reset(_.map(value, function(tag) {
                 return {tag: tag};
             }));
         }
