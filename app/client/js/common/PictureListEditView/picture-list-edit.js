@@ -48,7 +48,7 @@ define(function(require) {
             }));
         },
         onPicturesChanged: function() {
-            this.triggerMethod('change', this.value());
+            this.triggerMethod('changed');
         },
         value: function() {
             return _.object([
