@@ -12,7 +12,7 @@ define(function(require) {
     var util = require('common/util');
     var template = require('text!common/TagsEditView/tags-edit.html');
     var TagListView = require('common/TagsEditView/tag-list');
-    var AutocompleteItem = require('common/TagsEditView/autocomplete-list');
+    var AutocompleteList = require('common/TagsEditView/autocomplete-list');
 
     var KEY_ENTER = 13;
     var KEY_UP = 38;
@@ -28,18 +28,21 @@ define(function(require) {
     });
 
     function autocomplete(prefix, available_tags, collection) {
-        if (prefix.length > 0) {
-            return _.chain(available_tags)
-                .difference(collection.pluck('tag'))
-                .filter(function(tag) {
-                    return tag.startsWith(prefix);
-                })
-                .map(function(tag) {
-                    return {item: tag};
-                })
-                .value();
-        }
-        return [];
+        return new AutocompleteList({
+            collection: new Backbone.Collection(
+                prefix.length > 0
+                    ? _.chain(available_tags)
+                        .difference(collection.pluck('tag'))
+                        .filter(function(tag) {
+                            return tag.startsWith(prefix);
+                        })
+                        .map(function(tag) {
+                            return {item: tag};
+                        })
+                        .value()
+                    : []
+            )
+        });
     }
 
     return Marionette.LayoutView.extend({
@@ -51,11 +54,6 @@ define(function(require) {
         regions: {
             tagList: '.tag-list-wrapper',
             autocompleteList: '.autocomplete-list-wrapper'
-        },
-        events: {
-            'keyup @ui.input': 'onInputKeypress',
-            'blur @ui.input': 'onInputLostFocus',
-            'focus @ui.input': 'onInputGainFocus'
         },
         template: _.template(template),
         initialize: function(options) {
@@ -81,27 +79,37 @@ define(function(require) {
                 inputLabel: this.inputLabel
             };
         },
+        onInputChanged: function() {
+            var prefix = this.ui.input.val().trim().toLowerCase();
+            if (prefix) {
+                this.ui.input.data('value', this.ui.input.val());
+                this.showChildView(
+                    'autocompleteList',
+                    autocomplete(prefix, this.inputAvailableTags, this.tags)
+                );
+            } else {
+                this.getRegion('autocompleteList').empty();
+            }
+        },
         onInputKeypress: function(ev) {
+            var mod = ev.altKey || ev.ctrlKey || ev.metaKey || ev.shiftKey;
             var key_code = ev.keyCode;
             var prefix = this.ui.input.val().trim().toLowerCase();
-            if (key_code === KEY_UP || key_code === KEY_DOWN) {
-                this.ui.input.val(this.getRegion('autocompleteList').currentView.next(key_code));
+            var region = this.getRegion('autocompleteList');
+
+            if (!mod && (key_code === KEY_UP || key_code === KEY_DOWN)) {
+                if (region.currentView) {
+                    this.ui.input.val(region.currentView.next(key_code));
+                }
             } else if (key_code === KEY_ESC) {
-                this.getRegion('autocompleteList').empty();
+                region.empty();
                 this.ui.input.val(this.ui.input.data('value'));
                 this.ui.input.removeData('value');
             } else if (prefix && key_code === KEY_ENTER) {
-                this.getRegion('autocompleteList').empty();
+                region.empty();
                 this.tags.add({tag: prefix});
                 this.ui.input.removeData();
                 this.ui.input.val('');
-            } else if (prefix) {
-                this.showChildView('autocompleteList', new AutocompleteItem({
-                    collection: new Backbone.Collection(autocomplete(prefix, this.inputAvailableTags, this.tags))
-                }));
-                this.ui.input.data('value', this.ui.input.val());
-            } else {
-                this.getRegion('autocompleteList').empty();
             }
             ev.stopPropagation();
             ev.preventDefault();
@@ -116,6 +124,12 @@ define(function(require) {
             this.showChildView('tagList', new TagListView({
                 collection: this.tags
             }));
+            this.delegateEvents({
+                'blur  @ui.input': 'onInputLostFocus',
+                'focus @ui.input': 'onInputGainFocus',
+                'keyup @ui.input': 'onInputKeypress',
+                'input @ui.input': _.debounce(this.onInputChanged.bind(this), 200)
+            });
         },
         value: function() {
             return _.object([
