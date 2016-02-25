@@ -25,6 +25,7 @@ requirejs.config({
         'Dialog': 'common/Dialog/dialog',
         'LightBox': 'common/LightBox/lightbox',
         'FlagEditView': 'common/FlagEditView/flag-edit',
+        'FormEditView': 'common/FormEditView/form-edit',
         'LineEditView': 'common/LineEditView/line-edit',
         'PictureListEditView': 'common/PictureListEditView/picture-list-edit',
         'TagsEditView': 'common/TagsEditView/tags-edit',
