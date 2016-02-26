@@ -64,6 +64,13 @@ define(function(require) {
                 this.showChildView(region, child_view);
                 child_view.setValue(_.result(this.model, el.dataset.inputAttribute));
             }, this);
-        }
+        },
+		refresh: function() {
+			_.each(this.regions, function(selector, region) {
+				var el = this.$(selector).get(0);
+				var child_view = this.getRegion(region).currentView;
+				child_view.setValue(_.result(this.model, el.dataset.inputAttribute));
+			}, this);
+		}
     });
 });
