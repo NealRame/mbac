@@ -6,50 +6,14 @@ define(function(require) {
 	'use strict';
 
     var _ = require('underscore');
-	var Backbone = require('backbone');
-    var Marionette = require('marionette');
-    // var Dialog = require('Dialog');
-	var functional = require('common/functional');
+	var FormEditView = require('FormEditView');
+	var RemoveBehavior = require('common/Behaviors/remove');
+	var SaveBehavior = require('common/Behaviors/save');
+	var async = require('common/async');
+	var errors = require('common/errors');
     var template = require('text!pages/achievements/back/achievement-edit-view/achievement-edit-view2.html');
 
-	var FlagEditView = require('FlagEditView');
-	var LineEditView = require('LineEditView');
-	var PictureListEditView = require('PictureListEditView');
-	var TagsEditView = require('TagsEditView');
-	var TextEditView = require('TextEditView');
-
-	var app_channel = Backbone.Wreqr.radio.channel('app');
-
-	var edit_view = functional.dispatch(
-		function(type) {
-			if (type === 'flag') {
-				return FlagEditView;
-			}
-		},
-		function(type) {
-			if (type === 'line') {
-				return LineEditView;
-			}
-		},
-		function(type) {
-			if (type === 'picture-list') {
-				return PictureListEditView;
-			}
-		},
-		function(type) {
-			if (type === 'tags') {
-				return TagsEditView;
-			}
-		},
-		function(type) {
-			if (type === 'text') {
-				return TextEditView;
-			}
-		}
-	);
-
-    return Marionette.LayoutView.extend({
-		className: 'form-wrapper',
+    return FormEditView.extend({
 		regions: {
 			name: '#name',
 			description: '#description',
@@ -57,39 +21,65 @@ define(function(require) {
 			published: '#published',
 			pictures: '#pictures'
 		},
-		childEvents: {
-			'changed': 'onValueChanged'
+		behaviors: {
+			remove: {
+				behaviorClass: RemoveBehavior
+			},
+			save: {
+				behaviorClass: SaveBehavior
+			}
 		},
 		template: _.template(template),
-		initialize: function(options) {
-			_.bindAll(this, 'onCommand');
-			this.router = options.router;
-			app_channel.commands.setHandler('achievement', this.onCommand);
-		},
 		serializeData: function() {
 			return {
 				availableTags: this.collection.tags()
 			};
 		},
-		onCommand: function(cmd) {
-			console.log(cmd);
+		initialize: function(options) {
+			this.mergeOptions(options, 'router');
+			this.edited = false;
 		},
-		value: function() {
-			return _.assign.apply(
-				null,
-				_.map(this.regionManager.getRegions(), function(region) {
-					return region.currentView.value();
+		saveModel: function() {
+			var router = this.router;
+			var model = this.model;
+			var view = this;
+			async.saveModel(this.collection.add(model).set(this.value()))
+				.then(function() {
+					delete view.errorMessage;
+					router.navigate('#' + model.id, {
+						replace: true
+					});
 				})
-			);
+				.catch(function(err) {
+					view.errorMessage =
+						err instanceof errors.ModelValidationError
+							? 'Le formulaire contient des entrées non valides.'
+							: err.message;
+				})
+				.then(function() {
+					view.refresh();
+				});
 		},
-		onShow: function() {
-			_.each(this.regions, function(selector, region) {
-				var el = this.$(selector).get(0);
-				var View = edit_view(el.dataset.inputType);
-				var child_view = new View(el.dataset);
-				this.showChildView(region, child_view);
-				child_view.setValue(_.result(this.model, el.dataset.inputAttribute));
-			}, this);
+		removeModel: function() {
+			var router = this.router;
+			var view = this;
+			async.destroyModel(this.model)
+				.catch(function(err) {
+					view.errorMessage = err.message;
+					view.render();
+				})
+				.then(function() {
+					router.navigate('#', {
+						replace: true,
+						trigger: true
+					});
+				});
+		},
+		onValueChanged: function() {
+			this.edited = !_.isEqual(
+				this.value(),
+				this.model.omit('_id', '__v', 'date')
+			);
 		}
     });
 });
