@@ -61,7 +61,7 @@ define(function(require) {
             ]);
         },
         setValue: function(pictures) {
-            this.pictures.add(pictures);
+            this.pictures.reset(pictures);
         }
     });
 });
