@@ -158,4 +158,10 @@
             }
         }
     }
+    .input-error {
+        color: $form-input-invalid-color;
+        font-size: .75rem;
+        position: absolute;
+        margin-top: .125rem;
+    }
 }
