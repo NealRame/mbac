@@ -28,27 +28,27 @@ define(function(require) {
             });
         },
         achievements: function(args) {
-            app_channel.commands.execute('route', 'achievements', args);
             this.layout.showChildView('app', new AchievementListView({
                 collection: this.config.collection,
                 router: this.router
             }));
+            app_channel.commands.execute('route', 'achievements', args);
         },
         createAchievement: function() {
-            app_channel.commands.execute('route', 'editAchievement');
             this.layout.showChildView('app', new AchievementEditView({
                 collection: this.config.collection,
                 model: new Achievement({}),
                 router: this.router
             }));
+            app_channel.commands.execute('route', 'editAchievement');
         },
         editAchievement: function(id) {
-            app_channel.commands.execute('route', 'editAchievement', id);
             this.layout.showChildView('app', new AchievementEditView({
                 collection: this.config.collection,
                 model: this.config.collection.get(id),
                 router: this.router
             }));
+            app_channel.commands.execute('route', 'editAchievement', id);
         },
         onStart: function(config) {
             this.config = config;
@@ -70,9 +70,16 @@ define(function(require) {
 
     async.fetchCollection(AchievementCollectionProto, {reset: true})
         .then(function(collection) {
-            (new Application()).start({collection: collection});
+            var app = new Application();
+            app.start({collection: collection});
+            app_channel.commands.setHandler('achievement', function(cmd) {
+                var current_view = app.layout.getRegion('app').currentView;
+                current_view.triggerMethod(cmd);
+                return true;
+            });
         })
         .catch(function(err) {
-            alert(err.message);
+            console.error(err);
+            // alert(err.message);
         });
 });
