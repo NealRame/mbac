@@ -58,7 +58,7 @@ define(function(require) {
         template: _.template(template),
         initialize: function(options) {
             this.tags = new TagList([]);
-            this.mergeOptions(options, ['inputAttribute', 'inputAvailableTags', 'inputId', 'inputLabel']);
+            this.mergeOptions(options, ['inputAttribute', 'inputAvailableTags', 'inputError', 'inputId', 'inputLabel']);
             if (!functional.existy(this.inputId)) {
                 this.inputId = util.randomString({
                     prefix: 'input'
@@ -75,6 +75,7 @@ define(function(require) {
         },
         serializeData: function() {
             return {
+                inputError: this.inputError,
                 inputId: this.inputId,
                 inputLabel: this.inputLabel
             };

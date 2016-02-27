@@ -1,5 +1,5 @@
 <div class="text-right small-2 columns">
-    <label for="<%= inputId %>">
+    <label for="<%= inputId %>" data-field-valid="<%= !!!inputError %>">
         <%= inputLabel %>
     </label>
 </div>
@@ -8,5 +8,8 @@
         <div class="tag-list-wrapper"></div>
         <input id="<%= inputId %>" type="text" placeholder="Enter your tag...">
         <div class="autocomplete-list-wrapper"></div>
+        <% if (inputError) { %>
+        <span class="input-error"><%= inputError %></span>
+        <% } %>
     </div>
 </div>
