@@ -10,7 +10,6 @@ define(function(require) {
 	var RemoveBehavior = require('common/Behaviors/remove');
 	var SaveBehavior = require('common/Behaviors/save');
 	var async = require('common/async');
-	var errors = require('common/errors');
     var template = require('text!pages/achievements/back/achievement-edit-view/achievement-edit-view2.html');
 
     return FormEditView.extend({
@@ -45,19 +44,16 @@ define(function(require) {
 			var view = this;
 			async.saveModel(this.collection.add(model).set(this.value()))
 				.then(function() {
-					delete view.errorMessage;
+					delete view.error;
 					router.navigate('#' + model.id, {
 						replace: true
 					});
 				})
 				.catch(function(err) {
-					view.errorMessage =
-						err instanceof errors.ModelValidationError
-							? 'Le formulaire contient des entrées non valides.'
-							: err.message;
+					view.error = err;
 				})
 				.then(function() {
-					view.refresh();
+					view.render();
 				});
 		},
 		removeModel: function() {
