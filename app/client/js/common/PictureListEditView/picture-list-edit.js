@@ -37,6 +37,8 @@ define(function(require) {
             this.addRegion('pictures-wrapper', {
                 el: this.$('#' + this.inputId)
             });
+        },
+        onShow: function() {
             this.showChildView('pictures-wrapper', new PictureList({
                 collection: this.pictures,
                 editable: true,
