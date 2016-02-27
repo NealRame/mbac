@@ -7,6 +7,7 @@ define(function(require) {
 
     var _ = require('underscore');
     var Marionette = require('marionette');
+	var errors = require('common/errors');
     var functional = require('common/functional');
 
     var FlagEditView = require('FlagEditView');
@@ -43,11 +44,34 @@ define(function(require) {
         }
     );
 
+	function attribute_error_message(error, attr) {
+		var message = functional.property(error || {}, 'reason.' + attr);
+		if (functional.existy(message)) {
+			return {inputError: message};
+		}
+		return {};
+	}
+
     return Marionette.LayoutView.extend({
         className: 'form-wrapper',
         childEvents: {
             'changed': 'onValueChanged'
         },
+		templateHelpers: function() {
+			var view = this;
+			return {
+				hasError: function() {
+					return functional.existy(view.error);
+				},
+				errorMessage: function() {
+					return (
+						view.error instanceof errors.ModelValidationError
+							? 'Le formulaire contient des entrées non valides.'
+							: view.error.message
+					);
+				}
+			};
+		},
         value: function() {
             return _.assign.apply(
                 null,
@@ -56,21 +80,18 @@ define(function(require) {
                 })
             );
         },
-        onShow: function() {
+        onRender: function() {
             _.each(this.regions, function(selector, region) {
                 var el = this.$(selector).get(0);
                 var View = edit_view(el.dataset.inputType);
-                var child_view = new View(el.dataset);
+				var attr = el.dataset.inputAttribute;
+                var child_view = new View(_.assign(
+					el.dataset,
+					attribute_error_message(this.error, attr)
+				));
                 this.showChildView(region, child_view);
-                child_view.setValue(_.result(this.model, el.dataset.inputAttribute));
+                child_view.setValue(_.result(this.model, attr));
             }, this);
-        },
-		refresh: function() {
-			_.each(this.regions, function(selector, region) {
-				var el = this.$(selector).get(0);
-				var child_view = this.getRegion(region).currentView;
-				child_view.setValue(_.result(this.model, el.dataset.inputAttribute));
-			}, this);
-		}
+        }
     });
 });

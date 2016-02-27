@@ -1,3 +1,6 @@
+<% if (hasError()) { %>
+<div class="error"><%= errorMessage() %></div>
+<% } %>
 <div
     id="name"
     data-input-type="line"
