@@ -22,8 +22,9 @@ define(function(require) {
             'focus @ui.input': 'onInputGainFocus'
         },
         template: _.template(template),
+        inputError: false,
         initialize: function(options) {
-            this.mergeOptions(options, ['inputAttribute', 'inputId', 'inputLabel']);
+            this.mergeOptions(options, ['inputAttribute', 'inputError', 'inputId', 'inputLabel']);
             if (!this.inputId) {
                 this.inputId = util.randomString({
                     prefix: 'input'
@@ -32,6 +33,7 @@ define(function(require) {
         },
         serializeData: function() {
             return {
+                inputError: this.inputError,
                 inputId: this.inputId,
                 inputLabel: this.inputLabel
             };
