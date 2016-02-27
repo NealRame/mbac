@@ -17,8 +17,8 @@ define(function(require) {
         className: 'row',
         template: _.template(template),
         initialize: function(options) {
-            this.mergeOptions(options, ['inputAttribute', 'inputId', 'inputLabel']);
-            if (!this.inputId) {
+            this.mergeOptions(options, ['inputAttribute', 'inputError', 'inputId', 'inputLabel']);
+            if (!functional.existy(this.inputId)) {
                 this.inputId = util.randomString({
                     prefix: 'input'
                 });
@@ -32,6 +32,7 @@ define(function(require) {
         },
         serializeData: function() {
             return {
+                inputError: this.inputError,
                 inputId: this.inputId,
                 inputLabel: this.inputLabel
             };
