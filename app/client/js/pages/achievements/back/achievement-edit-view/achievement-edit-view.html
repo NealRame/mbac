@@ -1,74 +1,34 @@
-<% if (hasError) { %>
-<div class="error">
-    <%= errorMessage %>
-</div>
+<% if (hasError()) { %>
+<div class="error"><%= errorMessage() %></div>
 <% } %>
-
-<div class="row">
-    <div class="text-right small-2 columns">
-        <label for="name" data-field-valid="<%= fieldIsValid('name') %>">
-            Nom
-            <span class="tooltip"><%= fieldError('name') %></span>
-        </label>
-    </div>
-    <div class="small-10 columns">
-        <div class="input">
-            <input id="name" type="text" placeholder="Nom de la réalisation...">
-        </div>
-    </div>
+<div
+    id="name"
+    data-input-type="line"
+    data-input-attribute="name"
+    data-input-label="Nom">
 </div>
-
-<div class="row">
-    <div class="text-right small-2 columns">
-        <label for="description" data-field-valid="<%= fieldIsValid('description') %>">
-            Description
-            <span class="tooltip"><%= fieldError('description') %></span>
-        </label>
-    </div>
-    <div class="small-10 columns">
-        <div class="input">
-            <textarea id="description" rows="8" placeholder="Description de la réalisation..."></textarea>
-        </div>
-    </div>
+<div
+    id="description"
+    data-input-type="text"
+    data-input-attribute="description"
+    data-input-label="Description">
 </div>
-
-<div class="row">
-    <div class="text-right small-2 columns">
-        <label for="tags" data-field-valid="<%= fieldIsValid('tags') %>">
-            Tags
-            <span class="tooltip"><%= fieldError('tags') %></span>
-        </label>
-    </div>
-    <div class="small-10 columns">
-        <div class="input">
-            <input id="tags" type="text" placeholder="Liste de tags séparés par une virgule...">
-        </div>
-    </div>
+<div
+    id="tags"
+    data-input-type="tags"
+    data-input-attribute="tags"
+    data-input-label="Tags"
+    data-input-available-tags="<%= availableTags %>">
 </div>
-
-<div class="row">
-    <div class="text-right small-2 columns">
-        <label for="published" data-field-valid="<%= fieldIsValid('published') %>">
-            Publiée
-            <span class="tooltip"><%= fieldError('published') %></span>
-        </label>
-    </div>
-    <div class="small-10 columns">
-        <div class="switch round">
-            <input id="published" type="checkbox">
-            <label for="published"></label>
-        </div>
-    </div>
+<div
+    id="published"
+    data-input-type="flag"
+    data-input-attribute="published"
+    data-input-label="Publiée">
 </div>
-
-<div class="row">
-    <div class="text-right small-2 columns">
-        <label for="add-image" data-field-valid="<%= fieldIsValid('pictures') %>">
-            Images
-            <span class="tooltip"><%= fieldError('pictures') %></span>
-        </label>
-    </div>
-    <div class="small-10 columns">
-        <div id="pictures"></div>
-    </div>
+<div
+    id="pictures"
+    data-input-type="picture-list"
+    data-input-attribute="pictures"
+    data-input-label="Images">
 </div>
