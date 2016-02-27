@@ -70,47 +70,6 @@
         font-family: $body-font-family;
         position: relative;
         line-height: $form-input-line-height;
-        &[data-field-valid="false"] {
-            color: $form-input-invalid-color;
-            .tooltip {
-                background-color: $form-input-tooltip-bg-color;
-                border: solid 1px $form-input-tooltip-border-color;
-                border-radius: 4px;
-                display: inline;
-                color: $form-input-tooltip-fg-color;
-                font-size: .7rem;
-                margin-left: 1.5rem;
-                margin-top: -.5rem;
-                opacity: 0;
-                padding: .7rem;
-                pointer-events: none;
-                position: absolute;
-                text-align: center;
-                transition: opacity .25s ease-out;
-                width: $form-input-tooltip-width;
-                z-index: 10;
-                &::before {
-                    background-color: $form-input-tooltip-bg-color;
-                    border: solid 1px $form-input-tooltip-border-color;
-                    border-bottom: none;
-                    border-right: none;
-                    content: '';
-                    position: absolute;
-                    left: -.5rem;
-                    top: 1rem;
-                    transform: rotate(-45deg);
-                    height: 1rem;
-                    width: 1rem;
-                    z-index: 1;
-                }
-            }
-            &:hover {
-                .tooltip {
-                    opacity: 1;
-                    transition: opacity .25s ease-out;
-                }
-            }
-        }
     }
     .switch {
         margin: 0 1rem;
