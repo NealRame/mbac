@@ -48,9 +48,6 @@ define(function(require) {
                 }
             }));
         },
-        onPicturesChanged: function() {
-            this.triggerMethod('changed');
-        },
         value: function() {
             return _.object([
                 [
