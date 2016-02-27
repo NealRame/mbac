@@ -14,10 +14,6 @@ define(function(require) {
 
     return Marionette.LayoutView.extend({
         className: 'row',
-        childEvents: {
-            'picture:added': 'onPicturesChanged',
-            'picture:removed': 'onPicturesChanged'
-        },
         template: _.template(template),
         initialize: function(options) {
             this.pictures = new Backbone.Collection([]);
@@ -27,6 +23,9 @@ define(function(require) {
                     prefix: 'input'
                 });
             }
+            this.listenTo(this.pictures, 'add remove', function() {
+                this.triggerMethod('changed');
+            });
         },
         serializeData: function() {
             return {
