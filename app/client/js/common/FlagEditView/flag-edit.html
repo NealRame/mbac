@@ -1,9 +1,14 @@
 <div class="text-right small-2 columns">
-    <label for="<%= inputId %>"><%= inputLabel %></label>
+    <label for="<%= inputId %>"  data-field-valid="<%= !!!inputError %>">
+        <%= inputLabel %>
+    </label>
 </div>
 <div class="small-10 columns">
     <div class="switch round">
         <input id="<%= inputId %>" type="checkbox">
         <label for="<%= inputId %>"></label>
     </div>
+    <% if (inputError) { %>
+        <span class="input-error"><%= inputError %></span>
+    <% } %>
 </div>
