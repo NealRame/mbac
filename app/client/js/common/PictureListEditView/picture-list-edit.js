@@ -9,6 +9,7 @@ define(function(require) {
     var Backbone = require('backbone');
     var Marionette = require('marionette');
     var PictureList = require('PictureList');
+    var functional = require('common/functional');
     var util = require('common/util');
     var template = require('text!common/PictureListEditView/picture-list-edit.html');
 
@@ -16,14 +17,16 @@ define(function(require) {
         className: 'row',
         template: _.template(template),
         initialize: function(options) {
-            this.pictures = new Backbone.Collection([]);
             this.mergeOptions(options, ['inputAttribute', 'inputId', 'inputLabel']);
             if (!this.inputId) {
                 this.inputId = util.randomString({
                     prefix: 'input'
                 });
             }
-            this.listenTo(this.pictures, 'add remove', function() {
+            if (!functional.existy(this.collection)) {
+                this.collection = new Backbone.Collection([]);
+            }
+            this.listenTo(this.collection, 'add remove', function() {
                 this.triggerMethod('changed');
             });
         },
@@ -40,7 +43,7 @@ define(function(require) {
         },
         onShow: function() {
             this.showChildView('pictures-wrapper', new PictureList({
-                collection: this.pictures,
+                collection: this.collection,
                 editable: true,
                 thumbnailsRect: {
                     width: 192,
@@ -52,14 +55,14 @@ define(function(require) {
             return _.object([
                 [
                     this.inputAttribute,
-                    this.pictures.map(function(picture) {
+                    this.collection.map(function(picture) {
                         return picture.attributes;
                     })
                 ]
             ]);
         },
         setValue: function(pictures) {
-            this.pictures.reset(pictures);
+            this.collection.reset(pictures);
         }
     });
 });
