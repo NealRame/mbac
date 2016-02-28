@@ -10,7 +10,6 @@ define(function(require) {
     var functional = require('common/functional');
 
     var KEY_UP = 38;
-    var KEY_DOWN = 40;
 
     var AutocompleteItem = Marionette.ItemView.extend({
         attributes: function() {
