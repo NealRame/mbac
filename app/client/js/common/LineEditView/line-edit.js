@@ -22,7 +22,6 @@ define(function(require) {
             'focus @ui.input': 'onInputGainFocus'
         },
         template: _.template(template),
-        inputError: false,
         initialize: function(options) {
             this.mergeOptions(options, ['inputAttribute', 'inputError', 'inputId', 'inputLabel']);
             if (!this.inputId) {
