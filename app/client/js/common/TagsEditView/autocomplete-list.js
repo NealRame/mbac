@@ -19,7 +19,7 @@ define(function(require) {
             }
         },
         triggers: {
-            'click a': 'onItemClicked'
+            'click a': 'clicked'
         },
         tagName: 'li',
         template: _.template('<a href="#"><%= item %></a>')
@@ -27,6 +27,9 @@ define(function(require) {
 
     return Marionette.CollectionView.extend({
         childView: AutocompleteItem,
+        childEvents: {
+            'clicked': 'onItemClicked'
+        },
         className: 'autocomplete-list',
         tagName: 'ul',
         next: function(key) {
@@ -46,6 +49,9 @@ define(function(require) {
                 this.children.findByIndex(0).$el.addClass('current');
             }
             return this.$('.current').get(0).dataset.item;
+        },
+        onItemClicked: function(item) {
+            this.triggerMethod('autocomplete:item:clicked', item.model.get('item'));
         }
     });
 });

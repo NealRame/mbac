@@ -55,6 +55,9 @@ define(function(require) {
             tagList: '.tag-list-wrapper',
             autocompleteList: '.autocomplete-list-wrapper'
         },
+        childEvents: {
+            'autocomplete:item:clicked': 'onAutocompleteItemClicked'
+        },
         template: _.template(template),
         initialize: function(options) {
             this.tags = new TagList([]);
@@ -120,6 +123,12 @@ define(function(require) {
         },
         onInputLostFocus: function() {
             this.ui.inputWrapper.removeClass('focus');
+        },
+        onAutocompleteItemClicked: function(view, item) {
+            this.getRegion('autocompleteList').empty();
+            this.tags.add({tag: item});
+            this.ui.input.removeData();
+            this.ui.input.val('');
         },
         onRender: function() {
             this.showChildView('tagList', new TagListView({
