@@ -64,55 +64,69 @@ fs.readdirSync(config_dir).forEach(function (file) {
     }
 });
 
-if (config.env === 'development') {
-    /// ## Database module
-    ///
-    /// These settings are defined in the `config/database.conf.json` file.
-    ///
-    /// **Settings:**
-    config.database = _.defaults(config.database || {}, {
-        /// - `host` **REQUIRED**.
-        ///   In _development_ environment:
-        ///   - use the value of `DB_HOST` environment variable if defined,
-        ///   - fallback to `'127.0.0.1'`
-        host: process.env.DB_HOST || 'localhost',
-        /// - `port` **REQUIRED**.
-        ///   In _development_ environment:
-        ///   - use the value of `DB_PORT` environment variable if defined,
-        ///   - fallback to `27017`
-        port: process.env.DB_PORT || 27017,
-        /// - `name` **REQUIRED**.
-        ///   In _development_ environment:
-        ///   - use the value of `DB_NAME` environment variable if defined,
-        ///   - fallback to `products`
-        name: process.env.DB_NAME || 'test',
-        /// - `products` **REQUIRED**.
-        ///   In _development_ environment:
-        ///   - use the value of `DB_USER` environment variable if defined,
-        ///   - fallback to `test`
-        user: process.env.DB_USER || 'test',
-        /// - `password` **REQUIRED**.
-        ///   In _development_ environment:
-        ///   - use the value of `DB_PASSWORD` environment variable if defined,
-        ///   - fallback to `test`
-        password: process.env.DB_PASSWORD || 'test'
-    });
+/// ## Database module
+///
+/// These settings are defined in the `config/database.conf.json` file.
+///
+/// **Settings:**
+config.database = Object.assign(
+    config.database || {},
+    /// - `host` **REQUIRED**.
+    ///   Use the value of `DB_HOST` environment variable if defined.
+    process.env.DB_HOST ? {host: process.env.DB_HOST} : {},
+    /// - `port` **REQUIRED**.
+    ///   Use the value of `DB_PORT` environment variable if defined.
+    process.env.DB_PORT ? {host: process.env.DB_PORT} : {},
+    /// - `name` **REQUIRED**.
+    ///   Use the value of `DB_NAME` environment variable if defined.
+    process.env.DB_NAME ? {name: process.env.DB_NAME} : {},
+    /// - `user` **REQUIRED**.
+    /// Use the value of `DB_USER` environment variable if defined.
+    process.env.DB_USER ? {user: process.env.DB_USER} : {},
+    /// - `password` **REQUIRED**.
+    /// Use the value of `DB_PASSWORD` environment variable if defined.
+    process.env.DB_PASSWORD ? {password: process.env.DB_PASSWORD} : {}
+);
 
-    /// ## Server settings
-    /// These settings are defined in the `config/server.conf.json` file.
-    ///
-    /// **Settings:**
+if (config.env === 'development') {
+    /// In _development_ environment `config.database` atributes fallback to
+    /// these values if no configuration file or environment variables are set.
+    config.database = _.defaults(config.database || {}, {
+        /// - `config.database.host: 'localhost'
+        host: 'localhost',
+        /// - `config.database.port: 270117`
+        port: 27017,
+        /// - `config.database.name: 'test'`
+        name: 'test',
+        /// - `config.database.user: 'test'`
+        user: 'test',
+        /// - `config.database.password: 'test'`
+        password: 'test'
+    });
+}
+
+/// ## Server settings
+/// These settings are defined in the `config/server.conf.json` file.
+///
+/// **Settings:**
+config.server = Object.assign(
+    config.server || {},
+    /// - `address` **REQUIRED**.
+    ///   Use the value of `APP_ADDRESS` environment variable if defined.
+    process.env.APP_ADDRESS ? {address: process.env.APP_ADDRESS} : {},
+    /// - `port` **REQUIRED**.
+    ///    Use the value of `APP_PORT` environment variable if defined.
+    process.env.APP_PORT ? {port: process.env.APP_PORT} : {}
+);
+
+if (config.env === 'development') {
+    /// In _development_ environment `config.server` atributes fallback to
+    /// these values if no configuration file or environment variables are set.
     config.server = _.defaults(config.server || {}, {
-        /// - `address` **REQUIRED**.
-        ///    In _development_ environment:
-        ///    - use the value of `APP_ADDRESS` environment variable if defined,
-        ///    - fallback to `'127.0.0.1'`
-        address: process.env.APP_ADDRESS || '127.0.0.1',
-        /// - `port` **REQUIRED**.
-        ///    In _development_ environment:
-        ///    - use the value of `APP_PORT` environment variable if defined,
-        ///    - fallback to `3000`
-        port: process.env.APP_PORT || 3000
+        /// - `config.server.address`
+        address: '127.0.0.1',
+        /// - `config.server.port`
+        port: 3000
     });
 }
 
