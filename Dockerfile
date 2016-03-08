@@ -11,6 +11,7 @@ RUN npm install -g grunt-cli
 RUN npm install
 # RUN grunt
 
+ENV NODE_ENV="production"
 VOLUME $APP_ROOT_DIR/config
 EXPOSE $APP_PORT
 
