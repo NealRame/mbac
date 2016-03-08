@@ -18,6 +18,13 @@ module.exports = function(grunt) {
         return !isDev();
     };
 
+    var requirejs_log_level = function() {
+        if (process.env.REQUIRE_JS_LOG_LEVEL != null) {
+            return process.env.REQUIRE_JS_LOG_LEVEL;
+        }
+        return 4;
+    }
+
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
 
@@ -147,7 +154,7 @@ module.exports = function(grunt) {
                             exclude: ['common']
                         }
                     ],
-                    logLevel: 0
+                    logLevel: requirejs_log_level()
                 }
             }
         },
