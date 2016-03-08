@@ -1,3 +1,10 @@
 .DS_Store
 .git
 .gitignore
+config
+node_modules
+public/build.txt
+public/css
+public/fonts
+public/js
+public/sass
