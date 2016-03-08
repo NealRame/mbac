@@ -9,7 +9,7 @@ ADD . $APP_ROOT_DIR
 WORKDIR $APP_ROOT_DIR
 RUN npm install -g grunt-cli
 RUN npm install
-# RUN grunt
+RUN grunt
 
 ENV NODE_ENV="production"
 
