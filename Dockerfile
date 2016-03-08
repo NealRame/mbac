@@ -12,6 +12,8 @@ RUN npm install
 # RUN grunt
 
 ENV NODE_ENV="production"
+
+RUN mkdir $APP_ROOT_DIR/config
 VOLUME $APP_ROOT_DIR/config
 EXPOSE $APP_PORT
 
