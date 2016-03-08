@@ -17,7 +17,7 @@ define(function(require) {
     var functional = require('common/functional');
     var ui = require('common/ui');
 
-    var template = require('text!common/Lightbox/lightbox.html');
+    var template = require('text!common/LightBox/lightbox.html');
 
     var Lightbox = Marionette.LayoutView.extend({
         className: 'lightbox',
