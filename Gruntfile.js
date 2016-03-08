@@ -147,7 +147,7 @@ module.exports = function(grunt) {
                             exclude: ['common']
                         }
                     ],
-                    logLevel: 4
+                    logLevel: 0
                 }
             }
         },
