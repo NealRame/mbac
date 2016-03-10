@@ -216,8 +216,16 @@ module.exports = function(grunt) {
                     spawn: true
                 }
             }
-        }
+        },
 
+        docker_io: {
+            mbac: {
+                options: {
+                    buildName: 'mbac',
+                    tag: '<%= pkg.version %>'
+                }
+            }
+        }
     });
 
     ///////////////////////////////////////////////////////////////////////
@@ -227,6 +235,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-requirejs');
     grunt.loadNpmTasks('grunt-contrib-watch');
+    grunt.loadNpmTasks('grunt-docker-io');
     grunt.loadNpmTasks('grunt-notify');
     grunt.loadNpmTasks('grunt-sass');
 
